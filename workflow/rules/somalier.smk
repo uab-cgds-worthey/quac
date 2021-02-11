@@ -28,18 +28,21 @@ rule relate:
         # ped = RAW_DIR / "ped" / "{project}.ped",
         somalier_tool = config['somalier']['tool'],
     output:
-        expand(str(PROCESSED_DIR / "somalier/{{project}}/somalier.{ext}"),
+        expand(str(PROCESSED_DIR / "somalier/{{project}}/relatedness/somalier.{ext}"),
                 ext=['html', 'groups.tsv', 'pairs.tsv', 'samples.tsv']),
     message:
         "Running somalier relate. Project: {wildcards.project}"
     params:
         outdir = lambda wildcards, output: Path(output[0]).parent,
+        indir = lambda wildcards, input: Path(input[0]).parent,
     shell:
         r"""
+        echo "Heads up: Somalier is run on all samples in the input directory; Not just the files mentioned in rule."
+
         {input.somalier_tool} relate \
             --infer \
             --output-prefix {params.outdir}/somalier \
-            {input.extracted}
+            {params.indir}/*.somalier
         """
             # --ped {input.ped} \
 
@@ -52,17 +55,20 @@ rule ancestry:
         labels_1kg = config['somalier']['labels_1kg'],
         somalier_1kg = directory(config['somalier']['somalier_1kg']),
     output:
-        expand(str(PROCESSED_DIR / "somalier/{{project}}/somalier.somalier-ancestry.{ext}"),
+        expand(str(PROCESSED_DIR / "somalier/{{project}}/ancestry/somalier.somalier-ancestry.{ext}"),
                 ext=['html', 'tsv']),
     message:
         "Running somalier ancestry. Project: {wildcards.project}"
     params:
         outdir = lambda wildcards, output: Path(output[0]).parent,
+        indir = lambda wildcards, input: Path(input[0]).parent,
     shell:
         r"""
+        echo "Heads up: Somalier is run on all samples in the input directory; Not just the files mentioned in rule."
+
         {input.somalier_tool} ancestry \
             --output-prefix {params.outdir}/somalier \
             --labels {input.labels_1kg} \
             {input.somalier_1kg}*.somalier ++ \
-            {input.extracted}
+            {params.indir}/*.somalier
         """

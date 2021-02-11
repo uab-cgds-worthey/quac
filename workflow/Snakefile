@@ -49,9 +49,9 @@ wildcard_constraints:
 
 rule all:
     input:
-        expand(str(PROCESSED_DIR / "somalier/{project}/somalier.html"),
+        expand(str(PROCESSED_DIR / "somalier/{project}/relatedness/somalier.html"),
             project=[PROJECT_NAME]),
-        expand(str(PROCESSED_DIR / "somalier/{project}/somalier.somalier-ancestry.html"),
+        expand(str(PROCESSED_DIR / "somalier/{project}/ancestry/somalier.somalier-ancestry.html"),
             project=[PROJECT_NAME]),
 
 
