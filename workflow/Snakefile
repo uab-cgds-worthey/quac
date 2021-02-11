@@ -1,0 +1,24 @@
+'''
+USAGE:
+module reset
+module load Anaconda3/2020.02
+module load snakemake/5.9.1-foss-2018b-Python-3.6.6
+
+snakemake -s workflow/Snakefile --use-conda -p
+'''
+from pathlib import Path
+
+WORKFLOW_PATH = Path(workflow.basedir).parent
+
+configfile: WORKFLOW_PATH / "configs/workflow.yaml"
+
+EXTERNAL_DIR = Path("data/external")
+RAW_DIR = Path("data/raw")
+INTERIM_DIR = Path("data/interim")
+PROCESSED_DIR = Path("data/processed")
+
+
+rule all:
+    input:
+
+
