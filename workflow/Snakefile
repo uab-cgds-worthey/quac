@@ -30,13 +30,12 @@ INTERIM_DIR = Path("data/interim")
 PROCESSED_DIR = Path("data/processed")
 
 PROJECTS_PATH = Path(f"/data/project/worthey_lab/projects/")
-# PROJECTS_PATH = Path(f"/data/project/worthey_lab/projects/{PROJECT}/analysis")
 PROJECT_NAME = "MuscDyst_SU_MAlexander"
 SAMPLES = get_samples(RAW_DIR / f"ped/{PROJECT_NAME}.ped")
-print (SAMPLES)
 
 ##############   MODULES   ##############
 include: "rules/somalier.smk"
+include: "rules/indexcov.smk"
 #########################################
 
 
@@ -49,9 +48,14 @@ wildcard_constraints:
 
 rule all:
     input:
+        # somalier
         expand(str(PROCESSED_DIR / "somalier/{project}/relatedness/somalier.html"),
             project=[PROJECT_NAME]),
         expand(str(PROCESSED_DIR / "somalier/{project}/ancestry/somalier.somalier-ancestry.html"),
             project=[PROJECT_NAME]),
+        # indexcov
+        expand(str(PROCESSED_DIR / "indexcov/{project}/index.html"),
+            project=[PROJECT_NAME]),
+
 
 

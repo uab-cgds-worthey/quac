@@ -8,3 +8,5 @@
   * Relatedness
   * Sex
   * Ancestry
+* indexcov
+  * (Estimated) coverage of smaples
