@@ -11,13 +11,13 @@ rule extract:
     params:
         outdir = lambda wildcards, output: Path(output[[0]]).parent,
     shell:
-    r"""
-    {input.somalier_tool} extract \
-        --sites {input.sites} \
-        --fasta {input.ref} \
-        --out-dir {params.outdir} \
-        {input.vcf}
-    """
+        r"""
+        {input.somalier_tool} extract \
+            --sites {input.sites} \
+            --fasta {input.ref} \
+            --out-dir {params.outdir} \
+            {input.vcf}
+        """
 
 
 rule relate:
@@ -32,12 +32,12 @@ rule relate:
     params:
         outdir = lambda wildcards, output: Path(output[[0]]).parent,
     shell:
-    r"""
-    {input.somalier_tool} relate \
-        --infer \
-        --output-prefix {params.outdir}/somalier \
-        {input.extracted}
-    """
+        r"""
+        {input.somalier_tool} relate \
+            --infer \
+            --output-prefix {params.outdir}/somalier \
+            {input.extracted}
+        """
         # --ped {input.ped} \
 
 
@@ -53,10 +53,10 @@ rule ancestry:
     params:
         outdir = lambda wildcards, output: Path(output[[0]]).parent,
     shell:
-    r"""
-    {input.somalier_tool} ancestry \
-        --output-prefix {params.outdir}/somalier \
-        --labels {input.labels_1kg} \
-        {input.somalier_1kg} ++ \
-        {input.extracted}
-    """
+        r"""
+        {input.somalier_tool} ancestry \
+            --output-prefix {params.outdir}/somalier \
+            --labels {input.labels_1kg} \
+            {input.somalier_1kg} ++ \
+            {input.extracted}
+        """
