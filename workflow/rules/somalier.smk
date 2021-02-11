@@ -1,7 +1,7 @@
 rule extract:
     input:
-        vcf = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "vcf" / "{sample}.vcf.gz",
-        vcf_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "vcf" / "{sample}.vcf.gz.tbi",
+        bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",
+        bam_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
         somalier_tool = config['somalier']['tool'],
         sites = config['somalier']['sites'],
         ref_genome = config['somalier']['ref'],
@@ -17,7 +17,7 @@ rule extract:
             --sites {input.sites} \
             --fasta {input.ref_genome} \
             --out-dir {params.outdir} \
-            {input.vcf}
+            {input.bam}
         """
 
 
