@@ -25,7 +25,7 @@ rule relate:
     input:
         extracted = expand(str(INTERIM_DIR / "somalier_extract/{{project}}/{sample}.somalier"),
                         sample=SAMPLES),
-        # ped = RAW_DIR / "ped" / "{project}.ped",
+        ped = RAW_DIR / "ped" / "{project}.ped",
         somalier_tool = config['somalier']['tool'],
     output:
         expand(str(PROCESSED_DIR / "somalier/{{project}}/relatedness/somalier.{ext}"),
@@ -40,11 +40,11 @@ rule relate:
         echo "Heads up: Somalier is run on all samples in the input directory; Not just the files mentioned in rule."
 
         {input.somalier_tool} relate \
+            --ped {input.ped} \
             --infer \
             --output-prefix {params.outdir}/somalier \
             {params.indir}/*.somalier
         """
-            # --ped {input.ped} \
 
 
 rule ancestry:

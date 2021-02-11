@@ -18,7 +18,7 @@ def get_samples(fpath):
     samples = ()
     with open(fpath, 'r') as f_handle:
         for line in f_handle:
-            sample = line.split(' ')[1]
+            sample = line.split('\t')[1]
             samples += (sample,)
 
     return samples
