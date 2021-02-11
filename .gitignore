@@ -72,16 +72,10 @@ target/
 .ipynb_checkpoints/
 
 # exclude data from source control by default
-# data/
-variant_annotation/data/
+data/
 
 #snakemake
 .snakemake/
-
-
-# exclude test data used for development
-to_be_deleted/test_data/data/ref
-to_be_deleted/test_data/data/reads
 
 #logs
 logs/

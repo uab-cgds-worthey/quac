@@ -7,18 +7,51 @@ module load snakemake/5.9.1-foss-2018b-Python-3.6.6
 snakemake -s workflow/Snakefile --use-conda -p
 '''
 from pathlib import Path
+import pandas as pd
 
 WORKFLOW_PATH = Path(workflow.basedir).parent
-
 configfile: WORKFLOW_PATH / "configs/workflow.yaml"
+
+
+def get_samples(fpath):
+
+    samples = ()
+    with open(fpath, 'r') as f_handle:
+        for line in f_handle:
+            sample = line.split(' ')[1]
+            samples += (sample,)
+
+    return samples
+
 
 EXTERNAL_DIR = Path("data/external")
 RAW_DIR = Path("data/raw")
 INTERIM_DIR = Path("data/interim")
 PROCESSED_DIR = Path("data/processed")
 
+PROJECTS_PATH = Path(f"/data/project/worthey_lab/projects/")
+# PROJECTS_PATH = Path(f"/data/project/worthey_lab/projects/{PROJECT}/analysis")
+PROJECT_NAME = "MuscDyst_SU_MAlexander"
+SAMPLES = get_samples(RAW_DIR / f"ped/{PROJECT_NAME}.ped")
+print (SAMPLES)
+
+##############   MODULES   ##############
+include: "rules/somalier.smk"
+#########################################
+
+
+############   CONSTRAINTS   ############
+wildcard_constraints:
+    sample = '|'.join(SAMPLES),
+    project = PROJECT_NAME
+#########################################
+
 
 rule all:
     input:
+        expand(str(PROCESSED_DIR / "somalier/{project}/somalier.html"),
+            project=[PROJECT_NAME]),
+        expand(str(PROCESSED_DIR / "somalier/{project}/somalier.somalier-ancestry.html"),
+            project=[PROJECT_NAME]),
 
 
