@@ -36,6 +36,7 @@ SAMPLES = get_samples(RAW_DIR / f"ped/{PROJECT_NAME}.ped")
 ##############   MODULES   ##############
 include: "rules/somalier.smk"
 include: "rules/indexcov.smk"
+include: "rules/covviz.smk"
 #########################################
 
 
@@ -56,6 +57,8 @@ rule all:
         # indexcov
         expand(str(PROCESSED_DIR / "indexcov/{project}/index.html"),
             project=[PROJECT_NAME]),
-
+        # covviz
+        expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
+            project=[PROJECT_NAME]),
 
 
