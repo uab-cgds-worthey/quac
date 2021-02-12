@@ -39,6 +39,7 @@ SAMPLES = get_samples(RAW_DIR / f"ped/{PROJECT_NAME}.ped")
 include: "rules/somalier.smk"
 include: "rules/indexcov.smk"
 include: "rules/covviz.smk"
+include: "rules/mosdepth.smk"
 #########################################
 
 
@@ -62,5 +63,9 @@ rule all:
         # covviz
         expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
             project=[PROJECT_NAME]),
+        # mosdepth
+        expand(str(INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt"),
+            project=[PROJECT_NAME],
+            sample=SAMPLES),
 
 
