@@ -21,5 +21,6 @@ rule indexcov:
 
         {input.goleft_tool} indexcov \
             --directory {params.outdir} \
-            {params.project_dir}/[LU][WD]*/bam/*.bam
+            {params.project_dir}/[LU][WD]*/bam/*.bam \
+            2>&1 {log}
         """
