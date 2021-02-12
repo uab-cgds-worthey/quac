@@ -3,6 +3,8 @@ rule covviz:
         PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
     output:
         PROCESSED_DIR / "covviz/{project}/covviz_report.html",
+    log:
+        LOGS_PATH / "{project}/covviz.log"
     message:
         "Running covviz. Project: {wildcards.project}"
     conda:

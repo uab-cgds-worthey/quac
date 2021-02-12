@@ -12,7 +12,7 @@
   * (Estimated) coverage of smaples
 
 
-## How to quac
+## How to quac?
 
 * Modify config file `configs/workflow.yaml` as needed. Note: `projects_path` and `project_name` may be the most
   important ones you would care about.

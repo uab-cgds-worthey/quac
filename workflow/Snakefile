@@ -29,6 +29,8 @@ RAW_DIR = Path("data/raw")
 INTERIM_DIR = Path("data/interim")
 PROCESSED_DIR = Path("data/processed")
 
+LOGS_PATH = Path(config['logs_path'])
+LOGS_PATH.mkdir(exist_ok=True)
 PROJECTS_PATH = Path(config['projects_path'])
 PROJECT_NAME = config['project_name']
 SAMPLES = get_samples(RAW_DIR / f"ped/{PROJECT_NAME}.ped")

@@ -8,6 +8,8 @@ rule indexcov:
     output:
         PROCESSED_DIR / "indexcov/{project}/index.html",
         PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
+    log:
+        LOGS_PATH / "{project}/indexcov.log"
     message:
         "Running indexcov. Project: {wildcards.project}"
     params:

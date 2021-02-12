@@ -8,3 +8,4 @@ somalier:
     ref: "/data/project/worthey_lab/datasets_central/human_reference_genome/processed/GRCh38/no_alt_rel20190408/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna"
 goleft:
     tool: "/data/project/worthey_lab/projects/experimental_pipelines/mana/tools/goleft/0.2.4/goleft"
+logs_path: "logs/rule_logs/"

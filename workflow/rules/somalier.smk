@@ -7,6 +7,8 @@ rule extract:
         ref_genome = config['somalier']['ref'],
     output:
         INTERIM_DIR / "somalier_extract/{project}/{sample}.somalier"
+    log:
+        LOGS_PATH / "{project}/somalier_extract-{sample}.log"
     message:
         "Running somalier extract. Project: {wildcards.project}"
     params:
@@ -30,6 +32,8 @@ rule relate:
     output:
         expand(str(PROCESSED_DIR / "somalier/{{project}}/relatedness/somalier.{ext}"),
                 ext=['html', 'groups.tsv', 'pairs.tsv', 'samples.tsv']),
+    log:
+        LOGS_PATH / "{project}/somalier_relate.log"
     message:
         "Running somalier relate. Project: {wildcards.project}"
     params:
@@ -54,6 +58,8 @@ rule ancestry:
         somalier_tool = config['somalier']['tool'],
         labels_1kg = config['somalier']['labels_1kg'],
         somalier_1kg = directory(config['somalier']['somalier_1kg']),
+    log:
+        LOGS_PATH / "{project}/somalier_ancestry.log"
     output:
         expand(str(PROCESSED_DIR / "somalier/{{project}}/ancestry/somalier.somalier-ancestry.{ext}"),
                 ext=['html', 'tsv']),
