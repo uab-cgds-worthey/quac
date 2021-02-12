@@ -1,3 +1,5 @@
+projects_path: "/data/project/worthey_lab/projects/"
+project_name: "MuscDyst_SU_MAlexander"
 somalier:
     tool: "/data/project/worthey_lab/projects/experimental_pipelines/mana/tools/somalier/0.2.12/somalier"
     sites: "/data/project/worthey_lab/projects/experimental_pipelines/mana/tools/somalier/0.2.12/sites/sites.hg38.vcf.gz"
