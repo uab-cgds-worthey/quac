@@ -7,11 +7,11 @@ rule covviz:
         "Running covviz. Project: {wildcards.project}"
     conda:
         str(WORKFLOW_PATH / "configs/env/covviz.yaml")
-    params:
-        outdir = lambda wildcards, output: Path(output[0]).parent,
+    # params:
+    #     outdir = lambda wildcards, output: Path(output[0]).parent,
     shell:
         r"""
         covviz \
-            --output {params.outdir} \
+            --output {output} \
             {input}
         """
