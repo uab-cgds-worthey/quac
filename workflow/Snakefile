@@ -30,7 +30,7 @@ INTERIM_DIR = Path("data/interim")
 PROCESSED_DIR = Path("data/processed")
 
 LOGS_PATH = Path(config['logs_path'])
-LOGS_PATH.mkdir(exist_ok=True)
+LOGS_PATH.mkdir(parents=True, exist_ok=True)
 PROJECTS_PATH = Path(config['projects_path'])
 PROJECT_NAME = config['project_name']
 SAMPLES = get_samples(RAW_DIR / f"ped/{PROJECT_NAME}.ped")
@@ -67,5 +67,7 @@ rule all:
         expand(str(INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt"),
             project=[PROJECT_NAME],
             sample=SAMPLES),
+        expand(str(INTERIM_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
+            project=[PROJECT_NAME]),
 
 
