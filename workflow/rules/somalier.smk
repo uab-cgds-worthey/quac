@@ -20,7 +20,7 @@ rule extract:
             --fasta {input.ref_genome} \
             --out-dir {params.outdir} \
             {input.bam} \
-            2>&1 {log}
+            > {log} 2>&1
         """
 
 
@@ -49,7 +49,7 @@ rule relate:
             --infer \
             --output-prefix {params.outdir}/somalier \
             {params.indir}/*.somalier \
-            2>&1 {log}
+            > {log} 2>&1
         """
 
 
@@ -79,5 +79,5 @@ rule ancestry:
             --labels {input.labels_1kg} \
             {input.somalier_1kg}*.somalier ++ \
             {params.indir}/*.somalier \
-            2>&1 {log}
+            > {log} 2>&1
         """

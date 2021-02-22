@@ -14,5 +14,5 @@ rule covviz:
         covviz \
             --output {output} \
             {input} \
-            2>&1 {log}
+            > {log} 2>&1
         """

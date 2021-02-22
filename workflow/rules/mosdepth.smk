@@ -21,7 +21,7 @@ rule mosdepth_coverage:
             --fast-mode \
             {params.out_prefix} \
             {input.bam} \
-            2>&1 {log}
+            > {log} 2>&1
         """
 
 

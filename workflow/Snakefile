@@ -73,6 +73,6 @@ rule all:
         # verifyBamID
         expand(str(PROCESSED_DIR / "verifyBamID/{project}/{sample}.Ancestry"),
             project=[PROJECT_NAME],
-            sample=SAMPLES[6:9]),
+            sample=SAMPLES),
 
 

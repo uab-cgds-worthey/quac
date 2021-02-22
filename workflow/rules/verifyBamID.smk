@@ -15,13 +15,14 @@ rule run_verifybamid:
     conda:
         str(WORKFLOW_PATH / "configs/env/verifyBamID.yaml")
     params:
+        svd_prefix = lambda wildcards, input: input['svd'][0].replace(Path(input['svd'][0]).suffix, ''),
         out_prefix = lambda wildcards, output: output['ancestry'].replace('.Ancestry', ''),
     shell:
         r"""
         verifybamid2 \
-            --SVDPrefix {input.svd} \
+            --SVDPrefix {params.svd_prefix} \
             --Reference {input.ref_genome} \
             --BamFile {input.bam} \
             --Output {params.out_prefix} \
-            2>&1 {log}
+            > {log} 2>&1
         """
