@@ -40,6 +40,7 @@ include: "rules/somalier.smk"
 include: "rules/indexcov.smk"
 include: "rules/covviz.smk"
 include: "rules/mosdepth.smk"
+include: "rules/verifyBamID.smk"
 #########################################
 
 
@@ -64,10 +65,14 @@ rule all:
         expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
             project=[PROJECT_NAME]),
         # mosdepth
-        expand(str(INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt"),
+        # expand(str(INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt"),
+        #     project=[PROJECT_NAME],
+        #     sample=SAMPLES),
+        # expand(str(INTERIM_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
+        #     project=[PROJECT_NAME]),
+        # verifyBamID
+        expand(str(PROCESSED_DIR / "verifyBamID/{project}/{sample}.Ancestry"),
             project=[PROJECT_NAME],
-            sample=SAMPLES),
-        expand(str(INTERIM_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
-            project=[PROJECT_NAME]),
+            sample=SAMPLES[6:9]),
 
 

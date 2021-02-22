@@ -1,0 +1,9 @@
+name: verifyBamID
+
+channels:
+  - conda-forge
+  - bioconda
+
+dependencies:
+  - verifybamid2==2.0.1
+  - htslib==1.11
