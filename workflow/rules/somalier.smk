@@ -4,7 +4,7 @@ rule extract:
         bam_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
         somalier_tool = config['somalier']['tool'],
         sites = config['somalier']['sites'],
-        ref_genome = config['somalier']['ref'],
+        ref_genome = config['ref'],
     output:
         INTERIM_DIR / "somalier_extract/{project}/{sample}.somalier"
     log:
