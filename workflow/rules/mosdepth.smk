@@ -1,9 +1,7 @@
 rule mosdepth_coverage:
     input:
-        bam = lambda wildcards: expand(str(PROJECTS_PATH / wildcards.project / "analysis" / "{sample}" / "bam" / "{sample}.bam"),
-                sample=SAMPLES[wildcards.project]),
-        bam_index = lambda wildcards: expand(str(PROJECTS_PATH / wildcards.project / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai"),
-                sample=SAMPLES[wildcards.project]),
+        bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",
+        bam_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
     output:
         dist = INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt",
         summary = INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.summary.txt",

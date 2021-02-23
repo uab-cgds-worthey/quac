@@ -49,13 +49,13 @@ rule haplocheck:
             --reference {input.mt_ref} \
             --contig-name chrM \
             --output {output.vcf} \
-            {input.bam}
+            {input.bam} \
             > {log} 2>&1
 
         # run haplocheck
         {input.haplocheck} \
             --raw \
             --out {output.result} \
-            {output.vcf}
+            {output.vcf} \
             >> {log} 2>&1
         """

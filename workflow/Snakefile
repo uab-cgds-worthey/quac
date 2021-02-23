@@ -4,7 +4,7 @@ module reset
 module load Anaconda3/2020.02
 module load snakemake/5.9.1-foss-2018b-Python-3.6.6
 
-snakemake -s workflow/Snakefile --use-conda -p
+snakemake -s workflow/Snakefile --use-conda -k -p
 '''
 from pathlib import Path
 import pandas as pd
@@ -87,7 +87,7 @@ rule all:
         # expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
         #     project=PROJECT_NAMES),
         # # mosdepth
-        get_targets('mosdepth'),
+        # get_targets('mosdepth'),
         #### within-species contamination QC ####
         # verifyBamID
         get_targets('verifyBamID'),
