@@ -36,22 +36,6 @@ PROJECTS_PATH = Path(config['projects_path'])
 PROJECT_NAMES = config['project_names'].split(',')
 SAMPLES = {project: get_samples(RAW_DIR / f"ped/{project}.ped") for project in PROJECT_NAMES}
 
-##############   MODULES   ##############
-include: "rules/somalier.smk"
-include: "rules/indexcov.smk"
-include: "rules/covviz.smk"
-include: "rules/mosdepth.smk"
-include: "rules/within_species_contamintation.smk"
-#########################################
-
-
-############   CONSTRAINTS   ############
-wildcard_constraints:
-    # sample = '|'.join(SAMPLES),
-    sample = '|'.join([item for sublist in SAMPLES.values() for item in sublist]),
-    project = '|'.join(PROJECT_NAMES),
-#########################################
-
 
 def get_targets(tool_name, projects=PROJECT_NAMES, sample_dict=SAMPLES):
 
@@ -69,7 +53,24 @@ def get_targets(tool_name, projects=PROJECT_NAMES, sample_dict=SAMPLES):
                 raise SystemExit(1)
 
             flist.append(f)
+
     return flist
+
+
+##############   MODULES   ##############
+include: "rules/somalier.smk"
+include: "rules/indexcov.smk"
+include: "rules/covviz.smk"
+include: "rules/mosdepth.smk"
+include: "rules/within_species_contamintation.smk"
+#########################################
+
+
+############   CONSTRAINTS   ############
+wildcard_constraints:
+    sample = '|'.join([item for sublist in SAMPLES.values() for item in sublist]),
+    project = '|'.join(PROJECT_NAMES),
+#########################################
 
 
 rule all:
@@ -86,24 +87,11 @@ rule all:
         # expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
         #     project=PROJECT_NAMES),
         # # mosdepth
-        # expand(str(INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt"),
-        #     zip, project=PROJECT_NAMES,
-        #     sample=[sample for project in PROJECT_NAMES  for sample in SAMPLES[project]]),
         get_targets('mosdepth'),
-        # expand(str(INTERIM_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
-        #     project=PROJECT_NAMES),
         #### within-species contamination QC ####
         # verifyBamID
         get_targets('verifyBamID'),
-        # expand(str(PROCESSED_DIR / "verifyBamID/{project}/{sample}.Ancestry"),
-        #     project=PROJECT_NAMES,
-        #     sample=[sample for project in PROJECT_NAMES  for sample in SAMPLES[project]]),
-            # sample=SAMPLES),
         # # haplocheck
         get_targets('haplocheck'),
-        # expand(str(PROCESSED_DIR / "haplocheck/{project}/{sample}/haplocheck.txt"),
-        #     project=PROJECT_NAMES,
-        #     sample=[sample for project in PROJECT_NAMES  for sample in SAMPLES[project]]),
-        #     # sample=SAMPLES),
 
 
