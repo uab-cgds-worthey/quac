@@ -25,7 +25,6 @@ def get_samples(fpath):
 
     return samples
 
-
 EXTERNAL_DIR = Path("data/external")
 RAW_DIR = Path("data/raw")
 INTERIM_DIR = Path("data/interim")
@@ -34,8 +33,8 @@ PROCESSED_DIR = Path("data/processed")
 LOGS_PATH = Path(config['logs_path'])
 LOGS_PATH.mkdir(parents=True, exist_ok=True)
 PROJECTS_PATH = Path(config['projects_path'])
-PROJECT_NAME = config['project_name']
-SAMPLES = get_samples(RAW_DIR / f"ped/{PROJECT_NAME}.ped")
+PROJECT_NAMES = config['project_names'].split(',')
+SAMPLES = {project: get_samples(RAW_DIR / f"ped/{project}.ped") for project in PROJECT_NAMES}
 
 ##############   MODULES   ##############
 include: "rules/somalier.smk"
@@ -48,38 +47,63 @@ include: "rules/within_species_contamintation.smk"
 
 ############   CONSTRAINTS   ############
 wildcard_constraints:
-    sample = '|'.join(SAMPLES),
-    project = PROJECT_NAME
+    # sample = '|'.join(SAMPLES),
+    sample = '|'.join([item for sublist in SAMPLES.values() for item in sublist]),
+    project = '|'.join(PROJECT_NAMES),
 #########################################
+
+
+def get_targets(tool_name, projects=PROJECT_NAMES, sample_dict=SAMPLES):
+
+    flist = []
+    for project in projects:
+        for sample in sample_dict[project]:
+            if tool_name == 'mosdepth':
+                f = INTERIM_DIR / "mosdepth" / project / f"{sample}.mosdepth.global.dist.txt"
+            elif tool_name == 'verifyBamID':
+                f = PROCESSED_DIR / "verifyBamID" / project / f"{sample}.Ancestry"
+            elif tool_name == 'haplocheck':
+                f = PROCESSED_DIR / "haplocheck" / project / sample / "haplocheck.txt"
+            else:
+                print (f"Unexpected tool name '{tool_name}' supplied. Exiting.")
+                raise SystemExit(1)
+
+            flist.append(f)
+    return flist
 
 
 rule all:
     input:
         # somalier
         expand(str(PROCESSED_DIR / "somalier/{project}/relatedness/somalier.html"),
-            project=[PROJECT_NAME]),
+            project=PROJECT_NAMES),
         expand(str(PROCESSED_DIR / "somalier/{project}/ancestry/somalier.somalier-ancestry.html"),
-            project=[PROJECT_NAME]),
+            project=PROJECT_NAMES),
         # indexcov
         expand(str(PROCESSED_DIR / "indexcov/{project}/index.html"),
-            project=[PROJECT_NAME]),
-        # covviz
-        expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
-            project=[PROJECT_NAME]),
-        # mosdepth
-        expand(str(INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt"),
-            project=[PROJECT_NAME],
-            sample=SAMPLES),
+            project=PROJECT_NAMES),
+        # # covviz
+        # expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
+        #     project=PROJECT_NAMES),
+        # # mosdepth
+        # expand(str(INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt"),
+        #     zip, project=PROJECT_NAMES,
+        #     sample=[sample for project in PROJECT_NAMES  for sample in SAMPLES[project]]),
+        get_targets('mosdepth'),
         # expand(str(INTERIM_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
-        #     project=[PROJECT_NAME]),
+        #     project=PROJECT_NAMES),
         #### within-species contamination QC ####
         # verifyBamID
-        expand(str(PROCESSED_DIR / "verifyBamID/{project}/{sample}.Ancestry"),
-            project=[PROJECT_NAME],
-            sample=SAMPLES),
-        # haplocheck
-        expand(str(PROCESSED_DIR / "haplocheck/{project}/{sample}/haplocheck.txt"),
-            project=[PROJECT_NAME],
-            sample=SAMPLES),
+        get_targets('verifyBamID'),
+        # expand(str(PROCESSED_DIR / "verifyBamID/{project}/{sample}.Ancestry"),
+        #     project=PROJECT_NAMES,
+        #     sample=[sample for project in PROJECT_NAMES  for sample in SAMPLES[project]]),
+            # sample=SAMPLES),
+        # # haplocheck
+        get_targets('haplocheck'),
+        # expand(str(PROCESSED_DIR / "haplocheck/{project}/{sample}/haplocheck.txt"),
+        #     project=PROJECT_NAMES,
+        #     sample=[sample for project in PROJECT_NAMES  for sample in SAMPLES[project]]),
+        #     # sample=SAMPLES),
 
 

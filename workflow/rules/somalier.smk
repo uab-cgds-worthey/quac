@@ -26,8 +26,8 @@ rule extract:
 
 rule relate:
     input:
-        extracted = expand(str(INTERIM_DIR / "somalier_extract/{{project}}/{sample}.somalier"),
-                        sample=SAMPLES),
+        extracted = lambda wildcards: expand(str(INTERIM_DIR / "somalier_extract" / wildcards.project / "{sample}.somalier"),
+                sample=SAMPLES[wildcards.project]),
         ped = RAW_DIR / "ped" / "{project}.ped",
         somalier_tool = config['somalier']['tool'],
     output:
@@ -42,7 +42,7 @@ rule relate:
         indir = lambda wildcards, input: Path(input[0]).parent,
     shell:
         r"""
-        echo "Heads up: Somalier is run on all samples in the input directory; Not just the files mentioned in rule."
+        echo "Heads up: Somalier is run on all samples in the input directory; Not just the files mentioned in the rule's input."
 
         {input.somalier_tool} relate \
             --ped {input.ped} \
@@ -55,8 +55,8 @@ rule relate:
 
 rule ancestry:
     input:
-        extracted = expand(str(INTERIM_DIR / "somalier_extract/{{project}}/{sample}.somalier"),
-                        sample=SAMPLES),
+        extracted = lambda wildcards: expand(str(INTERIM_DIR / "somalier_extract" / wildcards.project / "{sample}.somalier"),
+                sample=SAMPLES[wildcards.project]),
         somalier_tool = config['somalier']['tool'],
         labels_1kg = config['somalier']['labels_1kg'],
         somalier_1kg = directory(config['somalier']['somalier_1kg']),
@@ -72,7 +72,7 @@ rule ancestry:
         indir = lambda wildcards, input: Path(input[0]).parent,
     shell:
         r"""
-        echo "Heads up: Somalier is run on all samples in the input directory; Not just the files mentioned in rule."
+        echo "Heads up: Somalier is run on all samples in the input directory; Not just the files mentioned in the rule's input."
 
         {input.somalier_tool} ancestry \
             --output-prefix {params.outdir}/somalier \

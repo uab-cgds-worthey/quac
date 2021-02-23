@@ -1,7 +1,9 @@
 rule mosdepth_coverage:
     input:
-        bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam = lambda wildcards: expand(str(PROJECTS_PATH / wildcards.project / "analysis" / "{sample}" / "bam" / "{sample}.bam"),
+                sample=SAMPLES[wildcards.project]),
+        bam_index = lambda wildcards: expand(str(PROJECTS_PATH / wildcards.project / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai"),
+                sample=SAMPLES[wildcards.project]),
     output:
         dist = INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt",
         summary = INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.summary.txt",
@@ -27,9 +29,8 @@ rule mosdepth_coverage:
 
 rule mosdepth_plot:
     input:
-        dist = expand(str(INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt"),
-                project=[PROJECT_NAME],
-                sample=SAMPLES),
+        dist = lambda wildcards: expand(str(INTERIM_DIR / "mosdepth" / wildcards.project / "{sample}.mosdepth.global.dist.txt"),
+                sample=SAMPLES[wildcards.project]),
         script = WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
         INTERIM_DIR / "mosdepth/{project}/mosdepth_{project}.html",
@@ -41,7 +42,7 @@ rule mosdepth_plot:
         in_dir = lambda wildcards, input: Path(input[0]).parent,
     shell:
         r"""
-        echo "Heads up: Mosdepth-plotting is run on all samples in "{params.in_dir}"; Not just the files mentioned in rule."
+        echo "Heads up: Mosdepth-plotting is run on all samples in "{params.in_dir}"; Not just the files mentioned in the rule's input."
 
         cd {params.in_dir}
         python {input.script} \
