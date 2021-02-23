@@ -18,6 +18,8 @@ def get_samples(fpath):
     samples = ()
     with open(fpath, 'r') as f_handle:
         for line in f_handle:
+            if line.startswith('#'):
+                continue
             sample = line.split('\t')[1]
             samples += (sample,)
 
@@ -65,9 +67,9 @@ rule all:
         expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
             project=[PROJECT_NAME]),
         # mosdepth
-        # expand(str(INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt"),
-        #     project=[PROJECT_NAME],
-        #     sample=SAMPLES),
+        expand(str(INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt"),
+            project=[PROJECT_NAME],
+            sample=SAMPLES),
         # expand(str(INTERIM_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
         #     project=[PROJECT_NAME]),
         # verifyBamID
