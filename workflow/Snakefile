@@ -42,7 +42,7 @@ include: "rules/somalier.smk"
 include: "rules/indexcov.smk"
 include: "rules/covviz.smk"
 include: "rules/mosdepth.smk"
-include: "rules/verifyBamID.smk"
+include: "rules/within_species_contamintation.smk"
 #########################################
 
 
@@ -72,8 +72,13 @@ rule all:
             sample=SAMPLES),
         # expand(str(INTERIM_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
         #     project=[PROJECT_NAME]),
+        #### within-species contamination QC ####
         # verifyBamID
         expand(str(PROCESSED_DIR / "verifyBamID/{project}/{sample}.Ancestry"),
+            project=[PROJECT_NAME],
+            sample=SAMPLES),
+        # haplocheck
+        expand(str(PROCESSED_DIR / "haplocheck/{project}/{sample}/haplocheck.txt"),
             project=[PROJECT_NAME],
             sample=SAMPLES),
 

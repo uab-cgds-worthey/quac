@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=quac
 #SBATCH --output=logs/quac-%j.log
-#SBATCH --cpus-per-task=10
+#SBATCH --cpus-per-task=20
 #SBATCH --mem-per-cpu=8G
 #SBATCH --partition=short
 
