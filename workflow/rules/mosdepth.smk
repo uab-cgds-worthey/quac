@@ -44,6 +44,6 @@ rule mosdepth_plot:
 
         cd {params.in_dir}
         python {input.script} \
-            --output {output} \
+            --output $(basename {output}) \
             *.mosdepth.global.dist.txt
         """

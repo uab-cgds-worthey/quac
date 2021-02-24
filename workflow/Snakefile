@@ -87,7 +87,9 @@ rule all:
         # expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
         #     project=PROJECT_NAMES),
         # # mosdepth
-        # get_targets('mosdepth'),
+        get_targets('mosdepth'),
+        expand(str(INTERIM_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
+            project=PROJECT_NAMES),
         #### within-species contamination QC ####
         # verifyBamID
         get_targets('verifyBamID'),
