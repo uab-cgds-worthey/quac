@@ -4,8 +4,7 @@ channels:
   - conda-forge
 
 dependencies:
-  - python==3.6.12
+  - python==3.8.5
   - pip
   - pip:
-      - covviz==1.3.0
-      # - "--editable=git+git://github.com/brwnj/covviz.git@a1ea4d4c64d47e36c94500914182496f8edd2391"
+      - covviz==1.3.1

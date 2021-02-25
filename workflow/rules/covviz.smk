@@ -1,6 +1,7 @@
 rule covviz:
     input:
-        PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
+        bed = PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
+        ped = RAW_DIR / "ped" / "{project}.ped",
     output:
         PROCESSED_DIR / "covviz/{project}/covviz_report.html",
     log:
@@ -12,7 +13,8 @@ rule covviz:
     shell:
         r"""
         covviz \
+            --ped {input.ped} \
             --output {output} \
-            {input} \
+            {input.bed} \
             > {log} 2>&1
         """
