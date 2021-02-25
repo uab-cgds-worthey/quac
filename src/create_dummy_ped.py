@@ -17,7 +17,7 @@ def main(project_name, outpath):
     with open(Path(outpath) / f"{project_name}.ped", "w") as out_handle:
         out_handle.write("\t".join(header) + "\n")
 
-        for sample in samples:
+        for sample in sorted(samples):
             data = ["unknown", sample, "-9", "-9", "-9", "-9"]
             out_handle.write("\t".join(data) + "\n")
 
