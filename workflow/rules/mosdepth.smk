@@ -3,8 +3,8 @@ rule mosdepth_coverage:
         bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",
         bam_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
     output:
-        dist = INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt",
-        summary = INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.summary.txt",
+        dist = PROCESSED_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt",
+        summary = PROCESSED_DIR / "mosdepth/{project}/{sample}.mosdepth.summary.txt",
     log:
         LOGS_PATH / "{project}/mosdepth_coverage-{sample}.log"
     message:
@@ -27,11 +27,11 @@ rule mosdepth_coverage:
 
 rule mosdepth_plot:
     input:
-        dist = lambda wildcards: expand(str(INTERIM_DIR / "mosdepth" / wildcards.project / "{sample}.mosdepth.global.dist.txt"),
+        dist = lambda wildcards: expand(str(PROCESSED_DIR / "mosdepth" / wildcards.project / "{sample}.mosdepth.global.dist.txt"),
                 sample=SAMPLES[wildcards.project]),
         script = WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
-        INTERIM_DIR / "mosdepth/{project}/mosdepth_{project}.html",
+        PROCESSED_DIR / "mosdepth/{project}/mosdepth_{project}.html",
     log:
         LOGS_PATH / "{project}/mosdepth_plot.log"
     message:

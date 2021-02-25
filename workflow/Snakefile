@@ -86,7 +86,7 @@ rule all:
         #     project=PROJECT_NAMES),
         # # mosdepth
         get_targets('mosdepth'),
-        expand(str(INTERIM_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
+        expand(str(PROCESSED_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
             project=PROJECT_NAMES),
         #### within-species contamination QC ####
         # verifyBamID
