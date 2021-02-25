@@ -1,4 +1,4 @@
-rule extract:
+rule somalier_extract:
     input:
         bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",
         bam_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
@@ -24,7 +24,7 @@ rule extract:
         """
 
 
-rule relate:
+rule somalier_relate:
     input:
         extracted = lambda wildcards: expand(str(INTERIM_DIR / "somalier_extract" / wildcards.project / "{sample}.somalier"),
                 sample=SAMPLES[wildcards.project]),
@@ -53,7 +53,7 @@ rule relate:
         """
 
 
-rule ancestry:
+rule somalier_ancestry:
     input:
         extracted = lambda wildcards: expand(str(INTERIM_DIR / "somalier_extract" / wildcards.project / "{sample}.somalier"),
                 sample=SAMPLES[wildcards.project]),

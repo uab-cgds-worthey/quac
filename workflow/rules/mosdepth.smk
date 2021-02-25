@@ -38,12 +38,14 @@ rule mosdepth_plot:
         "Running mosdepth plotting. Project: {wildcards.project}"
     params:
         in_dir = lambda wildcards, input: Path(input[0]).parent,
+        workflow_dir = Path(workflow.basedir).parent
     shell:
         r"""
         echo "Heads up: Mosdepth-plotting is run on all samples in "{params.in_dir}"; Not just the files mentioned in the rule's input."
 
-        cd {params.in_dir}
+        cd {params.in_dir}  # if not in directory, mosdepth uses filepath as sample name :(
         python {input.script} \
-            --output $(basename {output}) \
-            *.mosdepth.global.dist.txt
+            --output {params.workflow_dir}/{output} \
+            *.mosdepth.global.dist.txt \
+            > {params.workflow_dir}/{log} 2>&1
         """
