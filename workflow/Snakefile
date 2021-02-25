@@ -46,8 +46,6 @@ def get_targets(tool_name, projects=PROJECT_NAMES, sample_dict=SAMPLES):
                 f = INTERIM_DIR / "mosdepth" / project / f"{sample}.mosdepth.global.dist.txt"
             elif tool_name == 'verifyBamID':
                 f = PROCESSED_DIR / "verifyBamID" / project / f"{sample}.Ancestry"
-            elif tool_name == 'haplocheck':
-                f = PROCESSED_DIR / "haplocheck" / project / sample / "haplocheck.txt"
             else:
                 print (f"Unexpected tool name '{tool_name}' supplied. Exiting.")
                 raise SystemExit(1)
@@ -93,7 +91,5 @@ rule all:
         #### within-species contamination QC ####
         # verifyBamID
         get_targets('verifyBamID'),
-        # # haplocheck
-        get_targets('haplocheck'),
 
 
