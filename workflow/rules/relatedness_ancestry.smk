@@ -1,5 +1,5 @@
 TARGETS_SOMALIER = [
-    get_targets('somalier') if {'all', 'somalier'}.intersection(chosen_modules) else [],
+    get_targets('somalier') if {'all', 'somalier'}.intersection(MODULES_TO_RUN) else [],
 ]
 
 rule somalier_extract:

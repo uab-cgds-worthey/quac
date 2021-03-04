@@ -13,79 +13,8 @@ WORKFLOW_PATH = Path(workflow.basedir).parent
 configfile: WORKFLOW_PATH / "configs/workflow.yaml"
 
 
-def get_samples(fpath):
-
-    samples = ()
-    with open(fpath, 'r') as f_handle:
-        for line in f_handle:
-            if line.startswith('#'):
-                continue
-            sample = line.split('\t')[1]
-            samples += (sample,)
-
-    return samples
-
-EXTERNAL_DIR = Path("data/external")
-RAW_DIR = Path("data/raw")
-INTERIM_DIR = Path("data/interim")
-PROCESSED_DIR = Path("data/processed")
-
-LOGS_PATH = Path(config['logs_path'])
-LOGS_PATH.mkdir(parents=True, exist_ok=True)
-PROJECTS_PATH = Path(config['projects_path'])
-PROJECT_NAMES = config['project_names'].split(',')
-SAMPLES = {project: get_samples(RAW_DIR / f"ped/{project}.ped") for project in PROJECT_NAMES}
-
-
-def modules_to_run(chosen, allowed_options=['somalier', 'verifybamid', 'indexcov', 'mosdepth', 'covviz', 'all']):
-
-    chosen_modules = set([x.strip().lower() for x in chosen.strip().split(',')])
-    if chosen_modules.difference(set(allowed_options)):
-        msg =f"ERROR: Unexpected module was supplied by user. Allowed options: {allowed_options}"
-        raise SystemExit(msg)
-
-    return chosen_modules
-
-chosen_modules = modules_to_run(config['modules'])
-
-def get_targets(tool_name, projects=PROJECT_NAMES, sample_dict=SAMPLES):
-
-    flist = []
-    for project in projects:
-        for sample in sample_dict[project]:
-            if tool_name == 'mosdepth':
-                f = INTERIM_DIR / "mosdepth" / project / f"{sample}.mosdepth.global.dist.txt"
-                flist.append(f)
-            elif tool_name == 'verifybamid':
-                f = PROCESSED_DIR / "verifyBamID" / project / f"{sample}.Ancestry"
-                flist.append(f)
-
-        if tool_name == 'somalier':
-            f = [
-                expand(str(PROCESSED_DIR / "somalier/{project}/relatedness/somalier.html"),
-                    project=PROJECT_NAMES),
-                expand(str(PROCESSED_DIR / "somalier/{project}/ancestry/somalier.somalier-ancestry.html"),
-                    project=PROJECT_NAMES),
-            ]
-            flist.append(f)
-        elif tool_name == 'indexcov':
-            f = expand(str(PROCESSED_DIR / "indexcov/{project}/index.html"),
-                    project=PROJECT_NAMES)
-            flist.append(f)
-        elif tool_name == 'covviz':
-            f = expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
-                    project=PROJECT_NAMES),
-            flist.append(f)
-        elif tool_name == 'mosdepth':
-            f = expand(str(PROCESSED_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
-                    project=PROJECT_NAMES),
-            flist.append(f)
-
-
-    return flist
-
-
 ##############   MODULES   ##############
+include: "rules/common.smk"
 include: "rules/relatedness_ancestry.smk"
 include: "rules/coverage_analysis.smk"
 include: "rules/within_species_contamintation.smk"
@@ -97,7 +26,6 @@ wildcard_constraints:
     sample = '|'.join([item for sublist in SAMPLES.values() for item in sublist]),
     project = '|'.join(PROJECT_NAMES),
 #########################################
-
 
 
 rule all:

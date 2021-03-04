@@ -1,10 +1,10 @@
 TARGETS_COVERAGE = [
     # indexcov
-    get_targets('indexcov') if {'all', 'indexcov'}.intersection(chosen_modules) else [],
+    get_targets('indexcov') if {'all', 'indexcov'}.intersection(MODULES_TO_RUN) else [],
     # covviz
-    get_targets('covviz') if {'all', 'covviz'}.intersection(chosen_modules) else [],
+    get_targets('covviz') if {'all', 'covviz'}.intersection(MODULES_TO_RUN) else [],
     # mosdepth
-    get_targets('mosdepth') if {'all', 'mosdepth'}.intersection(chosen_modules) else [],
+    get_targets('mosdepth') if {'all', 'mosdepth'}.intersection(MODULES_TO_RUN) else [],
 ]
 
 
