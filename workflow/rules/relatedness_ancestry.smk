@@ -1,3 +1,7 @@
+TARGETS_SOMALIER = [
+    get_targets('somalier') if {'all', 'somalier'}.intersection(chosen_modules) else [],
+]
+
 rule somalier_extract:
     input:
         bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",

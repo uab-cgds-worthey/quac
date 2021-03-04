@@ -1,3 +1,13 @@
+TARGETS_COVERAGE = [
+    # indexcov
+    get_targets('indexcov') if {'all', 'indexcov'}.intersection(chosen_modules) else [],
+    # covviz
+    get_targets('covviz') if {'all', 'covviz'}.intersection(chosen_modules) else [],
+    # mosdepth
+    get_targets('mosdepth') if {'all', 'mosdepth'}.intersection(chosen_modules) else [],
+]
+
+
 ##########################   Mosdepth   ##########################
 rule mosdepth_coverage:
     input:
@@ -52,29 +62,6 @@ rule mosdepth_plot:
         """
 
 
-##########################   covviz   ##########################
-rule covviz:
-    input:
-        bed = PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
-        ped = RAW_DIR / "ped" / "{project}.ped",
-    output:
-        PROCESSED_DIR / "covviz/{project}/covviz_report.html",
-    log:
-        LOGS_PATH / "{project}/covviz.log"
-    message:
-        "Running covviz. Project: {wildcards.project}"
-    conda:
-        str(WORKFLOW_PATH / "configs/env/covviz.yaml")
-    shell:
-        r"""
-        covviz \
-            --ped {input.ped} \
-            --output {output} \
-            {input.bed} \
-            > {log} 2>&1
-        """
-
-
 ##########################   indexcov   ##########################
 rule indexcov:
     input:
@@ -100,5 +87,28 @@ rule indexcov:
         {input.goleft_tool} indexcov \
             --directory {params.outdir} \
             {params.project_dir}/[LU][WD]*/bam/*.bam \
+            > {log} 2>&1
+        """
+
+
+##########################   covviz   ##########################
+rule covviz:
+    input:
+        bed = PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
+        ped = RAW_DIR / "ped" / "{project}.ped",
+    output:
+        PROCESSED_DIR / "covviz/{project}/covviz_report.html",
+    log:
+        LOGS_PATH / "{project}/covviz.log"
+    message:
+        "Running covviz. Project: {wildcards.project}"
+    conda:
+        str(WORKFLOW_PATH / "configs/env/covviz.yaml")
+    shell:
+        r"""
+        covviz \
+            --ped {input.ped} \
+            --output {output} \
+            {input.bed} \
             > {log} 2>&1
         """

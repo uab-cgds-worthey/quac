@@ -1,3 +1,8 @@
+TARGETS_CONTAMINATION = [
+    get_targets('verifybamid') if {'all', 'verifybamid'}.intersection(chosen_modules) else [],
+]
+
+
 rule verifybamid:
     input:
         bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",
