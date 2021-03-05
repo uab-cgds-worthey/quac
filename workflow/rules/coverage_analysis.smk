@@ -14,8 +14,8 @@ rule mosdepth_coverage:
         bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",
         bam_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
     output:
-        dist = INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt",
-        summary = INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.summary.txt",
+        dist = PROCESSED_DIR / "mosdepth/{project}/results/{sample}.mosdepth.global.dist.txt",
+        summary = PROCESSED_DIR / "mosdepth/{project}/results/{sample}.mosdepth.summary.txt",
     message:
         "Running mosdepth for coverage. Project: {wildcards.project}, sample: {wildcards.sample}"
     group:
@@ -39,7 +39,7 @@ rule mosdepth_coverage:
 
 rule mosdepth_plot:
     input:
-        dist = expand(str(INTERIM_DIR / "mosdepth" / "{{project}}" / "{sample}.mosdepth.global.dist.txt"),
+        dist = expand(str(PROCESSED_DIR / "mosdepth" / "{{project}}" / "results" / "{sample}.mosdepth.global.dist.txt"),
                 sample=SAMPLES),
         script = WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:

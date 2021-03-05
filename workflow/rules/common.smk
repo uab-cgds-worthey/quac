@@ -53,7 +53,7 @@ def get_targets(tool_name, project=PROJECT_NAME, samples=SAMPLES):
     elif tool_name == 'mosdepth':
         flist += expand(str(PROCESSED_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
                     project=[PROJECT_NAME]),
-        flist += expand(str(INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt"),
+        flist += expand(str(PROCESSED_DIR / "mosdepth/{project}/results/{sample}.mosdepth.global.dist.txt"),
                     project=[PROJECT_NAME],
                     sample=SAMPLES),
     elif tool_name == 'verifybamid':

@@ -10,7 +10,7 @@ rule somalier_extract:
         sites = config['somalier']['sites'],
         ref_genome = config['ref'],
     output:
-        INTERIM_DIR / "somalier_extract/{project}/{sample}.somalier"
+        PROCESSED_DIR / "somalier/{project}/extract/{sample}.somalier",
     message:
         "Running somalier extract. Project: {wildcards.project}"
     group:
@@ -29,14 +29,14 @@ rule somalier_extract:
 
 rule somalier_relate:
     input:
-        extracted = expand(str(INTERIM_DIR / "somalier_extract" / "{{project}}" / "{sample}.somalier"),
+        extracted = expand(str(PROCESSED_DIR / "somalier" / "{{project}}" / "extract" / "{sample}.somalier"),
                 sample=SAMPLES),
         ped = RAW_DIR / "ped" / "{project}.ped",
         somalier_tool = config['somalier']['tool'],
     output:
         out = expand(str(PROCESSED_DIR / "somalier/{{project}}/relatedness/somalier.{ext}"),
                 ext=['html', 'groups.tsv', 'pairs.tsv', 'samples.tsv']),
-        log = PROCESSED_DIR / "somalier/{{project}}/relatedness/somalier.log",
+        log = PROCESSED_DIR / "somalier/{project}/relatedness/somalier.log",
     message:
         "Running somalier relate. Project: {wildcards.project}"
     group:
@@ -59,7 +59,7 @@ rule somalier_relate:
 
 rule somalier_ancestry:
     input:
-        extracted = expand(str(INTERIM_DIR / "somalier_extract" / "{{project}}" / "{sample}.somalier"),
+        extracted = expand(str(PROCESSED_DIR / "somalier" / "{{project}}" / "extract" / "{sample}.somalier"),
                 sample=SAMPLES),
         somalier_tool = config['somalier']['tool'],
         labels_1kg = config['somalier']['labels_1kg'],
