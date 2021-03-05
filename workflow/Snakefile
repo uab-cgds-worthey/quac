@@ -23,8 +23,8 @@ include: "rules/within_species_contamintation.smk"
 
 ############   CONSTRAINTS   ############
 wildcard_constraints:
-    sample = '|'.join([item for sublist in SAMPLES.values() for item in sublist]),
-    project = '|'.join(PROJECT_NAMES),
+    sample = '|'.join(SAMPLES),
+    project = PROJECT_NAME,
 #########################################
 
 

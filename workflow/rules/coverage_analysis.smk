@@ -38,8 +38,8 @@ rule mosdepth_coverage:
 
 rule mosdepth_plot:
     input:
-        dist = lambda wildcards: expand(str(INTERIM_DIR / "mosdepth" / wildcards.project / "{sample}.mosdepth.global.dist.txt"),
-                sample=SAMPLES[wildcards.project]),
+        dist = expand(str(INTERIM_DIR / "mosdepth" / "{{project}}" / "{sample}.mosdepth.global.dist.txt"),
+                sample=SAMPLES),
         script = WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
         PROCESSED_DIR / "mosdepth/{project}/mosdepth_{project}.html",
@@ -65,10 +65,10 @@ rule mosdepth_plot:
 ##########################   indexcov   ##########################
 rule indexcov:
     input:
-        bam = lambda wildcards: expand(str(PROJECTS_PATH / wildcards.project / "analysis" / "{sample}" / "bam" / "{sample}.bam"),
-                sample=SAMPLES[wildcards.project]),
-        bam_index = lambda wildcards: expand(str(PROJECTS_PATH / wildcards.project / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai"),
-                sample=SAMPLES[wildcards.project]),
+        bam = expand(str(PROJECTS_PATH / "{{project}}" / "analysis" / "{sample}" / "bam" / "{sample}.bam"),
+                sample=SAMPLES),
+        bam_index = expand(str(PROJECTS_PATH / "{{project}}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai"),
+                sample=SAMPLES),
         goleft_tool = config['goleft']['tool'],
     output:
         PROCESSED_DIR / "indexcov/{project}/index.html",

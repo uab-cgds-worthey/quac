@@ -30,8 +30,8 @@ rule somalier_extract:
 
 rule somalier_relate:
     input:
-        extracted = lambda wildcards: expand(str(INTERIM_DIR / "somalier_extract" / wildcards.project / "{sample}.somalier"),
-                sample=SAMPLES[wildcards.project]),
+        extracted = expand(str(INTERIM_DIR / "somalier_extract" / "{{project}}" / "{sample}.somalier"),
+                sample=SAMPLES),
         ped = RAW_DIR / "ped" / "{project}.ped",
         somalier_tool = config['somalier']['tool'],
     output:
@@ -59,8 +59,8 @@ rule somalier_relate:
 
 rule somalier_ancestry:
     input:
-        extracted = lambda wildcards: expand(str(INTERIM_DIR / "somalier_extract" / wildcards.project / "{sample}.somalier"),
-                sample=SAMPLES[wildcards.project]),
+        extracted = expand(str(INTERIM_DIR / "somalier_extract" / "{{project}}" / "{sample}.somalier"),
+                sample=SAMPLES),
         somalier_tool = config['somalier']['tool'],
         labels_1kg = config['somalier']['labels_1kg'],
         somalier_1kg = directory(config['somalier']['somalier_1kg']),

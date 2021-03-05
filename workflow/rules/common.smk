@@ -30,44 +30,42 @@ LOGS_PATH = Path(config['logs_path'])
 LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
 PROJECTS_PATH = Path(config['projects_path'])
-PROJECT_NAMES = config['project_names'].split(',')
-SAMPLES = {project: get_samples(RAW_DIR / f"ped/{project}.ped") for project in PROJECT_NAMES}
+PROJECT_NAME = config['project_name']
+SAMPLES = get_samples(RAW_DIR / f"ped/{PROJECT_NAME}.ped")
 
 MODULES_TO_RUN = modules_to_run(config['modules'])
 
 
-def get_targets(tool_name, projects=PROJECT_NAMES, sample_dict=SAMPLES):
+def get_targets(tool_name, project=PROJECT_NAME, samples=SAMPLES):
 
     flist = []
-    for project in projects:
-        for sample in sample_dict[project]:
-            if tool_name == 'mosdepth':
-                f = INTERIM_DIR / "mosdepth" / project / f"{sample}.mosdepth.global.dist.txt"
-                flist.append(f)
-            elif tool_name == 'verifybamid':
-                f = PROCESSED_DIR / "verifyBamID" / project / f"{sample}.Ancestry"
-                flist.append(f)
-
-        if tool_name == 'somalier':
-            f = [
-                expand(str(PROCESSED_DIR / "somalier/{project}/relatedness/somalier.html"),
-                    project=PROJECT_NAMES),
-                expand(str(PROCESSED_DIR / "somalier/{project}/ancestry/somalier.somalier-ancestry.html"),
-                    project=PROJECT_NAMES),
-            ]
-            flist.append(f)
-        elif tool_name == 'indexcov':
-            f = expand(str(PROCESSED_DIR / "indexcov/{project}/index.html"),
-                    project=PROJECT_NAMES)
-            flist.append(f)
-        elif tool_name == 'covviz':
-            f = expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
-                    project=PROJECT_NAMES),
-            flist.append(f)
-        elif tool_name == 'mosdepth':
-            f = expand(str(PROCESSED_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
-                    project=PROJECT_NAMES),
-            flist.append(f)
+    if tool_name == 'somalier':
+        # flist += [
+        #     expand(str(PROCESSED_DIR / "somalier/{project}/relatedness/somalier.html"),
+        #         project=[PROJECT_NAME]),
+        #     expand(str(PROCESSED_DIR / "somalier/{project}/ancestry/somalier.somalier-ancestry.html"),
+        #         project=[PROJECT_NAME]),
+        # ]
+        flist += expand(str(PROCESSED_DIR / "somalier/{project}/relatedness/somalier.html"),
+                    project=[PROJECT_NAME]),
+        flist += expand(str(PROCESSED_DIR / "somalier/{project}/ancestry/somalier.somalier-ancestry.html"),
+                    project=[PROJECT_NAME]),
+    elif tool_name == 'indexcov':
+        flist += expand(str(PROCESSED_DIR / "indexcov/{project}/index.html"),
+                    project=[PROJECT_NAME])
+    elif tool_name == 'covviz':
+        flist += expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
+                    project=[PROJECT_NAME]),
+    elif tool_name == 'mosdepth':
+        flist += expand(str(PROCESSED_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
+                    project=[PROJECT_NAME]),
+        flist += expand(str(INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt"),
+                    project=[PROJECT_NAME],
+                    sample=SAMPLES),
+    elif tool_name == 'verifybamid':
+        flist += expand(str(PROCESSED_DIR / "verifyBamID/{project}/{sample}.Ancestry"),
+                    project=[PROJECT_NAME],
+                    sample=SAMPLES),
 
 
     return flist
