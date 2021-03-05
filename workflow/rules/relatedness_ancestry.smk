@@ -4,15 +4,15 @@ TARGETS_SOMALIER = [
 
 rule somalier_extract:
     input:
-        bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam = PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam",
+        bam_index = PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
         somalier_tool = config['somalier']['tool'],
         sites = config['somalier']['sites'],
         ref_genome = config['ref'],
     output:
-        PROCESSED_DIR / "somalier/{project}/extract/{sample}.somalier",
+        OUT_DIR / "somalier/extract/{sample}.somalier",
     message:
-        "Running somalier extract. Project: {wildcards.project}"
+        "Running somalier extract. Sample: {wildcards.sample}"
     group:
         "somalier"
     params:
@@ -29,16 +29,16 @@ rule somalier_extract:
 
 rule somalier_relate:
     input:
-        extracted = expand(str(PROCESSED_DIR / "somalier" / "{{project}}" / "extract" / "{sample}.somalier"),
+        extracted = expand(str(OUT_DIR / "somalier" / "extract" / "{sample}.somalier"),
                 sample=SAMPLES),
         ped = PEDIGREE_FPATH,
         somalier_tool = config['somalier']['tool'],
     output:
-        out = expand(str(PROCESSED_DIR / "somalier/{{project}}/relatedness/somalier.{ext}"),
+        out = expand(str(OUT_DIR / "somalier" / "relatedness" / "somalier.{ext}"),
                 ext=['html', 'groups.tsv', 'pairs.tsv', 'samples.tsv']),
-        log = PROCESSED_DIR / "somalier/{project}/relatedness/somalier.log",
+        log = OUT_DIR / "somalier" / "relatedness" / "somalier.log",
     message:
-        "Running somalier relate. Project: {wildcards.project}"
+        "Running somalier relate"
     group:
         "somalier"
     params:
@@ -59,17 +59,17 @@ rule somalier_relate:
 
 rule somalier_ancestry:
     input:
-        extracted = expand(str(PROCESSED_DIR / "somalier" / "{{project}}" / "extract" / "{sample}.somalier"),
+        extracted = expand(str(OUT_DIR / "somalier" / "extract" / "{sample}.somalier"),
                 sample=SAMPLES),
         somalier_tool = config['somalier']['tool'],
         labels_1kg = config['somalier']['labels_1kg'],
         somalier_1kg = directory(config['somalier']['somalier_1kg']),
     output:
-        out = expand(str(PROCESSED_DIR / "somalier/{{project}}/ancestry/somalier.somalier-ancestry.{ext}"),
+        out = expand(str(OUT_DIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}"),
                 ext=['html', 'tsv']),
-        log = PROCESSED_DIR / "somalier/{project}/relatedness/somalier.log",
+        log = OUT_DIR / "somalier" / "relatedness" / "somalier.log",
     message:
-        "Running somalier ancestry. Project: {wildcards.project}"
+        "Running somalier ancestry."
     group:
         "somalier"
     params:

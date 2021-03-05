@@ -11,13 +11,13 @@ TARGETS_COVERAGE = [
 ##########################   Mosdepth   ##########################
 rule mosdepth_coverage:
     input:
-        bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam = PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam",
+        bam_index = PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
     output:
-        dist = PROCESSED_DIR / "mosdepth/{project}/results/{sample}.mosdepth.global.dist.txt",
-        summary = PROCESSED_DIR / "mosdepth/{project}/results/{sample}.mosdepth.summary.txt",
+        dist = OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt",
+        summary = OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.summary.txt",
     message:
-        "Running mosdepth for coverage. Project: {wildcards.project}, sample: {wildcards.sample}"
+        "Running mosdepth for coverage. Sample: {wildcards.sample}"
     group:
         "mosdepth"
     conda:
@@ -39,13 +39,13 @@ rule mosdepth_coverage:
 
 rule mosdepth_plot:
     input:
-        dist = expand(str(PROCESSED_DIR / "mosdepth" / "{{project}}" / "results" / "{sample}.mosdepth.global.dist.txt"),
+        dist = expand(str(OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt"),
                 sample=SAMPLES),
         script = WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
-        PROCESSED_DIR / "mosdepth/{project}/mosdepth_{project}.html",
+        OUT_DIR / "mosdepth" / f"mosdepth_{PROJECT_NAME}.html",
     message:
-        "Running mosdepth plotting. Project: {wildcards.project}"
+        "Running mosdepth plotting"
     group:
         "mosdepth"
     params:
@@ -65,17 +65,17 @@ rule mosdepth_plot:
 ##########################   indexcov   ##########################
 rule indexcov:
     input:
-        bam = expand(str(PROJECTS_PATH / "{{project}}" / "analysis" / "{sample}" / "bam" / "{sample}.bam"),
+        bam = expand(str(PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam"),
                 sample=SAMPLES),
-        bam_index = expand(str(PROJECTS_PATH / "{{project}}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai"),
+        bam_index = expand(str(PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai"),
                 sample=SAMPLES),
         goleft_tool = config['goleft']['tool'],
     output:
-        html = PROCESSED_DIR / "indexcov/{project}/index.html",
-        bed = PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
-        log = PROCESSED_DIR / "indexcov/{project}/stdout.log",
+        html = OUT_DIR / "indexcov" / "index.html",
+        bed = OUT_DIR / "indexcov" / f"{PROJECT_NAME}-indexcov.bed.gz",
+        log = OUT_DIR / "indexcov" / "stdout.log",
     message:
-        "Running indexcov. Project: {wildcards.project}"
+        "Running indexcov"
     params:
         outdir = lambda wildcards, output: Path(output[0]).parent,
         project_dir = lambda wildcards, input: str(Path(input['bam'][0]).parents[2]),
@@ -93,13 +93,13 @@ rule indexcov:
 ##########################   covviz   ##########################
 rule covviz:
     input:
-        bed = PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
+        bed = OUT_DIR / "indexcov" / f"{PROJECT_NAME}-indexcov.bed.gz",
         ped = PEDIGREE_FPATH,
     output:
-        html = PROCESSED_DIR / "covviz/{project}/covviz_report.html",
-        log = PROCESSED_DIR / "covviz/{project}/stdout.log",
+        html = OUT_DIR / "covviz" / "covviz_report.html",
+        log = OUT_DIR / "covviz" / "stdout.log",
     message:
-        "Running covviz. Project: {wildcards.project}"
+        "Running covviz"
     conda:
         str(WORKFLOW_PATH / "configs/env/covviz.yaml")
     shell:

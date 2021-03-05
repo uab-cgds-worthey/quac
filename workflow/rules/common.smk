@@ -21,10 +21,8 @@ def modules_to_run(chosen, allowed_options=['somalier', 'verifybamid', 'indexcov
     return selected_modules
 
 
-EXTERNAL_DIR = Path("data/external")
-RAW_DIR = Path("data/raw")
-INTERIM_DIR = Path("data/interim")
-PROCESSED_DIR = Path("data/processed")
+OUT_DIR = Path("data/processed")
+
 
 LOGS_PATH = Path(config['logs_path'])
 LOGS_PATH.mkdir(parents=True, exist_ok=True)
@@ -41,25 +39,20 @@ def get_targets(tool_name, project=PROJECT_NAME, samples=SAMPLES):
 
     flist = []
     if tool_name == 'somalier':
-        flist += expand(str(PROCESSED_DIR / "somalier/{project}/relatedness/somalier.html"),
-                    project=[PROJECT_NAME]),
-        flist += expand(str(PROCESSED_DIR / "somalier/{project}/ancestry/somalier.somalier-ancestry.html"),
-                    project=[PROJECT_NAME]),
+        flist += [
+            OUT_DIR / "somalier" / "relatedness" / "somalier.html",
+            OUT_DIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.html"
+            ]
     elif tool_name == 'indexcov':
-        flist += expand(str(PROCESSED_DIR / "indexcov/{project}/index.html"),
-                    project=[PROJECT_NAME])
+        flist += [OUT_DIR / "indexcov" / "index.html"]
     elif tool_name == 'covviz':
-        flist += expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
-                    project=[PROJECT_NAME]),
+        flist += [OUT_DIR / "covviz/" / "covviz_report.html"]
     elif tool_name == 'mosdepth':
-        flist += expand(str(PROCESSED_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
-                    project=[PROJECT_NAME]),
-        flist += expand(str(PROCESSED_DIR / "mosdepth/{project}/results/{sample}.mosdepth.global.dist.txt"),
-                    project=[PROJECT_NAME],
+        flist += [OUT_DIR / "mosdepth" / f"mosdepth_{PROJECT_NAME}.html"]
+        flist += expand(str(OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt"),
                     sample=SAMPLES),
     elif tool_name == 'verifybamid':
-        flist += expand(str(PROCESSED_DIR / "verifyBamID/{project}/{sample}.Ancestry"),
-                    project=[PROJECT_NAME],
+        flist += expand(str(OUT_DIR / "verifyBamID" / "{sample}.Ancestry"),
                     sample=SAMPLES),
 
 

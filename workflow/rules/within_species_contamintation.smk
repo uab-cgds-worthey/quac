@@ -5,16 +5,16 @@ TARGETS_CONTAMINATION = [
 
 rule verifybamid:
     input:
-        bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam = PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam",
+        bam_index = PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
         ref_genome = config['ref'],
         svd = expand(f"{config['verifyBamID']['svd_dat']}.{{ext}}",
                     ext=['bed', 'mu', 'UD'])
     output:
-        ancestry = PROCESSED_DIR / "verifyBamID/{project}/{sample}.Ancestry",
-        selfsm = PROCESSED_DIR / "verifyBamID/{project}/{sample}.selfSM",
+        ancestry = OUT_DIR / "verifyBamID/{sample}.Ancestry",
+        selfsm = OUT_DIR / "verifyBamID/{sample}.selfSM",
     message:
-        "Running VerifyBamID to detect within-species contamination. Project: {wildcards.project}, sample: {wildcards.sample}"
+        "Running VerifyBamID to detect within-species contamination. sample: {wildcards.sample}"
     conda:
         str(WORKFLOW_PATH / "configs/env/verifyBamID.yaml")
     params:
