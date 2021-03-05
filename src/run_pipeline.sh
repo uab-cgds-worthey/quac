@@ -12,12 +12,13 @@ module load Anaconda3/2020.02
 module load snakemake/5.9.1-foss-2018b-Python-3.6.6
 
 MODULES="all"
+PROJECT_NAME="CF_CFF_PFarrell"
 # EXTRA_ARGS="-n -q"
 EXTRA_ARGS=""
 
 snakemake \
     --snakefile "workflow/Snakefile" \
-    --config modules="${MODULES}" \
+    --config modules="${MODULES}" project_name="${PROJECT_NAME}" \
     --use-conda \
     --profile 'configs/snakemake_slurm_profile/{{cookiecutter.profile_name}}' \
     --cluster-config 'configs/cluster_config.json' \
