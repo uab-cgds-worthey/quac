@@ -94,7 +94,7 @@ rule indexcov:
 rule covviz:
     input:
         bed = PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
-        ped = RAW_DIR / "ped" / "{project}.ped",
+        ped = PEDIGREE_FPATH,
     output:
         html = PROCESSED_DIR / "covviz/{project}/covviz_report.html",
         log = PROCESSED_DIR / "covviz/{project}/stdout.log",

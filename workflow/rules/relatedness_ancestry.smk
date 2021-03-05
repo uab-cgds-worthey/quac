@@ -31,7 +31,7 @@ rule somalier_relate:
     input:
         extracted = expand(str(PROCESSED_DIR / "somalier" / "{{project}}" / "extract" / "{sample}.somalier"),
                 sample=SAMPLES),
-        ped = RAW_DIR / "ped" / "{project}.ped",
+        ped = PEDIGREE_FPATH,
         somalier_tool = config['somalier']['tool'],
     output:
         out = expand(str(PROCESSED_DIR / "somalier/{{project}}/relatedness/somalier.{ext}"),

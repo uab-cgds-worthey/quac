@@ -31,7 +31,8 @@ LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
 PROJECTS_PATH = Path(config['projects_path'])
 PROJECT_NAME = config['project_name']
-SAMPLES = get_samples(RAW_DIR / f"ped/{PROJECT_NAME}.ped")
+PEDIGREE_FPATH = config['ped']
+SAMPLES = get_samples(PEDIGREE_FPATH)
 
 MODULES_TO_RUN = modules_to_run(config['modules'])
 
