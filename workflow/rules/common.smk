@@ -1,4 +1,7 @@
 def get_samples(ped_fpath):
+    """
+    Parse pedigree file and return sample names
+    """
 
     samples = ()
     with open(ped_fpath, 'r') as f_handle:
@@ -11,30 +14,27 @@ def get_samples(ped_fpath):
     return samples
 
 
-def modules_to_run(chosen, allowed_options=['somalier', 'verifybamid', 'indexcov', 'mosdepth', 'covviz', 'all']):
+def modules_to_run(user_input):
+    """
+    Parse user-selected tools. Verify they are among the expected values.
+    """
+    user_input = set([x.strip().lower() for x in user_input.strip().split(',')])
 
-    selected_modules = set([x.strip().lower() for x in chosen.strip().split(',')])
-    if selected_modules.difference(set(allowed_options)):
+    allowed_options=['somalier', 'verifybamid', 'indexcov', 'mosdepth', 'covviz', 'all']
+    if user_input.difference(set(allowed_options)):
         msg =f"ERROR: Unexpected module was supplied by user. Allowed options: {allowed_options}"
         raise SystemExit(msg)
 
-    return selected_modules
+    print (f"Tools chosen by user to run: {list(user_input)}")
+
+    return user_input
 
 
-OUT_DIR = Path(config['out_dir'])
+def get_targets(tool_name, samples=None):
+    """
+    returns target files based on the tool
+    """
 
-LOGS_PATH = Path(config['logs_path'])
-LOGS_PATH.mkdir(parents=True, exist_ok=True)
-
-PROJECTS_PATH = Path(config['projects_path'])
-PROJECT_NAME = config['project_name']
-PEDIGREE_FPATH = config['ped']
-SAMPLES = get_samples(PEDIGREE_FPATH)
-
-MODULES_TO_RUN = modules_to_run(config['modules'])
-
-
-def get_targets(tool_name, project=PROJECT_NAME, samples=SAMPLES):
 
     flist = []
     if tool_name == 'somalier':
@@ -47,12 +47,25 @@ def get_targets(tool_name, project=PROJECT_NAME, samples=SAMPLES):
     elif tool_name == 'covviz':
         flist += [OUT_DIR / "covviz/" / "covviz_report.html"]
     elif tool_name == 'mosdepth':
-        flist += [OUT_DIR / "mosdepth" / f"mosdepth_{PROJECT_NAME}.html"]
+        flist += [OUT_DIR / "mosdepth" / f"mosdepth.html"]
         flist += expand(str(OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt"),
-                    sample=SAMPLES),
+                    sample=samples),
     elif tool_name == 'verifybamid':
         flist += expand(str(OUT_DIR / "verifyBamID" / "{sample}.Ancestry"),
-                    sample=SAMPLES),
-
+                    sample=samples),
 
     return flist
+
+
+#### configs from cli ####
+OUT_DIR = Path(config['out_dir'])
+PROJECT_NAME = config['project_name']
+MODULES_TO_RUN = modules_to_run(config['modules'])
+PEDIGREE_FPATH = config['ped']
+
+#### configs from configfile ####
+PROJECTS_PATH = Path(config['projects_path'])
+LOGS_PATH = Path(config['logs_path'])
+LOGS_PATH.mkdir(parents=True, exist_ok=True)
+
+SAMPLES = get_samples(PEDIGREE_FPATH)

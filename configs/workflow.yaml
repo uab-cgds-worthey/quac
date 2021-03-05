@@ -11,4 +11,4 @@ goleft:
     tool: "/data/project/worthey_lab/projects/experimental_pipelines/mana/tools/goleft/0.2.4/goleft"
 verifyBamID:
     svd_dat: "/data/project/worthey_lab/projects/experimental_pipelines/mana/tools/verifyBamID/VerifyBamID-2.0.1/resource/1000g.phase3.100k.b38.vcf.gz.dat"
-logs_path: "logs/rule_logs/"
+logs_path: "logs/"

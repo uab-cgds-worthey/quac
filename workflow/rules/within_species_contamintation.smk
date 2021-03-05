@@ -1,5 +1,5 @@
 TARGETS_CONTAMINATION = [
-    get_targets('verifybamid') if {'all', 'verifybamid'}.intersection(MODULES_TO_RUN) else [],
+    get_targets('verifybamid', SAMPLES) if {'all', 'verifybamid'}.intersection(MODULES_TO_RUN) else [],
 ]
 
 

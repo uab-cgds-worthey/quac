@@ -4,7 +4,7 @@ TARGETS_COVERAGE = [
     # covviz
     get_targets('covviz') if {'all', 'covviz'}.intersection(MODULES_TO_RUN) else [],
     # mosdepth
-    get_targets('mosdepth') if {'all', 'mosdepth'}.intersection(MODULES_TO_RUN) else [],
+    get_targets('mosdepth', SAMPLES) if {'all', 'mosdepth'}.intersection(MODULES_TO_RUN) else [],
 ]
 
 
@@ -43,7 +43,7 @@ rule mosdepth_plot:
                 sample=SAMPLES),
         script = WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
-        OUT_DIR / "mosdepth" / f"mosdepth_{PROJECT_NAME}.html",
+        OUT_DIR / "mosdepth" / f"mosdepth.html",
     message:
         "Running mosdepth plotting"
     group:
@@ -72,7 +72,7 @@ rule indexcov:
         goleft_tool = config['goleft']['tool'],
     output:
         html = OUT_DIR / "indexcov" / "index.html",
-        bed = OUT_DIR / "indexcov" / f"{PROJECT_NAME}-indexcov.bed.gz",
+        bed = OUT_DIR / "indexcov" / f"indexcov.bed.gz",
         log = OUT_DIR / "indexcov" / "stdout.log",
     message:
         "Running indexcov"
@@ -93,7 +93,7 @@ rule indexcov:
 ##########################   covviz   ##########################
 rule covviz:
     input:
-        bed = OUT_DIR / "indexcov" / f"{PROJECT_NAME}-indexcov.bed.gz",
+        bed = OUT_DIR / "indexcov" / f"indexcov.bed.gz",
         ped = PEDIGREE_FPATH,
     output:
         html = OUT_DIR / "covviz" / "covviz_report.html",
