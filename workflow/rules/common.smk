@@ -40,12 +40,6 @@ def get_targets(tool_name, project=PROJECT_NAME, samples=SAMPLES):
 
     flist = []
     if tool_name == 'somalier':
-        # flist += [
-        #     expand(str(PROCESSED_DIR / "somalier/{project}/relatedness/somalier.html"),
-        #         project=[PROJECT_NAME]),
-        #     expand(str(PROCESSED_DIR / "somalier/{project}/ancestry/somalier.somalier-ancestry.html"),
-        #         project=[PROJECT_NAME]),
-        # ]
         flist += expand(str(PROCESSED_DIR / "somalier/{project}/relatedness/somalier.html"),
                     project=[PROJECT_NAME]),
         flist += expand(str(PROCESSED_DIR / "somalier/{project}/ancestry/somalier.somalier-ancestry.html"),

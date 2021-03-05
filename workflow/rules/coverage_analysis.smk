@@ -16,10 +16,10 @@ rule mosdepth_coverage:
     output:
         dist = INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt",
         summary = INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.summary.txt",
-    log:
-        LOGS_PATH / "{project}/mosdepth_coverage-{sample}.log"
     message:
         "Running mosdepth for coverage. Project: {wildcards.project}, sample: {wildcards.sample}"
+    group:
+        "mosdepth"
     conda:
         str(WORKFLOW_PATH / "configs/env/mosdepth.yaml")
     params:
@@ -31,8 +31,7 @@ rule mosdepth_coverage:
             --threads {threads} \
             --fast-mode \
             {params.out_prefix} \
-            {input.bam} \
-            > {log} 2>&1
+            {input.bam}
         """
 
 
@@ -43,10 +42,10 @@ rule mosdepth_plot:
         script = WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
         PROCESSED_DIR / "mosdepth/{project}/mosdepth_{project}.html",
-    log:
-        LOGS_PATH / "{project}/mosdepth_plot.log"
     message:
         "Running mosdepth plotting. Project: {wildcards.project}"
+    group:
+        "mosdepth"
     params:
         in_dir = lambda wildcards, input: Path(input[0]).parent,
         workflow_dir = Path(workflow.basedir).parent
@@ -57,8 +56,7 @@ rule mosdepth_plot:
         cd {params.in_dir}  # if not in directory, mosdepth uses filepath as sample name :(
         python {input.script} \
             --output {params.workflow_dir}/{output} \
-            *.mosdepth.global.dist.txt \
-            > {params.workflow_dir}/{log} 2>&1
+            *.mosdepth.global.dist.txt
         """
 
 
@@ -73,8 +71,6 @@ rule indexcov:
     output:
         PROCESSED_DIR / "indexcov/{project}/index.html",
         PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
-    log:
-        LOGS_PATH / "{project}/indexcov.log"
     message:
         "Running indexcov. Project: {wildcards.project}"
     params:
@@ -86,8 +82,7 @@ rule indexcov:
 
         {input.goleft_tool} indexcov \
             --directory {params.outdir} \
-            {params.project_dir}/[LU][WD]*/bam/*.bam \
-            > {log} 2>&1
+            {params.project_dir}/[LU][WD]*/bam/*.bam
         """
 
 
@@ -98,8 +93,6 @@ rule covviz:
         ped = RAW_DIR / "ped" / "{project}.ped",
     output:
         PROCESSED_DIR / "covviz/{project}/covviz_report.html",
-    log:
-        LOGS_PATH / "{project}/covviz.log"
     message:
         "Running covviz. Project: {wildcards.project}"
     conda:
@@ -109,6 +102,5 @@ rule covviz:
         covviz \
             --ped {input.ped} \
             --output {output} \
-            {input.bed} \
-            > {log} 2>&1
+            {input.bed}
         """

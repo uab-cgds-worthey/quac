@@ -13,8 +13,6 @@ rule verifybamid:
     output:
         ancestry = PROCESSED_DIR / "verifyBamID/{project}/{sample}.Ancestry",
         selfsm = PROCESSED_DIR / "verifyBamID/{project}/{sample}.selfSM",
-    log:
-        LOGS_PATH / "{project}/verifyBamID-{sample}.log"
     message:
         "Running VerifyBamID to detect within-species contamination. Project: {wildcards.project}, sample: {wildcards.sample}"
     conda:
@@ -22,12 +20,14 @@ rule verifybamid:
     params:
         svd_prefix = lambda wildcards, input: input['svd'][0].replace(Path(input['svd'][0]).suffix, ''),
         out_prefix = lambda wildcards, output: output['ancestry'].replace('.Ancestry', ''),
+    threads:
+        1
     shell:
         r"""
         verifybamid2 \
+            --NumThread {threads} \
             --SVDPrefix {params.svd_prefix} \
             --Reference {input.ref_genome} \
             --BamFile {input.bam} \
-            --Output {params.out_prefix} \
-            > {log} 2>&1
+            --Output {params.out_prefix}
         """
