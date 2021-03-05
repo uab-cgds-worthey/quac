@@ -71,8 +71,9 @@ rule indexcov:
                 sample=SAMPLES),
         goleft_tool = config['goleft']['tool'],
     output:
-        PROCESSED_DIR / "indexcov/{project}/index.html",
-        PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
+        html = PROCESSED_DIR / "indexcov/{project}/index.html",
+        bed = PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
+        log = PROCESSED_DIR / "indexcov/{project}/stdout.log",
     message:
         "Running indexcov. Project: {wildcards.project}"
     params:
@@ -84,7 +85,8 @@ rule indexcov:
 
         {input.goleft_tool} indexcov \
             --directory {params.outdir} \
-            {params.project_dir}/[LU][WD]*/bam/*.bam
+            {params.project_dir}/[LU][WD]*/bam/*.bam \
+            > {output.log} 2>&1
         """
 
 
@@ -94,7 +96,8 @@ rule covviz:
         bed = PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
         ped = RAW_DIR / "ped" / "{project}.ped",
     output:
-        PROCESSED_DIR / "covviz/{project}/covviz_report.html",
+        html = PROCESSED_DIR / "covviz/{project}/covviz_report.html",
+        log = PROCESSED_DIR / "covviz/{project}/stdout.log",
     message:
         "Running covviz. Project: {wildcards.project}"
     conda:
@@ -104,5 +107,6 @@ rule covviz:
         covviz \
             --ped {input.ped} \
             --output {output} \
-            {input.bed}
+            {input.bed} \
+            > {output.log} 2>&1
         """

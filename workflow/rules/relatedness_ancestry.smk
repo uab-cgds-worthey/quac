@@ -65,14 +65,15 @@ rule somalier_ancestry:
         labels_1kg = config['somalier']['labels_1kg'],
         somalier_1kg = directory(config['somalier']['somalier_1kg']),
     output:
-        expand(str(PROCESSED_DIR / "somalier/{{project}}/ancestry/somalier.somalier-ancestry.{ext}"),
+        out = expand(str(PROCESSED_DIR / "somalier/{{project}}/ancestry/somalier.somalier-ancestry.{ext}"),
                 ext=['html', 'tsv']),
+        log = PROCESSED_DIR / "somalier/{project}/relatedness/somalier.log",
     message:
         "Running somalier ancestry. Project: {wildcards.project}"
     group:
         "somalier"
     params:
-        outdir = lambda wildcards, output: Path(output[0]).parent,
+        outdir = lambda wildcards, output: Path(output['out'][0]).parent,
         indir = lambda wildcards, input: Path(input[0]).parent,
     shell:
         r"""
@@ -82,5 +83,6 @@ rule somalier_ancestry:
             --output-prefix {params.outdir}/somalier \
             --labels {input.labels_1kg} \
             {input.somalier_1kg}*.somalier ++ \
-            {params.indir}/*.somalier
+            {params.indir}/*.somalier \
+            > {output.log} 2>&1
         """
