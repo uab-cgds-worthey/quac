@@ -1,0 +1,3 @@
+[submodule "configs/snakemake_slurm_profile"]
+	path = configs/snakemake_slurm_profile
+	url = git@gitlab.rc.uab.edu:center-for-computational-genomics-and-data-science/sciops/external-projects/snakemake_slurm_profile.git
