@@ -11,15 +11,17 @@ module reset
 module load Anaconda3/2020.02
 module load snakemake/5.9.1-foss-2018b-Python-3.6.6
 
-MODULES="all"
 PROJECT_NAME="CF_CFF_PFarrell"
 PEDIGREE_FPATH="data/raw/ped/${PROJECT_NAME}.ped"
+OUT_DIR="data/processed/${PROJECT_NAME}"
+
+MODULES="all"
 EXTRA_ARGS="-n -q"
 # EXTRA_ARGS=""
 
 snakemake \
     --snakefile "workflow/Snakefile" \
-    --config modules="${MODULES}" project_name="${PROJECT_NAME}" ped="${PEDIGREE_FPATH}" \
+    --config modules="${MODULES}" project_name="${PROJECT_NAME}" ped="${PEDIGREE_FPATH}" out_dir="${OUT_DIR}" \
     --use-conda \
     --profile 'configs/snakemake_slurm_profile/{{cookiecutter.profile_name}}' \
     --cluster-config 'configs/cluster_config.json' \

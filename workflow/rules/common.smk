@@ -21,8 +21,7 @@ def modules_to_run(chosen, allowed_options=['somalier', 'verifybamid', 'indexcov
     return selected_modules
 
 
-OUT_DIR = Path("data/processed")
-
+OUT_DIR = Path(config['out_dir'])
 
 LOGS_PATH = Path(config['logs_path'])
 LOGS_PATH.mkdir(parents=True, exist_ok=True)
