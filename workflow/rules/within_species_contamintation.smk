@@ -21,7 +21,7 @@ rule verifybamid:
         svd_prefix = lambda wildcards, input: input['svd'][0].replace(Path(input['svd'][0]).suffix, ''),
         out_prefix = lambda wildcards, output: output['ancestry'].replace('.Ancestry', ''),
     threads:
-        1
+        2
     shell:
         r"""
         verifybamid2 \

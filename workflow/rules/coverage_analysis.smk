@@ -22,6 +22,8 @@ rule mosdepth_coverage:
         "mosdepth"
     conda:
         str(WORKFLOW_PATH / "configs/env/mosdepth.yaml")
+    threads:
+        4
     params:
         out_prefix = lambda wildcards, output: output['summary'].replace('.mosdepth.summary.txt', ''),
     shell:
