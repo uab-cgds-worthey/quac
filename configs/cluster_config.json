@@ -6,7 +6,11 @@
         "mem": "8G",
         "output": "logs/rule_logs/{rule}-%j.log"
     },
-    "mosdepth_coverage": {
-        "partition": "short"
+    "mosdepth": {
+        "partition": "short",
+        "cpus-per-task": 12
+    },
+    "somalier": {
+        "cpus-per-task": 8
     }
 }

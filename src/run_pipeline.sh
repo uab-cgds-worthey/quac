@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=quac
 #SBATCH --output=logs/quac-%j.log
-#SBATCH --cpus-per-task=20
+#SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=8G
 #SBATCH --partition=short
 
@@ -12,7 +12,8 @@ module load Anaconda3/2020.02
 module load snakemake/5.9.1-foss-2018b-Python-3.6.6
 
 MODULES="all"
-EXTRA_ARGS="-n -q"
+# EXTRA_ARGS="-n -q"
+EXTRA_ARGS=""
 
 snakemake \
     --snakefile "workflow/Snakefile" \
