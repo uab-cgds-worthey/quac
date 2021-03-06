@@ -53,7 +53,6 @@ def main(outpath):
             "tracking_sheet": "data/external/project_tracker/PROJECT TRACKING -CF.xlsx",
             "affected": "all",
         },
-        # "CF_TLOAF_PFarrell",
         # "EDS3_unkn_DGreenspan",
         # "MuscDyst_SU_MAlexander",
         # "UDN_Phase1_EAWorthey",
