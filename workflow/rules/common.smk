@@ -2,7 +2,6 @@ def get_samples(ped_fpath):
     """
     Parse pedigree file and return sample names
     """
-
     samples = ()
     with open(ped_fpath, 'r') as f_handle:
         for line in f_handle:
@@ -34,8 +33,6 @@ def get_targets(tool_name, samples=None):
     """
     returns target files based on the tool
     """
-
-
     flist = []
     if tool_name == 'somalier':
         flist += [
