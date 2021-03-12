@@ -19,13 +19,6 @@ import yaml
 from utility_cgds.cgds.pipeline.src.submit_slurm_job import submit_slurm_job
 
 
-def is_valid_file(p, arg):
-    if not Path(arg).is_file():
-        p.error("The file '%s' does not exist!" % arg)
-    else:
-        return arg
-
-
 def make_dir(d):
     """
     Ensure directory exists
@@ -149,25 +142,69 @@ def main(args):
     return None
 
 
+def is_valid_file(p, arg):
+    if not Path(arg).is_file():
+        p.error("The file '%s' does not exist!" % arg)
+    else:
+        return arg
+
+
+def is_valid_dir(p, arg):
+    if not Path(os.path.expandvars(arg)).is_dir():
+        p.error("The directory '%s' does not exist!" % arg)
+    else:
+        return os.path.expandvars(arg)
+
+
 if __name__ == "__main__":
     PARSER = argparse.ArgumentParser(
         description="A wrapper for QuaC pipeline.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    ############ Args for QuaC wrapper tool  ############
-    WRAPPER = PARSER.add_argument_group("QuaC wrapper options")
+    ############ Args for QuaC workflow  ############
+    WORKFLOW = PARSER.add_argument_group("QuaC workflow options")
 
-    cluster_config_fname_default = (
-        Path(__file__).absolute().parents[1] / "configs/cluster_config.json"
+    WORKFLOW.add_argument(
+        "--project_name",
+        help="Project name",
+        metavar="",
     )
-    WRAPPER.add_argument(
-        "--cluster_config",
-        help="Cluster config json file. Needed for snakemake to run jobs in cluster.",
-        default=cluster_config_fname_default,
+    WORKFLOW.add_argument(
+        "--pedigree",
+        help="Pedigree filepath. Must be specific for the project supplied via --project_name",
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
+    QUAC_OUTDIR_DEFAULT = "$USER_SCRATCH/tmp/quac/results"
+    WORKFLOW.add_argument(
+        "--outdir",
+        help="Out directory path",
+        default=QUAC_OUTDIR_DEFAULT,
+        type=lambda x: is_valid_dir(PARSER, x),
+        metavar="",
+    )
+    WORKFLOW.add_argument(
+        "-m",
+        "--select_modules",
+        help="Runs only these user-specified modules(s). If >1, use comma as delimiter. \
+            Useful for development.",
+        default="all",
+        metavar="",
+    )
+
+    ############ Args for QuaC wrapper tool  ############
+    WRAPPER = PARSER.add_argument_group("QuaC wrapper options")
+
+    CLUSTER_CONFIG_DEFAULT = Path(__file__).absolute().parents[1] / "configs/cluster_config.json"
+    WRAPPER.add_argument(
+        "--cluster_config",
+        help="Cluster config json file. Needed for snakemake to run jobs in cluster.",
+        default=CLUSTER_CONFIG_DEFAULT,
+        type=lambda x: is_valid_file(PARSER, x),
+        metavar="",
+    )
+
     WRAPPER.add_argument(
         "-e",
         "--extra_args",
@@ -195,45 +232,6 @@ if __name__ == "__main__":
         help=f"Number of times snakemake restarts failed jobs. This may be set to >0 "
         "to avoid pipeline failing due to job fails due to random SLURM issues",
         default=RERUN_FAILED_DEFAULT,
-        metavar="",
-    )
-
-    # REQUIRED_ARGS = PARSER.add_argument_group("required named arguments")
-    # REQUIRED_ARGS.add_argument(
-    #     "--io_config",
-    #     help="Input-output config yaml file provided by user",
-    #     required=True,
-    #     type=lambda x: is_valid_file(PARSER, x),
-    #     metavar="",
-    # )
-
-    ############ Args for QuaC workflow  ############
-    WORKFLOW = PARSER.add_argument_group("QuaC workflow options")
-
-    WORKFLOW.add_argument(
-        "--project_name",
-        help="Project name",
-        metavar="",
-    )
-
-    WORKFLOW.add_argument(
-        "--pedigree",
-        help="Pedigree filepath. Must be specific for the project supplied via --project_name",
-        metavar="",
-    )
-
-    WORKFLOW.add_argument(
-        "--outdir",
-        help="Out directory path",
-        metavar="",
-    )
-
-    WORKFLOW.add_argument(
-        "-m",
-        "--select_modules",
-        help="Runs only these user-specified modules(s). If >1, use comma as delimiter. \
-            Useful for development.",
-        default="all",
         metavar="",
     )
 
