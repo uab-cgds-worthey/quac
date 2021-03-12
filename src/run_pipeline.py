@@ -7,8 +7,7 @@ along with their required modules, and submits them as slurm job.
 Run the script with --help flag to see its available options.
 
 Example usage:
-IO_CONFIG=".test/configs/user_io_config.yaml"
-src/run_pipeline.py --io_config $IO_CONFIG
+python src/run_pipeline.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF_CFF_PFarrell.ped -l -n
 
 """
 
@@ -36,8 +35,8 @@ def create_snakemake_command(args):
     # snakemake command to run
     cmd = [
         "snakemake",
-        f"--snakefile {snakefile_path}",
-        f"--config modules='{args.modules}' project_name={args.project_name} ped={args.pedigree} out_dir={args.outdir} log_dir={args.log_dir}",
+        f"--snakefile '{snakefile_path}'",
+        f"--config modules='{args.modules}' project_name='{args.project_name}' ped='{args.pedigree}' out_dir='{args.outdir}' log_dir='{args.log_dir}'",
         f"--restart-times {args.rerun_failed}",
         "--use-conda",
         f"--profile '{snakemake_profile_dir}'",
@@ -64,28 +63,20 @@ def main(args):
     snakemake_cmd = create_snakemake_command(args)
 
     # put together pipeline command to be run
-    anaconda_module = "Anaconda3/2020.02"
-    snakemake_module = "snakemake/5.9.1-foss-2018b-Python-3.6.6"
     pipeline_cmd = "\n".join(
         [
-            f"module reset",
-            f"module load {anaconda_module}  {snakemake_module}",
             " \\\n\t".join(snakemake_cmd),
         ]
     )
 
     print(
         f'{"#" * 40}\n'
-        # f"Input-output configs provided by user: '{args.io_config}'\n"
-        f"Cluster configs                      : '{args.cluster_config}'\n\n"
         "Command to run the pipeline:\n"
         "\x1B[31;95m" + pipeline_cmd + "\x1B[0m\n"
         f'{"#" * 40}\n'
     )
 
     # submit snakemake command as a slurm job
-    # Choose resources depending on if manta_execute rule will be run
-    # as localrule in snakemake or not.
     slurm_resources = {
         "partition": "short",  # express(max 2 hrs), short(max 12 hrs), medium(max 50 hrs), long(max 150 hrs)
         "ntasks": "1",
@@ -122,7 +113,7 @@ def is_valid_dir(p, arg):
 
 if __name__ == "__main__":
     PARSER = argparse.ArgumentParser(
-        description="A wrapper for QuaC pipeline.",
+        description="Wrapper tool for QuaC pipeline.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
@@ -136,7 +127,7 @@ if __name__ == "__main__":
     )
     WORKFLOW.add_argument(
         "--pedigree",
-        help="Pedigree filepath. Must be specific for the project supplied via --project_name",
+        help="Pedigree filepath. Must correspond to the project supplied via --project_name",
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
@@ -152,7 +143,7 @@ if __name__ == "__main__":
         "-m",
         "--modules",
         help="Runs only these user-specified modules(s). If >1, use comma as delimiter. \
-            Useful for development.",
+            See QuaC snakemake script for available options. Useful for development.",
         default="all",
         metavar="",
     )
@@ -172,7 +163,7 @@ if __name__ == "__main__":
     LOGS_DIR_DEFAULT = f"{QUAC_OUTDIR_DEFAULT}/../logs"
     WRAPPER.add_argument(
         "--log_dir",
-        help="Directory path where logs (both workflow and wrapper) will be stored",
+        help="Directory path where logs (both workflow's and wrapper's) will be stored",
         default=LOGS_DIR_DEFAULT,
         type=lambda x: is_valid_dir(PARSER, x),
         metavar="",
