@@ -62,7 +62,7 @@ PEDIGREE_FPATH = config['ped']
 
 #### configs from configfile ####
 PROJECTS_PATH = Path(config['projects_path'])
-LOGS_PATH = Path(config['logs_path'])
-LOGS_PATH.mkdir(parents=True, exist_ok=True)
+RULE_LOGS_PATH = Path(config['log_dir']) / 'rule_logs'
+RULE_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
 SAMPLES = get_samples(PEDIGREE_FPATH)

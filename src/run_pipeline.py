@@ -62,7 +62,7 @@ def create_snakemake_command(args):
     cmd = [
         "snakemake",
         f"--snakefile {snakefile_path}",
-        f"--config modules='{args.modules}' project_name={args.project_name} ped={args.pedigree} out_dir={args.outdir}",
+        f"--config modules='{args.modules}' project_name={args.project_name} ped={args.pedigree} out_dir={args.outdir} log_dir={args.log_dir}",
         f"--restart-times {args.rerun_failed}",
         "--use-conda",
         f"--profile '{snakemake_profile_dir}'",
@@ -205,6 +205,14 @@ if __name__ == "__main__":
         metavar="",
     )
 
+    LOGS_DIR_DEFAULT = f"{QUAC_OUTDIR_DEFAULT}/../logs"
+    WRAPPER.add_argument(
+        "--log_dir",
+        help="Directory path where logs (both workflow and wrapper) will be stored",
+        default=LOGS_DIR_DEFAULT,
+        type=lambda x: is_valid_file(PARSER, x),
+        metavar="",
+    )
     WRAPPER.add_argument(
         "-e",
         "--extra_args",

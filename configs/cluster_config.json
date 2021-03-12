@@ -4,7 +4,7 @@
         "partition": "express",
         "cpus-per-task": "{threads}",
         "mem": "8G",
-        "output": "{LOGS_PATH}/rule_logs/{rule}-%j.log"
+        "output": "{RULE_LOGS_PATH}/{rule}-%j.log"
     },
     "mosdepth": {
         "partition": "short",
