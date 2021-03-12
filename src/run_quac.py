@@ -34,11 +34,21 @@ def create_snakemake_command(args):
     # use absolute path to run it from anywhere
     snakefile_path = repo_path / "workflow" / "Snakefile"
 
+    quac_configs = {
+        "modules": args.modules,
+        "project_name": args.project_name,
+        "ped": args.pedigree,
+        "out_dir": str(Path(args.outdir) / args.project_name),
+        "log_dir": args.log_dir,
+        "exome": args.exome,
+    }
+    quac_configs = " ".join([f"{k}='{v}'" for k, v in quac_configs.items()])
+
     # snakemake command to run
     cmd = [
         "snakemake",
         f"--snakefile '{snakefile_path}'",
-        f"--config modules='{args.modules}' project_name='{args.project_name}' ped='{args.pedigree}' out_dir='{args.outdir}' log_dir='{args.log_dir}' exome={args.exome}",
+        f"--config {quac_configs}",
         f"--restart-times {args.rerun_failed}",
         "--use-conda",
         f"--profile '{snakemake_profile_dir}'",
