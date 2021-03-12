@@ -59,6 +59,7 @@ OUT_DIR = Path(config['out_dir'])
 PROJECT_NAME = config['project_name']
 MODULES_TO_RUN = modules_to_run(config['modules'])
 PEDIGREE_FPATH = config['ped']
+EXOME_MODE = config['exome']
 
 #### configs from configfile ####
 PROJECTS_PATH = Path(config['projects_path'])

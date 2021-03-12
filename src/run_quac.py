@@ -38,7 +38,7 @@ def create_snakemake_command(args):
     cmd = [
         "snakemake",
         f"--snakefile '{snakefile_path}'",
-        f"--config modules='{args.modules}' project_name='{args.project_name}' ped='{args.pedigree}' out_dir='{args.outdir}' log_dir='{args.log_dir}'",
+        f"--config modules='{args.modules}' project_name='{args.project_name}' ped='{args.pedigree}' out_dir='{args.outdir}' log_dir='{args.log_dir}' exome={args.exome}",
         f"--restart-times {args.rerun_failed}",
         "--use-conda",
         f"--profile '{snakemake_profile_dir}'",
@@ -148,6 +148,11 @@ if __name__ == "__main__":
             See QuaC snakemake script for available options. Useful for development.",
         default="all",
         metavar="",
+    )
+    WORKFLOW.add_argument(
+        "--exome",
+        action="store_true",
+        help="Flag to run in exome mode",
     )
 
     ############ Args for QuaC wrapper tool  ############

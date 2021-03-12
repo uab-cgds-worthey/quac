@@ -2,14 +2,21 @@ TARGETS_CONTAMINATION = [
     get_targets('verifybamid', SAMPLES) if {'all', 'verifybamid'}.intersection(MODULES_TO_RUN) else [],
 ]
 
+def get_svd(wildcards):
+    if EXOME_MODE:
+        return expand(f"{config['verifyBamID']['svd_dat_exome']}.{{ext}}",
+                            ext=['bed', 'mu', 'UD'])
+    else:
+        return expand(f"{config['verifyBamID']['svd_dat_wgs']}.{{ext}}",
+                            ext=['bed', 'mu', 'UD'])
+
 
 rule verifybamid:
     input:
         bam = PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam",
         bam_index = PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
         ref_genome = config['ref'],
-        svd = expand(f"{config['verifyBamID']['svd_dat']}.{{ext}}",
-                    ext=['bed', 'mu', 'UD'])
+        svd = get_svd
     output:
         ancestry = OUT_DIR / "verifyBamID/{sample}.Ancestry",
         selfsm = OUT_DIR / "verifyBamID/{sample}.selfSM",
