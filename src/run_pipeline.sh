@@ -11,13 +11,15 @@ module reset
 module load Anaconda3/2020.02
 module load snakemake/5.9.1-foss-2018b-Python-3.6.6
 
-PROJECT_NAME="CF_CFF_PFarrell"
+# PROJECT_NAME="UDN_Phase1_EAWorthey"
+PROJECT_NAME=$1
 PEDIGREE_FPATH="data/raw/ped/${PROJECT_NAME}.ped"
 OUT_DIR="data/processed/${PROJECT_NAME}"
 
 MODULES="all"
-EXTRA_ARGS="-n -q"
-# EXTRA_ARGS=""
+# MODULES="mosdepth"
+# EXTRA_ARGS="-n"
+EXTRA_ARGS=""
 
 snakemake \
     --snakefile "workflow/Snakefile" \

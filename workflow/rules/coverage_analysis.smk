@@ -72,7 +72,7 @@ rule indexcov:
         goleft_tool = config['goleft']['tool'],
     output:
         html = OUT_DIR / "indexcov" / "index.html",
-        bed = OUT_DIR / "indexcov" / f"indexcov.bed.gz",
+        bed = OUT_DIR / "indexcov" / f"indexcov-indexcov.bed.gz",
         log = OUT_DIR / "indexcov" / "stdout.log",
     message:
         "Running indexcov"
@@ -93,7 +93,7 @@ rule indexcov:
 ##########################   covviz   ##########################
 rule covviz:
     input:
-        bed = OUT_DIR / "indexcov" / f"indexcov.bed.gz",
+        bed = OUT_DIR / "indexcov" / f"indexcov-indexcov.bed.gz",
         ped = PEDIGREE_FPATH,
     output:
         html = OUT_DIR / "covviz" / "covviz_report.html",
@@ -106,7 +106,7 @@ rule covviz:
         r"""
         covviz \
             --ped {input.ped} \
-            --output {output} \
+            --output {output.html} \
             {input.bed} \
             > {output.log} 2>&1
         """

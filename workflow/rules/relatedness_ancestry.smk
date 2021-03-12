@@ -67,7 +67,7 @@ rule somalier_ancestry:
     output:
         out = expand(str(OUT_DIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}"),
                 ext=['html', 'tsv']),
-        log = OUT_DIR / "somalier" / "relatedness" / "somalier.log",
+        log = OUT_DIR / "somalier" / "ancestry" / "somalier.log",
     message:
         "Running somalier ancestry."
     group:
