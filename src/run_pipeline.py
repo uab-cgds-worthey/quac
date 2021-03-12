@@ -19,44 +19,19 @@ import yaml
 from utility_cgds.cgds.pipeline.src.submit_slurm_job import submit_slurm_job
 
 
-def make_dir(d):
-    """
-    Ensure directory exists
-    """
-
-    Path(d).mkdir(parents=True, exist_ok=True)
-
-    return None
-
-
-# def process_user_io_config(f):
-#     """
-#     Reads input-output config file and
-#     1. Returns paths that need to be mounted to singularity
-#     2. Create project_path dir if it doesn't exist
-#     3. Get paths to store job scripts and their logs
-#     """
-
-#     # get dirs to store slurmpy job scripts and their logs, and ensure they exist
-#     logs_dir = data["logs_dir"]
-#     make_dir(logs_dir)
-
-#     return logs_dir
-
-
 def create_snakemake_command(args):
     """
     Construct snakemake command to run the pipeline
     """
 
     # slurm profile dir for snakemake to properly handle to cluster job fails
+    repo_path = Path(__file__).absolute().parents[1]
     snakemake_profile_dir = (
-        Path(__file__).absolute().parents[1]
-        / "configs/snakemake_profile/{{cookiecutter.profile_name}}/"
+        repo_path / "configs/snakemake_slurm_profile//{{cookiecutter.profile_name}}/"
     )
 
     # use absolute path to run it from anywhere
-    snakefile_path = Path(__file__).absolute().parent / "workflow" / "Snakefile"
+    snakefile_path = repo_path / "workflow" / "Snakefile"
 
     # snakemake command to run
     cmd = [
@@ -84,8 +59,6 @@ def create_snakemake_command(args):
 
 
 def main(args):
-    # process user's input-output config file
-    slurmpy_logs_dir = process_user_io_config(args.io_config)
 
     # get snakemake command to execute for the pipeline
     snakemake_cmd = create_snakemake_command(args)
@@ -103,7 +76,7 @@ def main(args):
 
     print(
         f'{"#" * 40}\n'
-        f"Input-output configs provided by user: '{args.io_config}'\n"
+        # f"Input-output configs provided by user: '{args.io_config}'\n"
         f"Cluster configs                      : '{args.cluster_config}'\n\n"
         "Command to run the pipeline:\n"
         "\x1B[31;95m" + pipeline_cmd + "\x1B[0m\n"
@@ -113,26 +86,17 @@ def main(args):
     # submit snakemake command as a slurm job
     # Choose resources depending on if manta_execute rule will be run
     # as localrule in snakemake or not.
-    if args.manta_execution_cluster:
-        slurm_resources = {
-            "partition": "short",  # express(max 2 hrs), short(max 12 hrs), medium(max 50 hrs), long(max 150 hrs)
-            "ntasks": "1",
-            "time": "12:00:00",
-            "cpus-per-task": "1",
-            "mem": "2G",
-        }
-    else:
-        slurm_resources = {
-            "partition": "express",  # express(max 2 hrs), short(max 12 hrs), medium(max 50 hrs), long(max 150 hrs)
-            "ntasks": "1",
-            "time": "2:00:00",
-            "cpus-per-task": f"{args.cores}",
-            "mem": "8G",
-        }
+    slurm_resources = {
+        "partition": "short",  # express(max 2 hrs), short(max 12 hrs), medium(max 50 hrs), long(max 150 hrs)
+        "ntasks": "1",
+        "time": "12:00:00",
+        "cpus-per-task": "1",
+        "mem": "8G",
+    }
 
     job_dict = {
-        "basename": "svCaller-pipeline-",
-        "log_dir": slurmpy_logs_dir,
+        "basename": "quac-",
+        "log_dir": args.log_dir,
         "run_locally": args.run_locally,
         "resources": slurm_resources,
     }
@@ -186,7 +150,7 @@ if __name__ == "__main__":
     )
     WORKFLOW.add_argument(
         "-m",
-        "--select_modules",
+        "--modules",
         help="Runs only these user-specified modules(s). If >1, use comma as delimiter. \
             Useful for development.",
         default="all",
@@ -210,7 +174,7 @@ if __name__ == "__main__":
         "--log_dir",
         help="Directory path where logs (both workflow and wrapper) will be stored",
         default=LOGS_DIR_DEFAULT,
-        type=lambda x: is_valid_file(PARSER, x),
+        type=lambda x: is_valid_dir(PARSER, x),
         metavar="",
     )
     WRAPPER.add_argument(
