@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 """
+QuaC pipeline.
+
 Reads user input data, constructs snakemake command to run the pipeline
 along with their required modules, and submits them as slurm job.
 
