@@ -9,7 +9,7 @@ along with their required modules, and submits them as slurm job.
 Run the script with --help flag to see its available options.
 
 Example usage:
-python src/run_pipeline.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF_CFF_PFarrell.ped -l -n
+python src/run_quac.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF_CFF_PFarrell.ped -l -n
 
 """
 
