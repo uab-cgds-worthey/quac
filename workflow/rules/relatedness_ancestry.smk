@@ -84,7 +84,7 @@ rule somalier_ancestry:
         {input.somalier_tool} ancestry \
             --output-prefix {params.outdir}/somalier \
             --labels {input.labels_1kg} \
-            {input.somalier_1kg}*.somalier ++ \
+            {input.somalier_1kg}/*.somalier ++ \
             {params.indir}/*.somalier \
             > {log} 2>&1
         """
