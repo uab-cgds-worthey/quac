@@ -33,3 +33,17 @@ conda env update --file configs/env/quac.yaml
 # activate conda environment
 conda activate quac
 ```
+
+
+### Prep VerifyBamID datasets for exome analysis
+
+Need to add `chr` prefix to contigs.
+
+```sh
+# cd into exome resources dir
+cd /path/to/VerifyBamID-2.0.1/resource/exome/
+sed -e 's/^/chr/' 1000g.phase3.10k.b38.exome.vcf.gz.dat.bed > 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.bed
+sed -e 's/^/chr/' 1000g.phase3.10k.b38.exome.vcf.gz.dat.mu > 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.mu
+cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.UD 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.UD
+cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.V 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.V
+```

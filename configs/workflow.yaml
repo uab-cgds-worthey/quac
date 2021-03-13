@@ -11,4 +11,4 @@ goleft:
     tool: "/data/project/worthey_lab/projects/experimental_pipelines/mana/tools/goleft/0.2.4/goleft"
 verifyBamID:
     svd_dat_wgs: "/data/project/worthey_lab/projects/experimental_pipelines/mana/tools/verifyBamID/VerifyBamID-2.0.1/resource/1000g.phase3.100k.b38.vcf.gz.dat"
-    svd_dat_exome: "/data/project/worthey_lab/projects/experimental_pipelines/mana/tools/verifyBamID/VerifyBamID-2.0.1/resource/exome/1000g.phase3.10k.b38.exome.vcf.gz.dat"
+    svd_dat_exome: "/data/project/worthey_lab/projects/experimental_pipelines/mana/tools/verifyBamID/VerifyBamID-2.0.1/resource/exome/1000g.phase3.10k.b38_chr.exome.vcf.gz.dat"
