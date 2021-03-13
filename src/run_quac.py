@@ -37,6 +37,7 @@ def create_snakemake_command(args):
     quac_configs = {
         "modules": args.modules,
         "project_name": args.project_name,
+        "projects_path": args.projects_path,
         "ped": args.pedigree,
         "out_dir": str(Path(args.outdir) / args.project_name),
         "log_dir": args.log_dir,
@@ -135,6 +136,15 @@ if __name__ == "__main__":
     WORKFLOW.add_argument(
         "--project_name",
         help="Project name",
+        metavar="",
+    )
+
+    PROJECT_PATH_DEFAULT = "/data/project/worthey_lab/projects/"
+    WORKFLOW.add_argument(
+        "--projects_path",
+        help="Path where all projects are hosted. Don't include project name here.",
+        default=PROJECT_PATH_DEFAULT,
+        type=lambda x: is_valid_dir(PARSER, x),
         metavar="",
     )
     WORKFLOW.add_argument(

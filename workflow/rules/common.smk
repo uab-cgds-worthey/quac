@@ -57,13 +57,13 @@ def get_targets(tool_name, samples=None):
 #### configs from cli ####
 OUT_DIR = Path(config['out_dir'])
 PROJECT_NAME = config['project_name']
+PROJECTS_PATH = Path(config['projects_path'])
 MODULES_TO_RUN = modules_to_run(config['modules'])
 PEDIGREE_FPATH = config['ped']
 EXOME_MODE = config['exome']
 
 #### configs from configfile ####
-PROJECTS_PATH = Path(config['projects_path'])
 RULE_LOGS_PATH = Path(config['log_dir']) / 'rule_logs'
 RULE_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
-SAMPLES = get_samples(PEDIGREE_FPATH)
+SAMPLES = get_samples(PEDIGREE_FPATH)[:4]
