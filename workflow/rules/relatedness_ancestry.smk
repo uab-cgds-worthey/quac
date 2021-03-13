@@ -36,9 +36,10 @@ rule somalier_relate:
     output:
         out = expand(str(OUT_DIR / "somalier" / "relatedness" / "somalier.{ext}"),
                 ext=['html', 'groups.tsv', 'pairs.tsv', 'samples.tsv']),
-        log = OUT_DIR / "somalier" / "relatedness" / "somalier.log",
     message:
         "Running somalier relate"
+    log:
+        log = OUT_DIR / "somalier" / "relatedness" / "somalier.log",
     group:
         "somalier"
     params:
@@ -53,7 +54,7 @@ rule somalier_relate:
             --infer \
             --output-prefix {params.outdir}/somalier \
             {params.indir}/*.somalier \
-            > {output.log} 2>&1
+            > {log} 2>&1
         """
 
 
@@ -67,9 +68,10 @@ rule somalier_ancestry:
     output:
         out = expand(str(OUT_DIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}"),
                 ext=['html', 'tsv']),
-        log = OUT_DIR / "somalier" / "ancestry" / "somalier.log",
     message:
         "Running somalier ancestry."
+    log:
+        log = OUT_DIR / "somalier" / "ancestry" / "somalier.log",
     group:
         "somalier"
     params:
@@ -84,5 +86,5 @@ rule somalier_ancestry:
             --labels {input.labels_1kg} \
             {input.somalier_1kg}*.somalier ++ \
             {params.indir}/*.somalier \
-            > {output.log} 2>&1
+            > {log} 2>&1
         """

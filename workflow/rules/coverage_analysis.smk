@@ -73,9 +73,10 @@ rule indexcov:
     output:
         html = OUT_DIR / "indexcov" / "index.html",
         bed = OUT_DIR / "indexcov" / f"indexcov-indexcov.bed.gz",
-        log = OUT_DIR / "indexcov" / "stdout.log",
     message:
         "Running indexcov"
+    log:
+        OUT_DIR / "indexcov" / "stdout.log",
     params:
         outdir = lambda wildcards, output: Path(output[0]).parent,
         project_dir = lambda wildcards, input: str(Path(input['bam'][0]).parents[2]),
@@ -86,7 +87,7 @@ rule indexcov:
         {input.goleft_tool} indexcov \
             --directory {params.outdir} \
             {params.project_dir}/[LU][WD]*/bam/*.bam \
-            > {output.log} 2>&1
+            > {log} 2>&1
         """
 
 
@@ -97,9 +98,10 @@ rule covviz:
         ped = PEDIGREE_FPATH,
     output:
         html = OUT_DIR / "covviz" / "covviz_report.html",
-        log = OUT_DIR / "covviz" / "stdout.log",
     message:
         "Running covviz"
+    log:
+        OUT_DIR / "covviz" / "stdout.log",
     conda:
         str(WORKFLOW_PATH / "configs/env/covviz.yaml")
     shell:
@@ -108,5 +110,5 @@ rule covviz:
             --ped {input.ped} \
             --output {output.html} \
             {input.bed} \
-            > {output.log} 2>&1
+            > {log} 2>&1
         """
