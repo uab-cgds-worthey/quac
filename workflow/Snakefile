@@ -1,10 +1,12 @@
-'''
+"""
 QuaC pipeline
-'''
+"""
 
 import pandas as pd
 
 WORKFLOW_PATH = Path(workflow.basedir).parent
+
+
 configfile: WORKFLOW_PATH / "configs/workflow.yaml"
 
 
@@ -14,13 +16,17 @@ include: "rules/relatedness_ancestry.smk"
 include: "rules/coverage_analysis.smk"
 include: "rules/within_species_contamintation.smk"
 include: "rules/aggregate_results.smk"
+
+
 #########################################
 
 
 ############   CONSTRAINTS   ############
 wildcard_constraints:
-    sample = '|'.join(SAMPLES),
-    project = PROJECT_NAME,
+    sample="|".join(SAMPLES),
+    project=PROJECT_NAME,
+
+
 #########################################
 
 
@@ -29,5 +35,4 @@ rule all:
         TARGETS_SOMALIER,
         TARGETS_COVERAGE,
         TARGETS_CONTAMINATION,
-        OUT_DIR / "multiqc/multiqc_report.html"
-
+        OUT_DIR / "multiqc/multiqc_report.html",
