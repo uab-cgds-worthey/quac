@@ -1,8 +1,8 @@
 TARGETS_COVERAGE = [
     # indexcov
-    get_targets("indexcov") if {"all", "indexcov"}.intersection(MODULES_TO_RUN) else [],
+    get_targets("indexcov") if {"all", "indexcov"}.intersection(MODULES_TO_RUN) and not EXOME_MODE else [],
     # covviz
-    get_targets("covviz") if {"all", "covviz"}.intersection(MODULES_TO_RUN) else [],
+    get_targets("covviz") if {"all", "covviz"}.intersection(MODULES_TO_RUN) and not EXOME_MODE else [],
     # mosdepth
     get_targets("mosdepth", SAMPLES) if {"all", "mosdepth"}.intersection(MODULES_TO_RUN) else [],
 ]
