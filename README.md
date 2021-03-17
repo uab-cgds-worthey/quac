@@ -52,9 +52,24 @@ available for both these tools and they are hence easy to install.
 
 ### Setup config file
 
-Workflow config file `configs/workflow.yaml` provides path to certain tool installation path as well as other files that
-the tools require. Modify them as necessary. Refer to the QC tool's documentation for more information on files that
+Workflow config file `configs/workflow.yaml` provides path to path to necessary QC tools as well as other files that
+some QC tools require. Modify them as necessary. Refer to the QC tool's documentation for more information on files that
 they require.
+
+#### Prepare verifybamid datasets for exome analysis
+
+*This step is necessary only for exome samples.* verifybamid has provided auxiliary resource files, which are necessary
+for analysis. However, chromosome contigs do not include `chr` prefix in their exome resource files, which are expected for
+our analysis. Follow these steps to setup resource files with `chr` prefix in their contig names.
+
+```sh
+# cd into exome resources dir
+cd <path-to>/VerifyBamID-2.0.1/resource/exome/
+sed -e 's/^/chr/' 1000g.phase3.10k.b38.exome.vcf.gz.dat.bed > 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.bed
+sed -e 's/^/chr/' 1000g.phase3.10k.b38.exome.vcf.gz.dat.mu > 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.mu
+cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.UD 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.UD
+cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.V 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.V
+```
 
 ### Create conda environment
 
@@ -69,29 +84,5 @@ conda activate quac
 
 # if you need to update the existing environment
 conda env update --file configs/env/quac.yaml
-
 ```
 
-
-
-If the default path to `datasets_central` is going to be used (i.e. you'll be using the tool for testing and/or
-development), then you'll also need to initialize the default `datasets_central` directory. This can be done by running
-the following (must be done for each user):
-
-```sh
-mkdir -p $USER_SCRATCH/tmp/datasets_central_manager/datasets $USER_SCRATCH/tmp/datasets_central_manager/logs
-```
-
-
-### Prep VerifyBamID datasets for exome analysis
-
-Need to add `chr` prefix to contigs.
-
-```sh
-# cd into exome resources dir
-cd /path/to/VerifyBamID-2.0.1/resource/exome/
-sed -e 's/^/chr/' 1000g.phase3.10k.b38.exome.vcf.gz.dat.bed > 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.bed
-sed -e 's/^/chr/' 1000g.phase3.10k.b38.exome.vcf.gz.dat.mu > 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.mu
-cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.UD 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.UD
-cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.V 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.V
-```
