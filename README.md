@@ -8,6 +8,9 @@
     - [Create conda environment](#create-conda-environment)
   - [How to run QuaC](#how-to-run-quac)
     - [Example usage](#example-usage)
+  - [Output](#output)
+  - [Contributing](#contributing)
+  - [Changelog](#changelog)
 
 # QuaC
 
@@ -15,8 +18,8 @@
 
 ## Who am I?
 
-QuaC is a pipeline developed using snakemake, which runs a set of selected QC tools on NGS samples. Here are the tools it
-can currently quack on:
+QuaC is a pipeline developed using snakemake, which runs a set of selected QC tools on NGS samples. Here are the tools
+it can currently quack on:
 
 | Tool                                                              | Use                                                        |
 | ----------------------------------------------------------------- | ---------------------------------------------------------- |
@@ -63,7 +66,8 @@ available for both these tools and they are hence easy to install.
 - [somalier](https://github.com/brentp/somalier)
 - [goleft](https://github.com/brentp/goleft)
 
-*Note:* CGDS folks using QuaC in cheaha may skip this step, as these tools are already installed and centrally available.
+*Note:* CGDS folks using QuaC in cheaha may skip this step, as these tools are already installed and centrally
+available.
 
 ### Setup config file
 
@@ -74,8 +78,8 @@ they require.
 #### Prepare verifybamid datasets for exome analysis
 
 *This step is necessary only for exome samples.* verifybamid has provided auxiliary resource files, which are necessary
-for analysis. However, chromosome contigs do not include `chr` prefix in their exome resource files, which are expected for
-our analysis. Follow these steps to setup resource files with `chr` prefix in their contig names.
+for analysis. However, chromosome contigs do not include `chr` prefix in their exome resource files, which are expected
+for our analysis. Follow these steps to setup resource files with `chr` prefix in their contig names.
 
 ```sh
 # cd into exome resources dir
@@ -170,7 +174,20 @@ python src/run_quac.py --project_name UnusualCancers_CMGalluzi \
       --pedigree data/raw/ped/UnusualCancers_CMGalluzi.ped \
       --exome
 
-# for a WGS project, run specific modules/tools
-python src/run_quac.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF_CFF_PFarrell.ped --modules somalier
-
+# for a WGS project, run specific modules/tools and write results to a dir of choice
+python src/run_quac.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF_CFF_PFarrell.ped \
+      --modules somalier --outdir /some/lake/with/plenty/ducks/
 ```
+
+## Output
+
+QuaC results are stored at path specified via option `--outdir` (default: `$USER_SCRATCH/tmp/quac/results`). This
+includes aggregated QC results produced by [multiqc](https://multiqc.info/).
+
+## Contributing
+
+If you like to make changes to the source code, please see the [contribution guidelines](./CONTRIBUTING.md).
+
+## Changelog
+
+See [here](./Changelog.md).
