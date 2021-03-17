@@ -15,8 +15,8 @@
 
 ## Who am I?
 
-QuaC is a pipeline developed using snakemake, which runs a set of selected QC tools on NGS samples. Here are the tool I
-can quack:
+QuaC is a pipeline developed using snakemake, which runs a set of selected QC tools on NGS samples. Here are the tools it
+can currently quack on:
 
 | Tool                                                              | Use                                                        |
 | ----------------------------------------------------------------- | ---------------------------------------------------------- |
@@ -105,7 +105,7 @@ conda env update --file configs/env/quac.yaml
 
 In the activate conda environment, QuaC is run using script `src/quac.py`. Here are all the options available:
 
-```
+```sh
 $ ./src/run_quac.py -h
 usage: run_quac.py [-h] [--project_name] [--projects_path] [--pedigree]
                    [--outdir] [-m] [--exome] [--cluster_config] [--log_dir]
@@ -118,7 +118,7 @@ optional arguments:
 
 QuaC workflow options:
   --project_name      Project name (default: None)
-  --projects_path     Path where all projects are hosted. Don't include
+  --projects_path     Path where all projects are hosted. Dont include
                       project name here. (default:
                       /data/project/worthey_lab/projects/)
   --pedigree          Pedigree filepath. Must correspond to the project
