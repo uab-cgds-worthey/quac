@@ -60,8 +60,6 @@ def create_snakemake_command(args):
         "--cluster 'sbatch --ntasks {cluster.ntasks} --partition {cluster.partition}"
         " --cpus-per-task {cluster.cpus-per-task} --mem {cluster.mem}"
         " --output {cluster.output} --parsable'",
-        "--wms-monitor http://10.111.161.152/panoptes",
-        f"--wms-monitor-arg name=22 id=4365",
     ]
 
     # add any user provided extra args for snakemake
