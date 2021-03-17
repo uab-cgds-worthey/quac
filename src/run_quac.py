@@ -9,8 +9,11 @@ along with their required modules, and submits them as slurm job.
 Run the script with --help flag to see its available options.
 
 Example usage:
-python src/run_quac.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF_CFF_PFarrell.ped -l -n
-
+# First create environment as described in documentation
+python src/run_quac.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF_CFF_PFarrell.ped
+python src/run_quac.py --project_name HCC --pedigree data/raw/ped/HCC.ped --exome
+python src/run_quac.py --project_name UnusualCancers_CMGalluzi --projects_path /data/project/sloss/cgds_path_cmgalluzzi/ \
+        --pedigree data/raw/ped/UnusualCancers_CMGalluzi.ped --exome
 """
 
 import argparse
@@ -57,6 +60,8 @@ def create_snakemake_command(args):
         "--cluster 'sbatch --ntasks {cluster.ntasks} --partition {cluster.partition}"
         " --cpus-per-task {cluster.cpus-per-task} --mem {cluster.mem}"
         " --output {cluster.output} --parsable'",
+        "--wms-monitor http://10.111.161.152/panoptes",
+        f"--wms-monitor-arg name=22 id=4365",
     ]
 
     # add any user provided extra args for snakemake
