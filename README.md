@@ -1,12 +1,22 @@
+- [QuaC](#quac)
+  - [Who am I?](#who-am-i)
+  - [Installation](#installation)
+  - [Environment Setup](#environment-setup)
+    - [Requirements](#requirements)
+    - [Setup config file](#setup-config-file)
+      - [Prepare verifybamid datasets for exome analysis](#prepare-verifybamid-datasets-for-exome-analysis)
+    - [Create conda environment](#create-conda-environment)
+  - [How to run QuaC](#how-to-run-quac)
+    - [Example usage](#example-usage)
+
 # QuaC
 
 🦆🦆 Don't duck that QC thingy 🦆🦆
 
 ## Who am I?
 
-QuaC is a pipeline developed using snakemake, which runs a set of selected QC tools on NGS samples.
-
-## What can I quac about?
+QuaC is a pipeline developed using snakemake, which runs a set of selected QC tools on NGS samples. Here are the tool I
+can quack:
 
 | Tool                                                              | Use                                                        |
 | ----------------------------------------------------------------- | ---------------------------------------------------------- |
