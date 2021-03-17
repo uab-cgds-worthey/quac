@@ -86,3 +86,76 @@ conda activate quac
 conda env update --file configs/env/quac.yaml
 ```
 
+## How to run QuaC
+
+In the activate conda environment, QuaC is run using script `src/quac.py`. Here are all the options available:
+
+```
+$ ./src/run_quac.py -h
+usage: run_quac.py [-h] [--project_name] [--projects_path] [--pedigree]
+                   [--outdir] [-m] [--exome] [--cluster_config] [--log_dir]
+                   [-e] [-n] [-l] [--rerun_failed]
+
+Wrapper tool for QuaC pipeline.
+
+optional arguments:
+  -h, --help          show this help message and exit
+
+QuaC workflow options:
+  --project_name      Project name (default: None)
+  --projects_path     Path where all projects are hosted. Don't include
+                      project name here. (default:
+                      /data/project/worthey_lab/projects/)
+  --pedigree          Pedigree filepath. Must correspond to the project
+                      supplied via --project_name (default: None)
+  --outdir            Out directory path (default:
+                      $USER_SCRATCH/tmp/quac/results)
+  -m , --modules      Runs only these user-specified modules(s). If >1, use
+                      comma as delimiter. See QuaC snakemake script for
+                      available options. Useful for development. (default:
+                      all)
+  --exome             Flag to run in exome mode (default: False)
+
+QuaC wrapper options:
+  --cluster_config    Cluster config json file. Needed for snakemake to run
+                      jobs in cluster. (default: /data/project/worthey_lab/pro
+                      jects/experimental_pipelines/mana/quac/configs/cluster_c
+                      onfig.json)
+  --log_dir           Directory path where logs (both workflow's and
+                      wrapper's) will be stored (default:
+                      $USER_SCRATCH/tmp/quac/results/../logs)
+  -e , --extra_args   Pass additional custom args to snakemake. Equal symbol
+                      is needed for assignment as in this example: -e='--
+                      forceall' (default: None)
+  -n, --dryrun        Flag to dry-run snakemake. Does not execute anything,
+                      and just display what would be done. Equivalent to '--
+                      extra_args "-n"' (default: False)
+  -l, --run_locally   Flag to run the snakemake locally and not as a Slurm
+                      job. Useful for testing purposes. (default: False)
+  --rerun_failed      Number of times snakemake restarts failed jobs. This may
+                      be set to >0 to avoid pipeline failing due to job fails
+                      due to random SLURM issues (default: 0)
+```
+
+
+### Example usage
+
+`project_name` and `pedigree` are required options to run the tool.
+
+```sh
+# for a WGS project
+python src/run_quac.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF_CFF_PFarrell.ped
+
+# for an exome project
+python src/run_quac.py --project_name HCC --pedigree data/raw/ped/HCC.ped --exome
+
+# run for an exome project which is not in the default CGDS projects_path
+python src/run_quac.py --project_name UnusualCancers_CMGalluzi \
+      --projects_path /data/project/sloss/cgds_path_cmgalluzzi/ \
+      --pedigree data/raw/ped/UnusualCancers_CMGalluzi.ped \
+      --exome
+
+# for a WGS project, run specific modules/tools
+python src/run_quac.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF_CFF_PFarrell.ped --modules somalier
+
+```
