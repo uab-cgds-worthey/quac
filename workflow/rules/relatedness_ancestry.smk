@@ -36,7 +36,7 @@ rule somalier_relate:
     output:
         out=expand(
             str(OUT_DIR / "somalier" / "relatedness" / "somalier.{ext}"),
-            ext=["html", "groups.tsv", "pairs.tsv", "samples.tsv"],
+            ext=["html", "pairs.tsv", "samples.tsv"],
         ),
     message:
         "Running somalier relate"
@@ -68,7 +68,8 @@ rule somalier_ancestry:
         somalier_1kg=directory(config["somalier"]["somalier_1kg"]),
     output:
         out=expand(
-            str(OUT_DIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}"), ext=["html", "tsv"]
+            str(OUT_DIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}"),
+            ext=["html", "tsv"],
         ),
     message:
         "Running somalier ancestry."
