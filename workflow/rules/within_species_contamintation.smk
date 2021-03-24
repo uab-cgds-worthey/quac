@@ -12,8 +12,8 @@ def get_svd(wildcards):
 
 rule verifybamid:
     input:
-        bam=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam=PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam",
+        bam_index=PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
         ref_genome=config["ref"],
         svd=get_svd,
     output:

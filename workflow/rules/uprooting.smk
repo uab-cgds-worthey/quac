@@ -1,6 +1,6 @@
 rule samtools_stats:
     input:
-        PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam",
+        PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam",
     output:
         OUT_DIR / "samtools-stats" / "{sample}.txt"",
         # protected(PROJECT_PATH + "/{sample}/qc/samtools-stats/{sample}.txt"),
@@ -10,8 +10,8 @@ rule samtools_stats:
 
 rule qualimap_bamqc:
     input:
-        bam = PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        index = PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam = PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam",
+        index = PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
         #TODO: target regions
         # target_regions = config["processing"]["restrict-regions"] if config["processing"].get("restrict-regions") else []
         target_regions = []
@@ -43,7 +43,7 @@ rule qualimap_bamqc:
 
 rule bcftools_stats:
     input:
-        PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "vcf" / "{sample}.vcf.gz",
+        PROJECT_PATH / "analysis" / "{sample}" / "vcf" / "{sample}.vcf.gz",
     output:
         coverage = OUT_DIR / "bcftools-stats" / "{sample}.bcftools.stats",
     message:

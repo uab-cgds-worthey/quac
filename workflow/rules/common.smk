@@ -59,7 +59,7 @@ def get_targets(tool_name, samples=None):
 #### configs from cli ####
 OUT_DIR = Path(config["out_dir"])
 PROJECT_NAME = config["project_name"]
-PROJECTS_PATH = Path(config["projects_path"])
+PROJECT_PATH = Path(config["projects_path"]) / PROJECT_NAME
 MODULES_TO_RUN = modules_to_run(config["modules"])
 PEDIGREE_FPATH = config["ped"]
 EXOME_MODE = config["exome"]

@@ -11,8 +11,8 @@ TARGETS_COVERAGE = [
 ##########################   Mosdepth   ##########################
 rule mosdepth_coverage:
     input:
-        bam=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam=PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam",
+        bam_index=PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
     output:
         dist=OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt",
         summary=OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.summary.txt",
@@ -65,11 +65,11 @@ rule mosdepth_plot:
 rule indexcov:
     input:
         bam=expand(
-            str(PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam"),
+            str(PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam"),
             sample=SAMPLES,
         ),
         bam_index=expand(
-            str(PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai"),
+            str(PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai"),
             sample=SAMPLES,
         ),
         goleft_tool=config["goleft"]["tool"],
