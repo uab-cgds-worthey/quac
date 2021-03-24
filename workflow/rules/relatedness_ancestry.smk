@@ -18,12 +18,14 @@ rule somalier_extract:
         "somalier"
     params:
         outdir=lambda wildcards, output: Path(output[0]).parent,
+        sample_name="{sample}",
     shell:
         r"""
         {input.somalier_tool} extract \
             --sites {input.sites} \
             --fasta {input.ref_genome} \
             --out-dir {params.outdir} \
+            --sample-prefix {params.sample_name} \
             {input.bam}
         """
 
