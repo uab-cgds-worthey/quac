@@ -26,10 +26,11 @@ rule verifybamid:
     params:
         svd_prefix=lambda wildcards, input: input["svd"][0].replace(Path(input["svd"][0]).suffix, ""),
         out_prefix=lambda wildcards, output: output["ancestry"].replace(".Ancestry", ""),
+        sanity_check="TODO: Setup --DisableSanityCheck flag for testing dataset",
     threads: 4
     shell:
         r"""
-        verifybamid2 \
+        verifybamid2 {params.sanity_check} \
             --NumThread {threads} \
             --SVDPrefix {params.svd_prefix} \
             --Reference {input.ref_genome} \
