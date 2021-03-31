@@ -6,6 +6,7 @@
     - [Setup config file](#setup-config-file)
       - [Prepare verifybamid datasets for exome analysis](#prepare-verifybamid-datasets-for-exome-analysis)
     - [Create conda environment](#create-conda-environment)
+    - [Testing](#testing)
   - [How to run QuaC](#how-to-run-quac)
     - [Example usage](#example-usage)
   - [Output](#output)
@@ -105,6 +106,15 @@ conda activate quac
 conda env update --file configs/env/quac.yaml
 ```
 
+### Testing
+
+```sh
+python src/run_quac.py \
+      --project_name test_project \
+      --projects_path .test/ngs-data/ \
+      --pedigree .test/configs/project.ped
+```
+
 ## How to run QuaC
 
 In the activate conda environment, QuaC is run using script `src/quac.py`. Here are all the options available:
@@ -162,7 +172,7 @@ QuaC wrapper options:
 `project_name` and `pedigree` are required options to run the tool.
 
 ```sh
-# for a WGS project
+# for a WGS projetcquac
 python src/run_quac.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF_CFF_PFarrell.ped
 
 # for an exome project
@@ -175,8 +185,11 @@ python src/run_quac.py --project_name UnusualCancers_CMGalluzi \
       --exome
 
 # for a WGS project, run specific modules/tools and write results to a dir of choice
-python src/run_quac.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF_CFF_PFarrell.ped \
-      --modules somalier --outdir /some/lake/with/plenty/ducks/
+python src/run_quac.py \
+      --project_name CF_CFF_PFarrell \
+      --pedigree data/raw/ped/CF_CFF_PFarrell.ped \
+      --modules somalier \
+      --outdir /some/lake/with/plenty/ducks/
 ```
 
 ## Output
