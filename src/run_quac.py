@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 """
-QuaC pipeline.
+QuaC pipeline runner tool.
 
-Reads user input data, constructs snakemake command to run the pipeline
-along with their required modules, and submits them as slurm job.
+Reads user input data, constructs snakemake command to run the pipeline,
+and submits them as slurm job.
 
 Run the script with --help flag to see its available options.
 
@@ -38,7 +38,6 @@ def create_snakemake_command(args):
     snakefile_path = repo_path / "workflow" / "Snakefile"
 
     quac_configs = {
-        "modules": args.modules,
         "project_name": args.project_name,
         "projects_path": args.projects_path,
         "ped": args.pedigree,
@@ -162,14 +161,6 @@ if __name__ == "__main__":
         help="Out directory path",
         default=QUAC_OUTDIR_DEFAULT,
         type=lambda x: is_valid_dir(PARSER, x),
-        metavar="",
-    )
-    WORKFLOW.add_argument(
-        "-m",
-        "--modules",
-        help="Runs only these user-specified modules(s). If >1, use comma as delimiter. \
-            See QuaC snakemake script for available options. Useful for development.",
-        default="all",
         metavar="",
     )
     WORKFLOW.add_argument(

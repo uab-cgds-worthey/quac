@@ -1,8 +1,3 @@
-TARGETS_CONTAMINATION = [
-    get_targets("verifybamid", SAMPLES) if {"all", "verifybamid"}.intersection(MODULES_TO_RUN) else [],
-]
-
-
 def get_svd(wildcards):
     if EXOME_MODE:
         return expand(f"{config['verifyBamID']['svd_dat_exome']}.{{ext}}", ext=["bed", "mu", "UD"])

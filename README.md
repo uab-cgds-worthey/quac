@@ -112,7 +112,7 @@ conda env update --file configs/env/quac.yaml
 python src/run_quac.py \
       --project_name test_project \
       --projects_path .test/ngs-data/ \
-      --pedigree .test/configs/project.ped
+      --pedigree .test/configs/project.ped -l -n
 ```
 
 ## How to run QuaC
@@ -139,10 +139,6 @@ QuaC workflow options:
                       supplied via --project_name (default: None)
   --outdir            Out directory path (default:
                       $USER_SCRATCH/tmp/quac/results)
-  -m , --modules      Runs only these user-specified modules(s). If >1, use
-                      comma as delimiter. See QuaC snakemake script for
-                      available options. Useful for development. (default:
-                      all)
   --exome             Flag to run in exome mode (default: False)
 
 QuaC wrapper options:
@@ -179,16 +175,16 @@ python src/run_quac.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF
 python src/run_quac.py --project_name HCC --pedigree data/raw/ped/HCC.ped --exome
 
 # run for an exome project which is not in the default CGDS projects_path
-python src/run_quac.py --project_name UnusualCancers_CMGalluzi \
+python src/run_quac.py \
+      --project_name UnusualCancers_CMGalluzi \
       --projects_path /data/project/sloss/cgds_path_cmgalluzzi/ \
       --pedigree data/raw/ped/UnusualCancers_CMGalluzi.ped \
       --exome
 
-# for a WGS project, run specific modules/tools and write results to a dir of choice
+# for a WGS project, and write results to a dir of choice
 python src/run_quac.py \
       --project_name CF_CFF_PFarrell \
       --pedigree data/raw/ped/CF_CFF_PFarrell.ped \
-      --modules somalier \
       --outdir /some/lake/with/plenty/ducks/
 ```
 
