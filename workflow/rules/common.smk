@@ -56,6 +56,15 @@ def get_targets(tool_name, samples=None):
     return flist
 
 
+def is_testing_mode():
+    "checks if testing dataset is used as input for the pipeline"
+
+    if ".test/" in str(PROJECT_PATH):
+        return True
+
+    return None
+
+
 #### configs from cli ####
 OUT_DIR = Path(config["out_dir"])
 PROJECT_NAME = config["project_name"]

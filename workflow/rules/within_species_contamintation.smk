@@ -26,7 +26,7 @@ rule verifybamid:
     params:
         svd_prefix=lambda wildcards, input: input["svd"][0].replace(Path(input["svd"][0]).suffix, ""),
         out_prefix=lambda wildcards, output: output["ancestry"].replace(".Ancestry", ""),
-        sanity_check="TODO: Setup --DisableSanityCheck flag for testing dataset",
+        sanity_check="--DisableSanityCheck" if is_testing_mode() else "",
     threads: 4
     shell:
         r"""
