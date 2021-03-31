@@ -14,8 +14,6 @@ rule somalier_extract:
         OUT_DIR / "somalier/extract/{sample}.somalier",
     message:
         "Running somalier extract. Sample: {wildcards.sample}"
-    group:
-        "somalier"
     params:
         outdir=lambda wildcards, output: Path(output[0]).parent,
         sample_name="{sample}",
@@ -32,7 +30,9 @@ rule somalier_extract:
 
 rule somalier_relate:
     input:
-        extracted=expand(str(OUT_DIR / "somalier" / "extract" / "{sample}.somalier"), sample=SAMPLES),
+        extracted=expand(
+            str(OUT_DIR / "somalier" / "extract" / "{sample}.somalier"), sample=SAMPLES
+        ),
         ped=PEDIGREE_FPATH,
         somalier_tool=config["somalier"]["tool"],
     output:
@@ -44,8 +44,6 @@ rule somalier_relate:
         "Running somalier relate"
     log:
         log=OUT_DIR / "somalier" / "relatedness" / "somalier.log",
-    group:
-        "somalier"
     params:
         outdir=lambda wildcards, output: Path(output["out"][0]).parent,
         indir=lambda wildcards, input: Path(input[0]).parent,
@@ -64,7 +62,9 @@ rule somalier_relate:
 
 rule somalier_ancestry:
     input:
-        extracted=expand(str(OUT_DIR / "somalier" / "extract" / "{sample}.somalier"), sample=SAMPLES),
+        extracted=expand(
+            str(OUT_DIR / "somalier" / "extract" / "{sample}.somalier"), sample=SAMPLES
+        ),
         somalier_tool=config["somalier"]["tool"],
         labels_1kg=config["somalier"]["labels_1kg"],
         somalier_1kg=directory(config["somalier"]["somalier_1kg"]),
@@ -77,8 +77,6 @@ rule somalier_ancestry:
         "Running somalier ancestry."
     log:
         log=OUT_DIR / "somalier" / "ancestry" / "somalier.log",
-    group:
-        "somalier"
     params:
         outdir=lambda wildcards, output: Path(output["out"][0]).parent,
         indir=lambda wildcards, input: Path(input[0]).parent,
