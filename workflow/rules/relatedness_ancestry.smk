@@ -6,7 +6,7 @@ rule somalier_extract:
         sites=config["somalier"]["sites"],
         ref_genome=config["ref"],
     output:
-        OUT_DIR / "somalier/extract/{sample}.somalier",
+        OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier"
     message:
         "Running somalier extract. Sample: {wildcards.sample}"
     params:
@@ -26,13 +26,14 @@ rule somalier_extract:
 rule somalier_relate:
     input:
         extracted=expand(
-            str(OUT_DIR / "somalier" / "extract" / "{sample}.somalier"), sample=SAMPLES
+            str(OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier"),
+                sample=SAMPLES
         ),
         ped=PEDIGREE_FPATH,
         somalier_tool=config["somalier"]["tool"],
     output:
         out=expand(
-            str(OUT_DIR / "somalier" / "relatedness" / "somalier.{ext}"),
+            str(OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "relatedness" / "somalier.{ext}"),
             ext=["html", "pairs.tsv", "samples.tsv"],
         ),
     message:
@@ -58,14 +59,15 @@ rule somalier_relate:
 rule somalier_ancestry:
     input:
         extracted=expand(
-            str(OUT_DIR / "somalier" / "extract" / "{sample}.somalier"), sample=SAMPLES
+            str(OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier"),
+                sample=SAMPLES
         ),
         somalier_tool=config["somalier"]["tool"],
         labels_1kg=config["somalier"]["labels_1kg"],
         somalier_1kg=directory(config["somalier"]["somalier_1kg"]),
     output:
         out=expand(
-            str(OUT_DIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}"),
+            str(OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}"),
             ext=["html", "tsv"],
         ),
     message:

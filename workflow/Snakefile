@@ -31,26 +31,32 @@ wildcard_constraints:
 
 
 WGS_ONLY_COVERAGE_TARGETS = []
-if not not EXOME_MODE:
+if not EXOME_MODE:
     WGS_ONLY_COVERAGE_TARGETS = [
-     OUT_DIR / "indexcov" / "index.html",
-     OUT_DIR / "covviz/" / "covviz_report.html"
+     # indexcov
+     OUT_DIR / "analysis" / "project_level_qc" / "indexcov" / "index.html",
+     # covviz
+     OUT_DIR / "analysis" / "project_level_qc" / "covviz" / "covviz_report.html",
     ]
 
 
 rule all:
     input:
-        ## ancestry and relatedness ##
-        OUT_DIR / "somalier" / "relatedness" / "somalier.html",
-        OUT_DIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
-        ## coverage ##
+        ##### ancestry and relatedness #####
+        # somalier
+        OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
+        OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
+        ##### coverage #####
         WGS_ONLY_COVERAGE_TARGETS,
-        expand(str(OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt"),
+        # mosdepth
+        expand(str(OUT_DIR / "analysis" / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt"),
             sample=SAMPLES),
-        ## cross-sample contamination ##
+        OUT_DIR / "analysis" / "project_level_qc" / "mosdepth" / "mosdepth.html",
+        ##### cross-sample contamination #####
+        # verifyBamID
         expand(str(OUT_DIR / "analysis" / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry"),
             sample=SAMPLES),
-        ## results aggregation ##
+        ##### results aggregation #####
         # OUT_DIR / "multiqc/multiqc_report.html",
 
 

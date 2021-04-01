@@ -4,8 +4,8 @@ rule mosdepth_coverage:
         bam=PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam",
         bam_index=PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
     output:
-        dist=OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt",
-        summary=OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.summary.txt",
+        dist=OUT_DIR / "analysis" / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
+        summary=OUT_DIR / "analysis" / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.summary.txt",
     message:
         "Running mosdepth for coverage. Sample: {wildcards.sample}"
     group:
@@ -29,11 +29,11 @@ rule mosdepth_coverage:
 rule mosdepth_plot:
     input:
         dist=expand(
-            str(OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt"), sample=SAMPLES
+            str(OUT_DIR / "analysis" / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt"), sample=SAMPLES
         ),
         script=WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
-        OUT_DIR / "mosdepth" / f"mosdepth.html",
+        OUT_DIR / "analysis" / "project_level_qc" / "mosdepth" / "mosdepth.html"
     message:
         "Running mosdepth plotting"
     group:
@@ -64,8 +64,8 @@ rule indexcov:
         ),
         goleft_tool=config["goleft"]["tool"],
     output:
-        html=OUT_DIR / "indexcov" / "index.html",
-        bed=OUT_DIR / "indexcov" / f"indexcov-indexcov.bed.gz",
+        html=OUT_DIR / "analysis" / "project_level_qc" / "indexcov" / "index.html",
+        bed=OUT_DIR / "analysis" / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz",
     message:
         "Running indexcov"
     log:
@@ -87,10 +87,10 @@ rule indexcov:
 ##########################   covviz   ##########################
 rule covviz:
     input:
-        bed=OUT_DIR / "indexcov" / f"indexcov-indexcov.bed.gz",
+        bed=OUT_DIR / "analysis" / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz",
         ped=PEDIGREE_FPATH,
     output:
-        html=OUT_DIR / "covviz" / "covviz_report.html",
+        html=OUT_DIR / "analysis" / "project_level_qc" / "covviz" / "covviz_report.html",
     message:
         "Running covviz"
     log:
