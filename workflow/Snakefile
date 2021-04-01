@@ -15,6 +15,7 @@ include: "rules/common.smk"
 include: "rules/relatedness_ancestry.smk"
 include: "rules/coverage_analysis.smk"
 include: "rules/within_species_contamintation.smk"
+# include: "rules/vcf_stats.smk"
 # include: "rules/aggregate_results.smk"
 
 
@@ -47,11 +48,18 @@ rule all:
         OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
         OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
         ##### coverage #####
-        WGS_ONLY_COVERAGE_TARGETS,
+        # samtools
+        expand(str(OUT_DIR / "analysis" / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt"),
+            sample=SAMPLES),
+        # qualimap
+        expand(str(OUT_DIR / "analysis" / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html"),
+            sample=SAMPLES),
         # mosdepth
         expand(str(OUT_DIR / "analysis" / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt"),
             sample=SAMPLES),
         OUT_DIR / "analysis" / "project_level_qc" / "mosdepth" / "mosdepth.html",
+        # indexcov and covviz
+        WGS_ONLY_COVERAGE_TARGETS,
         ##### cross-sample contamination #####
         # verifyBamID
         expand(str(OUT_DIR / "analysis" / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry"),
