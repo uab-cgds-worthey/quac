@@ -107,7 +107,6 @@ rule indexcov:
             str(PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai"),
             sample=SAMPLES,
         ),
-        goleft_tool=config["goleft"]["tool"],
     output:
         html=OUT_DIR / "analysis" / "project_level_qc" / "indexcov" / "index.html",
         bed=OUT_DIR / "analysis" / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz",
@@ -115,6 +114,8 @@ rule indexcov:
         "Running indexcov"
     log:
         OUT_DIR / "analysis" / "project_level_qc" / "indexcov" / "stdout.log",
+    conda:
+        str(WORKFLOW_PATH / "configs/env/goleft.yaml")
     params:
         outdir=lambda wildcards, output: Path(output[0]).parent,
         project_dir=lambda wildcards, input: str(Path(input["bam"][0]).parents[2]),
@@ -122,7 +123,7 @@ rule indexcov:
         r"""
         echo "Heads up: Indexcov is run on all samples in the "project directory"; Not just the files mentioned in the rule's input."
 
-        {input.goleft_tool} indexcov \
+        goleft indexcov \
             --directory {params.outdir} \
             {params.project_dir}/*/bam/*.bam \
             > {log} 2>&1

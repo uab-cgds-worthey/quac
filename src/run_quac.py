@@ -23,19 +23,87 @@ import yaml
 from utility_cgds.cgds.pipeline.src.submit_slurm_job import submit_slurm_job
 
 
-def create_snakemake_command(args):
+def make_dir(d):
+    """
+    Ensure directory exists
+    """
+
+    Path(d).mkdir(parents=True, exist_ok=True)
+
+    return None
+
+
+def read_workflow_config(repo_path):
+    """
+    Read workflow config file and identify paths to be mounted for singularity
+    """
+
+    workflow_config_fpath = repo_path / "configs/workflow.yaml"
+    with open(workflow_config_fpath) as fh:
+        data = yaml.safe_load(fh)
+
+    mount_paths = set()
+
+    # ref genome
+    mount_paths.add(Path(data["ref"]).parent)
+
+    # somalier resource files
+    for resource in data["somalier"]:
+        mount_paths.add(Path(data["somalier"][resource]).parent)
+
+    # verifyBamID resource files
+    for resource in data["verifyBamID"]:
+        mount_paths.add(Path(data["verifyBamID"][resource]).parent)
+
+    return mount_paths
+
+
+def gather_mount_paths(projects_path, project_name, pedigree_path, out_dir, log_dir, repo_path):
+    """
+    Returns paths that need to be mounted to singularity
+    """
+
+    mount_paths = set()
+
+    # project path
+    project_path = Path(projects_path) / project_name / "analysis"
+    make_dir(project_path)
+    mount_paths.add(project_path)
+
+    # pedigree filepath
+    mount_paths.add(Path(pedigree_path).parent)
+
+    # output dirpath
+    outdir_path = str(Path(out_dir) / project_name)
+    make_dir(outdir_path)
+    mount_paths.add(outdir_path)
+
+    # logs dirpath
+    mount_paths.add(log_dir)
+
+    # read paths in workflow config file
+    mount_paths.update(read_workflow_config(repo_path))
+
+    return ",".join([str(x) for x in mount_paths])
+
+
+def create_snakemake_command(args, repo_path, mount_paths):
     """
     Construct snakemake command to run the pipeline
     """
 
     # slurm profile dir for snakemake to properly handle to cluster job fails
-    repo_path = Path(__file__).absolute().parents[1]
     snakemake_profile_dir = (
         repo_path / "configs/snakemake_slurm_profile//{{cookiecutter.profile_name}}/"
     )
 
     # use absolute path to run it from anywhere
     snakefile_path = repo_path / "workflow" / "Snakefile"
+
+    # directory to use as tmp in singularity container
+    # If not exist, singularity will complain
+    tmp_dir = os.path.expandvars("$USER_SCRATCH/tmp/quac")
+    make_dir(tmp_dir)
 
     quac_configs = {
         "project_name": args.project_name,
@@ -54,6 +122,8 @@ def create_snakemake_command(args):
         f"--config {quac_configs}",
         f"--restart-times {args.rerun_failed}",
         "--use-conda",
+        "--use-singularity",
+        f"--singularity-args '--bind {tmp_dir}:/tmp --bind {mount_paths}'",
         f"--profile '{snakemake_profile_dir}'",
         f"--cluster-config '{args.cluster_config}'",
         "--cluster 'sbatch --ntasks {cluster.ntasks} --partition {cluster.partition}"
@@ -74,12 +144,21 @@ def create_snakemake_command(args):
 
 def main(args):
 
+    repo_path = Path(__file__).absolute().parents[1]
+
+    # process user's input-output config file and get singularity bind paths
+    mount_paths = gather_mount_paths(
+        args.projects_path, args.project_name, args.pedigree, args.outdir, args.log_dir, repo_path
+    )
+
     # get snakemake command to execute for the pipeline
-    snakemake_cmd = create_snakemake_command(args)
+    snakemake_cmd = create_snakemake_command(args, repo_path, mount_paths)
 
     # put together pipeline command to be run
+    singularity_module = "Singularity/3.5.2-GCC-5.4.0-2.26"
     pipeline_cmd = "\n".join(
         [
+            f"module load {singularity_module}",
             " \\\n\t".join(snakemake_cmd),
         ]
     )
