@@ -56,7 +56,7 @@ rm -f $TMP_BAM_1 $TMP_BAM_2 header.txt
 ############# VCF files #############
 
 TMP_VCF="tmp.vcf"
-curl -L https://raw.githubusercontent.com/brentp/somalier/master/tests/test_sites.vcf \
+curl -L https://raw.githubusercontent.com/samtools/bcftools/master/test/concat.2.b.vcf \
     -o $TMP_VCF
 
 # add chr prefix
