@@ -39,14 +39,6 @@ for sample in A B; do
         | samtools reheader - $TMP_BAM_2 \
         > $OUT_BAM
     samtools index $OUT_BAM
-
-    # ### vcfs ###
-    # VCF_DIR="${PROJECT_DIR}/${sample}/vcf"
-    # mkdir -p $BAM_DIR
-    # OUT_vcf=${BAM_DIR}/${sample}.vcf.gz
-
-    # cp $SOURCE_VCF $OUT_vcf
-    # cp ${SOURCE_VCF}.tbi ${OUT_vcf}.tbi
 done
 
 # clean up yo
