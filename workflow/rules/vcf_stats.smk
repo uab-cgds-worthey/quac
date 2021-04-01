@@ -9,7 +9,7 @@ rule bcftools_stats:
         str(WORKFLOW_PATH / "configs/env/bcftools.yaml")
     shell:
         r"""
-        bcftools stats -s - \
+        bcftools stats --samples - \
             {input} \
             > {output}
         """
