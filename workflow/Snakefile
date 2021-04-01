@@ -48,7 +48,7 @@ rule all:
         expand(str(OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt"),
             sample=SAMPLES),
         ## cross-sample contamination ##
-        expand(str(OUT_DIR / "verifyBamID" / "{sample}.Ancestry"),
+        expand(str(OUT_DIR / "analysis" / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry"),
             sample=SAMPLES),
         ## results aggregation ##
         # OUT_DIR / "multiqc/multiqc_report.html",
