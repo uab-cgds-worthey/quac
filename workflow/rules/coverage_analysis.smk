@@ -53,8 +53,6 @@ rule mosdepth_coverage:
         summary=OUT_DIR / "analysis" / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.summary.txt",
     message:
         "Running mosdepth for coverage. Sample: {wildcards.sample}"
-    group:
-        "mosdepth"
     conda:
         str(WORKFLOW_PATH / "configs/env/mosdepth.yaml")
     threads: 4
@@ -81,8 +79,6 @@ rule mosdepth_plot:
         OUT_DIR / "analysis" / "project_level_qc" / "mosdepth" / "mosdepth.html"
     message:
         "Running mosdepth plotting"
-    group:
-        "mosdepth"
     params:
         in_dir=lambda wildcards, input: Path(input[0]).parent,
     shell:
