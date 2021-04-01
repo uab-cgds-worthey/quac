@@ -18,7 +18,7 @@ include: "rules/relatedness_ancestry.smk"
 include: "rules/coverage_analysis.smk"
 include: "rules/within_species_contamintation.smk"
 include: "rules/vcf_stats.smk"
-# include: "rules/aggregate_results.smk"
+include: "rules/aggregate_results.smk"
 
 
 #########################################
@@ -71,7 +71,8 @@ rule all:
         expand(str(OUT_DIR / "analysis" / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats"),
             sample=SAMPLES),
         ##### results aggregation #####
-        # OUT_DIR / "multiqc/multiqc_report.html",
+        expand(str(OUT_DIR / "analysis" / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc.html"),
+            sample=SAMPLES),
 
 
 
