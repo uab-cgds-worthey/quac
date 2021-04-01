@@ -15,7 +15,7 @@ include: "rules/common.smk"
 include: "rules/relatedness_ancestry.smk"
 include: "rules/coverage_analysis.smk"
 include: "rules/within_species_contamintation.smk"
-# include: "rules/vcf_stats.smk"
+include: "rules/vcf_stats.smk"
 # include: "rules/aggregate_results.smk"
 
 
@@ -63,6 +63,10 @@ rule all:
         ##### cross-sample contamination #####
         # verifyBamID
         expand(str(OUT_DIR / "analysis" / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry"),
+            sample=SAMPLES),
+        ##### VCF stats #####
+        # bcftools
+        expand(str(OUT_DIR / "analysis" / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats"),
             sample=SAMPLES),
         ##### results aggregation #####
         # OUT_DIR / "multiqc/multiqc_report.html",
