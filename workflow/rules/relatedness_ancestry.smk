@@ -39,7 +39,7 @@ rule somalier_relate:
     message:
         "Running somalier relate"
     log:
-        log=OUT_DIR / "somalier" / "relatedness" / "somalier.log",
+        log=OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "relatedness" / "somalier.log",
     params:
         outdir=lambda wildcards, output: Path(output["out"][0]).parent,
         indir=lambda wildcards, input: Path(input[0]).parent,
@@ -73,7 +73,7 @@ rule somalier_ancestry:
     message:
         "Running somalier ancestry."
     log:
-        log=OUT_DIR / "somalier" / "ancestry" / "somalier.log",
+        log=OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "ancestry" / "somalier.log",
     params:
         outdir=lambda wildcards, output: Path(output["out"][0]).parent,
         indir=lambda wildcards, input: Path(input[0]).parent,

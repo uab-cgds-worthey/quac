@@ -69,7 +69,7 @@ rule indexcov:
     message:
         "Running indexcov"
     log:
-        OUT_DIR / "indexcov" / "stdout.log",
+        OUT_DIR / "analysis" / "project_level_qc" / "indexcov" / "stdout.log",
     params:
         outdir=lambda wildcards, output: Path(output[0]).parent,
         project_dir=lambda wildcards, input: str(Path(input["bam"][0]).parents[2]),
@@ -94,7 +94,7 @@ rule covviz:
     message:
         "Running covviz"
     log:
-        OUT_DIR / "covviz" / "stdout.log",
+        OUT_DIR / "analysis" / "project_level_qc" / "covviz" / "stdout.log",
     conda:
         str(WORKFLOW_PATH / "configs/env/covviz.yaml")
     shell:
