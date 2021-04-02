@@ -1,13 +1,13 @@
 rule multiqc_initial_pass:
     input:
-        expand(str(PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-raw" / "{{sample}}-{unit}-{read}_fastqc.zip"),
+        expand(PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-raw" / "{{sample}}-{unit}-{read}_fastqc.zip",
             unit=[1,2], read=["R1", "R2"]),
-        expand(
-            str(PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-trimmed" / "{{sample}}-{unit}-{read}_fastqc.zip"),
+        expand(PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-trimmed" / "{{sample}}-{unit}-{read}_fastqc.zip",
             unit=[1,2], read=["R1", "R2"]),
-        expand(
-            str(PROJECT_PATH / "{{sample}}" / "qc" / "fastq_screen-trimmed" / "{{sample}}-{unit}-{read}_screen.txt"),
+        expand(PROJECT_PATH / "{{sample}}" / "qc" / "fastq_screen-trimmed" / "{{sample}}-{unit}-{read}_screen.txt",
             unit=[1,2], read=["R1", "R2"]),
+        expand(PROJECT_PATH / "{{sample}}" / "qc" / "dedup" / "{{sample}}-{unit}.metrics.txt",
+            unit=[1,2]),
         OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
         OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
         OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
