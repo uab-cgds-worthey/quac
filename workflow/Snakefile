@@ -73,7 +73,4 @@ rule all:
         ##### results aggregation #####
         expand(str(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html"),
             sample=SAMPLES),
-
-
-
-
+        OUT_DIR / "project_level_qc" / "multiqc" / "multiqc_report.html",

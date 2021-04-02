@@ -1,13 +1,12 @@
 rule multiqc_by_sample_initial_pass:
     input:
-        expand(PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-raw" / "{{sample}}-{unit}-{read}_fastqc.zip",
+        expand([
+            PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-raw" / "{{sample}}-{unit}-{read}_fastqc.zip",
+            PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-trimmed" / "{{sample}}-{unit}-{read}_fastqc.zip",
+            PROJECT_PATH / "{{sample}}" / "qc" / "fastq_screen-trimmed" / "{{sample}}-{unit}-{read}_screen.txt",
+            PROJECT_PATH / "{{sample}}" / "qc" / "dedup" / "{{sample}}-{unit}.metrics.txt",
+        ],
             unit=[1,2], read=["R1", "R2"]),
-        expand(PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-trimmed" / "{{sample}}-{unit}-{read}_fastqc.zip",
-            unit=[1,2], read=["R1", "R2"]),
-        expand(PROJECT_PATH / "{{sample}}" / "qc" / "fastq_screen-trimmed" / "{{sample}}-{unit}-{read}_screen.txt",
-            unit=[1,2], read=["R1", "R2"]),
-        expand(PROJECT_PATH / "{{sample}}" / "qc" / "dedup" / "{{sample}}-{unit}.metrics.txt",
-            unit=[1,2]),
         OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
         OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
         OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
@@ -103,15 +102,11 @@ rule aggregate_sample_rename_configs:
 
 rule multiqc_aggregation_all_samples:
     input:
-        expand(PROJECT_PATH / "{sample}" / "qc" / "fastqc-raw" / "{sample}-{unit}-{read}_fastqc.zip",
-            sample=SAMPLES, unit=[1,2], read=["R1", "R2"]),
-        expand(PROJECT_PATH / "{sample}" / "qc" / "fastqc-trimmed" / "{sample}-{unit}-{read}_fastqc.zip",
-            sample=SAMPLES, unit=[1,2], read=["R1", "R2"]),
-        expand(PROJECT_PATH / "{sample}" / "qc" / "fastq_screen-trimmed" / "{sample}-{unit}-{read}_screen.txt",
-            sample=SAMPLES, unit=[1,2], read=["R1", "R2"]),
-        expand(PROJECT_PATH / "{sample}" / "qc" / "dedup" / "{sample}-{unit}.metrics.txt",
-            sample=SAMPLES, unit=[1,2]),
         expand([
+            PROJECT_PATH / "{sample}" / "qc" / "fastqc-raw" / "{sample}-{unit}-{read}_fastqc.zip",
+            PROJECT_PATH / "{sample}" / "qc" / "fastqc-trimmed" / "{sample}-{unit}-{read}_fastqc.zip",
+            PROJECT_PATH / "{sample}" / "qc" / "fastq_screen-trimmed" / "{sample}-{unit}-{read}_screen.txt",
+            PROJECT_PATH / "{sample}" / "qc" / "dedup" / "{sample}-{unit}.metrics.txt",
             OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
             OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
             OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
@@ -120,7 +115,8 @@ rule multiqc_aggregation_all_samples:
             OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
             OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
             OUT_DIR / "{sample}" / "qc" / "qc_checkup" / "qc_checkup_overall_summary.yaml",
-        ], sample=SAMPLES),
+        ],
+            sample=SAMPLES, unit=[1,2], read=["R1", "R2"]),
         multiqc_config = "configs/multiqc_config.yaml",
         rename_config = OUT_DIR / "project_level_qc" / "multiqc" / "aggregated_rename_configs.tsv",
     output:
@@ -130,6 +126,8 @@ rule multiqc_aggregation_all_samples:
     params:
         # multiqc uses fastq's filenames to identify sample names. We renamed them based on units.tsv file,
         # using custom rename config file
-        extra = lambda wildcards, input: f'--config {input.multiqc_config} --sample-names {input.rename_config} --cl_config "max_table_rows: 2000"'
+        extra = lambda wildcards, input: f'--config {input.multiqc_config} \
+            --sample-names {input.rename_config} \
+            --cl_config "max_table_rows: 2000"'
     wrapper:
         "0.64.0/bio/multiqc"
