@@ -1,0 +1,41 @@
+"""
+Read multiqc's fastqc report and summarize the result of all fastq files in it.
+"""
+
+import pandas as pd
+from common import qc_logger, write_to_yaml_file
+
+# setup logging
+LOGGER = qc_logger(__name__)
+
+
+def fastqc(report_file, fastq_config, outfile):
+
+    LOGGER.info(f"Reading multiqc's fastqc report file: {report_file}")
+    df = pd.read_csv(report_file, sep="\t", index_col="Sample")
+
+    results_dict = {}
+    pass_or_fail = set()
+    for sample_name, row in df.iterrows():
+        LOGGER.info(f"Working on sample: {sample_name}")
+
+        results_dict[sample_name] = {}
+        for test_name in fastq_config:
+            results_dict[sample_name][test_name] = row[test_name]
+            pass_or_fail.add(row[test_name])
+
+    # write results to file
+    write_to_yaml_file(results_dict, outfile)
+
+    # summarize the result of all fastqs into one status term
+    if "fail" in pass_or_fail:
+        qc_check_status = "fail"
+    elif "warn" in pass_or_fail:
+        qc_check_status = "warn"
+    elif "pass" in pass_or_fail and len(pass_or_fail) == 1:
+        qc_check_status = "pass"
+    else:
+        print("Not prepared for this logic in fastqc results. Exiting now.")
+        raise SystemExit(1)
+
+    return qc_check_status
