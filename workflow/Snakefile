@@ -71,7 +71,7 @@ rule all:
         expand(str(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats"),
             sample=SAMPLES),
         ##### results aggregation #####
-        expand(str(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc.html"),
+        expand(str(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html"),
             sample=SAMPLES),
 
 
