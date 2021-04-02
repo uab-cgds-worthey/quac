@@ -61,7 +61,12 @@ rule qc_checkup:
 
 rule multiqc_by_sample_final_pass:
     input:
-        rules.multiqc_by_sample_initial_pass.input,
+        get_small_var_pipeline_targets,
+        OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
+        OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
+        OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
+        OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
+        OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         OUT_DIR / "{sample}" / "qc" / "qc_checkup" / "qc_checkup_overall_summary.yaml",
         multiqc_config = "configs/multiqc_config.yaml",
         rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
