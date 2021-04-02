@@ -1,9 +1,9 @@
 ##########################   Samtools   ##########################
 rule samtools_stats:
     input:
-        PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam",
+        PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
     output:
-        OUT_DIR / "analysis" / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
+        OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
         # protected(PROJECT_PATH + "/{sample}/qc/samtools-stats/{sample}.txt"),
     wrapper:
         "0.64.0/bio/samtools/stats"
@@ -12,15 +12,15 @@ rule samtools_stats:
 ##########################   Qualimap   ##########################
 rule qualimap_bamqc:
     input:
-        bam = PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        index = PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam = PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+        index = PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
         #TODO: target regions
         # target_regions = config["processing"]["restrict-regions"] if config["processing"].get("restrict-regions") else []
         target_regions = []
     output:
-        html_report = OUT_DIR / "analysis" / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
-        coverage = OUT_DIR / "analysis" / "{sample}" / "qc" / "qualimap" / "{sample}" / "raw_data_qualimapReport" / "coverage_across_reference.txt",
-        summary = OUT_DIR / "analysis" / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt",
+        html_report = OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
+        coverage = OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "raw_data_qualimapReport" / "coverage_across_reference.txt",
+        summary = OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt",
     message:
         "stats bam using qualimap"
     conda:
@@ -46,11 +46,11 @@ rule qualimap_bamqc:
 ##########################   Mosdepth   ##########################
 rule mosdepth_coverage:
     input:
-        bam=PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index=PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+        bam_index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
     output:
-        dist=OUT_DIR / "analysis" / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
-        summary=OUT_DIR / "analysis" / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.summary.txt",
+        dist=OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
+        summary=OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.summary.txt",
     message:
         "Running mosdepth for coverage. Sample: {wildcards.sample}"
     conda:
@@ -72,11 +72,11 @@ rule mosdepth_coverage:
 rule mosdepth_plot:
     input:
         dist=expand(
-            str(OUT_DIR / "analysis" / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt"), sample=SAMPLES
+            str(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt"), sample=SAMPLES
         ),
         script=WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
-        OUT_DIR / "analysis" / "project_level_qc" / "mosdepth" / "mosdepth.html"
+        OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html"
     message:
         "Running mosdepth plotting"
     params:
@@ -96,20 +96,20 @@ rule mosdepth_plot:
 rule indexcov:
     input:
         bam=expand(
-            str(PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam"),
+            str(PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam"),
             sample=SAMPLES,
         ),
         bam_index=expand(
-            str(PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai"),
+            str(PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai"),
             sample=SAMPLES,
         ),
     output:
-        html=OUT_DIR / "analysis" / "project_level_qc" / "indexcov" / "index.html",
-        bed=OUT_DIR / "analysis" / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz",
+        html=OUT_DIR / "project_level_qc" / "indexcov" / "index.html",
+        bed=OUT_DIR / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz",
     message:
         "Running indexcov"
     log:
-        OUT_DIR / "analysis" / "project_level_qc" / "indexcov" / "stdout.log",
+        OUT_DIR / "project_level_qc" / "indexcov" / "stdout.log",
     conda:
         str(WORKFLOW_PATH / "configs/env/goleft.yaml")
     params:
@@ -129,14 +129,14 @@ rule indexcov:
 ##########################   covviz   ##########################
 rule covviz:
     input:
-        bed=OUT_DIR / "analysis" / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz",
+        bed=OUT_DIR / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz",
         ped=PEDIGREE_FPATH,
     output:
-        html=OUT_DIR / "analysis" / "project_level_qc" / "covviz" / "covviz_report.html",
+        html=OUT_DIR / "project_level_qc" / "covviz" / "covviz_report.html",
     message:
         "Running covviz"
     log:
-        OUT_DIR / "analysis" / "project_level_qc" / "covviz" / "stdout.log",
+        OUT_DIR / "project_level_qc" / "covviz" / "stdout.log",
     conda:
         str(WORKFLOW_PATH / "configs/env/covviz.yaml")
     shell:

@@ -74,9 +74,8 @@ def gather_mount_paths(projects_path, project_name, pedigree_path, out_dir, log_
     mount_paths.add(Path(pedigree_path).parent)
 
     # output dirpath
-    outdir_path = str(Path(out_dir) / project_name)
-    make_dir(outdir_path)
-    mount_paths.add(outdir_path)
+    make_dir(out_dir)
+    mount_paths.add(out_dir)
 
     # logs dirpath
     mount_paths.add(log_dir)
@@ -109,7 +108,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
         "project_name": args.project_name,
         "projects_path": args.projects_path,
         "ped": args.pedigree,
-        "out_dir": str(Path(args.outdir) / args.project_name),
+        "out_dir": args.outdir,
         "log_dir": args.log_dir,
         "exome": args.exome,
     }
@@ -234,7 +233,7 @@ if __name__ == "__main__":
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
-    QUAC_OUTDIR_DEFAULT = "$USER_SCRATCH/tmp/quac/results"
+    QUAC_OUTDIR_DEFAULT = "$USER_SCRATCH/tmp/quac/results/test_project/analysis"
     WORKFLOW.add_argument(
         "--outdir",
         help="Out directory path",
@@ -260,7 +259,7 @@ if __name__ == "__main__":
         metavar="",
     )
 
-    LOGS_DIR_DEFAULT = f"{QUAC_OUTDIR_DEFAULT}/../logs"
+    LOGS_DIR_DEFAULT = f"$USER_SCRATCH/tmp/quac/logs"
     WRAPPER.add_argument(
         "--log_dir",
         help="Directory path where logs (both workflow's and wrapper's) will be stored",

@@ -7,13 +7,13 @@ def get_svd(wildcards):
 
 rule verifybamid:
     input:
-        bam=PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index=PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+        bam_index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
         ref_genome=config["ref"],
         svd=get_svd,
     output:
-        ancestry=OUT_DIR / "analysis" / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
-        selfsm=OUT_DIR / "analysis" / "{sample}" / "qc" / "verifyBamID" / "{sample}.selfSM",
+        ancestry=OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
+        selfsm=OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.selfSM",
     message:
         "Running VerifyBamID to detect within-species contamination. sample: {wildcards.sample}"
     conda:

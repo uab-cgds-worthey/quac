@@ -25,7 +25,7 @@ def is_testing_mode():
 #### configs from cli ####
 OUT_DIR = Path(config["out_dir"])
 PROJECT_NAME = config["project_name"]
-PROJECT_PATH = Path(config["projects_path"]) / PROJECT_NAME
+PROJECT_PATH = Path(config["projects_path"]) / PROJECT_NAME / "analysis"
 PEDIGREE_FPATH = config["ped"]
 EXOME_MODE = config["exome"]
 

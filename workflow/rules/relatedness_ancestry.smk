@@ -1,11 +1,11 @@
 rule somalier_extract:
     input:
-        bam=PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index=PROJECT_PATH / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+        bam_index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
         sites=config["somalier"]["sites"],
         ref_genome=config["ref"],
     output:
-        OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier"
+        OUT_DIR / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier"
     message:
         "Running somalier extract. Sample: {wildcards.sample}"
     singularity:
@@ -27,13 +27,13 @@ rule somalier_extract:
 rule somalier_relate:
     input:
         extracted=expand(
-            str(OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier"),
+            str(OUT_DIR / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier"),
                 sample=SAMPLES
         ),
         ped=PEDIGREE_FPATH,
     output:
         out=expand(
-            str(OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "relatedness" / "somalier.{ext}"),
+            str(OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.{ext}"),
             ext=["html", "pairs.tsv", "samples.tsv"],
         ),
     message:
@@ -41,7 +41,7 @@ rule somalier_relate:
     singularity:
         "docker://brentp/somalier:v0.2.12"
     log:
-        log=OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "relatedness" / "somalier.log",
+        log=OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.log",
     params:
         outdir=lambda wildcards, output: Path(output["out"][0]).parent,
         indir=lambda wildcards, input: Path(input[0]).parent,
@@ -61,14 +61,14 @@ rule somalier_relate:
 rule somalier_ancestry:
     input:
         extracted=expand(
-            str(OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier"),
+            str(OUT_DIR / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier"),
                 sample=SAMPLES
         ),
         labels_1kg=config["somalier"]["labels_1kg"],
         somalier_1kg=directory(config["somalier"]["somalier_1kg"]),
     output:
         out=expand(
-            str(OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}"),
+            str(OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}"),
             ext=["html", "tsv"],
         ),
     message:
@@ -76,7 +76,7 @@ rule somalier_ancestry:
     singularity:
         "docker://brentp/somalier:v0.2.12"
     log:
-        log=OUT_DIR / "analysis" / "project_level_qc" / "somalier" / "ancestry" / "somalier.log",
+        log=OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.log",
     params:
         outdir=lambda wildcards, output: Path(output["out"][0]).parent,
         indir=lambda wildcards, input: Path(input[0]).parent,
