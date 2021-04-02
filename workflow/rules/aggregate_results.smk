@@ -84,3 +84,20 @@ rule multiqc_final_pass:
         extra = lambda wildcards, input: f'--config {input.config_file} --sample-names {input.rename_config}'
     wrapper:
         "0.64.0/bio/multiqc"
+
+
+
+localrules: aggregate_sample_rename_configs
+rule aggregate_sample_rename_configs:
+    input:
+        expand(
+            PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
+            sample=SAMPLES)
+    output:
+        OUT_DIR / "project_level_qc" / "multiqc" / "aggregated_rename_configs.tsv",
+    message:
+        "Aggregate all sample rename-config files"
+    run:
+        aggregate_rename_configs(input, output[0])
+
+
