@@ -1,12 +1,7 @@
+##########################   Single-sample-level QC aggregation  ##########################
 rule multiqc_by_sample_initial_pass:
     input:
-        expand([
-            PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-raw" / "{{sample}}-{unit}-{read}_fastqc.zip",
-            PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-trimmed" / "{{sample}}-{unit}-{read}_fastqc.zip",
-            PROJECT_PATH / "{{sample}}" / "qc" / "fastq_screen-trimmed" / "{{sample}}-{unit}-{read}_screen.txt",
-            PROJECT_PATH / "{{sample}}" / "qc" / "dedup" / "{{sample}}-{unit}.metrics.txt",
-        ],
-            unit=[1,2], read=["R1", "R2"]),
+        get_small_var_pipeline_targets,
         OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
         OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
         OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
@@ -86,6 +81,7 @@ rule multiqc_by_sample_final_pass:
 
 
 
+##########################   Multi-sample QC aggregation  ##########################
 localrules: aggregate_sample_rename_configs
 rule aggregate_sample_rename_configs:
     input:

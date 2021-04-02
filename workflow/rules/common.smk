@@ -1,3 +1,5 @@
+import re
+
 def get_samples(ped_fpath):
     """
     Parse pedigree file and return sample names
@@ -20,6 +22,29 @@ def is_testing_mode():
         return True
 
     return None
+
+
+def get_small_var_pipeline_targets(wildcards):
+    """
+    Returns target files that are output by small variant caller pipeline.
+    Uses deduplication's output files as proxy to identify "units"
+    """
+
+    flist = (PROJECT_PATH / wildcards.sample / "qc" / "dedup").glob("*.metrics.txt")
+    units = []
+    for fpath in flist:
+        unit = re.match(fr"{wildcards.sample}-(\d+).metrics.txt", fpath.name)
+        units.append(unit.group(1))
+
+    targets = expand([
+            PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-raw" / "{{sample}}-{unit}-{read}_fastqc.zip",
+            PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-trimmed" / "{{sample}}-{unit}-{read}_fastqc.zip",
+            PROJECT_PATH / "{{sample}}" / "qc" / "fastq_screen-trimmed" / "{{sample}}-{unit}-{read}_screen.txt",
+            PROJECT_PATH / "{{sample}}" / "qc" / "dedup" / "{{sample}}-{unit}.metrics.txt",
+        ], unit=units, read=["R1", "R2"]),
+
+    return targets[0]
+
 
 
 def aggregate_rename_configs(rename_config_files, outfile):
@@ -57,3 +82,4 @@ RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"
 RULE_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
 SAMPLES = get_samples(PEDIGREE_FPATH)
+
