@@ -14,8 +14,6 @@ rule multiqc_by_sample_initial_pass:
         OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt",
         OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc_trimmed.txt",
         OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt",
-    # wildcard_constraints: #TODO - fix unit wildcard
-    #     unit="\d+",
     # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab (small var caller pipeline repo)
     message:
         "Aggregates QC results using multiqc. First pass. Output will be used for the internal QC checkup. Sample: {wildcards.sample}"
@@ -83,7 +81,6 @@ rule multiqc_by_sample_final_pass:
         extra = lambda wildcards, input: f'--config {input.multiqc_config} --sample-names {input.rename_config}'
     wrapper:
         "0.64.0/bio/multiqc"
-
 
 
 ##########################   Multi-sample QC aggregation  ##########################
