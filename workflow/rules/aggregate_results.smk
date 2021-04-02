@@ -40,7 +40,7 @@ rule multiqc_initial_pass:
         OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
-        # config_file = "configs/qc/multiqc_config.yaml",
+        config_file = "configs/multiqc_config.yaml",
         rename_config=(
             PROJECT_PATH
             / "{sample}"
