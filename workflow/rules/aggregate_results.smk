@@ -33,3 +33,56 @@ rule multiqc_initial_pass:
         extra = lambda wildcards, input: f'--config {input.config_file} --sample-names {input.rename_config}'
     wrapper:
         "0.64.0/bio/multiqc"
+
+
+rule qc_checkup:
+    input:
+        qc_config = "configs/qc_checkup/qc_checkup_config.yaml",
+        multiqc_stats = OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt",
+        fastqc_trimmed = OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc_trimmed.txt",
+        fastq_screen = OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt",
+        qualimap = OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt",
+    output:
+        expand(OUT_DIR / "{{sample}}" / "qc" / "qc_checkup" / "qc_checkup_{suffix}.yaml",
+            suffix=['overall_summary', 'fastqc', 'fastq_screen', 'qualimap_overall', 'qualimap_chromosome_stats']),
+    # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab
+    message:
+        "Runs QC checkup on various QC tool output, based on custom defined QC thresholds. "
+        "Note that this will NOT work as expected for multi-sample analysis."
+    params:
+        sample = "{sample}",
+        outdir = lambda wildcards, output: str(Path(output[0]).parent),
+    conda:
+        str(WORKFLOW_PATH / "configs/env/qc_checkup.yaml")
+    shell:
+        r"""
+        python src/qc_checkup/qc_checkup.py \
+            --config {input.qc_config} \
+            --multiqc_stats {input.multiqc_stats} \
+            --fastqc {input.fastqc_trimmed} \
+            --fastq_screen {input.fastq_screen} \
+            --qualimap {input.qualimap} \
+            --sample {params.sample} \
+            --outdir {params.outdir}
+        """
+
+
+rule multiqc_final_pass:
+    input:
+        rules.multiqc_initial_pass.input,
+        OUT_DIR / "{sample}" / "qc" / "qc_checkup" / "qc_checkup_overall_summary.yaml",
+        config_file = "configs/multiqc_config.yaml",
+        rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
+        qc_config = "configs/qc_checkup/qc_checkup_config.yaml",
+    output:
+        OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html",
+        OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt",
+    # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab
+    message:
+        "Aggregates QC results using multiqc. Final pass, where QC checkup results are also aggregated"
+    params:
+        # multiqc uses fastq's filenames to identify sample names. We renamed them based on units.tsv file,
+        # using custom rename config file
+        extra = lambda wildcards, input: f'--config {input.config_file} --sample-names {input.rename_config}'
+    wrapper:
+        "0.64.0/bio/multiqc"
