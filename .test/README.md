@@ -25,9 +25,9 @@ cp -r wgs B
 
 # run the pipeline. Execute only the rules of interest for QuaC
 IO_CONFIG=".test/configs/A/user_io_config.yaml"
-./src/run_pipeline.py --io_config $IO_CONFIG -e="--until fastqc_before_trimming fastqc_after_trimming fastq_screen multiqc_sample_renaming"
+./src/run_pipeline.py --io_config $IO_CONFIG -e="--until fastqc_before_trimming fastqc_after_trimming fastq_screen multiqc_sample_renaming mark_duplicates"
 IO_CONFIG=".test/configs/B/user_io_config.yaml"
-./src/run_pipeline.py --io_config $IO_CONFIG -e="--until fastqc_before_trimming fastqc_after_trimming fastq_screen multiqc_sample_renaming"
+./src/run_pipeline.py --io_config $IO_CONFIG -e="--until fastqc_before_trimming fastqc_after_trimming fastq_screen multiqc_sample_renaming mark_duplicates"
 
 # copy output qc files
 cp -r <small_var_pipeline_outdir>/A/qc/ <quac_repo>/.test/ngs-data/test_project/analysis/A
