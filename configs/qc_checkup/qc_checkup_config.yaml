@@ -64,3 +64,9 @@ fastq_screen:
   "others percentage":
     min: 0
     max: 1.0
+
+verifybamid:
+  FREEMIX:
+    human_readable: "% Cross-sample contamination"
+    min: 0
+    max: 2

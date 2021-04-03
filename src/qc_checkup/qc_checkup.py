@@ -14,6 +14,7 @@ from modules import fastqc
 from modules import fastq_screen
 from modules import multiqc_general_stats
 from modules import qualimap
+from modules import verifybamid
 from common import get_configs, is_valid_file, write_to_yaml_file, qc_logger
 
 
@@ -53,6 +54,13 @@ def main(config_f, fastqc_f, fastq_screen_f, multiqc_stats_f, qualimap_f, outdir
     qualimap_by_chrom_outfile = f"{out_filepath_prefix}_qualimap_chromosome_stats.yaml"
     qc_checks_dict["qualimap_chromosome_specific"] = qualimap.stat_by_chromosome(
         qualimap_f, sample, config_dict["qualimap"], qualimap_by_chrom_outfile
+    )
+
+    # verifyBamID
+    LOGGER.info("-" * 80)
+    verifybamid_outfile = f"{out_filepath_prefix}_verifybamid.yaml"
+    qc_checks_dict["verifybamid"] = verifybamid.verifybamid(
+        multiqc_general_stats_df, sample, config_dict["verifybamid"], verifybamid_outfile
     )
 
     # write QC check results to file
