@@ -25,16 +25,25 @@ def analyze(multiqc_df, sample_name, tool, config, tool_prefix, outfile):
     results_dict = {sample_name: {}}
     pass_fail = set()
     for qc_metric in config:
-        if tool == "bcftools_stats":
+        if tool == "bcftools_stats" and qc_metric in [
+            "perc_snps",
+            "perc_indels",
+            "heterozygosity_ratio",
+        ]:
             total_variants = multiqc_df.loc[sample_name, f"{tool_prefix}-number_of_records"]
+
             if qc_metric == "perc_snps":
                 total_snps = multiqc_df.loc[sample_name, f"{tool_prefix}-number_of_SNPs"]
                 value = ((total_snps / total_variants) * 100).round(3)
             elif qc_metric == "perc_indels":
                 total_indels = multiqc_df.loc[sample_name, f"{tool_prefix}-number_of_indels"]
                 value = ((total_indels / total_variants) * 100).round(3)
+            elif qc_metric == "heterozygosity_ratio":
+                nonref_homo = multiqc_df.loc[sample_name, f"{tool_prefix}-variations_hom"]
+                het = multiqc_df.loc[sample_name, f"{tool_prefix}-variations_het"]
+                value = (het / nonref_homo).round(3)
 
-        elif tool == "qualimap":
+        elif tool == "qualimap" and qc_metric in ["mean_cov:median_cov"]:
             if qc_metric == "mean_cov:median_cov":
                 mean_cov = multiqc_df.loc[sample_name, f"{tool_prefix}-mean_coverage"]
                 median_cov = multiqc_df.loc[sample_name, f"{tool_prefix}-median_coverage"]

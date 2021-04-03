@@ -149,7 +149,10 @@ if __name__ == "__main__":
     )
 
     PARSER.add_argument(
-        "--outdir", help="Directory where result files will be stored", type=str, metavar="",
+        "--outdir",
+        help="Directory where result files will be stored",
+        type=str,
+        metavar="",
     )
 
     args = PARSER.parse_args()

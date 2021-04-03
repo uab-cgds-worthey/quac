@@ -74,18 +74,18 @@ verifybamid:
 bcftools_stats:
   number_of_records:
     human_readable: "Total number of variants"
-    min: 4,900,000
-    max: 6,100,000
+    min: 4900000
+    max: 6100000
 
   number_of_SNPs:
     human_readable: "Total number of SNPs"
-    min: 4,000,000
-    max: 5,000,000
+    min: 4000000
+    max: 5000000
 
   number_of_indels:
     human_readable: "Total number of Indels"
-    min: 820,000
-    max: 1,150,000
+    min: 820000
+    max: 1150000
 
   perc_snps:
     human_readable: "%SNPs among all variants"
