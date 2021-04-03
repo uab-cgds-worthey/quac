@@ -14,7 +14,6 @@ from modules import fastqc
 from modules import fastq_screen
 from modules import multiqc_general_stats
 from modules import qualimap
-from modules import generic
 from common import get_configs, is_valid_file, write_to_yaml_file, qc_logger
 
 
@@ -46,7 +45,7 @@ def main(config_f, fastqc_f, fastq_screen_f, multiqc_stats_f, qualimap_f, outdir
     LOGGER.info("-" * 80)
     qualimap_overall_outfile = f"{out_filepath_prefix}_qualimap_overall.yaml"
     qualimap_prefix = "QualiMap_mqc-generalstats-qualimap"
-    qc_checks_dict["qualimap_overall"] = generic.analyze(
+    qc_checks_dict["qualimap_overall"] = multiqc_general_stats.test_for_range(
         multiqc_general_stats_df,
         sample,
         "qualimap",
@@ -66,7 +65,7 @@ def main(config_f, fastqc_f, fastq_screen_f, multiqc_stats_f, qualimap_f, outdir
     LOGGER.info("-" * 80)
     verifybamid_outfile = f"{out_filepath_prefix}_verifybamid.yaml"
     verifybamid_prefix = "VerifyBAMID_mqc-generalstats-verifybamid"
-    qc_checks_dict["verifybamid"] = generic.analyze(
+    qc_checks_dict["verifybamid"] = multiqc_general_stats.test_for_range(
         multiqc_general_stats_df,
         sample,
         "verifybamid",
@@ -79,7 +78,7 @@ def main(config_f, fastqc_f, fastq_screen_f, multiqc_stats_f, qualimap_f, outdir
     LOGGER.info("-" * 80)
     bcftools_stats_outfile = f"{out_filepath_prefix}_bcftools_stats.yaml"
     bcftools_stats_prefix = "Bcftools Stats_mqc-generalstats-bcftools_stats"
-    qc_checks_dict["bcftools_stats"] = generic.analyze(
+    qc_checks_dict["bcftools_stats"] = multiqc_general_stats.test_for_range(
         multiqc_general_stats_df,
         sample,
         "bcftools_stats",
