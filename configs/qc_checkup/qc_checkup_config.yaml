@@ -47,17 +47,17 @@ fastq_screen:
     min: 98.5
     max: 100
   "Mouse percentage":
-    min: 0
+    min: 8.1
     max: 11
   "Rat percentage":
-    min: 0
+    min: 9.0
     max: 11
   "Drosophila percentage":
-    min: 0
-    max: 2
+    min: 1.1
+    max: 1.8
   "Arabidopsis percentage":
-    min: 0
-    max: 1.5
+    min: 0.8
+    max: 1.2
   "No hits percentage":
     min: 0
     max: 1
@@ -70,3 +70,39 @@ verifybamid:
     human_readable: "% Cross-sample contamination"
     min: 0
     max: 2
+
+bcftools_stats:
+  number_of_records:
+    human_readable: "Total number of variants"
+    min: 4,900,000
+    max: 6,100,000
+
+  number_of_SNPs:
+    human_readable: "Total number of SNPs"
+    min: 4,000,000
+    max: 5,000,000
+
+  number_of_indels:
+    human_readable: "Total number of Indels"
+    min: 820,000
+    max: 1,150,000
+
+  perc_snps:
+    human_readable: "%SNPs among all variants"
+    min: 80
+    max: 83
+
+  perc_indels:
+    human_readable: "%Indels among all variants"
+    min: 17
+    max: 20
+
+  tstv:
+    human_readable: "Transition to Transversion ratio"
+    min: 1.92
+    max: 1.95
+
+  heterozygosity_ratio:
+    human_readable: "Heterozygosity ratio = # het sites / # non-reference homozygous sites."
+    min: 1.6
+    max:
