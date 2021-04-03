@@ -18,6 +18,10 @@ def read_stats(filepath):
 
 
 def test_for_range(multiqc_df, sample_name, tool, config, tool_prefix, outfile):
+    """
+    Read a tool's overall QC summary for a particular sample using multiqc's general stats data
+    and summarize the result.
+    """
 
     LOGGER.info(
         f"Analyzing overall '{tool}' QC results for sample '{sample_name}' using multiqc general stats data"
