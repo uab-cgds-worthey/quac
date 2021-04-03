@@ -37,7 +37,13 @@ def overall_stats(multiqc_df, sample_name, qualimap_config, outfile):
     results_dict = {sample_name: {}}
     pass_fail = set()
     for qc_metric in qualimap_config:
-        value = multiqc_df.loc[sample_name, f"{qualimap_prefix}-{qc_metric}"]
+        if qc_metric == "mean_cov:median_cov":
+            mean_cov = multiqc_df.loc[sample_name, f"{qualimap_prefix}-mean_coverage"]
+            median_cov = multiqc_df.loc[sample_name, f"{qualimap_prefix}-median_coverage"]
+            value = mean_cov / median_cov
+        else:
+            value = multiqc_df.loc[sample_name, f"{qualimap_prefix}-{qc_metric}"]
+
         minimum = qualimap_config[qc_metric]["min"]
         maximum = qualimap_config[qc_metric]["max"]
 
