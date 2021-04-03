@@ -11,54 +11,54 @@ from common import present_within_range, qc_logger, write_to_yaml_file
 LOGGER = qc_logger(__name__)
 
 
-def overall_stats(multiqc_df, sample_name, qualimap_config, outfile):
-    """
-    Reads overall qualimap QC summary for a particular sample using multiqc's general stats data
-    and summarizes the result.
-    """
+# def overall_stats(multiqc_df, sample_name, qualimap_config, outfile):
+#     """
+#     Reads overall qualimap QC summary for a particular sample using multiqc's general stats data
+#     and summarizes the result.
+#     """
 
-    LOGGER.info(
-        f"Analyzing overall qualimap results for sample '{sample_name}' using multiqc general stats data"
-    )
+#     LOGGER.info(
+#         f"Analyzing overall qualimap results for sample '{sample_name}' using multiqc general stats data"
+#     )
 
-    if sample_name not in multiqc_df.index:
-        LOGGER.exception(
-            f"Sample '{sample_name}' not present in multiqc's general stats data. Exiting now"
-        )
-        raise SystemExit(1)
+#     if sample_name not in multiqc_df.index:
+#         LOGGER.exception(
+#             f"Sample '{sample_name}' not present in multiqc's general stats data. Exiting now"
+#         )
+#         raise SystemExit(1)
 
-    qualimap_prefix = "QualiMap_mqc-generalstats-qualimap"
-    if pd.isnull(multiqc_df.loc[sample_name, f"{qualimap_prefix}-avg_gc"]):
-        LOGGER.exception(
-            f"Qualimap data not available for '{sample_name}' in multiqc's general stats data. Exiting now"
-        )
-        raise SystemExit(1)
+#     qualimap_prefix = "QualiMap_mqc-generalstats-qualimap"
+#     if pd.isnull(multiqc_df.loc[sample_name, f"{qualimap_prefix}-avg_gc"]):
+#         LOGGER.exception(
+#             f"Qualimap data not available for '{sample_name}' in multiqc's general stats data. Exiting now"
+#         )
+#         raise SystemExit(1)
 
-    results_dict = {sample_name: {}}
-    pass_fail = set()
-    for qc_metric in qualimap_config:
-        if qc_metric == "mean_cov:median_cov":
-            mean_cov = multiqc_df.loc[sample_name, f"{qualimap_prefix}-mean_coverage"]
-            median_cov = multiqc_df.loc[sample_name, f"{qualimap_prefix}-median_coverage"]
-            value = mean_cov / median_cov
-        else:
-            value = multiqc_df.loc[sample_name, f"{qualimap_prefix}-{qc_metric}"]
+#     results_dict = {sample_name: {}}
+#     pass_fail = set()
+#     for qc_metric in qualimap_config:
+#         if qc_metric == "mean_cov:median_cov":
+#             mean_cov = multiqc_df.loc[sample_name, f"{qualimap_prefix}-mean_coverage"]
+#             median_cov = multiqc_df.loc[sample_name, f"{qualimap_prefix}-median_coverage"]
+#             value = (mean_cov / median_cov).round(3)
+#         else:
+#             value = multiqc_df.loc[sample_name, f"{qualimap_prefix}-{qc_metric}"]
 
-        minimum = qualimap_config[qc_metric]["min"]
-        maximum = qualimap_config[qc_metric]["max"]
+#         minimum = qualimap_config[qc_metric]["min"]
+#         maximum = qualimap_config[qc_metric]["max"]
 
-        result = present_within_range(value, minimum, maximum)
-        results_dict[sample_name][f"{qc_metric}_val"] = float(value)
-        results_dict[sample_name][qc_metric] = "pass" if result else "fail"
-        pass_fail.add(result)
+#         result = present_within_range(value, minimum, maximum)
+#         results_dict[sample_name][f"{qc_metric}_val"] = float(value)
+#         results_dict[sample_name][qc_metric] = "pass" if result else "fail"
+#         pass_fail.add(result)
 
-    # write results to file
-    write_to_yaml_file(results_dict, outfile)
+#     # write results to file
+#     write_to_yaml_file(results_dict, outfile)
 
-    # summarize results to one term
-    qc_check_status = "pass" if all(pass_fail) else "fail"
+#     # summarize results to one term
+#     qc_check_status = "pass" if all(pass_fail) else "fail"
 
-    return qc_check_status
+#     return qc_check_status
 
 
 def stat_by_chromosome(qualimap_f, sample_name, qualimap_config, outfile):
