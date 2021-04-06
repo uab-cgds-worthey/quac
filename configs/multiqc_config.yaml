@@ -21,31 +21,31 @@ table_columns_visible:
 
     "FastQC (raw)": False
 
-
 # order of modules to show in report
 module_order:
     - cgds_qc_checkup
     - qualimap
     - picard
     - samtools
+    - mosdepth
     - bcftools
     - fastqc:
-        name: 'FastQC (trimmed)'
-        anchor: 'trimmed'
-        info: 'This section of the report shows FastQC results after adapter trimming.'
-        target: ''
-        path_filters:
-            - '*/qc/fastqc-trimmed/*_fastqc.zip'
+          name: "FastQC (trimmed)"
+          anchor: "trimmed"
+          info: "This section of the report shows FastQC results after adapter trimming."
+          target: ""
+          path_filters:
+              - "*/qc/fastqc-trimmed/*_fastqc.zip"
     - fastqc:
-        name: 'FastQC (raw)'
-        anchor: 'raw'
-        path_filters:
-            - '*/qc/fastqc-raw/*_fastqc.zip'
+          name: "FastQC (raw)"
+          anchor: "raw"
+          path_filters:
+              - "*/qc/fastqc-raw/*_fastqc.zip"
     - fastq_screen:
-        name: 'FastQ Screen (trimmed)'
-        path_filters:
-            - '*/qc/fastq_screen-trimmed/*'
-
+          name: "FastQ Screen (trimmed)"
+          path_filters:
+              - "*/qc/fastq_screen-trimmed/*"
+    - verifybamid
 
 # qualimap related
 qualimap_config:
@@ -60,44 +60,43 @@ qualimap_config:
         - 60
         - 100
 
-
 # configs for CGDS QC check-ups
 # NOTE: This multiqc config file has hard-coded parameters, which is based on the QC-checkup config file.
 # If parameters in QC-checkup config file get modified, this file may need to be edited correspondingly.
 custom_data:
     qc_checkup_overall_summary:
-        parent_id: 'cgds_qc_checkup'
-        parent_name: 'CGDS - QC checkup'
+        parent_id: "cgds_qc_checkup"
+        parent_name: "CGDS - QC checkup"
         parent_description: "This section contains CGDS's QC checking results (Might not work well for WES)."
-        id: 'qc_checkup_overall_summary'
-        section_name: 'Overall QC checkup summary'
-        description: 'Overall QC checkup summary of results from several QC tools'
-        file_format: 'yaml'
-        plot_type: 'table'
+        id: "qc_checkup_overall_summary"
+        section_name: "Overall QC checkup summary"
+        description: "Overall QC checkup summary of results from several QC tools"
+        file_format: "yaml"
+        plot_type: "table"
         pconfig:
-            table_title: 'Overall QC checkup summary'
+            table_title: "Overall QC checkup summary"
 
     qc_checkup_fastqc:
-        parent_id: 'cgds_qc_checkup'
-        id: 'qc_checkup_fastqc'
-        section_name: 'FastQC (trimmed)'
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_fastqc"
+        section_name: "FastQC (trimmed)"
         description: 'Quick summary of FastQC (trimmed) results. See <a href="#trimmed">FastQC</a> section below for detailed results.'
-        file_format: 'yaml'
-        plot_type: 'table'
+        file_format: "yaml"
+        plot_type: "table"
         pconfig:
-            table_title: 'FastQC - QC checkup'
+            table_title: "FastQC - QC checkup"
 
     qc_checkup_fastq_screen:
-        parent_id: 'cgds_qc_checkup'
-        id: 'qc_checkup_fastq_screen'
-        section_name: 'FastQ Screen (trimmed)'
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_fastq_screen"
+        section_name: "FastQ Screen (trimmed)"
         description: 'Quick summary of FastQ Screen (trimmed) results. See <a href="#fastq_screen-1">FastQ Screen</a> section below for detailed results.'
-        file_format: 'yaml'
-        plot_type: 'table'
+        file_format: "yaml"
+        plot_type: "table"
         pconfig:
-            table_title: 'FastQ Screen - QC checkup'
+            table_title: "FastQ Screen - QC checkup"
             only_defined_headers: False
-            scale: 'Blues'
+            scale: "Blues"
         headers:
             "%Human":
                 placement: 900
@@ -173,16 +172,16 @@ custom_data:
                 hidden: True
 
     qc_checkup_qualimap_overall:
-        parent_id: 'cgds_qc_checkup'
-        id: 'qc_checkup_qualimap_overall'
-        section_name: 'Qualimap - Overall stats'
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_qualimap_overall"
+        section_name: "Qualimap - Overall stats"
         description: 'Quick summary of Qualimap results. See <a href="#qualimap">QualiMap</a> section below for detailed results.'
-        file_format: 'yaml'
-        plot_type: 'table'
+        file_format: "yaml"
+        plot_type: "table"
         pconfig:
-            table_title: 'Qualimap - Overall stats - QC checkup'
+            table_title: "Qualimap - Overall stats - QC checkup"
             only_defined_headers: False
-            scale: 'Blues'
+            scale: "Blues"
         headers:
             avg_gc_val:
                 min: 40
@@ -201,12 +200,12 @@ custom_data:
                 hidden: True
 
     qc_checkup_qualimap_chromosome_stats:
-        parent_id: 'cgds_qc_checkup'
-        id: 'qc_checkup_qualimap_chromosome_stats'
-        section_name: 'Qualimap - Chromosome stats'
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_qualimap_chromosome_stats"
+        section_name: "Qualimap - Chromosome stats"
         description: 'Quick summary chromosome-level coverage info using Qualimap results. See <a href="#qualimap">QualiMap</a> section below for detailed results.'
-        file_format: 'yaml'
-        plot_type: 'linegraph'
+        file_format: "yaml"
+        plot_type: "linegraph"
         pconfig:
             id: qc_checkup_qualimap_chromosome_stats
             ymin: 0
@@ -214,22 +213,83 @@ custom_data:
             categories: True
             ylab: "Coverage (X)"
             extra_series:
-                name: 'Minimum required'
-                data: [[0,28], [21, 28], [22,14], [23,14]]
-                dashStyle: 'Dash'
+                name: "Minimum required"
+                data: [[0, 28], [21, 28], [22, 14], [23, 14]]
+                dashStyle: "Dash"
                 showInLegend: False
-                color: 'PaleVioletRed'
+                color: "PaleVioletRed"
 
+    qc_checkup_bcftools_stats:
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_bcftools_stats"
+        section_name: "Bcftools stats"
+        description: 'Quick summary of Bcftools-stats results. See <a href="#bcftools">Bcftools</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "Bcftools stats - QC checkup"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            number_of_records_val:
+                min: 4900000
+                max: 6100000
+                hidden: True
+            number_of_SNPs_val:
+                min: 4000000
+                max: 5000000
+                hidden: True
+            number_of_indels_val:
+                min: 820000
+                max: 1150000
+                hidden: True
+            perc_snps_val:
+                min: 80
+                max: 83
+                hidden: True
+            perc_indels_val:
+                min: 17
+                max: 20
+                hidden: True
+            tstv_val:
+                min: 1.92
+                max: 1.95
+                hidden: True
+            heterozygosity_ratio_val:
+                min: 1.6
+                max:
+                hidden: True
+
+    qc_checkup_verifybamid:
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_verifybamid"
+        section_name: "VerifyBAMID"
+        description: 'Quick summary of VerifyBAMID results. See <a href="#verifybamid-1">VerifyBAMID</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "VerifyBAMID - QC checkup"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            FREEMIX_val:
+                min: 0
+                max: 2
+                hidden: True
 
 # define file pattern for custom configs
 sp:
     qc_checkup_overall_summary:
-        fn: 'qc_checkup_overall_summary.yaml'
+        fn: "qc_checkup_overall_summary.yaml"
     qc_checkup_fastqc:
-        fn: 'qc_checkup_fastqc.yaml'
+        fn: "qc_checkup_fastqc.yaml"
     qc_checkup_fastq_screen:
-        fn: 'qc_checkup_fastq_screen.yaml'
+        fn: "qc_checkup_fastq_screen.yaml"
     qc_checkup_qualimap_overall:
-        fn: 'qc_checkup_qualimap_overall.yaml'
+        fn: "qc_checkup_qualimap_overall.yaml"
     qc_checkup_qualimap_chromosome_stats:
-        fn: 'qc_checkup_qualimap_chromosome_stats.yaml'
+        fn: "qc_checkup_qualimap_chromosome_stats.yaml"
+    qc_checkup_bcftools_stats:
+        fn: "qc_checkup_bcftools_stats.yaml"
+    qc_checkup_verifybamid:
+        fn: "qc_checkup_verifybamid.yaml"
