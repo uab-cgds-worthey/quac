@@ -13,7 +13,7 @@ rule qualimap_bamqc:
     input:
         bam = PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
         index = PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
-        target_regions = get_capture_regions_bed
+        target_regions = get_capture_regions_bed,
     output:
         html_report = OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
         coverage = OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "raw_data_qualimapReport" / "coverage_across_reference.txt",
@@ -45,6 +45,7 @@ rule mosdepth_coverage:
     input:
         bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
         bam_index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
+        target_regions = get_capture_regions_bed,
     output:
         dist=OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
         summary=OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.summary.txt",
@@ -55,12 +56,14 @@ rule mosdepth_coverage:
     threads: 4
     params:
         out_prefix=lambda wildcards, output: output["summary"].replace(".mosdepth.summary.txt", ""),
+        capture_bed = lambda wildcards, input: f"--by {input.target_regions}" if input.target_regions else '',
     shell:
         r"""
         mosdepth \
             --no-per-base \
             --threads {threads} \
             --fast-mode \
+            {params.capture_bed} \
             {params.out_prefix} \
             {input.bam}
         """
