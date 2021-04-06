@@ -199,6 +199,13 @@ custom_data:
                 min: {{ qualimap_percentage_aligned_min }}
                 max: {{ qualimap_percentage_aligned_max }}
                 hidden: True
+            "mean_cov:median_cov_val":
+                min: {{ qualimap_mean_median_coverage_ratio_min }}
+                max: {{ qualimap_mean_median_coverage_ratio_max }}
+                hidden: True
+            median_insert_size:
+                min: {{ qualimap_median_insert_size_min }}
+                hidden: True
 
     qc_checkup_qualimap_chromosome_stats:
         parent_id: "cgds_qc_checkup"
@@ -220,6 +227,64 @@ custom_data:
                 showInLegend: False
                 color: "PaleVioletRed"
 
+    qc_checkup_bcftools_stats:
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_bcftools_stats"
+        section_name: "Bcftools stats"
+        description: 'Quick summary of Bcftools-stats results. See <a href="#bcftools">Bcftools</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "Bcftools stats - QC checkup"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            number_of_records_val:
+                min: {{ bcftools_stats_number_of_records_min }}
+                max: {{ bcftools_stats_number_of_records_max }}
+                hidden: True
+            number_of_SNPs_val:
+                min: {{ bcftools_stats_number_of_SNPs_min }}
+                max: {{ bcftools_stats_number_of_SNPs_max }}
+                hidden: True
+            number_of_indels_val:
+                min: {{ bcftools_stats_number_of_indels_min }}
+                max: {{ bcftools_stats_number_of_indels_max }}
+                hidden: True
+            perc_snps_val:
+                min: {{ bcftools_stats_perc_snps_min }}
+                max: {{ bcftools_stats_perc_snps_max }}
+                hidden: True
+            perc_indels_val:
+                min: {{ bcftools_stats_perc_indels_min }}
+                max: {{ bcftools_stats_perc_indels_max }}
+                hidden: True
+            tstv_val:
+                min: {{ bcftools_stats_tstv_min }}
+                max: {{ bcftools_stats_tstv_max }}
+                hidden: True
+            heterozygosity_ratio_val:
+                min: {{ bcftools_stats_heterozygosity_ratio_min }}
+                max: {{ bcftools_stats_heterozygosity_ratio_max }}
+                hidden: True
+
+    qc_checkup_verifybamid:
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_verifybamid"
+        section_name: "VerifyBAMID"
+        description: 'Quick summary of VerifyBAMID results. See <a href="#verifybamid-1">VerifyBAMID</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "VerifyBAMID - QC checkup"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            FREEMIX_val:
+                min: {{ verifybamid_freemix_min }}
+                max: {{ verifybamid_freemix_max }}
+                hidden: True
+
 # define file pattern for custom configs
 sp:
     qc_checkup_overall_summary:
@@ -232,3 +297,7 @@ sp:
         fn: "qc_checkup_qualimap_overall.yaml"
     qc_checkup_qualimap_chromosome_stats:
         fn: "qc_checkup_qualimap_chromosome_stats.yaml"
+    qc_checkup_bcftools_stats:
+        fn: "qc_checkup_bcftools_stats.yaml"
+    qc_checkup_verifybamid:
+        fn: "qc_checkup_verifybamid.yaml"

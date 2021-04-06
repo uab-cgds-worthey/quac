@@ -8,6 +8,7 @@ table_columns_visible:
         50_x_pc: False
         60_x_pc: False
         100_x_pc: False
+        200_x_pc: False
 
     "Bcftools Stats":
         number_of_SNPs: False
@@ -27,7 +28,6 @@ module_order:
     - qualimap
     - picard
     - samtools
-    - mosdepth
     - bcftools
     - fastqc:
           name: "FastQC (trimmed)"
@@ -45,7 +45,6 @@ module_order:
           name: "FastQ Screen (trimmed)"
           path_filters:
               - "*/qc/fastq_screen-trimmed/*"
-    - verifybamid
 
 # qualimap related
 qualimap_config:
@@ -53,12 +52,14 @@ qualimap_config:
         - 1
         - 5
         - 10
+        - 15
         - 20
         - 30
         - 40
         - 50
         - 60
         - 100
+        - 200
 
 # configs for CGDS QC check-ups
 # NOTE: This multiqc config file has hard-coded parameters, which is based on the QC-checkup config file.
@@ -112,22 +113,22 @@ custom_data:
                 hidden: True
                 placement: 910
             "%Mouse_val":
-                min: 0
+                min: 8.1
                 max: 11
                 hidden: True
                 placement: 930
             "%Rat_val":
-                min: 0
+                min: 9.0
                 max: 11
                 hidden: True
                 placement: 950
             "%Drosophila_val":
-                min: 0
-                max: 2
+                min: 1.1
+                max: 1.8
                 hidden: True
             "%Arabidopsis_val":
-                min: 0
-                max: 1.5
+                min: 0.8
+                max: 1.2
                 hidden: True
             "%No hits_val":
                 min: 0
@@ -136,39 +137,39 @@ custom_data:
                 placement: 970
             "%Adapters_val":
                 min: 0
-                max: 1
+                max: 1.0
                 hidden: True
             "%Ecoli_val":
                 min: 0
-                max: 1
+                max: 1.0
                 hidden: True
             "%Lambda_val":
                 min: 0
-                max: 1
+                max: 1.0
                 hidden: True
             "%MT_val":
                 min: 0
-                max: 1
+                max: 1.0
                 hidden: True
             "%PhiX_val":
                 min: 0
-                max: 1
+                max: 1.0
                 hidden: True
             "%Vectors_val":
                 min: 0
-                max: 1
+                max: 1.0
                 hidden: True
             "%Worm_val":
                 min: 0
-                max: 1
+                max: 1.0
                 hidden: True
             "%Yeast_val":
                 min: 0
-                max: 1
+                max: 1.0
                 hidden: True
             "%rRNA_val":
                 min: 0
-                max: 1
+                max: 1.0
                 hidden: True
 
     qc_checkup_qualimap_overall:
@@ -184,19 +185,26 @@ custom_data:
             scale: "Blues"
         headers:
             avg_gc_val:
-                min: 40
-                max: 45
+                min: 40.5
+                max: 42.5
                 hidden: True
             # if you change coverage limits, also change values in "qc_checkup_qualimap_chromosome_stats"
             mean_coverage_val:
-                min: 28
+                min: 30
                 hidden: True
             median_coverage_val:
-                min: 28
+                min: 30
                 hidden: True
             percentage_aligned_val:
                 min: 99
                 max: 100
+                hidden: True
+            "mean_cov:median_cov_val":
+                min: 0.95
+                max: 1.05
+                hidden: True
+            median_insert_size:
+                min: 250
                 hidden: True
 
     qc_checkup_qualimap_chromosome_stats:
@@ -214,7 +222,7 @@ custom_data:
             ylab: "Coverage (X)"
             extra_series:
                 name: "Minimum required"
-                data: [[0, 28], [21, 28], [22, 14], [23, 14]]
+                data: [[0, 30], [21, 30], [22, 15.0], [23, 15.0]]
                 dashStyle: "Dash"
                 showInLegend: False
                 color: "PaleVioletRed"
@@ -257,7 +265,7 @@ custom_data:
                 hidden: True
             heterozygosity_ratio_val:
                 min: 1.6
-                max:
+                max: 
                 hidden: True
 
     qc_checkup_verifybamid:
