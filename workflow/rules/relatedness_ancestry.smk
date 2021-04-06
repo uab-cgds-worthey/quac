@@ -26,11 +26,11 @@ rule somalier_extract:
 
 rule somalier_relate:
     input:
-        extracted=expand(str(OUT_DIR / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier"), sample=SAMPLES),
+        extracted=expand(OUT_DIR / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier", sample=SAMPLES),
         ped=PEDIGREE_FPATH,
     output:
         out=expand(
-            str(OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.{ext}"),
+            OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.{ext}",
             ext=["html", "pairs.tsv", "samples.tsv"],
         ),
     message:
@@ -57,12 +57,12 @@ rule somalier_relate:
 
 rule somalier_ancestry:
     input:
-        extracted=expand(str(OUT_DIR / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier"), sample=SAMPLES),
+        extracted=expand(OUT_DIR / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier", sample=SAMPLES),
         labels_1kg=config["somalier"]["labels_1kg"],
         somalier_1kg=directory(config["somalier"]["somalier_1kg"]),
     output:
         out=expand(
-            str(OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}"),
+            OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}",
             ext=["html", "tsv"],
         ),
     message:

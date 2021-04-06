@@ -53,20 +53,20 @@ rule all:
         OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
         ##### coverage #####
         # samtools
-        expand(str(OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt"), sample=SAMPLES),
+        expand(OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt", sample=SAMPLES),
         # qualimap
-        expand(str(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html"), sample=SAMPLES),
+        expand(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html", sample=SAMPLES),
         # mosdepth
-        expand(str(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt"), sample=SAMPLES),
+        expand(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt", sample=SAMPLES),
         OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html",
         # indexcov and covviz
         WGS_ONLY_COVERAGE_TARGETS,
         ##### cross-sample contamination #####
         # verifyBamID
-        expand(str(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry"), sample=SAMPLES),
+        expand(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry", sample=SAMPLES),
         ##### VCF stats #####
         # bcftools
-        expand(str(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats"), sample=SAMPLES),
+        expand(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats", sample=SAMPLES),
         ##### results aggregation #####
-        expand(str(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html"), sample=SAMPLES),
+        expand(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html", sample=SAMPLES),
         OUT_DIR / "project_level_qc" / "multiqc" / "multiqc_report.html",

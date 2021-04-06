@@ -133,8 +133,8 @@ rule multiqc_aggregation_all_samples:
         # using custom rename config file
         extra=(
             lambda wildcards, input: f'--config {input.multiqc_config} \
-                    --sample-names {input.rename_config} \
-                    --cl_config "max_table_rows: 2000"'
+                            --sample-names {input.rename_config} \
+                            --cl_config "max_table_rows: 2000"'
         ),
     wrapper:
         "0.64.0/bio/multiqc"

@@ -71,7 +71,7 @@ rule mosdepth_coverage:
 
 rule mosdepth_plot:
     input:
-        dist=expand(str(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt"), sample=SAMPLES),
+        dist=expand(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt", sample=SAMPLES),
         script=WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
         OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html",
@@ -94,11 +94,11 @@ rule mosdepth_plot:
 rule indexcov:
     input:
         bam=expand(
-            str(PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam"),
+            PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
             sample=SAMPLES,
         ),
         bam_index=expand(
-            str(PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai"),
+            PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
             sample=SAMPLES,
         ),
     output:
