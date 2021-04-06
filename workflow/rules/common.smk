@@ -1,4 +1,6 @@
 import re
+from snakemake.logging import logger
+
 
 def get_samples(ped_fpath):
     """
@@ -57,15 +59,20 @@ def get_small_var_pipeline_targets(wildcards):
         unit = re.match(fr"{wildcards.sample}-(\d+).metrics.txt", fpath.name)
         units.append(unit.group(1))
 
-    targets = expand([
-            PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-raw" / "{{sample}}-{unit}-{read}_fastqc.zip",
-            PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-trimmed" / "{{sample}}-{unit}-{read}_fastqc.zip",
-            PROJECT_PATH / "{{sample}}" / "qc" / "fastq_screen-trimmed" / "{{sample}}-{unit}-{read}_screen.txt",
-            PROJECT_PATH / "{{sample}}" / "qc" / "dedup" / "{{sample}}-{unit}.metrics.txt",
-        ], unit=units, read=["R1", "R2"]),
+    targets = (
+        expand(
+            [
+                PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-raw" / "{{sample}}-{unit}-{read}_fastqc.zip",
+                PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-trimmed" / "{{sample}}-{unit}-{read}_fastqc.zip",
+                PROJECT_PATH / "{{sample}}" / "qc" / "fastq_screen-trimmed" / "{{sample}}-{unit}-{read}_screen.txt",
+                PROJECT_PATH / "{{sample}}" / "qc" / "dedup" / "{{sample}}-{unit}.metrics.txt",
+            ],
+            unit=units,
+            read=["R1", "R2"],
+        ),
+    )
 
     return targets[0]
-
 
 
 def aggregate_rename_configs(rename_config_files, outfile):
@@ -103,4 +110,3 @@ RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"
 RULE_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
 SAMPLES = get_samples(PEDIGREE_FPATH)
-

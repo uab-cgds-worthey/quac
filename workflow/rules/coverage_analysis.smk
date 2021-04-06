@@ -11,21 +11,21 @@ rule samtools_stats:
 ##########################   Qualimap   ##########################
 rule qualimap_bamqc:
     input:
-        bam = PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
-        index = PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
-        target_regions = get_capture_regions_bed,
+        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+        index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
+        target_regions=get_capture_regions_bed,
     output:
-        html_report = OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
-        coverage = OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "raw_data_qualimapReport" / "coverage_across_reference.txt",
-        summary = OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt",
+        html_report=OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
+        coverage=OUT_DIR / "{sample}" / "qc/qualimap/{sample}/raw_data_qualimapReport/coverage_across_reference.txt",
+        summary=OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt",
     message:
         "stats bam using qualimap"
     conda:
         str(WORKFLOW_PATH / "configs/env/qualimap.yaml")
     params:
-        outdir = lambda wildcards, output: str(Path(output['html_report']).parent),
-        capture_bed = lambda wildcards, input: f"--feature-file {input.target_regions}" if input.target_regions else '',
-        java_mem="24G"
+        outdir=lambda wildcards, output: str(Path(output["html_report"]).parent),
+        capture_bed=lambda wildcards, input: f"--feature-file {input.target_regions}" if input.target_regions else "",
+        java_mem="24G",
     shell:
         r"""
         qualimap bamqc \
@@ -45,7 +45,7 @@ rule mosdepth_coverage:
     input:
         bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
         bam_index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
-        target_regions = get_capture_regions_bed,
+        target_regions=get_capture_regions_bed,
     output:
         dist=OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
         summary=OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.summary.txt",
@@ -56,7 +56,7 @@ rule mosdepth_coverage:
     threads: 4
     params:
         out_prefix=lambda wildcards, output: output["summary"].replace(".mosdepth.summary.txt", ""),
-        capture_bed = lambda wildcards, input: f"--by {input.target_regions}" if input.target_regions else '',
+        capture_bed=lambda wildcards, input: f"--by {input.target_regions}" if input.target_regions else "",
     shell:
         r"""
         mosdepth \
@@ -71,12 +71,10 @@ rule mosdepth_coverage:
 
 rule mosdepth_plot:
     input:
-        dist=expand(
-            str(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt"), sample=SAMPLES
-        ),
+        dist=expand(str(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt"), sample=SAMPLES),
         script=WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
-        OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html"
+        OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html",
     message:
         "Running mosdepth plotting"
     params:
