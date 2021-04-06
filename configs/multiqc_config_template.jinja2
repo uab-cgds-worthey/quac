@@ -108,68 +108,68 @@ custom_data:
             "%No hits":
                 placement: 960
             "%Human_val":
-                min: { { fastq_screen.human.min } }
-                max: { { fastq_screen.human.max } }
+                min: {{ fastq_screen_human_min }}
+                max: {{ fastq_screen_human_max }}
                 hidden: True
                 placement: 910
             "%Mouse_val":
-                min: { { fastq_screen.mouse.min } }
-                max: { { fastq_screen.mouse.max } }
+                min: {{ fastq_screen_mouse_min }}
+                max: {{ fastq_screen_mouse_max }}
                 hidden: True
                 placement: 930
             "%Rat_val":
-                min: 0
-                max: { { fastq_screen.rat.min } }
-                hidden: { { fastq_screen.rat.max } }
+                min: {{ fastq_screen_rat_min }}
+                max: {{ fastq_screen_rat_max }}
+                hidden: True
                 placement: 950
             "%Drosophila_val":
-                min: { { fastq_screen.drosophila.min } }
-                max: { { fastq_screen.drosophila.max } }
+                min: {{ fastq_screen_drosophila_min }}
+                max: {{ fastq_screen_drosophila_max }}
                 hidden: True
             "%Arabidopsis_val":
-                min: { { fastq_screen.arabidopsis.min } }
-                max: { { fastq_screen.arabidopsis.max } }
+                min: {{ fastq_screen_arabidopsis_min }}
+                max: {{ fastq_screen_arabidopsis_max }}
                 hidden: True
             "%No hits_val":
-                min: { { fastq_screen.nohits.min } }
-                max: { { fastq_screen.nohits.max } }
+                min: {{ fastq_screen_nohits_min }}
+                max: {{ fastq_screen_nohits_max }}
                 hidden: True
                 placement: 970
             "%Adapters_val":
-                min: { { fastq_screen.others.min } }
-                max: { { fastq_screen.others.max } }
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
                 hidden: True
             "%Ecoli_val":
-                min: { { fastq_screen.others.min } }
-                max: { { fastq_screen.others.max } }
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
                 hidden: True
             "%Lambda_val":
-                min: { { fastq_screen.others.min } }
-                max: { { fastq_screen.others.max } }
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
                 hidden: True
             "%MT_val":
-                min: { { fastq_screen.others.min } }
-                max: { { fastq_screen.others.max } }
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
                 hidden: True
             "%PhiX_val":
-                min: { { fastq_screen.others.min } }
-                max: { { fastq_screen.others.max } }
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
                 hidden: True
             "%Vectors_val":
-                min: { { fastq_screen.others.min } }
-                max: { { fastq_screen.others.max } }
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
                 hidden: True
             "%Worm_val":
-                min: { { fastq_screen.others.min } }
-                max: { { fastq_screen.others.max } }
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
                 hidden: True
             "%Yeast_val":
-                min: { { fastq_screen.others.min } }
-                max: { { fastq_screen.others.max } }
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
                 hidden: True
             "%rRNA_val":
-                min: { { fastq_screen.others.min } }
-                max: { { fastq_screen.others.max } }
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
                 hidden: True
 
     qc_checkup_qualimap_overall:
@@ -185,19 +185,19 @@ custom_data:
             scale: "Blues"
         headers:
             avg_gc_val:
-                min: { { qualimap.avg_gc.min } }
-                max: { { qualimap.avg_gc.max } }
+                min: {{ qualimap_avg_gc_min }}
+                max: {{ qualimap_avg_gc_max }}
                 hidden: True
             # if you change coverage limits, also change values in "qc_checkup_qualimap_chromosome_stats"
             mean_coverage_val:
-                min: { { qualimap.mean_coverage.min } }
+                min: {{ qualimap_mean_coverage_min }}
                 hidden: True
             median_coverage_val:
-                min: { { qualimap.median_coverage.min } }
+                min: {{ qualimap_median_coverage_min }}
                 hidden: True
             percentage_aligned_val:
-                min: { { qualimap.percentage_aligned.min } }
-                max: { { qualimap.percentage_aligned.max } }
+                min: {{ qualimap_percentage_aligned_min }}
+                max: {{ qualimap_percentage_aligned_max }}
                 hidden: True
 
     qc_checkup_qualimap_chromosome_stats:
@@ -215,7 +215,7 @@ custom_data:
             ylab: "Coverage (X)"
             extra_series:
                 name: "Minimum required"
-                data: [[0, { { qualimap.mean_coverage.min } }], [21, { { qualimap.mean_coverage.min } }], [22, { { qualimap.mean_coverage.min } }/2], [23, { { qualimap.mean_coverage.min } }/2]]
+                data: [[0, {{ qualimap_mean_coverage_min }}], [21, {{ qualimap_mean_coverage_min }}], [22, {{ qualimap_mean_coverage_min / 2 }}], [23, {{ qualimap_mean_coverage_min / 2}}]]
                 dashStyle: "Dash"
                 showInLegend: False
                 color: "PaleVioletRed"
