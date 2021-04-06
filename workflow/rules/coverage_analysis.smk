@@ -4,7 +4,6 @@ rule samtools_stats:
         PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
     output:
         OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
-        # protected(PROJECT_PATH + "/{sample}/qc/samtools-stats/{sample}.txt"),
     wrapper:
         "0.64.0/bio/samtools/stats"
 
@@ -14,9 +13,7 @@ rule qualimap_bamqc:
     input:
         bam = PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
         index = PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
-        #TODO: target regions
-        # target_regions = config["processing"]["restrict-regions"] if config["processing"].get("restrict-regions") else []
-        target_regions = []
+        target_regions = get_capture_regions_bed
     output:
         html_report = OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
         coverage = OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "raw_data_qualimapReport" / "coverage_across_reference.txt",

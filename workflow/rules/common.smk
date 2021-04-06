@@ -24,6 +24,20 @@ def is_testing_mode():
     return None
 
 
+def get_capture_regions_bed(wildcards):
+    "returns capture bed file (if any) used by small variant caller pipeline"
+
+    config_dir = PROJECT_PATH / wildcards.sample / "configs" / "small_variant_caller"
+    bed = list(config_dir.glob('*.bed'))
+    bed += list(config_dir.glob('*.bed.gz'))
+
+    if len(bed) > 1:
+        print (f"ERROR: More then one capture bed file found for sample {wildcards.sample} - {bed}")
+        raise SystemExit(1)
+
+    return bed
+
+
 def get_small_var_pipeline_targets(wildcards):
     """
     Returns target files that are output by small variant caller pipeline.
