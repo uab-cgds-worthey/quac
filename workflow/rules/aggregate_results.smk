@@ -8,7 +8,7 @@ rule multiqc_by_sample_initial_pass:
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         multiqc_config = "configs/multiqc_config.yaml",
-        rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv"
+        rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_rename_config.tsv"
     output:
         OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc.html",
         OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt",
@@ -67,7 +67,7 @@ rule multiqc_by_sample_final_pass:
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         OUT_DIR / "{sample}" / "qc" / "qc_checkup" / "qc_checkup_overall_summary.yaml",
         multiqc_config = "configs/multiqc_config.yaml",
-        rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
+        rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_rename_config.tsv",
         qc_config = "configs/qc_checkup/qc_checkup_config.yaml",
     output:
         OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html",
@@ -88,7 +88,7 @@ localrules: aggregate_sample_rename_configs
 rule aggregate_sample_rename_configs:
     input:
         expand(
-            PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
+            PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_rename_config.tsv",
             sample=SAMPLES)
     output:
         OUT_DIR / "project_level_qc" / "multiqc" / "aggregated_rename_configs.tsv",
