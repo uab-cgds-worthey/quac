@@ -28,11 +28,18 @@ def get_capture_regions_bed(wildcards):
     "returns capture bed file (if any) used by small variant caller pipeline"
 
     config_dir = PROJECT_PATH / wildcards.sample / "configs" / "small_variant_caller"
-    bed = list(config_dir.glob('*.bed'))
-    bed += list(config_dir.glob('*.bed.gz'))
+    compressed_bed = list(config_dir.glob("*.bed.gz"))
+    if compressed_bed:
+        logger.error(
+            f"ERROR: Compressed capture bed file found for sample {wildcards.sample}, "
+            "but it is not supported by some QC tools used in QuaC (eg. qualimap). "
+            f"Use compressed bed file instead. - {compressed_bed}"
+        )
+        raise SystemExit(1)
 
+    bed = list(config_dir.glob("*.bed"))
     if len(bed) > 1:
-        print (f"ERROR: More then one capture bed file found for sample {wildcards.sample} - {bed}")
+        logger.error(f"ERROR: More then one capture bed file found for sample {wildcards.sample} - {bed}")
         raise SystemExit(1)
 
     return bed

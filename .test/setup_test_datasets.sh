@@ -58,6 +58,6 @@ done
 ############# Regions file #############
 
 # Treat sample B as exome dataset and add a capture-regions bed file
-CAPTURE_FILE="${PROJECT_DIR}/B/configs/small_variant_caller/capture_regions.bed.gz"
+CAPTURE_FILE="${PROJECT_DIR}/B/configs/small_variant_caller/capture_regions.bed"
 mkdir -p $(dirname $CAPTURE_FILE)
-echo -e "chr20\t59992\t3653078" | bgzip > $CAPTURE_FILE
+echo -e "chr20\t59992\t3653078\n" > $CAPTURE_FILE
