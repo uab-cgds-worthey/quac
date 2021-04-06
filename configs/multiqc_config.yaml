@@ -265,7 +265,6 @@ custom_data:
                 hidden: True
             heterozygosity_ratio_val:
                 min: 1.6
-                max: 
                 hidden: True
 
     qc_checkup_verifybamid:

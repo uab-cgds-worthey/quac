@@ -2,7 +2,7 @@
 Creates multiqc config file based on jinja templating and values from qc-checkup config file.
 """
 
-from jinja2 import Template
+from jinja2 import Template, StrictUndefined
 import yaml
 
 
@@ -12,7 +12,7 @@ def main(template_f, qc_config, outfile):
         config = yaml.safe_load(file_handle)
 
     with open(template_f) as file_:
-        template = Template(file_.read())
+        template = Template(file_.read(), undefined=StrictUndefined)
 
     data = template.render(
         # fastq screen
@@ -59,6 +59,7 @@ def main(template_f, qc_config, outfile):
         bcftools_stats_heterozygosity_ratio_min=config["bcftools_stats"]["heterozygosity_ratio"][
             "min"
         ],
+        undefined=StrictUndefined,
     )
 
     with open(outfile, "w") as fh:
