@@ -119,7 +119,7 @@ rule multiqc_aggregation_all_samples:
                 OUT_DIR / "{sample}" / "qc" / "qc_checkup" / "qc_checkup_overall_summary.yaml",
             ],
             sample=SAMPLES,
-            unit=[1, 2],
+            unit=[1],
             read=["R1", "R2"],
         ),
         multiqc_config="configs/multiqc_config.yaml",
