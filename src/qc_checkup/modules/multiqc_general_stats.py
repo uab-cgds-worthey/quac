@@ -60,6 +60,9 @@ def test_for_range(multiqc_df, sample_name, tool, config, tool_prefix, outfile):
                 median_cov = multiqc_df.loc[sample_name, f"{tool_prefix}-median_coverage"]
                 value = (mean_cov / median_cov).round(3)
 
+        elif tool == "verifybamid" and qc_metric in ["FREEMIX"]:
+            if qc_metric == "FREEMIX":
+                value = multiqc_df.loc[sample_name, f"{tool_prefix}-{qc_metric}"] * 100
         else:
             value = multiqc_df.loc[sample_name, f"{tool_prefix}-{qc_metric}"]
 
