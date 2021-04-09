@@ -1,29 +1,30 @@
 TARGETS_COVERAGE = [
     # indexcov
-    get_targets('indexcov') if {'all', 'indexcov'}.intersection(MODULES_TO_RUN) else [],
+    get_targets("indexcov") if {"all", "indexcov"}.intersection(MODULES_TO_RUN) and not EXOME_MODE else [],
     # covviz
-    get_targets('covviz') if {'all', 'covviz'}.intersection(MODULES_TO_RUN) else [],
+    get_targets("covviz") if {"all", "covviz"}.intersection(MODULES_TO_RUN) and not EXOME_MODE else [],
     # mosdepth
-    get_targets('mosdepth') if {'all', 'mosdepth'}.intersection(MODULES_TO_RUN) else [],
+    get_targets("mosdepth", SAMPLES) if {"all", "mosdepth"}.intersection(MODULES_TO_RUN) else [],
 ]
 
 
 ##########################   Mosdepth   ##########################
 rule mosdepth_coverage:
     input:
-        bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam",
+        bam_index=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
     output:
-        dist = INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.global.dist.txt",
-        summary = INTERIM_DIR / "mosdepth/{project}/{sample}.mosdepth.summary.txt",
-    log:
-        LOGS_PATH / "{project}/mosdepth_coverage-{sample}.log"
+        dist=OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt",
+        summary=OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.summary.txt",
     message:
-        "Running mosdepth for coverage. Project: {wildcards.project}, sample: {wildcards.sample}"
+        "Running mosdepth for coverage. Sample: {wildcards.sample}"
+    group:
+        "mosdepth"
     conda:
         str(WORKFLOW_PATH / "configs/env/mosdepth.yaml")
+    threads: 4
     params:
-        out_prefix = lambda wildcards, output: output['summary'].replace('.mosdepth.summary.txt', ''),
+        out_prefix=lambda wildcards, output: output["summary"].replace(".mosdepth.summary.txt", ""),
     shell:
         r"""
         mosdepth \
@@ -31,55 +32,57 @@ rule mosdepth_coverage:
             --threads {threads} \
             --fast-mode \
             {params.out_prefix} \
-            {input.bam} \
-            > {log} 2>&1
+            {input.bam}
         """
 
 
 rule mosdepth_plot:
     input:
-        dist = lambda wildcards: expand(str(INTERIM_DIR / "mosdepth" / wildcards.project / "{sample}.mosdepth.global.dist.txt"),
-                sample=SAMPLES[wildcards.project]),
-        script = WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
+        dist=expand(
+            str(OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt"), sample=SAMPLES
+        ),
+        script=WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
-        PROCESSED_DIR / "mosdepth/{project}/mosdepth_{project}.html",
-    log:
-        LOGS_PATH / "{project}/mosdepth_plot.log"
+        OUT_DIR / "mosdepth" / f"mosdepth.html",
     message:
-        "Running mosdepth plotting. Project: {wildcards.project}"
+        "Running mosdepth plotting"
+    group:
+        "mosdepth"
     params:
-        in_dir = lambda wildcards, input: Path(input[0]).parent,
-        workflow_dir = Path(workflow.basedir).parent
+        in_dir=lambda wildcards, input: Path(input[0]).parent,
     shell:
         r"""
         echo "Heads up: Mosdepth-plotting is run on all samples in "{params.in_dir}"; Not just the files mentioned in the rule's input."
 
         cd {params.in_dir}  # if not in directory, mosdepth uses filepath as sample name :(
         python {input.script} \
-            --output {params.workflow_dir}/{output} \
-            *.mosdepth.global.dist.txt \
-            > {params.workflow_dir}/{log} 2>&1
+            --output {output} \
+            *.mosdepth.global.dist.txt
         """
 
 
 ##########################   indexcov   ##########################
 rule indexcov:
     input:
-        bam = lambda wildcards: expand(str(PROJECTS_PATH / wildcards.project / "analysis" / "{sample}" / "bam" / "{sample}.bam"),
-                sample=SAMPLES[wildcards.project]),
-        bam_index = lambda wildcards: expand(str(PROJECTS_PATH / wildcards.project / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai"),
-                sample=SAMPLES[wildcards.project]),
-        goleft_tool = config['goleft']['tool'],
+        bam=expand(
+            str(PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam"),
+            sample=SAMPLES,
+        ),
+        bam_index=expand(
+            str(PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai"),
+            sample=SAMPLES,
+        ),
+        goleft_tool=config["goleft"]["tool"],
     output:
-        PROCESSED_DIR / "indexcov/{project}/index.html",
-        PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
-    log:
-        LOGS_PATH / "{project}/indexcov.log"
+        html=OUT_DIR / "indexcov" / "index.html",
+        bed=OUT_DIR / "indexcov" / f"indexcov-indexcov.bed.gz",
     message:
-        "Running indexcov. Project: {wildcards.project}"
+        "Running indexcov"
+    log:
+        OUT_DIR / "indexcov" / "stdout.log",
     params:
-        outdir = lambda wildcards, output: Path(output[0]).parent,
-        project_dir = lambda wildcards, input: str(Path(input['bam'][0]).parents[2]),
+        outdir=lambda wildcards, output: Path(output[0]).parent,
+        project_dir=lambda wildcards, input: str(Path(input["bam"][0]).parents[2]),
     shell:
         r"""
         echo "Heads up: Indexcov is run on all samples in the "project directory"; Not just the files mentioned in the rule's input."
@@ -94,21 +97,21 @@ rule indexcov:
 ##########################   covviz   ##########################
 rule covviz:
     input:
-        bed = PROCESSED_DIR / "indexcov/{project}/{project}-indexcov.bed.gz",
-        ped = RAW_DIR / "ped" / "{project}.ped",
+        bed=OUT_DIR / "indexcov" / f"indexcov-indexcov.bed.gz",
+        ped=PEDIGREE_FPATH,
     output:
-        PROCESSED_DIR / "covviz/{project}/covviz_report.html",
-    log:
-        LOGS_PATH / "{project}/covviz.log"
+        html=OUT_DIR / "covviz" / "covviz_report.html",
     message:
-        "Running covviz. Project: {wildcards.project}"
+        "Running covviz"
+    log:
+        OUT_DIR / "covviz" / "stdout.log",
     conda:
         str(WORKFLOW_PATH / "configs/env/covviz.yaml")
     shell:
         r"""
         covviz \
             --ped {input.ped} \
-            --output {output} \
+            --output {output.html} \
             {input.bed} \
             > {log} 2>&1
         """

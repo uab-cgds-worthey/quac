@@ -1,33 +1,38 @@
 TARGETS_CONTAMINATION = [
-    get_targets('verifybamid') if {'all', 'verifybamid'}.intersection(MODULES_TO_RUN) else [],
+    get_targets("verifybamid", SAMPLES) if {"all", "verifybamid"}.intersection(MODULES_TO_RUN) else [],
 ]
+
+
+def get_svd(wildcards):
+    if EXOME_MODE:
+        return expand(f"{config['verifyBamID']['svd_dat_exome']}.{{ext}}", ext=["bed", "mu", "UD"])
+    else:
+        return expand(f"{config['verifyBamID']['svd_dat_wgs']}.{{ext}}", ext=["bed", "mu", "UD"])
 
 
 rule verifybamid:
     input:
-        bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
-        ref_genome = config['ref'],
-        svd = expand(f"{config['verifyBamID']['svd_dat']}.{{ext}}",
-                    ext=['bed', 'mu', 'UD'])
+        bam=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam",
+        bam_index=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        ref_genome=config["ref"],
+        svd=get_svd,
     output:
-        ancestry = PROCESSED_DIR / "verifyBamID/{project}/{sample}.Ancestry",
-        selfsm = PROCESSED_DIR / "verifyBamID/{project}/{sample}.selfSM",
-    log:
-        LOGS_PATH / "{project}/verifyBamID-{sample}.log"
+        ancestry=OUT_DIR / "verifyBamID/{sample}.Ancestry",
+        selfsm=OUT_DIR / "verifyBamID/{sample}.selfSM",
     message:
-        "Running VerifyBamID to detect within-species contamination. Project: {wildcards.project}, sample: {wildcards.sample}"
+        "Running VerifyBamID to detect within-species contamination. sample: {wildcards.sample}"
     conda:
         str(WORKFLOW_PATH / "configs/env/verifyBamID.yaml")
     params:
-        svd_prefix = lambda wildcards, input: input['svd'][0].replace(Path(input['svd'][0]).suffix, ''),
-        out_prefix = lambda wildcards, output: output['ancestry'].replace('.Ancestry', ''),
+        svd_prefix=lambda wildcards, input: input["svd"][0].replace(Path(input["svd"][0]).suffix, ""),
+        out_prefix=lambda wildcards, output: output["ancestry"].replace(".Ancestry", ""),
+    threads: 4
     shell:
         r"""
         verifybamid2 \
+            --NumThread {threads} \
             --SVDPrefix {params.svd_prefix} \
             --Reference {input.ref_genome} \
             --BamFile {input.bam} \
-            --Output {params.out_prefix} \
-            > {log} 2>&1
+            --Output {params.out_prefix}
         """

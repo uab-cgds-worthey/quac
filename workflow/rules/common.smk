@@ -1,73 +1,71 @@
 def get_samples(ped_fpath):
-
+    """
+    Parse pedigree file and return sample names
+    """
     samples = ()
-    with open(ped_fpath, 'r') as f_handle:
+    with open(ped_fpath, "r") as f_handle:
         for line in f_handle:
-            if line.startswith('#'):
+            if line.startswith("#"):
                 continue
-            sample = line.split('\t')[1]
+            sample = line.split("\t")[1]
             samples += (sample,)
 
     return samples
 
 
-def modules_to_run(chosen, allowed_options=['somalier', 'verifybamid', 'indexcov', 'mosdepth', 'covviz', 'all']):
+def modules_to_run(user_input):
+    """
+    Parse user-selected tools. Verify they are among the expected values.
+    """
+    user_input = set([x.strip().lower() for x in user_input.strip().split(",")])
 
-    selected_modules = set([x.strip().lower() for x in chosen.strip().split(',')])
-    if selected_modules.difference(set(allowed_options)):
-        msg =f"ERROR: Unexpected module was supplied by user. Allowed options: {allowed_options}"
+    allowed_options = ["somalier", "verifybamid", "indexcov", "mosdepth", "covviz", "all"]
+    if user_input.difference(set(allowed_options)):
+        msg = f"ERROR: Unexpected module was supplied by user. Allowed options: {allowed_options}"
         raise SystemExit(msg)
 
-    return selected_modules
+    print(f"Tools chosen by user to run: {list(user_input)}")
+
+    return user_input
 
 
-EXTERNAL_DIR = Path("data/external")
-RAW_DIR = Path("data/raw")
-INTERIM_DIR = Path("data/interim")
-PROCESSED_DIR = Path("data/processed")
-
-LOGS_PATH = Path(config['logs_path'])
-LOGS_PATH.mkdir(parents=True, exist_ok=True)
-
-PROJECTS_PATH = Path(config['projects_path'])
-PROJECT_NAMES = config['project_names'].split(',')
-SAMPLES = {project: get_samples(RAW_DIR / f"ped/{project}.ped") for project in PROJECT_NAMES}
-
-MODULES_TO_RUN = modules_to_run(config['modules'])
-
-
-def get_targets(tool_name, projects=PROJECT_NAMES, sample_dict=SAMPLES):
-
+def get_targets(tool_name, samples=None):
+    """
+    returns target files based on the tool
+    """
     flist = []
-    for project in projects:
-        for sample in sample_dict[project]:
-            if tool_name == 'mosdepth':
-                f = INTERIM_DIR / "mosdepth" / project / f"{sample}.mosdepth.global.dist.txt"
-                flist.append(f)
-            elif tool_name == 'verifybamid':
-                f = PROCESSED_DIR / "verifyBamID" / project / f"{sample}.Ancestry"
-                flist.append(f)
-
-        if tool_name == 'somalier':
-            f = [
-                expand(str(PROCESSED_DIR / "somalier/{project}/relatedness/somalier.html"),
-                    project=PROJECT_NAMES),
-                expand(str(PROCESSED_DIR / "somalier/{project}/ancestry/somalier.somalier-ancestry.html"),
-                    project=PROJECT_NAMES),
-            ]
-            flist.append(f)
-        elif tool_name == 'indexcov':
-            f = expand(str(PROCESSED_DIR / "indexcov/{project}/index.html"),
-                    project=PROJECT_NAMES)
-            flist.append(f)
-        elif tool_name == 'covviz':
-            f = expand(str(PROCESSED_DIR / "covviz/{project}/covviz_report.html"),
-                    project=PROJECT_NAMES),
-            flist.append(f)
-        elif tool_name == 'mosdepth':
-            f = expand(str(PROCESSED_DIR / "mosdepth/{project}/mosdepth_{project}.html"),
-                    project=PROJECT_NAMES),
-            flist.append(f)
-
+    if tool_name == "somalier":
+        flist += [
+            OUT_DIR / "somalier" / "relatedness" / "somalier.html",
+            OUT_DIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
+        ]
+    elif tool_name == "indexcov":
+        flist += [OUT_DIR / "indexcov" / "index.html"]
+    elif tool_name == "covviz":
+        flist += [OUT_DIR / "covviz/" / "covviz_report.html"]
+    elif tool_name == "mosdepth":
+        flist += [OUT_DIR / "mosdepth" / f"mosdepth.html"]
+        flist += (
+            expand(
+                str(OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt"), sample=samples
+            ),
+        )
+    elif tool_name == "verifybamid":
+        flist += (expand(str(OUT_DIR / "verifyBamID" / "{sample}.Ancestry"), sample=samples),)
 
     return flist
+
+
+#### configs from cli ####
+OUT_DIR = Path(config["out_dir"])
+PROJECT_NAME = config["project_name"]
+PROJECTS_PATH = Path(config["projects_path"])
+MODULES_TO_RUN = modules_to_run(config["modules"])
+PEDIGREE_FPATH = config["ped"]
+EXOME_MODE = config["exome"]
+
+#### configs from configfile ####
+RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"
+RULE_LOGS_PATH.mkdir(parents=True, exist_ok=True)
+
+SAMPLES = get_samples(PEDIGREE_FPATH)

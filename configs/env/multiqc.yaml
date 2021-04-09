@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+  - anaconda
+  - bioconda
+dependencies:
+  - python =3.6
+  - multiqc=1.9

@@ -1,49 +1,52 @@
 TARGETS_SOMALIER = [
-    get_targets('somalier') if {'all', 'somalier'}.intersection(MODULES_TO_RUN) else [],
+    get_targets("somalier") if {"all", "somalier"}.intersection(MODULES_TO_RUN) else [],
 ]
+
 
 rule somalier_extract:
     input:
-        bam = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index = PROJECTS_PATH / "{project}" / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
-        somalier_tool = config['somalier']['tool'],
-        sites = config['somalier']['sites'],
-        ref_genome = config['ref'],
+        bam=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam",
+        bam_index=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        somalier_tool=config["somalier"]["tool"],
+        sites=config["somalier"]["sites"],
+        ref_genome=config["ref"],
     output:
-        INTERIM_DIR / "somalier_extract/{project}/{sample}.somalier"
-    log:
-        LOGS_PATH / "{project}/somalier_extract-{sample}.log"
+        OUT_DIR / "somalier/extract/{sample}.somalier",
     message:
-        "Running somalier extract. Project: {wildcards.project}"
+        "Running somalier extract. Sample: {wildcards.sample}"
+    group:
+        "somalier"
     params:
-        outdir = lambda wildcards, output: Path(output[0]).parent,
+        outdir=lambda wildcards, output: Path(output[0]).parent,
     shell:
         r"""
         {input.somalier_tool} extract \
             --sites {input.sites} \
             --fasta {input.ref_genome} \
             --out-dir {params.outdir} \
-            {input.bam} \
-            > {log} 2>&1
+            {input.bam}
         """
 
 
 rule somalier_relate:
     input:
-        extracted = lambda wildcards: expand(str(INTERIM_DIR / "somalier_extract" / wildcards.project / "{sample}.somalier"),
-                sample=SAMPLES[wildcards.project]),
-        ped = RAW_DIR / "ped" / "{project}.ped",
-        somalier_tool = config['somalier']['tool'],
+        extracted=expand(str(OUT_DIR / "somalier" / "extract" / "{sample}.somalier"), sample=SAMPLES),
+        ped=PEDIGREE_FPATH,
+        somalier_tool=config["somalier"]["tool"],
     output:
-        expand(str(PROCESSED_DIR / "somalier/{{project}}/relatedness/somalier.{ext}"),
-                ext=['html', 'groups.tsv', 'pairs.tsv', 'samples.tsv']),
-    log:
-        LOGS_PATH / "{project}/somalier_relate.log"
+        out=expand(
+            str(OUT_DIR / "somalier" / "relatedness" / "somalier.{ext}"),
+            ext=["html", "pairs.tsv", "samples.tsv"],
+        ),
     message:
-        "Running somalier relate. Project: {wildcards.project}"
+        "Running somalier relate"
+    log:
+        log=OUT_DIR / "somalier" / "relatedness" / "somalier.log",
+    group:
+        "somalier"
     params:
-        outdir = lambda wildcards, output: Path(output[0]).parent,
-        indir = lambda wildcards, input: Path(input[0]).parent,
+        outdir=lambda wildcards, output: Path(output["out"][0]).parent,
+        indir=lambda wildcards, input: Path(input[0]).parent,
     shell:
         r"""
         echo "Heads up: Somalier is run on all samples in the input directory; Not just the files mentioned in the rule's input."
@@ -59,21 +62,24 @@ rule somalier_relate:
 
 rule somalier_ancestry:
     input:
-        extracted = lambda wildcards: expand(str(INTERIM_DIR / "somalier_extract" / wildcards.project / "{sample}.somalier"),
-                sample=SAMPLES[wildcards.project]),
-        somalier_tool = config['somalier']['tool'],
-        labels_1kg = config['somalier']['labels_1kg'],
-        somalier_1kg = directory(config['somalier']['somalier_1kg']),
-    log:
-        LOGS_PATH / "{project}/somalier_ancestry.log"
+        extracted=expand(str(OUT_DIR / "somalier" / "extract" / "{sample}.somalier"), sample=SAMPLES),
+        somalier_tool=config["somalier"]["tool"],
+        labels_1kg=config["somalier"]["labels_1kg"],
+        somalier_1kg=directory(config["somalier"]["somalier_1kg"]),
     output:
-        expand(str(PROCESSED_DIR / "somalier/{{project}}/ancestry/somalier.somalier-ancestry.{ext}"),
-                ext=['html', 'tsv']),
+        out=expand(
+            str(OUT_DIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}"),
+            ext=["html", "tsv"],
+        ),
     message:
-        "Running somalier ancestry. Project: {wildcards.project}"
+        "Running somalier ancestry."
+    log:
+        log=OUT_DIR / "somalier" / "ancestry" / "somalier.log",
+    group:
+        "somalier"
     params:
-        outdir = lambda wildcards, output: Path(output[0]).parent,
-        indir = lambda wildcards, input: Path(input[0]).parent,
+        outdir=lambda wildcards, output: Path(output["out"][0]).parent,
+        indir=lambda wildcards, input: Path(input[0]).parent,
     shell:
         r"""
         echo "Heads up: Somalier is run on all samples in the input directory; Not just the files mentioned in the rule's input."
@@ -81,7 +87,7 @@ rule somalier_ancestry:
         {input.somalier_tool} ancestry \
             --output-prefix {params.outdir}/somalier \
             --labels {input.labels_1kg} \
-            {input.somalier_1kg}*.somalier ++ \
+            {input.somalier_1kg}/*.somalier ++ \
             {params.indir}/*.somalier \
             > {log} 2>&1
         """
