@@ -78,15 +78,12 @@ rule mosdepth_plot:
     message:
         "Running mosdepth plotting"
     params:
-        in_dir=lambda wildcards, input: Path(input[0]).parent,
+        infiles=lambda wildcards: str(OUT_DIR / f"{{{','.join(SAMPLES)}}}" / "qc" / "mosdepth" / "*.mosdepth.global.dist.txt")
     shell:
         r"""
-        echo "Heads up: Mosdepth-plotting is run on all samples in "{params.in_dir}"; Not just the files mentioned in the rule's input."
-
-        cd {params.in_dir}  # if not in directory, mosdepth uses filepath as sample name :(
         python {input.script} \
             --output {output} \
-            *.mosdepth.global.dist.txt
+            {params.infiles}
         """
 
 
