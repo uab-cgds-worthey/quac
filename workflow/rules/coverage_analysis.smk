@@ -109,14 +109,12 @@ rule indexcov:
         str(WORKFLOW_PATH / "configs/env/goleft.yaml")
     params:
         outdir=lambda wildcards, output: Path(output[0]).parent,
-        project_dir=lambda wildcards, input: str(Path(input["bam"][0]).parents[2]),
+        infiles=lambda wildcards: str(PROJECT_PATH / f"{{{','.join(SAMPLES)}}}" / "bam" / "*.bam")
     shell:
         r"""
-        echo "Heads up: Indexcov is run on all samples in the "project directory"; Not just the files mentioned in the rule's input."
-
         goleft indexcov \
             --directory {params.outdir} \
-            {params.project_dir}/*/bam/*.bam \
+            {params.infiles} \
             > {log} 2>&1
         """
 
