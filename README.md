@@ -10,6 +10,7 @@
   - [How to run QuaC](#how-to-run-quac)
     - [Example usage](#example-usage)
   - [Output](#output)
+    - [Dummy pedigree file creator](#dummy-pedigree-file-creator)
   - [Contributing](#contributing)
   - [Changelog](#changelog)
 
@@ -192,6 +193,15 @@ python src/run_quac.py \
 
 QuaC results are stored at path specified via option `--outdir` (default: `$USER_SCRATCH/tmp/quac/results`). This
 includes aggregated QC results produced by [multiqc](https://multiqc.info/).
+
+### Dummy pedigree file creator
+
+Script `src/create_dummy_ped.py` creates a "dummy" pedigree file given a project path as input. It's purpose is just to
+create a basic pedigree file, which will lack sex (unless project tracking sheet is provided), relatedness and
+affected info. See header of the script for usage instructions.
+
+Note that we plan to use phenotips in future to produce fully capable pedigree file. One may manually create them as
+well, but this could be error-prone.
 
 ## Contributing
 
