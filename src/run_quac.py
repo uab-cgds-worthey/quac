@@ -128,7 +128,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
         f"--cluster-config '{args.cluster_config}'",
         "--cluster 'sbatch --ntasks {cluster.ntasks} --partition {cluster.partition}"
         " --cpus-per-task {cluster.cpus-per-task} --mem {cluster.mem}"
-        " --output {cluster.output} --parsable'",
+        " --job-name {cluster.jobname} --output {cluster.output} --parsable'",
     ]
 
     # add any user provided extra args for snakemake

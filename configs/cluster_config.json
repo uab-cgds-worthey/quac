@@ -4,6 +4,7 @@
         "partition": "express",
         "cpus-per-task": "{threads}",
         "mem": "8G",
+        "jobname": "QuaC.{rule}.{jobid}",
         "output": "{RULE_LOGS_PATH}/{rule}-%j.log"
     }
 }
