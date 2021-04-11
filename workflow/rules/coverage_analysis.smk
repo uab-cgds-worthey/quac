@@ -3,7 +3,7 @@ rule samtools_stats:
     input:
         PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
     output:
-        OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
+        protected(OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt"),
     wrapper:
         "0.64.0/bio/samtools/stats"
 
@@ -15,9 +15,9 @@ rule qualimap_bamqc:
         index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
         target_regions=get_capture_regions_bed,
     output:
-        html_report=OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
-        coverage=OUT_DIR / "{sample}" / "qc/qualimap/{sample}/raw_data_qualimapReport/coverage_across_reference.txt",
-        summary=OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt",
+        html_report=protected(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html"),
+        coverage=protected(OUT_DIR / "{sample}" / "qc/qualimap/{sample}/raw_data_qualimapReport/coverage_across_reference.txt"),
+        summary=protected(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt"),
     message:
         "stats bam using qualimap"
     conda:
@@ -47,8 +47,8 @@ rule mosdepth_coverage:
         bam_index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
         target_regions=get_capture_regions_bed,
     output:
-        dist=OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
-        summary=OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.summary.txt",
+        dist=protected(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt"),
+        summary=protected(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.summary.txt"),
     message:
         "Running mosdepth for coverage. Sample: {wildcards.sample}"
     conda:
@@ -74,7 +74,7 @@ rule mosdepth_plot:
         dist=expand(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt", sample=SAMPLES),
         script=WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
-        OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html",
+        protected(OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html"),
     message:
         "Running mosdepth plotting"
     params:
@@ -99,8 +99,8 @@ rule indexcov:
             sample=SAMPLES,
         ),
     output:
-        html=OUT_DIR / "project_level_qc" / "indexcov" / "index.html",
-        bed=OUT_DIR / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz",
+        html=protected(OUT_DIR / "project_level_qc" / "indexcov" / "index.html"),
+        bed=protected(OUT_DIR / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz"),
     message:
         "Running indexcov"
     log:
@@ -125,7 +125,7 @@ rule covviz:
         bed=OUT_DIR / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz",
         ped=PEDIGREE_FPATH,
     output:
-        html=OUT_DIR / "project_level_qc" / "covviz" / "covviz_report.html",
+        html=protected(OUT_DIR / "project_level_qc" / "covviz" / "covviz_report.html"),
     message:
         "Running covviz"
     log:

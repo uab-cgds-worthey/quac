@@ -2,7 +2,7 @@ rule bcftools_stats:
     input:
         PROJECT_PATH / "{sample}" / "vcf" / "{sample}.vcf.gz",
     output:
-        OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
+        protected(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats"),
     message:
         "stats vcf using bcftools"
     conda:

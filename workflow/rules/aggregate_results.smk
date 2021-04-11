@@ -10,10 +10,10 @@ rule multiqc_by_sample_initial_pass:
         multiqc_config="configs/multiqc_config.yaml",
         rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config"  / "{sample}_rename_config.tsv",
     output:
-        OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc.html",
-        OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt",
-        OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc_trimmed.txt",
-        OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt",
+        protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc.html"),
+        protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt"),
+        protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc_trimmed.txt"),
+        protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt"),
     # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab (small var caller pipeline repo)
     message:
         "Aggregates QC results using multiqc. First pass. Output will be used for the internal QC checkup. Sample: {wildcards.sample}"
@@ -33,10 +33,10 @@ rule qc_checkup:
         fastq_screen=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt",
         qualimap=OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt",
     output:
-        expand(
+        protected(expand(
             OUT_DIR / "{{sample}}" / "qc" / "qc_checkup" / "qc_checkup_{suffix}.yaml",
             suffix=["overall_summary", "fastqc", "fastq_screen", "qualimap_overall", "qualimap_chromosome_stats"],
-        ),
+        )),
     # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab
     message:
         "Runs QC checkup on various QC tool output, based on custom defined QC thresholds. "
@@ -72,8 +72,8 @@ rule multiqc_by_sample_final_pass:
         rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config"  / "{sample}_rename_config.tsv",
         qc_config="configs/qc_checkup/qc_checkup_config.yaml",
     output:
-        OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html",
-        OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt",
+        protected(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html"),
+        protected(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt"),
     # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab
     message:
         "Aggregates QC results using multiqc. Final pass, where QC checkup results are also aggregated"
@@ -94,7 +94,7 @@ rule aggregate_sample_rename_configs:
     input:
         expand(PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config"  / "{sample}_rename_config.tsv", sample=SAMPLES),
     output:
-        OUT_DIR / "project_level_qc" / "multiqc" / "aggregated_rename_configs.tsv",
+        protected(OUT_DIR / "project_level_qc" / "multiqc" / "aggregated_rename_configs.tsv"),
     message:
         "Aggregate all sample rename-config files"
     run:
@@ -125,7 +125,7 @@ rule multiqc_aggregation_all_samples:
         multiqc_config="configs/multiqc_config.yaml",
         rename_config=OUT_DIR / "project_level_qc" / "multiqc" / "aggregated_rename_configs.tsv",
     output:
-        OUT_DIR / "project_level_qc" / "multiqc" / "multiqc_report.html",
+        protected(OUT_DIR / "project_level_qc" / "multiqc" / "multiqc_report.html"),
     message:
         "Running multiqc for all samples"
     params:

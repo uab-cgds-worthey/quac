@@ -12,8 +12,8 @@ rule verifybamid:
         ref_genome=config["ref"],
         svd=get_svd,
     output:
-        ancestry=OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
-        selfsm=OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.selfSM",
+        ancestry=protected(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry"),
+        selfsm=protected(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.selfSM"),
     message:
         "Running VerifyBamID to detect within-species contamination. sample: {wildcards.sample}"
     conda:
