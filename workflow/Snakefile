@@ -67,6 +67,7 @@ rule all:
         ##### VCF stats #####
         # bcftools
         expand(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats", sample=SAMPLES),
+        expand(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.index.tsv", sample=SAMPLES),
         ##### results aggregation #####
         expand(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html", sample=SAMPLES),
         OUT_DIR / "project_level_qc" / "multiqc" / "multiqc_report.html",
