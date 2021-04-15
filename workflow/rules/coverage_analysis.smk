@@ -40,6 +40,24 @@ rule qualimap_bamqc:
         """
 
 
+##########################   Picard   ##########################
+rule picard_collect_multiple_metrics:
+    input:
+        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+        index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
+        ref=config["ref"],
+    output:
+        multiext(
+            str(OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}"),
+            ".alignment_summary_metrics",
+            ".quality_yield_metrics",
+            ".insert_size_metrics",
+            ".insert_size_histogram.pdf",
+        ),
+    wrapper:
+        "0.73.0/bio/picard/collectmultiplemetrics"
+
+
 ##########################   Mosdepth   ##########################
 rule mosdepth_coverage:
     input:
@@ -78,7 +96,7 @@ rule mosdepth_plot:
     message:
         "Running mosdepth plotting"
     params:
-        infiles=lambda wildcards: str(OUT_DIR / f"{{{','.join(SAMPLES)}}}" / "qc" / "mosdepth" / "*.mosdepth.global.dist.txt")
+        infiles=lambda wildcards: str(OUT_DIR / f"{{{','.join(SAMPLES)}}}" / "qc" / "mosdepth" / "*.mosdepth.global.dist.txt"),
     shell:
         r"""
         python {input.script} \
@@ -109,7 +127,7 @@ rule indexcov:
         str(WORKFLOW_PATH / "configs/env/goleft.yaml")
     params:
         outdir=lambda wildcards, output: Path(output[0]).parent,
-        infiles=lambda wildcards: str(PROJECT_PATH / f"{{{','.join(SAMPLES)}}}" / "bam" / "*.bam")
+        infiles=lambda wildcards: str(PROJECT_PATH / f"{{{','.join(SAMPLES)}}}" / "bam" / "*.bam"),
     shell:
         r"""
         goleft indexcov \

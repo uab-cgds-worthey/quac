@@ -56,6 +56,16 @@ rule all:
         expand(OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt", sample=SAMPLES),
         # qualimap
         expand(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html", sample=SAMPLES),
+        # picard
+        expand(
+            OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.{ext}",
+            sample=SAMPLES,
+            ext=[
+                ".alignment_summary_metrics",
+                ".quality_yield_metrics",
+                ".insert_size_metrics",
+            ],
+        ),
         # mosdepth
         expand(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt", sample=SAMPLES),
         OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html",
@@ -67,7 +77,7 @@ rule all:
         ##### VCF stats #####
         # bcftools
         expand(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats", sample=SAMPLES),
-        expand(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.index.tsv", sample=SAMPLES),
+        expand(OUT_DIR / "{sample}" / "qc" / "bcftools-index" / "{sample}.bcftools.index.tsv", sample=SAMPLES),
         ##### results aggregation #####
         expand(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html", sample=SAMPLES),
         OUT_DIR / "project_level_qc" / "multiqc" / "multiqc_report.html",
