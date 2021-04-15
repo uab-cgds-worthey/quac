@@ -27,10 +27,12 @@ rule somalier_relate:
         extracted=expand(OUT_DIR / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier", sample=SAMPLES),
         ped=PEDIGREE_FPATH,
     output:
-        out=protected(expand(
-            OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.{ext}",
-            ext=["html", "pairs.tsv", "samples.tsv"],
-        )),
+        out=protected(
+            expand(
+                OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.{ext}",
+                ext=["html", "pairs.tsv", "samples.tsv"],
+            )
+        ),
     message:
         "Running somalier relate"
     singularity:
@@ -39,7 +41,7 @@ rule somalier_relate:
         log=OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.log",
     params:
         outdir=lambda wildcards, output: Path(output["out"][0]).parent,
-        infiles=lambda wildcards: str(OUT_DIR / "project_level_qc" / "somalier" / "extract" / f"{{{','.join(SAMPLES)}}}.somalier")
+        infiles=lambda wildcards: str(OUT_DIR / "project_level_qc" / "somalier" / "extract" / f"{{{','.join(SAMPLES)}}}.somalier"),
     shell:
         r"""
         echo "Heads up: Somalier is run on all samples in the input directory; Not just the files mentioned in the rule's input."
@@ -59,10 +61,12 @@ rule somalier_ancestry:
         labels_1kg=config["somalier"]["labels_1kg"],
         somalier_1kg=directory(config["somalier"]["somalier_1kg"]),
     output:
-        out=protected(expand(
-            OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}",
-            ext=["html", "tsv"],
-        )),
+        out=protected(
+            expand(
+                OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}",
+                ext=["html", "tsv"],
+            )
+        ),
     message:
         "Running somalier ancestry."
     singularity:
@@ -71,7 +75,7 @@ rule somalier_ancestry:
         log=OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.log",
     params:
         outdir=lambda wildcards, output: Path(output["out"][0]).parent,
-        infiles=lambda wildcards: str(OUT_DIR / "project_level_qc" / "somalier" / "extract" / f"{{{','.join(SAMPLES)}}}.somalier")
+        infiles=lambda wildcards: str(OUT_DIR / "project_level_qc" / "somalier" / "extract" / f"{{{','.join(SAMPLES)}}}.somalier"),
     shell:
         r"""
         somalier ancestry \
