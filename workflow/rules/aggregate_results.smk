@@ -4,11 +4,12 @@ rule multiqc_by_sample_initial_pass:
         get_small_var_pipeline_targets,
         OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
         OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
+        OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
         OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         multiqc_config="configs/multiqc_config.yaml",
-        rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config"  / "{sample}_rename_config.tsv",
+        rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc.html"),
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt"),
@@ -33,10 +34,12 @@ rule qc_checkup:
         fastq_screen=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt",
         qualimap=OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt",
     output:
-        protected(expand(
-            OUT_DIR / "{{sample}}" / "qc" / "qc_checkup" / "qc_checkup_{suffix}.yaml",
-            suffix=["overall_summary", "fastqc", "fastq_screen", "qualimap_overall", "qualimap_chromosome_stats"],
-        )),
+        protected(
+            expand(
+                OUT_DIR / "{{sample}}" / "qc" / "qc_checkup" / "qc_checkup_{suffix}.yaml",
+                suffix=["overall_summary", "fastqc", "fastq_screen", "qualimap_overall", "qualimap_chromosome_stats"],
+            )
+        ),
     # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab
     message:
         "Runs QC checkup on various QC tool output, based on custom defined QC thresholds. "
@@ -64,12 +67,13 @@ rule multiqc_by_sample_final_pass:
         get_small_var_pipeline_targets,
         OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
         OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
+        OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
         OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         OUT_DIR / "{sample}" / "qc" / "qc_checkup" / "qc_checkup_overall_summary.yaml",
         multiqc_config="configs/multiqc_config.yaml",
-        rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config"  / "{sample}_rename_config.tsv",
+        rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
         qc_config="configs/qc_checkup/qc_checkup_config.yaml",
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html"),
@@ -92,7 +96,9 @@ localrules:
 
 rule aggregate_sample_rename_configs:
     input:
-        expand(PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config"  / "{sample}_rename_config.tsv", sample=SAMPLES),
+        expand(
+            PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv", sample=SAMPLES
+        ),
     output:
         protected(OUT_DIR / "project_level_qc" / "multiqc" / "aggregated_rename_configs.tsv"),
     message:
@@ -113,6 +119,7 @@ rule multiqc_aggregation_all_samples:
                 OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
                 OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
                 OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
+                OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
                 OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
                 OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
                 OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
@@ -133,8 +140,8 @@ rule multiqc_aggregation_all_samples:
         # using custom rename config file
         extra=(
             lambda wildcards, input: f'--config {input.multiqc_config} \
-                            --sample-names {input.rename_config} \
-                            --cl_config "max_table_rows: 2000"'
+                                    --sample-names {input.rename_config} \
+                                    --cl_config "max_table_rows: 2000"'
         ),
     wrapper:
         "0.64.0/bio/multiqc"
