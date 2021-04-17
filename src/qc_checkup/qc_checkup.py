@@ -14,10 +14,13 @@ from modules import fastqc
 from modules import fastq_screen
 from modules import multiqc_general_stats
 from modules import qualimap
+from modules import picard
 from common import get_configs, is_valid_file, write_to_yaml_file, qc_logger
 
 
-def main(config_f, fastqc_f, fastq_screen_f, multiqc_stats_f, qualimap_f, outdir, sample):
+def main(
+    config_f, fastqc_f, fastq_screen_f, multiqc_stats_f, qualimap_f, picard_asm_f, outdir, sample
+):
 
     # read config from file
     config_dict = get_configs(config_f)
@@ -59,6 +62,13 @@ def main(config_f, fastqc_f, fastq_screen_f, multiqc_stats_f, qualimap_f, outdir
     qualimap_by_chrom_outfile = f"{out_filepath_prefix}_qualimap_chromosome_stats.yaml"
     qc_checks_dict["qualimap_chromosome_specific"] = qualimap.stat_by_chromosome(
         qualimap_f, sample, config_dict["qualimap"], qualimap_by_chrom_outfile
+    )
+
+    # picard - AlignmentSummaryMetrics
+    LOGGER.info("-" * 80)
+    picard_asm_outfile = f"{out_filepath_prefix}_picard_AlignmentSummaryMetrics.yaml"
+    qc_checks_dict["picard_asm"] = picard.process_AlignmentSummaryMetrics(
+        picard_asm_f, config_dict["picard"]["AlignmentSummaryMetrics"], picard_asm_outfile
     )
 
     # verifyBamID
@@ -134,6 +144,13 @@ if __name__ == "__main__":
     )
 
     PARSER.add_argument(
+        "--picard",
+        help="Picard report file from multiqc output",
+        type=lambda x: is_valid_file(PARSER, x),
+        metavar="",
+    )
+
+    PARSER.add_argument(
         "--multiqc_stats",
         help="Multiqc general stats txt report file",
         type=lambda x: is_valid_file(PARSER, x),
@@ -161,10 +178,11 @@ if __name__ == "__main__":
     FASTQ_SCREEN = args.fastq_screen
     MULTIQC_STATS_F = args.multiqc_stats
     QUALIMAP_F = args.qualimap
+    PICARD_F = args.picard
     SAMPLE = args.sample
     OUT_DIR = args.outdir
 
     # setup logging
     LOGGER = qc_logger(__name__)
 
-    main(CONFIG, FASTQC, FASTQ_SCREEN, MULTIQC_STATS_F, QUALIMAP_F, OUT_DIR, SAMPLE)
+    main(CONFIG, FASTQC, FASTQ_SCREEN, MULTIQC_STATS_F, QUALIMAP_F, PICARD_F, OUT_DIR, SAMPLE)
