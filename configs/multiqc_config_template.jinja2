@@ -227,6 +227,34 @@ custom_data:
                 showInLegend: False
                 color: "PaleVioletRed"
 
+    qc_checkup_picard_asm_overall:
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_picard_AlignmentSummaryMetrics"
+        section_name: "Picard - AlignmentSummaryMetrics"
+        description: 'TODO: Quick summary of picard-AlignmentSummaryMetrics results. See <a href="#qualimap">QualiMap</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "Qualimap - Overall stats - QC checkup"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            PCT_PF_READS_ALIGNED_val:
+                min: {{ picard_asm_PCT_PF_READS_ALIGNED_min }}
+                max: {{ picard_asm_PCT_PF_READS_ALIGNED_max }}
+                hidden: True
+            PF_HQ_ALIGNED_Q20_BASES_val:
+                min: {{ picard_asm_PF_HQ_ALIGNED_Q20_BASES_min }}
+                hidden: True
+            PCT_ADAPTER_val:
+                min: {{ picard_asm_PCT_ADAPTER_min }}
+                max: {{ picard_asm_PCT_ADAPTER_max }}
+                hidden: True
+            PCT_CHIMERAS_val:
+                min: {{ picard_asm_PCT_CHIMERAS_min }}
+                max: {{ picard_asm_PCT_CHIMERAS_max }}
+                hidden: True
+
     qc_checkup_bcftools_stats:
         parent_id: "cgds_qc_checkup"
         id: "qc_checkup_bcftools_stats"
@@ -294,6 +322,8 @@ sp:
         fn: "qc_checkup_fastq_screen.yaml"
     qc_checkup_qualimap_overall:
         fn: "qc_checkup_qualimap_overall.yaml"
+    qc_checkup_picard_asm_overall:
+        fn: "qc_checkup_picard_AlignmentSummaryMetrics.yaml"
     qc_checkup_qualimap_chromosome_stats:
         fn: "qc_checkup_qualimap_chromosome_stats.yaml"
     qc_checkup_bcftools_stats:

@@ -40,6 +40,31 @@ def main(template_f, qc_config, outfile):
         qualimap_median_insert_size_min=config["qualimap"]["median_insert_size"]["min"],
         qualimap_percentage_aligned_min=config["qualimap"]["percentage_aligned"]["min"],
         qualimap_percentage_aligned_max=config["qualimap"]["percentage_aligned"]["max"],
+        # picard_asm
+        picard_asm_PCT_PF_READS_ALIGNED_min=config["picard"]["AlignmentSummaryMetrics"][
+            "PCT_PF_READS_ALIGNED"
+        ]["min"],
+        picard_asm_PCT_PF_READS_ALIGNED_max=config["picard"]["AlignmentSummaryMetrics"][
+            "PCT_PF_READS_ALIGNED"
+        ]["max"],
+        picard_asm_PF_HQ_ALIGNED_Q20_BASES_min=config["picard"]["AlignmentSummaryMetrics"][
+            "PF_HQ_ALIGNED_Q20_BASES"
+        ]["min"],
+        picard_asm_PF_HQ_ALIGNED_Q20_BASES_max=config["picard"]["AlignmentSummaryMetrics"][
+            "PF_HQ_ALIGNED_Q20_BASES"
+        ]["max"],
+        picard_asm_PCT_ADAPTER_min=config["picard"]["AlignmentSummaryMetrics"]["PCT_ADAPTER"][
+            "min"
+        ],
+        picard_asm_PCT_ADAPTER_max=config["picard"]["AlignmentSummaryMetrics"]["PCT_ADAPTER"][
+            "max"
+        ],
+        picard_asm_PCT_CHIMERAS_min=config["picard"]["AlignmentSummaryMetrics"]["PCT_CHIMERAS"][
+            "min"
+        ],
+        picard_asm_PCT_CHIMERAS_max=config["picard"]["AlignmentSummaryMetrics"]["PCT_CHIMERAS"][
+            "max"
+        ],
         # verifybamid
         verifybamid_freemix_min=config["verifybamid"]["FREEMIX"]["min"],
         verifybamid_freemix_max=config["verifybamid"]["FREEMIX"]["max"],
