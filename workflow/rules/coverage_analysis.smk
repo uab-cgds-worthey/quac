@@ -54,6 +54,8 @@ rule picard_collect_multiple_metrics:
             ".insert_size_metrics",
             ".insert_size_histogram.pdf",
         ),
+    params:
+        "PROGRAM=null "
     wrapper:
         "0.73.0/bio/picard/collectmultiplemetrics"
 
