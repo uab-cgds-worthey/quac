@@ -48,6 +48,14 @@ picard:
       min: 0
       max: 1
 
+  QualityYieldMetrics:
+    Q30_BASES:
+      min: 80000000000
+      max:
+    "% Q30_BASES":
+      min: 85
+      max:
+
 fastqc:
   - per_base_sequence_quality
   - per_tile_sequence_quality

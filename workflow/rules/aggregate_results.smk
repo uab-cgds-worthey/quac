@@ -33,7 +33,8 @@ rule qc_checkup:
         fastqc_trimmed=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc_trimmed.txt",
         fastq_screen=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt",
         qualimap=OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt",
-        picard=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_AlignmentSummaryMetrics.txt",
+        picard_asm=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_AlignmentSummaryMetrics.txt",
+        picard_qym=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_QualityYieldMetrics.txt",
     output:
         protected(
             expand(
@@ -58,7 +59,8 @@ rule qc_checkup:
             --fastqc {input.fastqc_trimmed} \
             --fastq_screen {input.fastq_screen} \
             --qualimap {input.qualimap} \
-            --picard {input.picard} \
+            --picard_asm {input.picard_asm} \
+            --picard_qym {input.picard_qym} \
             --sample {params.sample} \
             --outdir {params.outdir}
         """

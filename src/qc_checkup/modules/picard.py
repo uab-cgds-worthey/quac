@@ -5,7 +5,7 @@ from common import present_within_range, qc_logger, write_to_yaml_file
 LOGGER = qc_logger(__name__)
 
 
-def process_AlignmentSummaryMetrics(report_file, picard_asm_config, outfile):
+def check_metrics(report_file, picard_asm_config, outfile):
 
     LOGGER.info(f"Reading multiqc's Picard-AlignmentSummaryMetrics report file: {report_file}")
 
@@ -20,7 +20,11 @@ def process_AlignmentSummaryMetrics(report_file, picard_asm_config, outfile):
         results_dict[sample_name] = {}
         for qc_metric in picard_asm_config.keys():
             # PCT in the name is misleading. They are actually fractions!
-            if qc_metric.startswith("PCT_"):
+            if qc_metric == "% Q30_BASES":
+                total_reads = row["TOTAL_BASES"]
+                q30_bases = row["Q30_BASES"]
+                value = (q30_bases / total_reads) * 100
+            elif qc_metric.startswith("PCT_"):
                 value = row[qc_metric] * 100
             else:
                 value = row[qc_metric]

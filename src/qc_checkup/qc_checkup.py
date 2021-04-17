@@ -19,7 +19,15 @@ from common import get_configs, is_valid_file, write_to_yaml_file, qc_logger
 
 
 def main(
-    config_f, fastqc_f, fastq_screen_f, multiqc_stats_f, qualimap_f, picard_asm_f, outdir, sample
+    config_f,
+    fastqc_f,
+    fastq_screen_f,
+    multiqc_stats_f,
+    qualimap_f,
+    picard_asm_f,
+    picard_qym_f,
+    outdir,
+    sample,
 ):
 
     # read config from file
@@ -67,8 +75,15 @@ def main(
     # picard - AlignmentSummaryMetrics
     LOGGER.info("-" * 80)
     picard_asm_outfile = f"{out_filepath_prefix}_picard_AlignmentSummaryMetrics.yaml"
-    qc_checks_dict["picard_asm"] = picard.process_AlignmentSummaryMetrics(
+    qc_checks_dict["picard_asm"] = picard.check_metrics(
         picard_asm_f, config_dict["picard"]["AlignmentSummaryMetrics"], picard_asm_outfile
+    )
+
+    # picard - QualityYieldMetrics
+    LOGGER.info("-" * 80)
+    picard_qym_outfile = f"{out_filepath_prefix}_picard_QualityYieldMetrics.yaml"
+    qc_checks_dict["picard_qym"] = picard.check_metrics(
+        picard_qym_f, config_dict["picard"]["QualityYieldMetrics"], picard_qym_outfile
     )
 
     # verifyBamID
@@ -144,8 +159,15 @@ if __name__ == "__main__":
     )
 
     PARSER.add_argument(
-        "--picard",
-        help="Picard report file from multiqc output",
+        "--picard_asm",
+        help="Picard AlignmentSummaryMetrics report file from multiqc output",
+        type=lambda x: is_valid_file(PARSER, x),
+        metavar="",
+    )
+
+    PARSER.add_argument(
+        "--picard_qym",
+        help="Picard QualityYieldMetrics report file from multiqc output",
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
@@ -178,11 +200,22 @@ if __name__ == "__main__":
     FASTQ_SCREEN = args.fastq_screen
     MULTIQC_STATS_F = args.multiqc_stats
     QUALIMAP_F = args.qualimap
-    PICARD_F = args.picard
+    PICARD_ASM_F = args.picard_asm
+    PICARD_QYM_F = args.picard_qym
     SAMPLE = args.sample
     OUT_DIR = args.outdir
 
     # setup logging
     LOGGER = qc_logger(__name__)
 
-    main(CONFIG, FASTQC, FASTQ_SCREEN, MULTIQC_STATS_F, QUALIMAP_F, PICARD_F, OUT_DIR, SAMPLE)
+    main(
+        CONFIG,
+        FASTQC,
+        FASTQ_SCREEN,
+        MULTIQC_STATS_F,
+        QUALIMAP_F,
+        PICARD_ASM_F,
+        PICARD_QYM_F,
+        OUT_DIR,
+        SAMPLE,
+    )
