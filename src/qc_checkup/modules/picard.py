@@ -10,10 +10,7 @@ def check_thresholds(results_dict, pass_fail, report_file, config):
     LOGGER.info(f"Reading multiqc's Picard-module report file: {report_file}")
 
     df = pd.read_csv(report_file, sep="\t", index_col="Sample")
-    # perc_columns = [x for x in df.columns if "percentage" in x]
 
-    # results_dict = {}
-    # pass_fail = set()
     for sample_name, row in df.iterrows():
         LOGGER.info(f"Working on sample: {sample_name}")
 
@@ -37,11 +34,6 @@ def check_thresholds(results_dict, pass_fail, report_file, config):
             results_dict[sample_name][f"{qc_metric}_val"] = float(value)
             results_dict[sample_name][qc_metric] = "pass" if result else "fail"
             pass_fail.add(result)
-
-    # write results to file
-    # write_to_yaml_file(results_dict, outfile)
-
-    # summarize results to one term
 
     return results_dict, pass_fail
 

@@ -72,20 +72,7 @@ def main(
         qualimap_f, sample, config_dict["qualimap"], qualimap_by_chrom_outfile
     )
 
-    # # picard - AlignmentSummaryMetrics
-    # LOGGER.info("-" * 80)
-    # picard_asm_outfile = f"{out_filepath_prefix}_picard_AlignmentSummaryMetrics.yaml"
-    # qc_checks_dict["picard_asm"] = picard.check_metrics(
-    #     picard_asm_f, config_dict["picard"]["AlignmentSummaryMetrics"], picard_asm_outfile
-    # )
-
-    # # picard - QualityYieldMetrics
-    # LOGGER.info("-" * 80)
-    # picard_qym_outfile = f"{out_filepath_prefix}_picard_QualityYieldMetrics.yaml"
-    # qc_checks_dict["picard_qym"] = picard.check_metrics(
-    #     picard_qym_f, config_dict["picard"]["QualityYieldMetrics"], picard_qym_outfile
-    # )
-
+    # picard
     picard_outfile = f"{out_filepath_prefix}_picard.yaml"
     qc_checks_dict["picard"] = picard.picard(
         config_dict["picard"], picard_asm_f, picard_qym_f, picard_outfile
