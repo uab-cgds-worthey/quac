@@ -30,6 +30,24 @@ qualimap:
     min: 250
     max:
 
+picard:
+  AlignmentSummaryMetrics:
+    PCT_PF_READS_ALIGNED:
+      min: 98
+      max: 100
+
+    PF_HQ_ALIGNED_Q20_BASES:
+      min: 100000000000
+      max:
+
+    PCT_ADAPTER:
+      min: 0
+      max: 0.2
+
+    PCT_CHIMERAS:
+      min: 0
+      max: 1
+
 fastqc:
   - per_base_sequence_quality
   - per_tile_sequence_quality
