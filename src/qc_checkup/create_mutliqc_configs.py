@@ -40,7 +40,7 @@ def main(template_f, qc_config, outfile):
         qualimap_median_insert_size_min=config["qualimap"]["median_insert_size"]["min"],
         qualimap_percentage_aligned_min=config["qualimap"]["percentage_aligned"]["min"],
         qualimap_percentage_aligned_max=config["qualimap"]["percentage_aligned"]["max"],
-        # picard_asm
+        # picard_AlignmentSummaryMetrics
         picard_asm_PCT_PF_READS_ALIGNED_min=config["picard"]["AlignmentSummaryMetrics"][
             "PCT_PF_READS_ALIGNED"
         ]["min"],
@@ -64,6 +64,11 @@ def main(template_f, qc_config, outfile):
         ],
         picard_asm_PCT_CHIMERAS_max=config["picard"]["AlignmentSummaryMetrics"]["PCT_CHIMERAS"][
             "max"
+        ],
+        # picard_QualityYieldMetrics
+        picard_qym_Q30_BASES_min=config["picard"]["QualityYieldMetrics"]["Q30_BASES"]["min"],
+        picard_qym_perc_Q30_BASES_min=config["picard"]["QualityYieldMetrics"]["perc_Q30_BASES"][
+            "min"
         ],
         # verifybamid
         verifybamid_freemix_min=config["verifybamid"]["FREEMIX"]["min"],

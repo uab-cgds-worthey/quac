@@ -52,7 +52,7 @@ picard:
     Q30_BASES:
       min: 80000000000
       max:
-    "% Q30_BASES":
+    perc_Q30_BASES:
       min: 85
       max:
 
