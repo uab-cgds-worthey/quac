@@ -98,7 +98,23 @@ def aggregate_rename_configs(rename_config_files, outfile):
     return None
 
 
-#### configs from cli ####
+##########################   Staging rules  ##########################
+rule create_multiq_config:
+    input:
+        script = WORKFLOW_PATH / "src" / "qc_checkup" / "create_mutliqc_configs.py",
+        template = WORKFLOW_PATH / "configs" / "multiqc_config_template.jinja2",
+        qc_checkup_config = WORKFLOW_PATH / "configs" / "qc_checkup" / "qc_checkup_config.yaml",
+    output:
+        WORKFLOW_PATH / "configs" / "multiqc_config.yaml"
+    message:
+        "Creates multiqc configs from jinja-template based on QC-checkup configs"
+    shell:
+        r"""
+        python {input.script}
+        """
+
+
+##########################   Configs from CLI  ##########################
 OUT_DIR = Path(config["out_dir"])
 PROJECT_NAME = config["project_name"]
 PROJECT_PATH = Path(config["projects_path"]) / PROJECT_NAME / "analysis"
