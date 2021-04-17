@@ -61,10 +61,10 @@ rule all:
             OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.{ext}",
             sample=SAMPLES,
             ext=[
-                ".alignment_summary_metrics",
-                ".quality_yield_metrics",
-                ".insert_size_metrics",
-            ],
+                "alignment_summary_metrics",
+                "quality_yield_metrics",
+                "insert_size_metrics",
+            ]
         ),
         # mosdepth
         expand(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt", sample=SAMPLES),
