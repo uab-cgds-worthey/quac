@@ -99,6 +99,7 @@ def aggregate_rename_configs(rename_config_files, outfile):
 
 
 ##########################   Staging rules  ##########################
+localrules: create_multiq_config
 rule create_multiq_config:
     input:
         script = WORKFLOW_PATH / "src" / "qc_checkup" / "create_mutliqc_configs.py",
