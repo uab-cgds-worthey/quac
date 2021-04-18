@@ -109,6 +109,8 @@ rule create_multiq_config:
         WORKFLOW_PATH / "configs" / "multiqc_config.yaml"
     message:
         "Creates multiqc configs from jinja-template based on QC-checkup configs"
+    conda:
+        str(WORKFLOW_PATH / "configs/env/qc_checkup.yaml")
     shell:
         r"""
         python {input.script}

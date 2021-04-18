@@ -5,6 +5,7 @@ channels:
 dependencies:
   - python =3.6
   - pandas =1.1
+  - jinja2==2.11.3
   - pyyaml=5.3
   - fire=0.3
   - multiqc=1.9
