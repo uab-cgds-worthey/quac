@@ -172,7 +172,7 @@ def main(args):
 
     # submit snakemake command as a slurm job
     slurm_resources = {
-        "partition": "short",  # express(max 2 hrs), short(max 12 hrs), medium(max 50 hrs), long(max 150 hrs)
+        "partition": "medium",  # express(max 2 hrs), short(max 12 hrs), medium(max 50 hrs), long(max 150 hrs)
         "ntasks": "1",
         "time": "12:00:00",
         "cpus-per-task": "1",
