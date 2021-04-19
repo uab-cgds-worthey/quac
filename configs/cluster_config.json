@@ -9,7 +9,7 @@
     },
     "qualimap_bamqc": {
         "partition": "short",
-        "mem-per-cpu": "{params.java_mem}"
+        "mem": "{params.java_mem}"
     },
     "picard_collect_multiple_metrics": {
         "partition": "short"
