@@ -13,5 +13,8 @@
     },
     "picard_collect_multiple_metrics": {
         "partition": "short"
+    },
+    "multiqc_aggregation_all_samples": {
+        "mem": "24G"
     }
 }
