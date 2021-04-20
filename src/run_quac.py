@@ -171,10 +171,17 @@ def main(args):
     )
 
     # submit snakemake command as a slurm job
+    slurm_partition_times = {
+        "express": "02:00:00",
+        "short": "12:00:00",
+        "medium": "50:00:00",
+        "long": "150:00:00",
+    }
+
     slurm_resources = {
-        "partition": "medium",  # express(max 2 hrs), short(max 12 hrs), medium(max 50 hrs), long(max 150 hrs)
+        "partition": args.slurm_partition,  # express(max 2 hrs), short(max 12 hrs), medium(max 50 hrs), long(max 150 hrs)
         "ntasks": "1",
-        "time": "12:00:00",
+        "time": slurm_partition_times[args.slurm_partition],
         "cpus-per-task": "1",
         "mem": "8G",
     }
@@ -295,6 +302,16 @@ if __name__ == "__main__":
         help=f"Number of times snakemake restarts failed jobs. This may be set to >0 "
         "to avoid pipeline failing due to job fails due to random SLURM issues",
         default=RERUN_FAILED_DEFAULT,
+        metavar="",
+    )
+
+    WRAPPER.add_argument(
+        "--slurm_partition",
+        help="Request a specific partition for the slurm resource allocation for QuaC workflow. "
+        "Available partitions in Cheaha are: express(max 2 hrs), short(max 12 hrs), "
+        "medium(max 50 hrs), long(max 150 hrs)",
+        default="short",
+        choices=["express", "short", "medium", "long"],
         metavar="",
     )
 

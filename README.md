@@ -184,6 +184,7 @@ python src/run_quac.py \
 
 # for a WGS project, and write results to a dir of choice
 python src/run_quac.py \
+      --slurm_partition medium \
       --project_name CF_CFF_PFarrell \
       --pedigree data/raw/ped/CF_CFF_PFarrell.ped \
       --outdir /some/lake/with/plenty/ducks/
