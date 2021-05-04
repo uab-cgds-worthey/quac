@@ -58,6 +58,26 @@ rule picard_collect_multiple_metrics:
         "0.73.0/bio/picard/collectmultiplemetrics"
 
 
+rule picard_collect_wgs_metrics:
+    input:
+        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+        index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
+        ref=config["ref"],
+    output:
+        OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
+    message:
+        "stats bam using Picard-CollectMultipleMetrics"
+    conda:
+        str(WORKFLOW_PATH / "configs/env/picard.yaml")
+    shell:
+        r"""
+        picard CollectWgsMetrics \
+            I={input.bam} \
+            O={output} \
+            R={input.ref}
+        """
+
+
 ##########################   Mosdepth   ##########################
 rule mosdepth_coverage:
     input:
