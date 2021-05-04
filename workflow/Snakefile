@@ -63,7 +63,6 @@ rule all:
             ext=[
                 "alignment_summary_metrics",
                 "quality_yield_metrics",
-                "insert_size_metrics",
             ]
         ),
         # mosdepth

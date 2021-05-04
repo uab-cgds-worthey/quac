@@ -51,8 +51,6 @@ rule picard_collect_multiple_metrics:
             str(OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}"),
             ".alignment_summary_metrics",
             ".quality_yield_metrics",
-            ".insert_size_metrics",
-            ".insert_size_histogram.pdf",
         ),
     params:
         "PROGRAM=null "
