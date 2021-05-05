@@ -15,6 +15,7 @@ from modules import fastq_screen
 from modules import multiqc_general_stats
 from modules import qualimap
 from modules import picard
+from modules import variant_freq_by_contig
 from common import get_configs, is_valid_file, write_to_yaml_file, qc_logger
 
 
@@ -27,6 +28,7 @@ def main(
     picard_asm_f,
     picard_qym_f,
     picard_wgs_f,
+    bcftools_index_f,
     outdir,
     sample,
 ):
@@ -105,6 +107,15 @@ def main(
         bcftools_stats_outfile,
     )
 
+    # bcftools-index for per-contig variant frequency
+    bcftools_index_outfile = f"{out_filepath_prefix}_variant_per_contig.yaml"
+    qc_checks_dict["variant_per_contig"] = variant_freq_by_contig.stat_by_chromosome(
+        bcftools_index_f,
+        sample,
+        config_dict["perc_variant_per_contig"],
+        bcftools_index_outfile,
+    )
+
     # write QC check results to file
     LOGGER.info("-" * 80)
     sample_qc_checks_dict = {sample: qc_checks_dict}  # multiqc-friendly format
@@ -173,6 +184,13 @@ if __name__ == "__main__":
     )
 
     PARSER.add_argument(
+        "--bcftools_index",
+        help="Bcftools index file",
+        type=lambda x: is_valid_file(PARSER, x),
+        metavar="",
+    )
+
+    PARSER.add_argument(
         "--multiqc_stats",
         help="Multiqc general stats txt report file",
         type=lambda x: is_valid_file(PARSER, x),
@@ -203,6 +221,7 @@ if __name__ == "__main__":
     PICARD_ASM_F = args.picard_asm
     PICARD_QYM_F = args.picard_qym
     PICARD_WGS_F = args.picard_wgs
+    BCFTOOLS_INDEX_F = args.bcftools_index
     SAMPLE = args.sample
     OUT_DIR = args.outdir
 
@@ -218,6 +237,7 @@ if __name__ == "__main__":
         PICARD_ASM_F,
         PICARD_QYM_F,
         PICARD_WGS_F,
+        BCFTOOLS_INDEX_F,
         OUT_DIR,
         SAMPLE,
     )

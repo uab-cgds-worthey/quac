@@ -140,3 +140,77 @@ bcftools_stats:
     human_readable: "Heterozygosity ratio = # het sites / # non-reference homozygous sites."
     min: 1.6
     max:
+
+perc_variant_per_contig:
+  chr1:
+    min: 0.15
+    max: 0.20
+  chr2:
+    min: 0.155
+    max: 0.20
+  chr3:
+    min: 0.16
+    max: 0.21
+  chr4:
+    min: 0.17
+    max: 0.22
+  chr5:
+    min: 0.15
+    max: 0.20
+  chr6:
+    min: 0.17
+    max: 0.21
+  chr7:
+    min: 0.17
+    max: 0.22
+  chr8:
+    min: 0.16
+    max: 0.22
+  chr9:
+    min: 0.15
+    max: 0.20
+  chr10:
+    min: 0.175
+    max: 0.23
+  chr11:
+    min: 0.17
+    max: 0.22
+  chr12:
+    min: 0.16
+    max: 0.21
+  chr13:
+    min: 0.157
+    max: 0.20
+  chr14:
+    min: 0.134
+    max: 0.18
+  chr15:
+    min: 0.134
+    max: 0.18
+  chr16:
+    min: 0.156
+    max: 0.21
+  chr17:
+    min: 0.16
+    max: 0.22
+  chr18:
+    min: 0.16
+    max: 0.21
+  chr19:
+    min: 0.178
+    max: 0.26
+  chr20:
+    min: 0.19
+    max: 0.25
+  chr21:
+    min: 0.17
+    max: 0.24
+  chr22:
+    min: 0.153
+    max: 0.21
+  chrX:
+    min: 0.7
+    max: 0.15
+  chrY:
+    min: 0.2
+    max: 0.4
