@@ -70,6 +70,11 @@ def main(template_f, qc_config, outfile):
         picard_qym_perc_Q30_BASES_min=config["picard"]["QualityYieldMetrics"]["perc_Q30_BASES"][
             "min"
         ],
+        # picard_WgsMetrics
+        picard_wgs_PCT_EXC_TOTAL_min=config["picard"]["WgsMetrics"]["PCT_EXC_TOTAL"]["min"],
+        picard_wgs_PCT_EXC_TOTAL_max=config["picard"]["WgsMetrics"]["PCT_EXC_TOTAL"]["max"],
+        picard_wgs_PCT_15X_min=config["picard"]["WgsMetrics"]["PCT_15X"]["min"],
+        picard_wgs_PCT_15X_max=config["picard"]["WgsMetrics"]["PCT_15X"]["max"],
         # verifybamid
         verifybamid_freemix_min=config["verifybamid"]["FREEMIX"]["min"],
         verifybamid_freemix_max=config["verifybamid"]["FREEMIX"]["max"],

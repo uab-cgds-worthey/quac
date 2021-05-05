@@ -269,6 +269,14 @@ custom_data:
             perc_Q30_BASES_val:
                 min: 85
                 hidden: True
+            PCT_EXC_TOTAL_val:
+                min: 0
+                max: 15
+                hidden: True
+            PCT_15X_val:
+                min: 90
+                max: 100
+                hidden: True
 
     qc_checkup_bcftools_stats:
         parent_id: "cgds_qc_checkup"
