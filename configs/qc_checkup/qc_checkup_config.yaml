@@ -209,8 +209,8 @@ perc_variant_per_contig:
     min: 0.153
     max: 0.21
   chrX:
-    min: 0.7
+    min: 0.07
     max: 0.15
   chrY:
-    min: 0.2
-    max: 0.4
+    min: 0.02
+    max: 0.04
