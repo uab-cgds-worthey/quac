@@ -22,6 +22,9 @@ table_columns_visible:
 
     "FastQC (raw)": False
 
+table_columns_placement:
+    verifybamid: 900
+
 # order of modules to show in report
 module_order:
     - cgds_qc_checkup
@@ -45,6 +48,8 @@ module_order:
           name: "FastQ Screen (trimmed)"
           path_filters:
               - "*/qc/fastq_screen-trimmed/*"
+    - verifybamid
+    - somalier
 
 # qualimap related
 qualimap_config:
