@@ -4,7 +4,7 @@ rule bcftools_stats:
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats"),
     message:
-        "stats vcf using bcftools"
+        "stats vcf using bcftools. Sample: {wildcards.sample}"
     conda:
         str(WORKFLOW_PATH / "configs/env/bcftools.yaml")
     shell:
@@ -21,7 +21,7 @@ rule bcftools_index:
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "bcftools-index" / "{sample}.bcftools.index.tsv"),
     message:
-        "Obtains per-contig variant count stats using bcftools index"
+        "Obtains per-contig variant count stats using bcftools index. Sample: {wildcards.sample}"
     conda:
         str(WORKFLOW_PATH / "configs/env/bcftools.yaml")
     shell:

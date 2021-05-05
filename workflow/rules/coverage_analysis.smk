@@ -4,6 +4,8 @@ rule samtools_stats:
         PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt"),
+    message:
+        "stats bam using samtools. Sample: {wildcards.sample}"
     wrapper:
         "0.64.0/bio/samtools/stats"
 
@@ -19,7 +21,7 @@ rule qualimap_bamqc:
         coverage=protected(OUT_DIR / "{sample}" / "qc/qualimap/{sample}/raw_data_qualimapReport/coverage_across_reference.txt"),
         summary=protected(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt"),
     message:
-        "stats bam using qualimap"
+        "stats bam using qualimap. Sample: {wildcards.sample}"
     conda:
         str(WORKFLOW_PATH / "configs/env/qualimap.yaml")
     params:
@@ -53,6 +55,8 @@ rule picard_collect_multiple_metrics:
             ".alignment_summary_metrics",
             ".quality_yield_metrics",
         ),
+    message:
+        "stats bam using Picard's collectmultiplemetrics. Sample: {wildcards.sample}"
     params:
         "PROGRAM=null ",
     wrapper:
@@ -67,7 +71,7 @@ rule picard_collect_wgs_metrics:
     output:
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
     message:
-        "stats bam using Picard-CollectMultipleMetrics"
+        "stats bam using Picard-CollectMultipleMetrics. Sample: {wildcards.sample}"
     conda:
         str(WORKFLOW_PATH / "configs/env/picard.yaml")
     shell:

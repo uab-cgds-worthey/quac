@@ -50,7 +50,7 @@ rule qc_checkup:
     # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab
     message:
         "Runs QC checkup on various QC tool output, based on custom defined QC thresholds. "
-        "Note that this will NOT work as expected for multi-sample analysis."
+        "Note that this will NOT work as expected for multi-sample analysis. Sample: {wildcards.sample}"
     params:
         sample="{sample}",
         outdir=lambda wildcards, output: str(Path(output[0]).parent),
@@ -90,7 +90,7 @@ rule multiqc_by_sample_final_pass:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt"),
     # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab
     message:
-        "Aggregates QC results using multiqc. Final pass, where QC checkup results are also aggregated"
+        "Aggregates QC results using multiqc. Final pass, where QC checkup results are also aggregated. Sample: {wildcards.sample}"
     params:
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file
@@ -113,7 +113,7 @@ rule aggregate_sample_rename_configs:
     output:
         protected(OUT_DIR / "project_level_qc" / "multiqc" / "aggregated_rename_configs.tsv"),
     message:
-        "Aggregate all sample rename-config files"
+        "Aggregate all sample rename-config files. Sample: {wildcards.sample}"
     run:
         aggregate_rename_configs(input, output[0])
 
