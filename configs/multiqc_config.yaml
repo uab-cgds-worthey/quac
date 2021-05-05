@@ -330,7 +330,7 @@ custom_data:
                 hidden: True
             FREEMIX:
                 title: "Contamination(%)"
-                description: "Cross-human-sample contamination (min: 0, max: 2)"
+                description: "Cross-human-sample contamination"
 
 # define file pattern for custom configs
 sp:
