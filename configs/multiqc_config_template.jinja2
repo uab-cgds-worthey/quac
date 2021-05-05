@@ -10,6 +10,10 @@ table_columns_visible:
         100_x_pc: False
         200_x_pc: False
 
+    Picard:
+        MEDIAN_COVERAGE: False
+        PCT_30X: False
+
     "Bcftools Stats":
         number_of_SNPs: False
         number_of_indels: False
@@ -321,7 +325,12 @@ custom_data:
             FREEMIX_val:
                 min: {{ verifybamid_freemix_min }}
                 max: {{ verifybamid_freemix_max }}
+                title: "Contamination(%)_val"
+                description: "Cross-human-sample contamination (min: {{ verifybamid_freemix_min }}, max: {{ verifybamid_freemix_max }})"
                 hidden: True
+            FREEMIX:
+                title: "Contamination(%)"
+                description: "Cross-human-sample contamination (min: {{ verifybamid_freemix_min }}, max: {{ verifybamid_freemix_max }})"
 
 # define file pattern for custom configs
 sp:
