@@ -26,6 +26,7 @@ def main(
     qualimap_f,
     picard_asm_f,
     picard_qym_f,
+    picard_wgs_f,
     outdir,
     sample,
 ):
@@ -75,7 +76,7 @@ def main(
     # picard
     picard_outfile = f"{out_filepath_prefix}_picard.yaml"
     qc_checks_dict["picard"] = picard.picard(
-        config_dict["picard"], picard_asm_f, picard_qym_f, picard_outfile
+        config_dict["picard"], picard_asm_f, picard_qym_f, picard_wgs_f, picard_outfile
     )
 
     # verifyBamID
@@ -165,6 +166,13 @@ if __name__ == "__main__":
     )
 
     PARSER.add_argument(
+        "--picard_wgs",
+        help="Picard WgsMetrics report file from multiqc output",
+        type=lambda x: is_valid_file(PARSER, x),
+        metavar="",
+    )
+
+    PARSER.add_argument(
         "--multiqc_stats",
         help="Multiqc general stats txt report file",
         type=lambda x: is_valid_file(PARSER, x),
@@ -194,6 +202,7 @@ if __name__ == "__main__":
     QUALIMAP_F = args.qualimap
     PICARD_ASM_F = args.picard_asm
     PICARD_QYM_F = args.picard_qym
+    PICARD_WGS_F = args.picard_wgs
     SAMPLE = args.sample
     OUT_DIR = args.outdir
 
@@ -208,6 +217,7 @@ if __name__ == "__main__":
         QUALIMAP_F,
         PICARD_ASM_F,
         PICARD_QYM_F,
+        PICARD_WGS_F,
         OUT_DIR,
         SAMPLE,
     )

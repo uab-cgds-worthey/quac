@@ -56,6 +56,14 @@ picard:
       min: 85
       max:
 
+  WgsMetrics:
+    PCT_EXC_TOTAL:
+      min: 0
+      max: 15
+    PCT_15X:
+      min: 90
+      max: 100
+
 fastqc:
   - per_base_sequence_quality
   - per_tile_sequence_quality

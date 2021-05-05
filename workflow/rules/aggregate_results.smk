@@ -17,6 +17,7 @@ rule multiqc_by_sample_initial_pass:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt"),
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_AlignmentSummaryMetrics.txt"),
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_QualityYieldMetrics.txt"),
+        protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_wgsmetrics.txt"),
     # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab (small var caller pipeline repo)
     message:
         "Aggregates QC results using multiqc. First pass. Output will be used for the internal QC checkup. Sample: {wildcards.sample}"
@@ -36,6 +37,7 @@ rule qc_checkup:
         fastq_screen=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt",
         picard_asm=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_AlignmentSummaryMetrics.txt",
         picard_qym=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_QualityYieldMetrics.txt",
+        picard_wgs=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_wgsmetrics.txt",
         qualimap=OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt",
     output:
         protected(
@@ -63,6 +65,7 @@ rule qc_checkup:
             --qualimap {input.qualimap} \
             --picard_asm {input.picard_asm} \
             --picard_qym {input.picard_qym} \
+            --picard_wgs {input.picard_wgs} \
             --sample {params.sample} \
             --outdir {params.outdir}
         """

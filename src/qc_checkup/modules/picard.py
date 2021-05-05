@@ -38,7 +38,7 @@ def check_thresholds(results_dict, pass_fail, report_file, config):
     return results_dict, pass_fail
 
 
-def picard(config_dict, asm_infile, qym_infile, outfile):
+def picard(config_dict, asm_infile, qym_infile, wgs_infile, outfile):
 
     results_dict = {}
     pass_fail = set()
@@ -53,6 +53,12 @@ def picard(config_dict, asm_infile, qym_infile, outfile):
     LOGGER.info("-" * 40)
     results_dict, pass_fail = check_thresholds(
         results_dict, pass_fail, qym_infile, config_dict["QualityYieldMetrics"]
+    )
+
+    # picard - CollectWgsMetrics
+    LOGGER.info("-" * 40)
+    results_dict, pass_fail = check_thresholds(
+        results_dict, pass_fail, wgs_infile, config_dict["WgsMetrics"]
     )
 
     # write results to file
