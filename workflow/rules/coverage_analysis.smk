@@ -28,6 +28,7 @@ rule qualimap_bamqc:
         java_mem="24G",
     shell:
         r"""
+        unset DISPLAY
         qualimap bamqc \
             -bam {input.bam} \
             {params.capture_bed} \
