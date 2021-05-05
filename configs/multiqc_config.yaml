@@ -318,6 +318,140 @@ custom_data:
                 min: 1.6
                 hidden: True
 
+    qc_checkup_variant_per_contig:
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_variant_per_contig"
+        section_name: "Variant frequency per contig"
+        description: "Quick summary of %variant per contig results."
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "%Variant per contig - QC checkup"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+        headers:
+            chr1_val:
+                min: 0.15
+                max: 0.2
+                format: '{:,.3f}'
+                hidden: True
+            chr2_val:
+                min: 0.155
+                max: 0.2
+                format: '{:,.3f}'
+                hidden: True
+            chr3_val:
+                min: 0.16
+                max: 0.21
+                format: '{:,.3f}'
+                hidden: True
+            chr4_val:
+                min: 0.17
+                max: 0.22
+                format: '{:,.3f}'
+                hidden: True
+            chr5_val:
+                min: 0.15
+                max: 0.2
+                format: '{:,.3f}'
+                hidden: True
+            chr6_val:
+                min: 0.17
+                max: 0.21
+                format: '{:,.3f}'
+                hidden: True
+            chr7_val:
+                min: 0.17
+                max: 0.22
+                format: '{:,.3f}'
+                hidden: True
+            chr8_val:
+                min: 0.16
+                max: 0.22
+                format: '{:,.3f}'
+                hidden: True
+            chr9_val:
+                min: 0.15
+                max: 0.2
+                format: '{:,.3f}'
+                hidden: True
+            chr10_val:
+                min: 0.175
+                max: 0.23
+                format: '{:,.3f}'
+                hidden: True
+            chr11_val:
+                min: 0.17
+                max: 0.22
+                format: '{:,.3f}'
+                hidden: True
+            chr12_val:
+                min: 0.16
+                max: 0.21
+                format: '{:,.3f}'
+                hidden: True
+            chr13_val:
+                min: 0.157
+                max: 0.2
+                format: '{:,.3f}'
+                hidden: True
+            chr14_val:
+                min: 0.134
+                max: 0.18
+                format: '{:,.3f}'
+                hidden: True
+            chr15_val:
+                min: 0.134
+                max: 0.18
+                format: '{:,.3f}'
+                hidden: True
+            chr16_val:
+                min: 0.156
+                max: 0.21
+                format: '{:,.3f}'
+                hidden: True
+            chr17_val:
+                min: 0.16
+                max: 0.22
+                format: '{:,.3f}'
+                hidden: True
+            chr18_val:
+                min: 0.16
+                max: 0.21
+                format: '{:,.3f}'
+                hidden: True
+            chr19_val:
+                min: 0.178
+                max: 0.26
+                format: '{:,.3f}'
+                hidden: True
+            chr20_val:
+                min: 0.19
+                max: 0.25
+                format: '{:,.3f}'
+                hidden: True
+            chr21_val:
+                min: 0.17
+                max: 0.24
+                format: '{:,.3f}'
+                hidden: True
+            chr22_val:
+                min: 0.153
+                max: 0.21
+                format: '{:,.3f}'
+                hidden: True
+            chrX_val:
+                min: 0.07
+                max: 0.15
+                format: '{:,.3f}'
+                hidden: True
+            chrY_val:
+                min: 0.02
+                max: 0.04
+                format: '{:,.3f}'
+                hidden: True
+
     qc_checkup_verifybamid:
         parent_id: "cgds_qc_checkup"
         id: "qc_checkup_verifybamid"
@@ -356,5 +490,7 @@ sp:
         fn: "qc_checkup_qualimap_chromosome_stats.yaml"
     qc_checkup_bcftools_stats:
         fn: "qc_checkup_bcftools_stats.yaml"
+    qc_checkup_variant_per_contig:
+        fn: "qc_checkup_variant_per_contig.yaml"
     qc_checkup_verifybamid:
         fn: "qc_checkup_verifybamid.yaml"

@@ -318,6 +318,140 @@ custom_data:
                 min: {{ bcftools_stats_heterozygosity_ratio_min }}
                 hidden: True
 
+    qc_checkup_variant_per_contig:
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_variant_per_contig"
+        section_name: "Variant frequency per contig"
+        description: "Quick summary of %variant per contig results."
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "%Variant per contig - QC checkup"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+        headers:
+            chr1_val:
+                min: {{ perc_variant_per_contig_chr1_min }}
+                max: {{ perc_variant_per_contig_chr1_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr2_val:
+                min: {{ perc_variant_per_contig_chr2_min }}
+                max: {{ perc_variant_per_contig_chr2_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr3_val:
+                min: {{ perc_variant_per_contig_chr3_min }}
+                max: {{ perc_variant_per_contig_chr3_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr4_val:
+                min: {{ perc_variant_per_contig_chr4_min }}
+                max: {{ perc_variant_per_contig_chr4_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr5_val:
+                min: {{ perc_variant_per_contig_chr5_min }}
+                max: {{ perc_variant_per_contig_chr5_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr6_val:
+                min: {{ perc_variant_per_contig_chr6_min }}
+                max: {{ perc_variant_per_contig_chr6_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr7_val:
+                min: {{ perc_variant_per_contig_chr7_min }}
+                max: {{ perc_variant_per_contig_chr7_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr8_val:
+                min: {{ perc_variant_per_contig_chr8_min }}
+                max: {{ perc_variant_per_contig_chr8_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr9_val:
+                min: {{ perc_variant_per_contig_chr9_min }}
+                max: {{ perc_variant_per_contig_chr9_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr10_val:
+                min: {{ perc_variant_per_contig_chr10_min }}
+                max: {{ perc_variant_per_contig_chr10_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr11_val:
+                min: {{ perc_variant_per_contig_chr11_min }}
+                max: {{ perc_variant_per_contig_chr11_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr12_val:
+                min: {{ perc_variant_per_contig_chr12_min }}
+                max: {{ perc_variant_per_contig_chr12_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr13_val:
+                min: {{ perc_variant_per_contig_chr13_min }}
+                max: {{ perc_variant_per_contig_chr13_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr14_val:
+                min: {{ perc_variant_per_contig_chr14_min }}
+                max: {{ perc_variant_per_contig_chr14_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr15_val:
+                min: {{ perc_variant_per_contig_chr15_min }}
+                max: {{ perc_variant_per_contig_chr15_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr16_val:
+                min: {{ perc_variant_per_contig_chr16_min }}
+                max: {{ perc_variant_per_contig_chr16_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr17_val:
+                min: {{ perc_variant_per_contig_chr17_min }}
+                max: {{ perc_variant_per_contig_chr17_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr18_val:
+                min: {{ perc_variant_per_contig_chr18_min }}
+                max: {{ perc_variant_per_contig_chr18_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr19_val:
+                min: {{ perc_variant_per_contig_chr19_min }}
+                max: {{ perc_variant_per_contig_chr19_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr20_val:
+                min: {{ perc_variant_per_contig_chr20_min }}
+                max: {{ perc_variant_per_contig_chr20_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr21_val:
+                min: {{ perc_variant_per_contig_chr21_min }}
+                max: {{ perc_variant_per_contig_chr21_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chr22_val:
+                min: {{ perc_variant_per_contig_chr22_min }}
+                max: {{ perc_variant_per_contig_chr22_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chrX_val:
+                min: {{ perc_variant_per_contig_chrX_min }}
+                max: {{ perc_variant_per_contig_chrX_max }}
+                format: '{:,.3f}'
+                hidden: True
+            chrY_val:
+                min: {{ perc_variant_per_contig_chrY_min }}
+                max: {{ perc_variant_per_contig_chrY_max }}
+                format: '{:,.3f}'
+                hidden: True
+
     qc_checkup_verifybamid:
         parent_id: "cgds_qc_checkup"
         id: "qc_checkup_verifybamid"
@@ -356,5 +490,7 @@ sp:
         fn: "qc_checkup_qualimap_chromosome_stats.yaml"
     qc_checkup_bcftools_stats:
         fn: "qc_checkup_bcftools_stats.yaml"
+    qc_checkup_variant_per_contig:
+        fn: "qc_checkup_variant_per_contig.yaml"
     qc_checkup_verifybamid:
         fn: "qc_checkup_verifybamid.yaml"
