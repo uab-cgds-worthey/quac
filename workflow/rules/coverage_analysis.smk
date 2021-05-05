@@ -53,7 +53,7 @@ rule picard_collect_multiple_metrics:
             ".quality_yield_metrics",
         ),
     params:
-        "PROGRAM=null "
+        "PROGRAM=null ",
     wrapper:
         "0.73.0/bio/picard/collectmultiplemetrics"
 
@@ -109,7 +109,10 @@ rule mosdepth_coverage:
 
 rule mosdepth_plot:
     input:
-        dist=expand(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt", sample=SAMPLES),
+        dist=expand(
+            OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
+            sample=SAMPLES,
+        ),
         script=WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
         protected(OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html"),

@@ -99,14 +99,17 @@ def aggregate_rename_configs(rename_config_files, outfile):
 
 
 ##########################   Staging rules  ##########################
-localrules: create_multiq_config
-rule create_multiq_config:
+localrules:
+    create_multiqc_config,
+
+
+rule create_multiqc_config:
     input:
-        script = WORKFLOW_PATH / "src" / "qc_checkup" / "create_mutliqc_configs.py",
-        template = WORKFLOW_PATH / "configs" / "multiqc_config_template.jinja2",
-        qc_checkup_config = WORKFLOW_PATH / "configs" / "qc_checkup" / "qc_checkup_config.yaml",
+        script=WORKFLOW_PATH / "src" / "qc_checkup" / "create_mutliqc_configs.py",
+        template=WORKFLOW_PATH / "configs" / "multiqc_config_template.jinja2",
+        qc_checkup_config=WORKFLOW_PATH / "configs" / "qc_checkup" / "qc_checkup_config.yaml",
     output:
-        WORKFLOW_PATH / "configs" / "multiqc_config.yaml"
+        WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
     message:
         "Creates multiqc configs from jinja-template based on QC-checkup configs"
     conda:

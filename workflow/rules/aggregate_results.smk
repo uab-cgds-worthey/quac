@@ -5,6 +5,7 @@ rule multiqc_by_sample_initial_pass:
         OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
         OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
+        OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         multiqc_config=WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
@@ -73,6 +74,7 @@ rule multiqc_by_sample_final_pass:
         OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
         OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
+        OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         OUT_DIR / "{sample}" / "qc" / "qc_checkup" / "qc_checkup_overall_summary.yaml",
@@ -100,7 +102,8 @@ localrules:
 rule aggregate_sample_rename_configs:
     input:
         expand(
-            PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv", sample=SAMPLES
+            PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
+            sample=SAMPLES,
         ),
     output:
         protected(OUT_DIR / "project_level_qc" / "multiqc" / "aggregated_rename_configs.tsv"),
@@ -123,6 +126,7 @@ rule multiqc_aggregation_all_samples:
                 OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
                 OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
                 OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
+                OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
                 OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
                 OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
                 OUT_DIR / "{sample}" / "qc" / "qc_checkup" / "qc_checkup_overall_summary.yaml",
@@ -142,8 +146,8 @@ rule multiqc_aggregation_all_samples:
         # using custom rename config file
         extra=(
             lambda wildcards, input: f'--config {input.multiqc_config} \
-                                    --sample-names {input.rename_config} \
-                                    --cl_config "max_table_rows: 2000"'
+                                                            --sample-names {input.rename_config} \
+                                                            --cl_config "max_table_rows: 2000"'
         ),
     wrapper:
         "0.64.0/bio/multiqc"

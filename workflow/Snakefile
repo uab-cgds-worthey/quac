@@ -64,7 +64,7 @@ rule all:
                 "alignment_summary_metrics",
                 "quality_yield_metrics",
                 "collect_wgs_metrics",
-            ]
+            ],
         ),
         # mosdepth
         expand(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt", sample=SAMPLES),
