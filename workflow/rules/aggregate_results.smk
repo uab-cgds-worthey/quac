@@ -113,7 +113,7 @@ rule aggregate_sample_rename_configs:
     output:
         protected(OUT_DIR / "project_level_qc" / "multiqc" / "aggregated_rename_configs.tsv"),
     message:
-        "Aggregate all sample rename-config files. Sample: {wildcards.sample}"
+        "Aggregate all sample rename-config files."
     run:
         aggregate_rename_configs(input, output[0])
 
