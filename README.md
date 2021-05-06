@@ -2,8 +2,10 @@
   - [What is QuaC?](#what-is-quac)
     - [QC tools included](#qc-tools-included)
   - [Pipeline installation](#pipeline-installation)
-  - [Environment Setup](#environment-setup)
     - [Requirements](#requirements)
+    - [Retrieve pipeline source code](#retrieve-pipeline-source-code)
+  - [Environment Setup](#environment-setup)
+    - [Requirements](#requirements-1)
     - [Setup config file](#setup-config-file)
       - [Prepare verifybamid datasets for exome analysis](#prepare-verifybamid-datasets-for-exome-analysis)
     - [Create conda environment](#create-conda-environment)
@@ -57,11 +59,17 @@ This QuaC pipeline should be treated as a companion to the QC results generated 
 
 Installation simply requires fetching the source code. Following are required:
 
+### Requirements
+
 - Git v2.0+
 - CGDS GitLab access
 - [SSH Key for access](https://docs.uabgrid.uab.edu/wiki/Cheaha_GettingStarted#Logging_in_to_Cheaha) to Cheaha cluster
 
-To fetch source code, change in to directory of your choice and run:
+
+### Retrieve pipeline source code
+
+Pipeline installation simply requires fetching the source code. This repository use git submodules, which needs to be
+pulled when cloning. Go to the directory of your choice and run the command below.
 
 ```sh
 git clone -b master \
@@ -69,8 +77,7 @@ git clone -b master \
     git@gitlab.rc.uab.edu:center-for-computational-genomics-and-data-science/sciops/pipelines/quac.git
 ```
 
-Note that this repository uses git submodules, which gets automatically pulled when cloning using above command. Simply
-downloading this repository from GitLab, instead of cloning, may not fetch the submodules included.
+Note that downloading this repository from GitLab, instead of cloning, may not fetch the submodules included.
 
 ## Environment Setup
 
