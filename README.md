@@ -6,9 +6,9 @@
     - [Retrieve pipeline source code](#retrieve-pipeline-source-code)
   - [Environment Setup](#environment-setup)
     - [Requirements](#requirements-1)
+    - [Create conda environment](#create-conda-environment)
     - [Setup config file](#setup-config-file)
       - [Prepare verifybamid datasets for exome analysis](#prepare-verifybamid-datasets-for-exome-analysis)
-    - [Create conda environment](#create-conda-environment)
     - [Testing](#testing)
   - [How to run QuaC](#how-to-run-quac)
     - [Example usage](#example-usage)
@@ -34,18 +34,18 @@ QuaC quacks using the tools listed below:
 
 | Tool                                                                                                                       | Use                                                                                           |
 | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| **BAM**                                                                                                                |                                                                                               |
+| **BAM**                                                                                                                    |                                                                                               |
 | [Qualimap](http://qualimap.conesalab.org/)                                                                                 | QCs alignment data in SAM/BAM files                                                           |
 | [Picard-CollectMultipleMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectMultipleMetrics) | summarizes alignment metrics from a SAM/BAM file using several modules                        |
 | [Picard-CollectWgsMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectWgsMetrics)           | Collects metrics about coverage and performance of whole genome sequencing (WGS) experiments. |
 | [mosdepth](https://github.com/brentp/mosdepth)                                                                             | Fast BAM/CRAM depth calculation                                                               |
 | [indexcov](https://github.com/brentp/goleft/tree/master/indexcov)                                                          | Estimate coverage from whole-genome bam or cram index                                         |
 | [covviz](https://github.com/brwnj/covviz)                                                                                  | Identifies large, coverage-based anomalies                                                    |
-| **VCF**                                                                                                                |                                                                                               |
+| **VCF**                                                                                                                    |                                                                                               |
 | [bcftools stats](https://samtools.github.io/bcftools/bcftools.html#stats)                                                  | Stats variants in VCF                                                                         |
-| **Within-species contamination**                                                                                       |                                                                                               |
+| **Within-species contamination**                                                                                           |                                                                                               |
 | [verifybamid](https://github.com/Griffan/VerifyBamID)                                                                      | Estimates within-species (i.e. cross-sample) contamination                                    |
-| **Sex, ancestry and relatedness estimation**                                                                                      |                                                                                               |
+| **Sex, ancestry and relatedness estimation**                                                                               |                                                                                               |
 | [somalier](https://github.com/brentp/somalier)                                                                             | Estimation of sex, ancestry and relatedness                                                   |
 
 
@@ -79,14 +79,50 @@ git clone -b master \
 
 Note that downloading this repository from GitLab, instead of cloning, may not fetch the submodules included.
 
+
 ## Environment Setup
 
 ### Requirements
 
+***Direct***
+
+- [Deep clone of repo](#pipeline-installation) created
 - Anaconda/miniconda
     - Tested with Anaconda3/2020.02
+
+***Indirect***
+
+- Snakemake
+    - Tested with v6.0.5
+    - Gets installed as part of conda environment
+- Python
+    - Tested with v3.6.3
+    - Gets installed as part of conda environment
+- slurmpy
+    - Tested with v0.0.8
+    - Gets installed as part of conda environment
 - Singularity
     - Tested with v3.5.2
+    - Will be loaded as a module
+
+
+### Create conda environment
+
+Necessary dependencies for QuaC can installed in a conda environment as shown below:
+
+```sh
+module reset
+module load Anaconda3/2020.02
+
+# create conda environment. Needed only the first time.
+conda env create --file configs/env/quac.yaml
+# activate conda environment
+conda activate quac
+
+# if you need to update the existing environment
+conda env update --file configs/env/quac.yaml
+```
+
 
 ### Setup config file
 
@@ -109,20 +145,6 @@ cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.UD 1000g.phase3.10k.b38_chr.exome.vcf.g
 cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.V 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.V
 ```
 
-### Create conda environment
-
-```sh
-module reset
-module load Anaconda3/2020.02
-
-# create conda environment. Needed only the first time.
-conda env create --file configs/env/quac.yaml
-# activate conda environment
-conda activate quac
-
-# if you need to update the existing environment
-conda env update --file configs/env/quac.yaml
-```
 
 ### Testing
 
