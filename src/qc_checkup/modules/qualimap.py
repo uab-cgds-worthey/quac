@@ -1,7 +1,5 @@
 """
-1. Read overall qualimap QC summary for a particular sample using multiqc's general stats data
-and summarize the result.
-2. Analyze chromosome-level coverage QC using qualimap report file and summarize the result.
+Analyze chromosome-level coverage QC using qualimap report file and summarize the result.
 """
 
 import pandas as pd
@@ -15,6 +13,15 @@ def stat_by_chromosome(qualimap_f, sample_name, qualimap_config, outfile):
     """
     Analyzes chromosome-level coverage QC using qualimap report file
     and summarize the result.
+
+    Args:
+        qualimap_f (str): Qualimap report file
+        sample_name (str): sample name
+        qualimap_config (dict): Thresholds for QC metrics
+        outfile (str): Output filepath
+
+    Returns:
+        str: Result stating if sample has passed or failed the tests (pass, fail).
     """
 
     LOGGER.info(f"Analyzing chromosome-level coverage QC using qualimap report file: {qualimap_f}")

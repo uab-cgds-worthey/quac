@@ -1,3 +1,7 @@
+"""
+Analyze chromosome-level variant frquency using bcftools-index file and summarize the result.
+"""
+
 import pandas as pd
 from common import present_within_range, qc_logger, write_to_yaml_file
 
@@ -6,6 +10,7 @@ LOGGER = qc_logger(__name__)
 
 
 def read_file(f):
+    "Reads bcftools index file and calculates %variant-freq per contig"
 
     df = pd.read_csv(f, sep="\t", names=["contig", "length", "variant_count"], index_col="contig")
     df["var_freq"] = ((df["variant_count"] / df["length"]) * 100).round(4)
@@ -14,6 +19,18 @@ def read_file(f):
 
 
 def stat_by_chromosome(bcftools_index_f, sample_name, variant_freq_config, outfile):
+    """
+    Analyzes chromosome-level variant frquency using bcftools-index file and summarizes the result.
+
+    Args:
+        bcftools_index_f (str): Bcftools-index file
+        sample_name (str): sample name
+        variant_freq_config (dict): Thresholds for QC metrics
+        outfile (str): Output filepath
+
+    Returns:
+        str: Result stating if sample has passed or failed the tests (pass, fail).
+    """
 
     LOGGER.info(
         f"Analyzing chromosome-level coverage QC using qualimap report file: {bcftools_index_f}"

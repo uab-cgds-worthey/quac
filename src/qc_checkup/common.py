@@ -1,5 +1,5 @@
 """
-Functions to help with QC checkup script
+Functions to help with QC checkup tool
 """
 
 from pathlib import Path

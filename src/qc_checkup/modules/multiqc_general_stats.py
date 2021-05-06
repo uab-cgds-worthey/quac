@@ -1,5 +1,6 @@
 """
-Reads multiqc general stats file
+Reads multiqc general stats file.
+Provides a generic helper function to verify stats based on multiqc's general stats data.
 """
 
 import pandas as pd
@@ -10,6 +11,7 @@ LOGGER = qc_logger(__name__)
 
 
 def read_stats(filepath):
+    "Reads multiqc general stats file"
 
     LOGGER.info(f"Reading multiqc general stats file: {filepath}")
     df = pd.read_csv(filepath, sep="\t", index_col="Sample")
@@ -17,10 +19,21 @@ def read_stats(filepath):
     return df
 
 
-def test_for_range(multiqc_df, sample_name, tool, config, tool_prefix, outfile):
+def check_thresholds(multiqc_df, sample_name, tool, config, tool_prefix, outfile):
     """
     Read a tool's overall QC summary for a particular sample using multiqc's general stats data
     and summarize the result.
+
+    Args:
+        multiqc_df (df): multiqc general stats dataframe
+        sample_name (str): sample name
+        tool (str): tool name
+        config (dict): Thresholds for QC metrics
+        tool_prefix (str): Tool's prefix used by multiqc in their general stats data
+        outfile (str): Output filepath
+
+    Returns:
+        str: Result stating if sample has passed or failed the tests (pass, fail).
     """
 
     LOGGER.info(
