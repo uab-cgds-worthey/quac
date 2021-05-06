@@ -188,6 +188,13 @@ python src/run_quac.py \
       --project_name CF_CFF_PFarrell \
       --pedigree data/raw/ped/CF_CFF_PFarrell.ped \
       --outdir /some/lake/with/plenty/ducks/
+
+PROJECT="MuscDyst_SU_MAlexander"
+python src/run_quac.py \
+      --slurm_partition medium \
+      --project_name ${PROJECT} \
+      --outdir /data/scratch/manag/tmp/quac/results/test_${PROJECT}/analysis \
+      --pedigree data/raw/ped/${PROJECT}.ped -n
 ```
 
 ## Output
