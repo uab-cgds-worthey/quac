@@ -15,6 +15,8 @@
     - [Example usage](#example-usage)
     - [Dummy pedigree file creator](#dummy-pedigree-file-creator)
   - [Testing pipeline](#testing-pipeline)
+    - [How to run](#how-to-run)
+    - [Expected output files](#expected-output-files)
   - [Output](#output)
   - [Visualization of workflow](#visualization-of-workflow)
   - [Contributing](#contributing)
@@ -37,14 +39,14 @@ QuaC quacks using the tools listed below:
 
 | Tool                                                                                                                       | Use                                                                                           |
 | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| **BAM QC**                                                                                                                    |                                                                                               |
+| **BAM QC**                                                                                                                 |                                                                                               |
 | [Qualimap](http://qualimap.conesalab.org/)                                                                                 | QCs alignment data in SAM/BAM files                                                           |
 | [Picard-CollectMultipleMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectMultipleMetrics) | summarizes alignment metrics from a SAM/BAM file using several modules                        |
 | [Picard-CollectWgsMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectWgsMetrics)           | Collects metrics about coverage and performance of whole genome sequencing (WGS) experiments. |
 | [mosdepth](https://github.com/brentp/mosdepth)                                                                             | Fast BAM/CRAM depth calculation                                                               |
 | [indexcov](https://github.com/brentp/goleft/tree/master/indexcov)                                                          | Estimate coverage from whole-genome bam or cram index                                         |
 | [covviz](https://github.com/brwnj/covviz)                                                                                  | Identifies large, coverage-based anomalies                                                    |
-| **VCF QC**                                                                                                                    |                                                                                               |
+| **VCF QC**                                                                                                                 |                                                                                               |
 | [bcftools stats](https://samtools.github.io/bcftools/bcftools.html#stats)                                                  | Stats variants in VCF                                                                         |
 | **Within-species contamination**                                                                                           |                                                                                               |
 | [verifybamid](https://github.com/Griffan/VerifyBamID)                                                                      | Estimates within-species (i.e. cross-sample) contamination                                    |
@@ -90,27 +92,9 @@ environment will install all necessary dependencies to run QuaC workflow.
 
 ### Requirements
 
-***Direct***
-
 - [Deep clone of repo](#pipeline-installation) created
 - Anaconda/miniconda
     - Tested with Anaconda3/2020.02
-
-***Indirect***
-
-- Snakemake
-    - Tested with v6.0.5
-    - Gets installed as part of conda environment
-- Python
-    - Tested with v3.6.3
-    - Gets installed as part of conda environment
-- slurmpy
-    - Tested with v0.0.8
-    - Gets installed as part of conda environment
-- Singularity
-    - Tested with v3.5.2
-    - Will be loaded as a module
-
 
 ### Create conda environment
 
@@ -134,8 +118,8 @@ conda env update --file configs/env/quac.yaml
 
 In order to run the QuaC pipeline, user needs to
 
-a. Set up conda environment (see above) b. Set up config files specifying paths required by QC tools used in the
-pipeline.
+1. Set up conda environment (see above)
+2. Set up config files specifying paths required by QC tools used in the pipeline.
 
 ### Requirements
 
@@ -270,10 +254,15 @@ python src/run_quac.py \
       --pedigree "path/to/project_duck/pedigree_file.ped"
 ```
 
-Note that options `--project_name` and `--pedigree` are both necessary. All samples, belonging to a project, that ne ed
-to be analyzed should be supplied in a pedigree file format and provided to QuaC's wrapper script via `--pedigree`. This
-repo also [includes a script that can create a dummy pedigree file](#dummy-pedigree-file-creator) with all samples
-belonging to a project.
+Note that options `--project_name` and `--pedigree` are required. Only the samples that are supplied in pedigree file
+via `--pedigree` will be processed by QuaC and all of these samples must belong to the same project. This repo also
+includes a handy script [`src/create_dummy_ped.py`](src/create_dummy_ped.py) that can create a dummy pedigree file,
+which will lack sex (unless project tracking sheet is provided), relatedness and affectedness info. See header of the
+script for usage instructions.
+
+Note that we plan to use [phenotips](https://phenotips.com/) in future to produce fully capable pedigree file. One may
+manually create them as well, but this could be error-prone.
+
 
 **NOTE:**
 
@@ -320,20 +309,20 @@ python src/run_quac.py \
       --exome
 ```
 
-### Dummy pedigree file creator
-
-Script `src/create_dummy_ped.py` creates a "dummy" pedigree file given a project's path as input. It's purpose is just
-to create a basic pedigree file, which will lack sex (unless project tracking sheet is provided), relatedness and
-affectedness info. See header of the script for usage instructions.
-
-Note that we plan to use [phenotips](https://phenotips.com/) in future to produce fully capable pedigree file. One may
-manually create them as well, but this could be error-prone.
-
 
 ## Testing pipeline
 
 The system-level testing implemented for this pipeline tests whether the pipeline runs from start to finish without any
 error using:
+
+- Test datasets present in [`.test/ngs-data/test_project`](.test/ngs-data/test_project), which reflects a test project
+  containing two samples. [See here](.test/README.md) for more info on how they were created.
+
+> **_NOTE:_**  This testing does not verify that pipeline's output are correct. Instead, its purpose is just to ensure
+> that pipeline runs from beginning to end without any execution error for the given test dataset.
+
+
+### How to run
 
 ```sh
 module reset
@@ -345,6 +334,10 @@ python src/run_quac.py \
       --projects_path .test/ngs-data/ \
       --pedigree .test/configs/project.ped -l -n
 ```
+
+### Expected output files
+
+TODO
 
 
 ## Output
