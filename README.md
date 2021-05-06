@@ -12,8 +12,8 @@
     - [Testing](#testing)
   - [How to run QuaC](#how-to-run-quac)
     - [Example usage](#example-usage)
-  - [Output](#output)
     - [Dummy pedigree file creator](#dummy-pedigree-file-creator)
+  - [Output](#output)
   - [Contributing](#contributing)
   - [Changelog](#changelog)
 
@@ -167,13 +167,14 @@ python src/run_quac.py \
 
 ## How to run QuaC
 
-In the activate conda environment, QuaC is run using script `src/quac.py`. Here are all the options available:
+After activating the conda environment, QuaC pipeline is run using the wrapper script `src/run_quac.py`. Here are all
+the options available:
 
 ```sh
 $ ./src/run_quac.py -h
 usage: run_quac.py [-h] [--project_name] [--projects_path] [--pedigree]
-                   [--outdir] [-m] [--exome] [--cluster_config] [--log_dir]
-                   [-e] [-n] [-l] [--rerun_failed]
+                   [--outdir] [--exome] [--cluster_config] [--log_dir] [-e]
+                   [-n] [-l] [--rerun_failed] [--slurm_partition]
 
 Wrapper tool for QuaC pipeline.
 
@@ -182,13 +183,13 @@ optional arguments:
 
 QuaC workflow options:
   --project_name      Project name (default: None)
-  --projects_path     Path where all projects are hosted. Dont include
+  --projects_path     Path where all projects are hosted. Do not include
                       project name here. (default:
                       /data/project/worthey_lab/projects/)
   --pedigree          Pedigree filepath. Must correspond to the project
                       supplied via --project_name (default: None)
   --outdir            Out directory path (default:
-                      $USER_SCRATCH/tmp/quac/results)
+                      $USER_SCRATCH/tmp/quac/results/test_project/analysis)
   --exome             Flag to run in exome mode (default: False)
 
 QuaC wrapper options:
@@ -198,7 +199,7 @@ QuaC wrapper options:
                       onfig.json)
   --log_dir           Directory path where logs (both workflow's and
                       wrapper's) will be stored (default:
-                      $USER_SCRATCH/tmp/quac/results/../logs)
+                      $USER_SCRATCH/tmp/quac/logs)
   -e , --extra_args   Pass additional custom args to snakemake. Equal symbol
                       is needed for assignment as in this example: -e='--
                       forceall' (default: None)
@@ -210,55 +211,64 @@ QuaC wrapper options:
   --rerun_failed      Number of times snakemake restarts failed jobs. This may
                       be set to >0 to avoid pipeline failing due to job fails
                       due to random SLURM issues (default: 0)
+  --slurm_partition   Request a specific partition for the slurm resource
+                      allocation for QuaC workflow. Available partitions in
+                      Cheaha are: express(max 2 hrs), short(max 12 hrs),
+                      medium(max 50 hrs), long(max 150 hrs) (default: short)
 ```
 
+
+Note that options `--project_name` and `--pedigree` are both necessary. All samples, belonging to a project, that ne ed
+to be analyzed should be supplied in a pedigree file format and provided to QuaC's wrapper script via `--pedigree`. This
+repo also [includes a script that can create a dummy pedigree file](#dummy-pedigree-file-creator) with all samples
+belonging to a project.
 
 ### Example usage
 
-`project_name` and `pedigree` are required options to run the tool.
+Options `project_name` and `pedigree` are required to run the tool.
 
 ```sh
-# for a WGS projetcquac
-python src/run_quac.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF_CFF_PFarrell.ped
-
-# for an exome project
-python src/run_quac.py --project_name HCC --pedigree data/raw/ped/HCC.ped --exome
-
-# run for an exome project which is not in the default CGDS projects_path
+# to quack on a WGS project
 python src/run_quac.py \
-      --project_name UnusualCancers_CMGalluzi \
-      --projects_path /data/project/sloss/cgds_path_cmgalluzzi/ \
-      --pedigree data/raw/ped/UnusualCancers_CMGalluzi.ped \
-      --exome
-
-# for a WGS project, and write results to a dir of choice
-python src/run_quac.py \
-      --slurm_partition medium \
       --project_name CF_CFF_PFarrell \
-      --pedigree data/raw/ped/CF_CFF_PFarrell.ped \
-      --outdir /some/lake/with/plenty/ducks/
+      --pedigree "data/raw/ped/CF_CFF_PFarrell.ped"
 
-PROJECT="MuscDyst_SU_MAlexander"
+# to quack on a WGS project and write results to a dir of choice
+PROJECT="CF_CFF_PFarrell"
 python src/run_quac.py \
       --slurm_partition medium \
       --project_name ${PROJECT} \
-      --outdir /data/scratch/manag/tmp/quac/results/test_${PROJECT}/analysis \
-      --pedigree data/raw/ped/${PROJECT}.ped -n
+      --pedigree "data/raw/ped/${PROJECT}.ped" \
+      --outdir "/data/scratch/manag/tmp/quac/results/test_${PROJECT}/analysis"
+
+# to quack on an exome project
+python src/run_quac.py \
+      --project_name HCC \
+      --pedigree "data/raw/ped/HCC.ped" \
+      --exome
+
+# to quack on an exome project which is not in the default CGDS projects_path
+python src/run_quac.py \
+      --project_name UnusualCancers_CMGalluzi \
+      --projects_path "/data/project/sloss/cgds_path_cmgalluzzi/" \
+      --pedigree "data/raw/ped/UnusualCancers_CMGalluzi.ped" \
+      --exome
 ```
+
+### Dummy pedigree file creator
+
+Script `src/create_dummy_ped.py` creates a "dummy" pedigree file given a project's path as input. It's purpose is just
+to create a basic pedigree file, which will lack sex (unless project tracking sheet is provided), relatedness and
+affectedness info. See header of the script for usage instructions.
+
+Note that we plan to use [phenotips](https://phenotips.com/) in future to produce fully capable pedigree file. One may
+manually create them as well, but this could be error-prone.
 
 ## Output
 
 QuaC results are stored at path specified via option `--outdir` (default: `$USER_SCRATCH/tmp/quac/results`). This
 includes aggregated QC results produced by [multiqc](https://multiqc.info/).
 
-### Dummy pedigree file creator
-
-Script `src/create_dummy_ped.py` creates a "dummy" pedigree file given a project path as input. It's purpose is just to
-create a basic pedigree file, which will lack sex (unless project tracking sheet is provided), relatedness and affected
-info. See header of the script for usage instructions.
-
-Note that we plan to use phenotips in future to produce fully capable pedigree file. One may manually create them as
-well, but this could be error-prone.
 
 ## Contributing
 

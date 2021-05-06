@@ -230,7 +230,7 @@ if __name__ == "__main__":
     PROJECT_PATH_DEFAULT = "/data/project/worthey_lab/projects/"
     WORKFLOW.add_argument(
         "--projects_path",
-        help="Path where all projects are hosted. Don't include project name here.",
+        help="Path where all projects are hosted. Do not include project name here.",
         default=PROJECT_PATH_DEFAULT,
         type=lambda x: is_valid_dir(PARSER, x),
         metavar="",
