@@ -1,6 +1,7 @@
 - [QuaC](#quac)
-  - [Who am I?](#who-am-i)
-  - [Installation](#installation)
+  - [What is QuaC?](#what-is-quac)
+    - [QC tools included](#qc-tools-included)
+  - [Pipeline installation](#pipeline-installation)
   - [Environment Setup](#environment-setup)
     - [Requirements](#requirements)
     - [Setup config file](#setup-config-file)
@@ -18,18 +19,33 @@
 
 🦆🦆 Don't duck that QC thingy 🦆🦆
 
-## Who am I?
+## What is QuaC?
 
-QuaC is a pipeline developed using snakemake, which runs a set of selected QC tools on NGS samples. Here are the tools
-it can currently quack on:
+QuaC is a pipeline, developed using snakemake, that runs several QC tools and summarizes results for WGS/WES samples at
+CGDS. It is designed to run after samples are run through [CGDS's small variant caller
+pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
 
-| Tool                                                              | Use                                                        |
-| ----------------------------------------------------------------- | ---------------------------------------------------------- |
-| [somalier](https://github.com/brentp/somalier)                    | Estimation of sex, ancestry and relatedness                |
-| [verifybamid](https://github.com/Griffan/VerifyBamID)             | Estimates within-species (i.e. cross-sample) contamination |
-| [mosdepth](https://github.com/brentp/mosdepth)                    | Fast BAM/CRAM depth calculation                            |
-| [indexcov](https://github.com/brentp/goleft/tree/master/indexcov) | Estimate coverage from whole-genome bam or cram index      |
-| [covviz](https://github.com/brwnj/covviz)                         | Identifies large, coverage-based anomalies                 |
+
+### QC tools included
+
+QuaC quacks using the tools listed below:
+
+| Tool                                                                                                                       | Use                                                                                           |
+| -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| **BAM**                                                                                                                |                                                                                               |
+| [Qualimap](http://qualimap.conesalab.org/)                                                                                 | QCs alignment data in SAM/BAM files                                                           |
+| [Picard-CollectMultipleMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectMultipleMetrics) | summarizes alignment metrics from a SAM/BAM file using several modules                        |
+| [Picard-CollectWgsMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectWgsMetrics)           | Collects metrics about coverage and performance of whole genome sequencing (WGS) experiments. |
+| [mosdepth](https://github.com/brentp/mosdepth)                                                                             | Fast BAM/CRAM depth calculation                                                               |
+| [indexcov](https://github.com/brentp/goleft/tree/master/indexcov)                                                          | Estimate coverage from whole-genome bam or cram index                                         |
+| [covviz](https://github.com/brwnj/covviz)                                                                                  | Identifies large, coverage-based anomalies                                                    |
+| **VCF**                                                                                                                |                                                                                               |
+| [bcftools stats](https://samtools.github.io/bcftools/bcftools.html#stats)                                                  | Stats variants in VCF                                                                         |
+| **Within-species contamination**                                                                                       |                                                                                               |
+| [verifybamid](https://github.com/Griffan/VerifyBamID)                                                                      | Estimates within-species (i.e. cross-sample) contamination                                    |
+| **Sex, ancestry and relatedness estimation**                                                                                      |                                                                                               |
+| [somalier](https://github.com/brentp/somalier)                                                                             | Estimation of sex, ancestry and relatedness                                                   |
+
 
 
 **Note:** At CGDS, significant amount of QC is additionally performed as part of the [small variant caller
@@ -37,11 +53,11 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 This QuaC pipeline should be treated as a companion to the QC results generated by the small_variant_caller_pipeline.
 
 
-## Installation
+## Pipeline installation
 
 Installation simply requires fetching the source code. Following are required:
 
-- Git
+- Git v2.0+
 - CGDS GitLab access
 - [SSH Key for access](https://docs.uabgrid.uab.edu/wiki/Cheaha_GettingStarted#Logging_in_to_Cheaha) to Cheaha cluster
 
@@ -61,15 +77,9 @@ downloading this repository from GitLab, instead of cloning, may not fetch the s
 ### Requirements
 
 - Anaconda/miniconda
-
-Also the tools listed below, which are not available via conda distribution, need to be installed. Static binaries are
-available for both these tools and they are hence easy to install.
-
-- [somalier](https://github.com/brentp/somalier)
-- [goleft](https://github.com/brentp/goleft)
-
-*Note:* CGDS folks using QuaC in cheaha may skip this step, as these tools are already installed and centrally
-available.
+    - Tested with Anaconda3/2020.02
+- Singularity
+    - Tested with v3.5.2
 
 ### Setup config file
 
@@ -205,8 +215,8 @@ includes aggregated QC results produced by [multiqc](https://multiqc.info/).
 ### Dummy pedigree file creator
 
 Script `src/create_dummy_ped.py` creates a "dummy" pedigree file given a project path as input. It's purpose is just to
-create a basic pedigree file, which will lack sex (unless project tracking sheet is provided), relatedness and
-affected info. See header of the script for usage instructions.
+create a basic pedigree file, which will lack sex (unless project tracking sheet is provided), relatedness and affected
+info. See header of the script for usage instructions.
 
 Note that we plan to use phenotips in future to produce fully capable pedigree file. One may manually create them as
 well, but this could be error-prone.

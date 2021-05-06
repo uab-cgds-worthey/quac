@@ -1,5 +1,5 @@
 """
-QuaC Pipeline to perform QC on fastqs, bams and vcfs.
+QuaC Pipeline to perform QC on bams and vcfs.
 Works at project level.
 """
 
