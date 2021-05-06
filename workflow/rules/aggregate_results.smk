@@ -44,7 +44,14 @@ rule qc_checkup:
         protected(
             expand(
                 OUT_DIR / "{{sample}}" / "qc" / "qc_checkup" / "qc_checkup_{suffix}.yaml",
-                suffix=["overall_summary", "fastqc", "fastq_screen", "qualimap_overall", "qualimap_chromosome_stats", "variant_per_contig"],
+                suffix=[
+                    "overall_summary",
+                    "fastqc",
+                    "fastq_screen",
+                    "qualimap_overall",
+                    "qualimap_chromosome_stats",
+                    "variant_per_contig",
+                ],
             )
         ),
     # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab
@@ -151,8 +158,8 @@ rule multiqc_aggregation_all_samples:
         # using custom rename config file
         extra=(
             lambda wildcards, input: f'--config {input.multiqc_config} \
-                                        --sample-names {input.rename_config} \
-                                        --cl_config "max_table_rows: 2000"'
+                                            --sample-names {input.rename_config} \
+                                            --cl_config "max_table_rows: 2000"'
         ),
     wrapper:
         "0.64.0/bio/multiqc"

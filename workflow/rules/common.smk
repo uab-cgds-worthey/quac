@@ -132,3 +132,6 @@ RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"
 RULE_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
 SAMPLES = get_samples(PEDIGREE_FPATH)
+
+logger.info(f"// Processing project: {PROJECT_NAME}")
+logger.info(f'// Project path: "{PROJECT_PATH}"')
