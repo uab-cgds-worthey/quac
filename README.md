@@ -29,8 +29,16 @@
 ## What is QuaC?
 
 QuaC is a pipeline, developed using snakemake, that runs several QC tools and summarizes results for WGS/WES samples at
-CGDS. It is designed to run after samples are run through [CGDS's small variant caller
+CGDS. It is a companion pipeline that should be run after samples in a project are run through [CGDS's small
+variant caller
 pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
+
+QuaC performs the following:
+
+* Runs various QC tools on output produced by the small variant caller pipeline
+* Performs QC checkup based on expected thresholds and summarizes the results
+* Aggregates QC output produced by these tools as well as those produced small variant caller pipeline. For sake of
+  simplicity, fastqc, fastq-screen and picard's markduplicates are still run by the small variant caller pipeline.
 
 
 ### QC tools included
@@ -337,7 +345,45 @@ python src/run_quac.py \
 
 ### Expected output files
 
-TODO
+```sh
+$ tree $USER_SCRATCH/tmp/quac/results/test_project/ -d -L 4
+/data/scratch/manag/tmp/quac/results/test_project/
+└── analysis
+    ├── A
+    │   └── qc
+    │       ├── bcftools-index
+    │       ├── bcftools-stats
+    │       ├── mosdepth
+    │       ├── multiqc_final_pass
+    │       ├── multiqc_initial_pass
+    │       ├── picard-stats
+    │       ├── qc_checkup
+    │       ├── qualimap
+    │       ├── samtools-stats
+    │       └── verifyBamID
+    ├── B
+    │   └── qc
+    │       ├── bcftools-index
+    │       ├── bcftools-stats
+    │       ├── mosdepth
+    │       ├── multiqc_final_pass
+    │       ├── multiqc_initial_pass
+    │       ├── picard-stats
+    │       ├── qc_checkup
+    │       ├── qualimap
+    │       ├── samtools-stats
+    │       └── verifyBamID
+    └── project_level_qc
+        ├── covviz
+        ├── indexcov
+        ├── mosdepth
+        ├── multiqc
+        │   └── multiqc_report_data
+        └── somalier
+            ├── ancestry
+            ├── extract
+            └── relatedness
+```
 
 
 ## Output
