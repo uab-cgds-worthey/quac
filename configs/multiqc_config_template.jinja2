@@ -251,32 +251,56 @@ custom_data:
             PCT_PF_READS_ALIGNED_val:
                 min: {{ picard_asm_PCT_PF_READS_ALIGNED_min }}
                 max: {{ picard_asm_PCT_PF_READS_ALIGNED_max }}
+                description: "% of Pass filter(PF) reads that aligned to the reference sequence. PF_READS_ALIGNED / PF_READS"
                 hidden: True
             PF_HQ_ALIGNED_Q20_BASES_val:
                 min: {{ picard_asm_PF_HQ_ALIGNED_Q20_BASES_min }}
+                description: "The subset of PF_HQ_ALIGNED_BASES where the base call quality was Q20 or higher."
                 hidden: True
             PCT_ADAPTER_val:
                 min: {{ picard_asm_PCT_ADAPTER_min }}
                 max: {{ picard_asm_PCT_ADAPTER_max }}
+                description: "% of Pass filter(PF) reads that are unaligned and match to a known adapter sequence right from the start of the read."
                 hidden: True
             PCT_CHIMERAS_val:
                 min: {{ picard_asm_PCT_CHIMERAS_min }}
                 max: {{ picard_asm_PCT_CHIMERAS_max }}
+                description: "The number of chimeric pairs expressed as a % of the total of all outward facing pairs, inward-facing pairs, and chimeric pairs."
                 hidden: True
             Q30_BASES_val:
                 min: {{ picard_qym_Q30_BASES_min }}
+                description: "The number of bases in all reads that achieve quality score 30 or higher"
                 hidden: True
             perc_Q30_BASES_val:
                 min: {{ picard_qym_perc_Q30_BASES_min }}
+                description: "% of bases in all reads that achieve quality score 30 or higher"
                 hidden: True
             PCT_EXC_TOTAL_val:
                 min: {{ picard_wgs_PCT_EXC_TOTAL_min }}
                 max: {{ picard_wgs_PCT_EXC_TOTAL_max }}
+                description: "% of aligned bases excluded due to all filters."
                 hidden: True
             PCT_15X_val:
                 min: {{ picard_wgs_PCT_15X_min }}
                 max: {{ picard_wgs_PCT_15X_max }}
+                description: "% of bases that attained at least 15X sequence coverage in post-filtering bases."
                 hidden: True
+            PCT_PF_READS_ALIGNED:
+                description: "% of Pass filter(PF) reads that aligned to the reference sequence. PF_READS_ALIGNED / PF_READS"
+            PF_HQ_ALIGNED_Q20_BASES:
+                description: "The subset of PF_HQ_ALIGNED_BASES where the base call quality was Q20 or higher."
+            PCT_ADAPTER:
+                description: "% of Pass filter(PF) reads that are unaligned and match to a known adapter sequence right from the start of the read."
+            PCT_CHIMERAS:
+                description: "The number of chimeric pairs expressed as a % of the total of all outward facing pairs, inward-facing pairs, and chimeric pairs."
+            Q30_BASES:
+                description: "The number of bases in all reads that achieve quality score 30 or higher"
+            perc_Q30_BASES:
+                description: "% of bases in all reads that achieve quality score 30 or higher"
+            PCT_EXC_TOTAL:
+                description: "% of aligned bases excluded due to all filters."
+            PCT_15X:
+                description: "% of bases that attained at least 15X sequence coverage in post-filtering bases."
 
     qc_checkup_bcftools_stats:
         parent_id: "cgds_qc_checkup"
@@ -293,30 +317,51 @@ custom_data:
             number_of_records_val:
                 min: {{ bcftools_stats_number_of_records_min }}
                 max: {{ bcftools_stats_number_of_records_max }}
+                description: "Number of variants"
                 hidden: True
             number_of_SNPs_val:
                 min: {{ bcftools_stats_number_of_SNPs_min }}
                 max: {{ bcftools_stats_number_of_SNPs_max }}
+                description: "Number of SNPs"
                 hidden: True
             number_of_indels_val:
                 min: {{ bcftools_stats_number_of_indels_min }}
                 max: {{ bcftools_stats_number_of_indels_max }}
+                description: "Number of Insertions/Deletions"
                 hidden: True
             perc_snps_val:
                 min: {{ bcftools_stats_perc_snps_min }}
                 max: {{ bcftools_stats_perc_snps_max }}
+                description: "% SNPs"
                 hidden: True
             perc_indels_val:
                 min: {{ bcftools_stats_perc_indels_min }}
                 max: {{ bcftools_stats_perc_indels_max }}
+                description: "% Insertions/Deletions"
                 hidden: True
             tstv_val:
                 min: {{ bcftools_stats_tstv_min }}
                 max: {{ bcftools_stats_tstv_max }}
+                description: "SNPs transition / transversion ratio"
                 hidden: True
             heterozygosity_ratio_val:
                 min: {{ bcftools_stats_heterozygosity_ratio_min }}
+                description: "No. of het sites in an individual divided by the no. of non-reference hom sites. Note: This varies heavily across populations."
                 hidden: True
+            number_of_records:
+                description: "Number of variants"
+            number_of_SNPs:
+                description: "Number of SNPs"
+            number_of_indels:
+                description: "Number of Insertions/Deletions"
+            perc_snps:
+                description: "% SNPs"
+            perc_indels:
+                description: "% Insertions/Deletions"
+            tstv:
+                description: "SNPs transition / transversion ratio"
+            heterozygosity_ratio:
+                description: "No. of het sites in an individual divided by the no. of non-reference hom sites. Note: This varies heavily across populations."
 
     qc_checkup_variant_per_contig:
         parent_id: "cgds_qc_checkup"
