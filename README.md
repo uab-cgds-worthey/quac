@@ -7,7 +7,7 @@
   - [Environment Setup](#environment-setup)
     - [Requirements](#requirements-1)
     - [Create conda environment](#create-conda-environment)
-    - [Setup config file](#setup-config-file)
+    - [QuaC workflow config file](#quac-workflow-config-file)
       - [Prepare verifybamid datasets for exome analysis](#prepare-verifybamid-datasets-for-exome-analysis)
     - [Testing](#testing)
   - [How to run QuaC](#how-to-run-quac)
@@ -34,14 +34,14 @@ QuaC quacks using the tools listed below:
 
 | Tool                                                                                                                       | Use                                                                                           |
 | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| **BAM**                                                                                                                    |                                                                                               |
+| **BAM QC**                                                                                                                    |                                                                                               |
 | [Qualimap](http://qualimap.conesalab.org/)                                                                                 | QCs alignment data in SAM/BAM files                                                           |
 | [Picard-CollectMultipleMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectMultipleMetrics) | summarizes alignment metrics from a SAM/BAM file using several modules                        |
 | [Picard-CollectWgsMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectWgsMetrics)           | Collects metrics about coverage and performance of whole genome sequencing (WGS) experiments. |
 | [mosdepth](https://github.com/brentp/mosdepth)                                                                             | Fast BAM/CRAM depth calculation                                                               |
 | [indexcov](https://github.com/brentp/goleft/tree/master/indexcov)                                                          | Estimate coverage from whole-genome bam or cram index                                         |
 | [covviz](https://github.com/brwnj/covviz)                                                                                  | Identifies large, coverage-based anomalies                                                    |
-| **VCF**                                                                                                                    |                                                                                               |
+| **VCF QC**                                                                                                                    |                                                                                               |
 | [bcftools stats](https://samtools.github.io/bcftools/bcftools.html#stats)                                                  | Stats variants in VCF                                                                         |
 | **Within-species contamination**                                                                                           |                                                                                               |
 | [verifybamid](https://github.com/Griffan/VerifyBamID)                                                                      | Estimates within-species (i.e. cross-sample) contamination                                    |
@@ -124,17 +124,27 @@ conda env update --file configs/env/quac.yaml
 ```
 
 
-### Setup config file
+### QuaC workflow config file
 
-Workflow config file `configs/workflow.yaml` provides path to path to necessary QC tools as well as other files that
-some QC tools require. Modify them as necessary. Refer to the QC tool's documentation for more information on files that
-they require.
+QuaC requires a workflow config file in yaml format (`configs/workflow.yaml`), which provides filepaths to necessary
+dependencies required by certain QC tools. Their format should look like:
+
+```yaml
+ref: "path to ref genome path"
+somalier:
+    sites: "path to somalier's site file"
+    labels_1kg: "path to somalier's ancestry-labels-1kg file"
+    somalier_1kg: "dirpath to somalier's 1kg-somalier files"
+verifyBamID:
+    svd_dat_wgs: "path to WGS resources .dat files"
+    svd_dat_exome: "path to exome resources .dat files"
+```
 
 #### Prepare verifybamid datasets for exome analysis
 
 *This step is necessary only for exome samples.* verifybamid has provided auxiliary resource files, which are necessary
 for analysis. However, chromosome contigs do not include `chr` prefix in their exome resource files, which are expected
-for our analysis. Follow these steps to setup resource files with `chr` prefix in their contig names.
+for our analyses at CGDS. Follow these steps to setup resource files with `chr` prefix in their contig names.
 
 ```sh
 # cd into exome resources dir
