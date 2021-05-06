@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# This script sets up test bam and vcf datasets using NA12878, which was run
+# This script sets up test bam and vcf datasets using NA12878 sample, which was run
 # through CGDS's small variant caller pipeline.
 # Also creates test capture-region bed file.
 

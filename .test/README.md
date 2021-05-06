@@ -1,8 +1,20 @@
 # Testing
 
+Output from [Small variant caller
+pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline)
+are the inputs to QuaC pipeline. Hence following datasets are necessary for testing:
+
+1. bams
+2. vcfs
+3. QC output (from tools fastqc, fastq-screen and picard-markduplicates)
+4. Sample rename config
+
+Note: Be sure to preserve directory structure used in the output of Small variant caller
+pipeline.
+
 ## Setup test datasets
 
-* To setup test bam and vcf files, run:
+* To setup test bam and vcf files, which are from sub-sampled NA12878 data, run:
 
 ```sh
 cd .test
