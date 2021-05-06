@@ -7,10 +7,12 @@
   - [Environment Setup](#environment-setup)
     - [Requirements](#requirements-1)
     - [Create conda environment](#create-conda-environment)
-    - [QuaC workflow config file](#quac-workflow-config-file)
-      - [Prepare verifybamid datasets for exome analysis](#prepare-verifybamid-datasets-for-exome-analysis)
     - [Testing](#testing)
   - [How to run QuaC](#how-to-run-quac)
+    - [Requirements](#requirements-2)
+    - [Set up workflow config file](#set-up-workflow-config-file)
+      - [Prepare verifybamid datasets for exome analysis](#prepare-verifybamid-datasets-for-exome-analysis)
+    - [Run pipeline](#run-pipeline)
     - [Example usage](#example-usage)
     - [Dummy pedigree file creator](#dummy-pedigree-file-creator)
   - [Output](#output)
@@ -82,6 +84,9 @@ Note that downloading this repository from GitLab, instead of cloning, may not f
 
 ## Environment Setup
 
+After pipeline installation is completed, a conda environment needs to be created as described below. This conda
+environment will install all necessary dependencies to run QuaC workflow.
+
 ### Requirements
 
 ***Direct***
@@ -124,7 +129,61 @@ conda env update --file configs/env/quac.yaml
 ```
 
 
-### QuaC workflow config file
+### Testing
+
+```sh
+python src/run_quac.py \
+      --project_name test_project \
+      --projects_path .test/ngs-data/ \
+      --pedigree .test/configs/project.ped -l -n
+```
+
+## How to run QuaC
+
+In order to run the QuaC pipeline, user needs to
+
+a. Set up conda environment (see above) b. Set up config files specifying paths required by QC tools used in the
+pipeline.
+
+### Requirements
+
+***Direct***
+
+- Snakemake
+    - Tested with v6.0.5
+    - Gets installed as part of conda environment
+- Python
+    - Tested with v3.6.3
+    - Gets installed as part of conda environment
+- slurmpy
+    - Tested with v0.0.8
+    - Gets installed as part of conda environment
+
+***Indirect***
+
+- Anaconda/miniconda
+    - Tested with Anaconda3/2020.02
+- Singularity
+    - Tested with v3.5.2
+    - Will be loaded as a module
+
+
+Tools below are used in the pipeline, and snakemake automatically installs them in conda environments inside the
+singularity container. Therefore, they don't need to be manually installed. For tool versions used, refer to the
+snakemake rules.
+
+- qualimap
+- picard
+- mosdepth
+- indexcov
+- covviz
+- bcftools
+- verifybamid
+- somalier
+- multiqc
+
+
+### Set up workflow config file
 
 QuaC requires a workflow config file in yaml format (`configs/workflow.yaml`), which provides filepaths to necessary
 dependencies required by certain QC tools. Their format should look like:
@@ -156,16 +215,7 @@ cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.V 1000g.phase3.10k.b38_chr.exome.vcf.gz
 ```
 
 
-### Testing
-
-```sh
-python src/run_quac.py \
-      --project_name test_project \
-      --projects_path .test/ngs-data/ \
-      --pedigree .test/configs/project.ped -l -n
-```
-
-## How to run QuaC
+### Run pipeline
 
 After activating the conda environment, QuaC pipeline is run using the wrapper script `src/run_quac.py`. Here are all
 the options available:
@@ -217,11 +267,35 @@ QuaC wrapper options:
                       medium(max 50 hrs), long(max 150 hrs) (default: short)
 ```
 
+To run the wrapper script, which in turn will execute the QuaC pipeline:
+
+```sh
+module reset
+module load Anaconda3/2020.02
+conda activate quac
+
+python src/run_quac.py \
+      --project_name PROJECT_DUCK \
+      --pedigree "path/to/project_duck/pedigree_file.ped"
+```
 
 Note that options `--project_name` and `--pedigree` are both necessary. All samples, belonging to a project, that ne ed
 to be analyzed should be supplied in a pedigree file format and provided to QuaC's wrapper script via `--pedigree`. This
 repo also [includes a script that can create a dummy pedigree file](#dummy-pedigree-file-creator) with all samples
 belonging to a project.
+
+**NOTE:**
+
+Besides the basic features, wrapper script [`src/run_quac.py`](./src/run_quac.py) offers the following:
+
+- Pass custom snakemake args using option `--extra_args`.
+- Dry-run snakemake using flag `--dryrun`. Note that this is same as `--extra_args='-n'`.
+- Override cluster config file passed to snakemake using `--cluster_config`.
+- Run snakemake locally, instead of submitting it to Slurm, using `--run_locally`. Note that jobs from snakemake will
+  still be submitted to Slurm.
+- Reruns failed jobs once again by default. This may be modified using `--rerun_failed`.
+- Override slurm partition used via `--slurm_partition`.
+
 
 ### Example usage
 
