@@ -1,5 +1,6 @@
 """
-QuaC pipeline
+QuaC Pipeline to perform QC on fastqs, bams and vcfs.
+Works at project level.
 """
 
 import pandas as pd
