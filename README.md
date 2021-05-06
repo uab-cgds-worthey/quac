@@ -7,7 +7,6 @@
   - [Environment Setup](#environment-setup)
     - [Requirements](#requirements-1)
     - [Create conda environment](#create-conda-environment)
-    - [Testing](#testing)
   - [How to run QuaC](#how-to-run-quac)
     - [Requirements](#requirements-2)
     - [Set up workflow config file](#set-up-workflow-config-file)
@@ -15,7 +14,9 @@
     - [Run pipeline](#run-pipeline)
     - [Example usage](#example-usage)
     - [Dummy pedigree file creator](#dummy-pedigree-file-creator)
+  - [Testing pipeline](#testing-pipeline)
   - [Output](#output)
+  - [Visualization of workflow](#visualization-of-workflow)
   - [Contributing](#contributing)
   - [Changelog](#changelog)
 
@@ -129,15 +130,6 @@ conda env update --file configs/env/quac.yaml
 ```
 
 
-### Testing
-
-```sh
-python src/run_quac.py \
-      --project_name test_project \
-      --projects_path .test/ngs-data/ \
-      --pedigree .test/configs/project.ped -l -n
-```
-
 ## How to run QuaC
 
 In order to run the QuaC pipeline, user needs to
@@ -213,7 +205,6 @@ sed -e 's/^/chr/' 1000g.phase3.10k.b38.exome.vcf.gz.dat.mu > 1000g.phase3.10k.b3
 cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.UD 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.UD
 cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.V 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.V
 ```
-
 
 ### Run pipeline
 
@@ -338,11 +329,55 @@ affectedness info. See header of the script for usage instructions.
 Note that we plan to use [phenotips](https://phenotips.com/) in future to produce fully capable pedigree file. One may
 manually create them as well, but this could be error-prone.
 
+
+## Testing pipeline
+
+The system-level testing implemented for this pipeline tests whether the pipeline runs from start to finish without any
+error using:
+
+```sh
+module reset
+module load Anaconda3/2020.02
+conda activate quac
+
+python src/run_quac.py \
+      --project_name test_project \
+      --projects_path .test/ngs-data/ \
+      --pedigree .test/configs/project.ped -l -n
+```
+
+
 ## Output
 
 QuaC results are stored at path specified via option `--outdir` (default: `$USER_SCRATCH/tmp/quac/results`). This
 includes aggregated QC results produced by [multiqc](https://multiqc.info/).
 
+
+## Visualization of workflow
+
+[Visualization of the pipeline](https://snakemake.readthedocs.io/en/stable/executing/cluster-cloud.html#visualization)
+based on the test datasets are available in [directory `dag_pipeline`](./dag_pipeline/). Commands used to create this
+visualization:
+
+```sh
+module reset
+module load Anaconda3/2020.02
+conda activate quac
+DAG_DIR="pipeline_visualized"
+
+###### WGS ######
+python src/run_quac.py \
+      --project_name test_project \
+      --projects_path .test/ngs-data/ \
+      --pedigree .test/configs/project.ped \
+      --run_locally --extra_args "--dag -F | dot -Tpng > ${DAG_DIR}/wgs_dag.png"
+
+python src/run_quac.py \
+      --project_name test_project \
+      --projects_path .test/ngs-data/ \
+      --pedigree .test/configs/project.ped \
+      --run_locally --extra_args "--rulegraph -F | dot -Tpng > ${DAG_DIR}/wgs_rulegraph.png"
+```
 
 ## Contributing
 
