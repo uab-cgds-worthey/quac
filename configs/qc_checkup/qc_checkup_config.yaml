@@ -1,66 +1,74 @@
 qualimap:
   # TODO: verify the limits used
   avg_gc:
-    human_readable: "% GC"
+    description: "Mean GC content"
     min: 40.5
     max: 42.5
 
   percentage_aligned:
-    human_readable: "% Aligned"
+    description: "% mapped reads"
     min: 99
     max: 100
 
   mean_coverage:
-    human_readable: "Mean coverage"
+    description: "Mean coverage"
     min: 30
     max:
 
   median_coverage:
-    human_readable: "Median coverage"
+    description: "Median coverage"
     min: 30
     max:
 
   mean_cov:median_cov:
-    human_readable: "Mean-coverage:Media-coverage"
+    description: "Ratio of Mean coverage to Median coverage"
     min: 0.95
     max: 1.05
 
   median_insert_size:
-    human_readable: "Median insert size"
+    description: "Median insert size"
     min: 250
     max:
 
 picard:
   AlignmentSummaryMetrics:
     PCT_PF_READS_ALIGNED:
+      description: "% of Pass filter (PF) reads that aligned to the reference sequence. PF_READS_ALIGNED / PF_READS"
       min: 98
       max: 100
 
     PF_HQ_ALIGNED_Q20_BASES:
+      description: "The subset of PF_HQ_ALIGNED_BASES where the base call quality was Q20 or higher."
       min: 100000000000
       max:
 
     PCT_ADAPTER:
+      description: "% of Pass filter(PF) reads that are unaligned and match to a known adapter sequence right from the start of the read."
       min: 0
       max: 0.2
 
     PCT_CHIMERAS:
+      description: "The number of chimeric pairs expressed as a % of the total of all outward facing pairs, inward-facing pairs, and chimeric pairs."
       min: 0
       max: 1
 
   QualityYieldMetrics:
     Q30_BASES:
+      description: "The number of bases in all reads that achieve quality score 30 or higher"
       min: 80000000000
       max:
     perc_Q30_BASES:
+      description: "% of bases in all reads that achieve quality score 30 or higher"
       min: 85
       max:
 
   WgsMetrics:
     PCT_EXC_TOTAL:
+      description: "% of aligned bases excluded due to all filters."
       min: 0
       max: 15
     PCT_15X:
+      description: "% of bases that attained at least 15X sequence coverage in post-filtering bases."
       min: 90
       max: 100
 
@@ -101,43 +109,43 @@ fastq_screen:
 
 verifybamid:
   FREEMIX:
-    human_readable: "% Cross-sample contamination"
+    description: "% Cross-human-sample contamination"
     min: 0
     max: 2
 
 bcftools_stats:
   number_of_records:
-    human_readable: "Total number of variants"
+    description: "Total number of variants"
     min: 4900000
     max: 6100000
 
   number_of_SNPs:
-    human_readable: "Total number of SNPs"
+    description: "Total number of SNPs"
     min: 4000000
     max: 5000000
 
   number_of_indels:
-    human_readable: "Total number of Indels"
+    description: "Total number of Indels"
     min: 820000
     max: 1150000
 
   perc_snps:
-    human_readable: "%SNPs among all variants"
+    description: "%SNPs among all variants"
     min: 80
     max: 83
 
   perc_indels:
-    human_readable: "%Indels among all variants"
+    description: "%Indels among all variants"
     min: 17
     max: 20
 
   tstv:
-    human_readable: "Transition to Transversion ratio"
+    description: "Transition to Transversion ratio"
     min: 1.92
     max: 1.95
 
   heterozygosity_ratio:
-    human_readable: "Heterozygosity ratio = # het sites / # non-reference homozygous sites."
+    description: "No. of het sites in an individual divided by the no. of non-reference hom sites. Note: This varies heavily across populations."
     min: 1.6
     max:
 

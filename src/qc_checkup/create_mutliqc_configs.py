@@ -31,16 +31,31 @@ def main(template_f, qc_config, outfile):
         fastq_screen_others_min=config["fastq_screen"]["others percentage"]["min"],
         fastq_screen_others_max=config["fastq_screen"]["others percentage"]["max"],
         # qualimap
+        qualimap_avg_gc_description=config["qualimap"]["avg_gc"]["description"],
         qualimap_avg_gc_min=config["qualimap"]["avg_gc"]["min"],
         qualimap_avg_gc_max=config["qualimap"]["avg_gc"]["max"],
+        qualimap_mean_coverage_description=config["qualimap"]["mean_coverage"]["description"],
         qualimap_mean_coverage_min=config["qualimap"]["mean_coverage"]["min"],
+        qualimap_median_coverage_description=config["qualimap"]["median_coverage"]["description"],
         qualimap_median_coverage_min=config["qualimap"]["median_coverage"]["min"],
+        qualimap_mean_median_coverage_ratio_description=config["qualimap"]["mean_cov:median_cov"][
+            "description"
+        ],
         qualimap_mean_median_coverage_ratio_min=config["qualimap"]["mean_cov:median_cov"]["min"],
         qualimap_mean_median_coverage_ratio_max=config["qualimap"]["mean_cov:median_cov"]["max"],
+        qualimap_median_insert_size_description=config["qualimap"]["median_insert_size"][
+            "description"
+        ],
         qualimap_median_insert_size_min=config["qualimap"]["median_insert_size"]["min"],
+        qualimap_percentage_aligned_description=config["qualimap"]["percentage_aligned"][
+            "description"
+        ],
         qualimap_percentage_aligned_min=config["qualimap"]["percentage_aligned"]["min"],
         qualimap_percentage_aligned_max=config["qualimap"]["percentage_aligned"]["max"],
         # picard_AlignmentSummaryMetrics
+        picard_asm_PCT_PF_READS_ALIGNED_description=config["picard"]["AlignmentSummaryMetrics"][
+            "PCT_PF_READS_ALIGNED"
+        ]["description"],
         picard_asm_PCT_PF_READS_ALIGNED_min=config["picard"]["AlignmentSummaryMetrics"][
             "PCT_PF_READS_ALIGNED"
         ]["min"],
@@ -50,15 +65,24 @@ def main(template_f, qc_config, outfile):
         picard_asm_PF_HQ_ALIGNED_Q20_BASES_min=config["picard"]["AlignmentSummaryMetrics"][
             "PF_HQ_ALIGNED_Q20_BASES"
         ]["min"],
+        picard_asm_PF_HQ_ALIGNED_Q20_BASES_description=config["picard"]["AlignmentSummaryMetrics"][
+            "PF_HQ_ALIGNED_Q20_BASES"
+        ]["description"],
         picard_asm_PF_HQ_ALIGNED_Q20_BASES_max=config["picard"]["AlignmentSummaryMetrics"][
             "PF_HQ_ALIGNED_Q20_BASES"
         ]["max"],
+        picard_asm_PCT_ADAPTER_description=config["picard"]["AlignmentSummaryMetrics"][
+            "PCT_ADAPTER"
+        ]["description"],
         picard_asm_PCT_ADAPTER_min=config["picard"]["AlignmentSummaryMetrics"]["PCT_ADAPTER"][
             "min"
         ],
         picard_asm_PCT_ADAPTER_max=config["picard"]["AlignmentSummaryMetrics"]["PCT_ADAPTER"][
             "max"
         ],
+        picard_asm_PCT_CHIMERAS_description=config["picard"]["AlignmentSummaryMetrics"][
+            "PCT_CHIMERAS"
+        ]["description"],
         picard_asm_PCT_CHIMERAS_min=config["picard"]["AlignmentSummaryMetrics"]["PCT_CHIMERAS"][
             "min"
         ],
@@ -66,31 +90,59 @@ def main(template_f, qc_config, outfile):
             "max"
         ],
         # picard_QualityYieldMetrics
+        picard_qym_Q30_BASES_description=config["picard"]["QualityYieldMetrics"]["Q30_BASES"][
+            "description"
+        ],
         picard_qym_Q30_BASES_min=config["picard"]["QualityYieldMetrics"]["Q30_BASES"]["min"],
+        picard_qym_perc_Q30_BASES_description=config["picard"]["QualityYieldMetrics"][
+            "perc_Q30_BASES"
+        ]["description"],
         picard_qym_perc_Q30_BASES_min=config["picard"]["QualityYieldMetrics"]["perc_Q30_BASES"][
             "min"
         ],
         # picard_WgsMetrics
+        picard_wgs_PCT_EXC_TOTAL_description=config["picard"]["WgsMetrics"]["PCT_EXC_TOTAL"][
+            "description"
+        ],
         picard_wgs_PCT_EXC_TOTAL_min=config["picard"]["WgsMetrics"]["PCT_EXC_TOTAL"]["min"],
         picard_wgs_PCT_EXC_TOTAL_max=config["picard"]["WgsMetrics"]["PCT_EXC_TOTAL"]["max"],
+        picard_wgs_PCT_15X_description=config["picard"]["WgsMetrics"]["PCT_15X"]["description"],
         picard_wgs_PCT_15X_min=config["picard"]["WgsMetrics"]["PCT_15X"]["min"],
         picard_wgs_PCT_15X_max=config["picard"]["WgsMetrics"]["PCT_15X"]["max"],
         # verifybamid
+        verifybamid_freemix_description=config["verifybamid"]["FREEMIX"]["description"],
         verifybamid_freemix_min=config["verifybamid"]["FREEMIX"]["min"],
         verifybamid_freemix_max=config["verifybamid"]["FREEMIX"]["max"],
         # bcftools_stats
+        bcftools_stats_number_of_records_description=config["bcftools_stats"]["number_of_records"][
+            "description"
+        ],
         bcftools_stats_number_of_records_min=config["bcftools_stats"]["number_of_records"]["min"],
         bcftools_stats_number_of_records_max=config["bcftools_stats"]["number_of_records"]["max"],
+        bcftools_stats_number_of_SNPs_description=config["bcftools_stats"]["number_of_SNPs"][
+            "description"
+        ],
         bcftools_stats_number_of_SNPs_min=config["bcftools_stats"]["number_of_SNPs"]["min"],
         bcftools_stats_number_of_SNPs_max=config["bcftools_stats"]["number_of_SNPs"]["max"],
+        bcftools_stats_number_of_indels_description=config["bcftools_stats"]["number_of_indels"][
+            "description"
+        ],
         bcftools_stats_number_of_indels_min=config["bcftools_stats"]["number_of_indels"]["min"],
         bcftools_stats_number_of_indels_max=config["bcftools_stats"]["number_of_indels"]["max"],
+        bcftools_stats_perc_snps_description=config["bcftools_stats"]["perc_snps"]["description"],
         bcftools_stats_perc_snps_min=config["bcftools_stats"]["perc_snps"]["min"],
         bcftools_stats_perc_snps_max=config["bcftools_stats"]["perc_snps"]["max"],
+        bcftools_stats_perc_indels_description=config["bcftools_stats"]["perc_indels"][
+            "description"
+        ],
         bcftools_stats_perc_indels_min=config["bcftools_stats"]["perc_indels"]["min"],
         bcftools_stats_perc_indels_max=config["bcftools_stats"]["perc_indels"]["max"],
+        bcftools_stats_tstv_description=config["bcftools_stats"]["tstv"]["description"],
         bcftools_stats_tstv_min=config["bcftools_stats"]["tstv"]["min"],
         bcftools_stats_tstv_max=config["bcftools_stats"]["tstv"]["max"],
+        bcftools_stats_heterozygosity_ratio_description=config["bcftools_stats"][
+            "heterozygosity_ratio"
+        ]["description"],
         bcftools_stats_heterozygosity_ratio_min=config["bcftools_stats"]["heterozygosity_ratio"][
             "min"
         ],

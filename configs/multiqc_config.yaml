@@ -230,7 +230,7 @@ custom_data:
             "mean_cov:median_cov_val":
                 min: 0.95
                 max: 1.05
-                description: "Ratio of mean_coverage to median_coverage (min: 0.95, max: 1.05)"
+                description: "Ratio of Mean coverage to Median coverage (min: 0.95, max: 1.05)"
                 hidden: True
             median_insert_size_val:
                 min: 250
@@ -261,7 +261,7 @@ custom_data:
         parent_id: "cgds_qc_checkup"
         id: "qc_checkup_picard"
         section_name: "Picard"
-        description: 'TODO: Quick summary of picard-AlignmentSummaryMetrics results. See <a href="#qualimap">QualiMap</a> section below for detailed results.'
+        description: 'Quick summary of picard metrics. See <a href="#picard-1">Picard</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
@@ -338,49 +338,49 @@ custom_data:
             number_of_records_val:
                 min: 4900000
                 max: 6100000
-                description: "Number of variants (min: 4900000, max: 6100000)"
+                description: "Total number of variants (min: 4900000, max: 6100000)"
                 hidden: True
             number_of_SNPs_val:
                 min: 4000000
                 max: 5000000
-                description: "Number of SNPs (min: 4000000, max: 5000000)"
+                description: "Total number of SNPs (min: 4000000, max: 5000000)"
                 hidden: True
             number_of_indels_val:
                 min: 820000
                 max: 1150000
-                description: "Number of Insertions/Deletions (min: 820000, max: 1150000)"
+                description: "Total number of Indels (min: 820000, max: 1150000)"
                 hidden: True
             perc_snps_val:
                 min: 80
                 max: 83
-                description: "% SNPs (min: 80, max: 83)"
+                description: "%SNPs among all variants (min: 80, max: 83)"
                 hidden: True
             perc_indels_val:
                 min: 17
                 max: 20
-                description: "% Insertions/Deletions (min: 17, max: 20)"
+                description: "%Indels among all variants (min: 17, max: 20)"
                 hidden: True
             tstv_val:
                 min: 1.92
                 max: 1.95
-                description: "SNPs transition / transversion ratio (min: 1.92, max: 1.95)"
+                description: "Transition to Transversion ratio (min: 1.92, max: 1.95)"
                 hidden: True
             heterozygosity_ratio_val:
                 min: 1.6
                 description: "No. of het sites in an individual divided by the no. of non-reference hom sites. Note: This varies heavily across populations. (min: 1.6)"
                 hidden: True
             number_of_records:
-                description: "Number of variants"
+                description: "Total number of variants"
             number_of_SNPs:
-                description: "Number of SNPs"
+                description: "Total number of SNPs"
             number_of_indels:
-                description: "Number of Insertions/Deletions"
+                description: "Total number of Indels"
             perc_snps:
-                description: "% SNPs"
+                description: "%SNPs among all variants"
             perc_indels:
-                description: "% Insertions/Deletions"
+                description: "%Indels among all variants"
             tstv:
-                description: "SNPs transition / transversion ratio"
+                description: "Transition to Transversion ratio"
             heterozygosity_ratio:
                 description: "No. of het sites in an individual divided by the no. of non-reference hom sites. Note: This varies heavily across populations."
 
@@ -557,12 +557,12 @@ custom_data:
             FREEMIX_val:
                 min: 0
                 max: 2
-                description: "Cross-human-sample contamination (min: 0, max: 2)"
+                description: "% Cross-sample contamination (min: 0, max: 2)"
                 title: "Contamination(%)_val"
                 hidden: True
             FREEMIX:
                 title: "Contamination(%)"
-                description: "Cross-human-sample contamination"
+                description: "% Cross-sample contamination"
 
 # define file pattern for custom configs
 sp:
