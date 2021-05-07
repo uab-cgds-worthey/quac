@@ -119,66 +119,81 @@ custom_data:
             "%Human_val":
                 min: 98.5
                 max: 100
+                description: "%Human (min: 98.5, max: 100)"
                 hidden: True
                 placement: 910
             "%Mouse_val":
                 min: 8.1
                 max: 11
+                description: "%Mouse (min: 8.1, max: 11)"
                 hidden: True
                 placement: 930
             "%Rat_val":
                 min: 9.0
                 max: 11
+                description: "%Rat (min: 9.0, max: 11)"
                 hidden: True
                 placement: 950
             "%Drosophila_val":
                 min: 1.1
                 max: 1.8
+                description: "%Drosophila (min: 1.1, max: 1.8)"
                 hidden: True
             "%Arabidopsis_val":
                 min: 0.8
                 max: 1.2
+                description: "%Arabidopsis (min: 0.8, max: 1.2)"
                 hidden: True
             "%No hits_val":
                 min: 0
                 max: 1
+                description: "%No hits (min: 0, max: 1)"
                 hidden: True
                 placement: 970
             "%Adapters_val":
                 min: 0
                 max: 1.0
+                description: "%Adapters (min: 0, max: 1.0)"
                 hidden: True
             "%Ecoli_val":
                 min: 0
                 max: 1.0
+                description: "%Ecoli (min: 0, max: 1.0)"
                 hidden: True
             "%Lambda_val":
                 min: 0
                 max: 1.0
+                description: "%Lambda (min: 0, max: 1.0)"
                 hidden: True
             "%MT_val":
                 min: 0
                 max: 1.0
+                description: "%MT (min: 0, max: 1.0)"
                 hidden: True
             "%PhiX_val":
                 min: 0
                 max: 1.0
+                description: "%PhiX (min: 0, max: 1.0)"
                 hidden: True
             "%Vectors_val":
                 min: 0
                 max: 1.0
+                description: "%Vectors (min: 0, max: 1.0)"
                 hidden: True
             "%Worm_val":
                 min: 0
                 max: 1.0
+                description: "%Worm (min: 0, max: 1.0)"
                 hidden: True
             "%Yeast_val":
                 min: 0
                 max: 1.0
+                description: "%Yeast (min: 0, max: 1.0)"
                 hidden: True
             "%rRNA_val":
                 min: 0
                 max: 1.0
+                description: "%rRNA (min: 0, max: 1.0)"
                 hidden: True
 
     qc_checkup_qualimap_overall:
@@ -196,24 +211,30 @@ custom_data:
             avg_gc_val:
                 min: 40.5
                 max: 42.5
+                description: "Mean GC content (min: 40.5, max: 42.5)"
                 hidden: True
             # if you change coverage limits, also change values in "qc_checkup_qualimap_chromosome_stats"
             mean_coverage_val:
                 min: 30
+                description: "Mean coverage (min: 30)"
                 hidden: True
             median_coverage_val:
                 min: 30
+                description: "Median coverage (min: 30)"
                 hidden: True
             percentage_aligned_val:
                 min: 99
                 max: 100
+                description: "% mapped reads (min: 99, max: 100)"
                 hidden: True
             "mean_cov:median_cov_val":
                 min: 0.95
                 max: 1.05
+                description: "Ratio of mean_coverage to median_coverage (min: 0.95, max: 1.05)"
                 hidden: True
             median_insert_size_val:
                 min: 250
+                description: "Median insert size (min: 250)"
                 hidden: True
 
     qc_checkup_qualimap_chromosome_stats:
@@ -251,32 +272,56 @@ custom_data:
             PCT_PF_READS_ALIGNED_val:
                 min: 98
                 max: 100
+                description: "% of Pass filter(PF) reads that aligned to the reference sequence. PF_READS_ALIGNED / PF_READS (min: 98, max: 100)"
                 hidden: True
             PF_HQ_ALIGNED_Q20_BASES_val:
                 min: 100000000000
+                description: "The subset of PF_HQ_ALIGNED_BASES where the base call quality was Q20 or higher. (min: 100000000000)"
                 hidden: True
             PCT_ADAPTER_val:
                 min: 0
                 max: 0.2
+                description: "% of Pass filter(PF) reads that are unaligned and match to a known adapter sequence right from the start of the read. (min: 0, max: 0.2)"
                 hidden: True
             PCT_CHIMERAS_val:
                 min: 0
                 max: 1
+                description: "The number of chimeric pairs expressed as a % of the total of all outward facing pairs, inward-facing pairs, and chimeric pairs. (min: 0, max: 1)"
                 hidden: True
             Q30_BASES_val:
                 min: 80000000000
+                description: "The number of bases in all reads that achieve quality score 30 or higher (min: 80000000000)"
                 hidden: True
             perc_Q30_BASES_val:
                 min: 85
+                description: "% of bases in all reads that achieve quality score 30 or higher (min: 85)"
                 hidden: True
             PCT_EXC_TOTAL_val:
                 min: 0
                 max: 15
+                description: "% of aligned bases excluded due to all filters. (min: 0, max: 15)"
                 hidden: True
             PCT_15X_val:
                 min: 90
                 max: 100
+                description: "% of bases that attained at least 15X sequence coverage in post-filtering bases. (min: 90, max: 100)"
                 hidden: True
+            PCT_PF_READS_ALIGNED:
+                description: "% of Pass filter(PF) reads that aligned to the reference sequence. PF_READS_ALIGNED / PF_READS"
+            PF_HQ_ALIGNED_Q20_BASES:
+                description: "The subset of PF_HQ_ALIGNED_BASES where the base call quality was Q20 or higher."
+            PCT_ADAPTER:
+                description: "% of Pass filter(PF) reads that are unaligned and match to a known adapter sequence right from the start of the read."
+            PCT_CHIMERAS:
+                description: "The number of chimeric pairs expressed as a % of the total of all outward facing pairs, inward-facing pairs, and chimeric pairs."
+            Q30_BASES:
+                description: "The number of bases in all reads that achieve quality score 30 or higher"
+            perc_Q30_BASES:
+                description: "% of bases in all reads that achieve quality score 30 or higher"
+            PCT_EXC_TOTAL:
+                description: "% of aligned bases excluded due to all filters."
+            PCT_15X:
+                description: "% of bases that attained at least 15X sequence coverage in post-filtering bases."
 
     qc_checkup_bcftools_stats:
         parent_id: "cgds_qc_checkup"
@@ -293,30 +338,51 @@ custom_data:
             number_of_records_val:
                 min: 4900000
                 max: 6100000
+                description: "Number of variants (min: 4900000, max: 6100000)"
                 hidden: True
             number_of_SNPs_val:
                 min: 4000000
                 max: 5000000
+                description: "Number of SNPs (min: 4000000, max: 5000000)"
                 hidden: True
             number_of_indels_val:
                 min: 820000
                 max: 1150000
+                description: "Number of Insertions/Deletions (min: 820000, max: 1150000)"
                 hidden: True
             perc_snps_val:
                 min: 80
                 max: 83
+                description: "% SNPs (min: 80, max: 83)"
                 hidden: True
             perc_indels_val:
                 min: 17
                 max: 20
+                description: "% Insertions/Deletions (min: 17, max: 20)"
                 hidden: True
             tstv_val:
                 min: 1.92
                 max: 1.95
+                description: "SNPs transition / transversion ratio (min: 1.92, max: 1.95)"
                 hidden: True
             heterozygosity_ratio_val:
                 min: 1.6
+                description: "No. of het sites in an individual divided by the no. of non-reference hom sites. Note: This varies heavily across populations. (min: 1.6)"
                 hidden: True
+            number_of_records:
+                description: "Number of variants"
+            number_of_SNPs:
+                description: "Number of SNPs"
+            number_of_indels:
+                description: "Number of Insertions/Deletions"
+            perc_snps:
+                description: "% SNPs"
+            perc_indels:
+                description: "% Insertions/Deletions"
+            tstv:
+                description: "SNPs transition / transversion ratio"
+            heterozygosity_ratio:
+                description: "No. of het sites in an individual divided by the no. of non-reference hom sites. Note: This varies heavily across populations."
 
     qc_checkup_variant_per_contig:
         parent_id: "cgds_qc_checkup"
@@ -334,121 +400,145 @@ custom_data:
             chr1_val:
                 min: 0.15
                 max: 0.2
+                description: "chr1 (min: 0.15, max: 0.2)"
                 format: '{:,.3f}'
                 hidden: True
             chr2_val:
                 min: 0.155
                 max: 0.2
+                description: "chr2 (min: 0.155, max: 0.2)"
                 format: '{:,.3f}'
                 hidden: True
             chr3_val:
                 min: 0.16
                 max: 0.21
+                description: "chr3 (min: 0.16, max: 0.21)"
                 format: '{:,.3f}'
                 hidden: True
             chr4_val:
                 min: 0.17
                 max: 0.22
+                description: "chr4 (min: 0.17, max: 0.22)"
                 format: '{:,.3f}'
                 hidden: True
             chr5_val:
                 min: 0.15
                 max: 0.2
+                description: "chr5 (min: 0.15, max: 0.2)"
                 format: '{:,.3f}'
                 hidden: True
             chr6_val:
                 min: 0.17
                 max: 0.21
+                description: "chr6 (min: 0.17, max: 0.21)"
                 format: '{:,.3f}'
                 hidden: True
             chr7_val:
                 min: 0.17
                 max: 0.22
+                description: "chr7 (min: 0.17, max: 0.22)"
                 format: '{:,.3f}'
                 hidden: True
             chr8_val:
                 min: 0.16
                 max: 0.22
+                description: "chr8 (min: 0.16, max: 0.22)"
                 format: '{:,.3f}'
                 hidden: True
             chr9_val:
                 min: 0.15
                 max: 0.2
+                description: "chr9 (min: 0.15, max: 0.2)"
                 format: '{:,.3f}'
                 hidden: True
             chr10_val:
                 min: 0.175
                 max: 0.23
+                description: "chr10 (min: 0.175, max: 0.23)"
                 format: '{:,.3f}'
                 hidden: True
             chr11_val:
                 min: 0.17
                 max: 0.22
+                description: "chr11 (min: 0.17, max: 0.22)"
                 format: '{:,.3f}'
                 hidden: True
             chr12_val:
                 min: 0.16
                 max: 0.21
+                description: "chr12 (min: 0.16, max: 0.21)"
                 format: '{:,.3f}'
                 hidden: True
             chr13_val:
                 min: 0.157
                 max: 0.2
+                description: "chr13 (min: 0.157, max: 0.2)"
                 format: '{:,.3f}'
                 hidden: True
             chr14_val:
                 min: 0.134
                 max: 0.18
+                description: "chr14 (min: 0.134, max: 0.18)"
                 format: '{:,.3f}'
                 hidden: True
             chr15_val:
                 min: 0.134
                 max: 0.18
+                description: "chr15 (min: 0.134, max: 0.18)"
                 format: '{:,.3f}'
                 hidden: True
             chr16_val:
                 min: 0.156
                 max: 0.21
+                description: "chr16 (min: 0.156, max: 0.21)"
                 format: '{:,.3f}'
                 hidden: True
             chr17_val:
                 min: 0.16
                 max: 0.22
+                description: "chr17 (min: 0.16, max: 0.22)"
                 format: '{:,.3f}'
                 hidden: True
             chr18_val:
                 min: 0.16
                 max: 0.21
+                description: "chr18 (min: 0.16, max: 0.21)"
                 format: '{:,.3f}'
                 hidden: True
             chr19_val:
                 min: 0.178
                 max: 0.26
+                description: "chr19 (min: 0.178, max: 0.26)"
                 format: '{:,.3f}'
                 hidden: True
             chr20_val:
                 min: 0.19
                 max: 0.25
+                description: "chr20 (min: 0.19, max: 0.25)"
                 format: '{:,.3f}'
                 hidden: True
             chr21_val:
                 min: 0.17
                 max: 0.24
+                description: "chr21 (min: 0.17, max: 0.24)"
                 format: '{:,.3f}'
                 hidden: True
             chr22_val:
                 min: 0.153
                 max: 0.21
+                description: "chr22 (min: 0.153, max: 0.21)"
                 format: '{:,.3f}'
                 hidden: True
             chrX_val:
                 min: 0.07
                 max: 0.15
+                description: "chrX (min: 0.07, max: 0.15)"
                 format: '{:,.3f}'
                 hidden: True
             chrY_val:
                 min: 0.02
                 max: 0.04
+                description: "chrY (min: 0.02, max: 0.04)"
                 format: '{:,.3f}'
                 hidden: True
 
@@ -467,8 +557,8 @@ custom_data:
             FREEMIX_val:
                 min: 0
                 max: 2
-                title: "Contamination(%)_val"
                 description: "Cross-human-sample contamination (min: 0, max: 2)"
+                title: "Contamination(%)_val"
                 hidden: True
             FREEMIX:
                 title: "Contamination(%)"

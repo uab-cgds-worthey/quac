@@ -348,7 +348,7 @@ conda activate quac
 python src/run_quac.py \
       --project_name test_project \
       --projects_path .test/ngs-data/ \
-      --pedigree .test/configs/project.ped -l -n
+      --pedigree .test/configs/project.ped
 ```
 
 ### Expected output files
