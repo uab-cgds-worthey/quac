@@ -39,7 +39,7 @@ picard:
 
     PF_HQ_ALIGNED_Q20_BASES:
       description: "The subset of PF_HQ_ALIGNED_BASES where the base call quality was Q20 or higher."
-      min: 100000000000
+      min: 1.0e+11
       max:
 
     PCT_ADAPTER:
@@ -55,7 +55,7 @@ picard:
   QualityYieldMetrics:
     Q30_BASES:
       description: "The number of bases in all reads that achieve quality score 30 or higher"
-      min: 80000000000
+      min: 80.0e+9
       max:
     perc_Q30_BASES:
       description: "% of bases in all reads that achieve quality score 30 or higher"
@@ -116,18 +116,18 @@ verifybamid:
 bcftools_stats:
   number_of_records:
     description: "Total number of variants"
-    min: 4900000
-    max: 6100000
+    min: 4.9e+6
+    max: 6.1e+6
 
   number_of_SNPs:
     description: "Total number of SNPs"
-    min: 4000000
-    max: 5000000
+    min: 4.0e+6
+    max: 5.0e+6
 
   number_of_indels:
     description: "Total number of Indels"
-    min: 820000
-    max: 1150000
+    min: 0.82e+6
+    max: 1.15e+6
 
   perc_snps:
     description: "%SNPs among all variants"

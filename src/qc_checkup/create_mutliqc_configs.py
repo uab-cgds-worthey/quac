@@ -62,9 +62,7 @@ def main(template_f, qc_config, outfile):
         picard_asm_PCT_PF_READS_ALIGNED_max=config["picard"]["AlignmentSummaryMetrics"][
             "PCT_PF_READS_ALIGNED"
         ]["max"],
-        picard_asm_PF_HQ_ALIGNED_Q20_BASES_min=config["picard"]["AlignmentSummaryMetrics"][
-            "PF_HQ_ALIGNED_Q20_BASES"
-        ]["min"],
+        picard_asm_PF_HQ_ALIGNED_Q20_BASES_min=f'{config["picard"]["AlignmentSummaryMetrics"]["PF_HQ_ALIGNED_Q20_BASES"]["min"]:.1E}',
         picard_asm_PF_HQ_ALIGNED_Q20_BASES_description=config["picard"]["AlignmentSummaryMetrics"][
             "PF_HQ_ALIGNED_Q20_BASES"
         ]["description"],
@@ -93,7 +91,7 @@ def main(template_f, qc_config, outfile):
         picard_qym_Q30_BASES_description=config["picard"]["QualityYieldMetrics"]["Q30_BASES"][
             "description"
         ],
-        picard_qym_Q30_BASES_min=config["picard"]["QualityYieldMetrics"]["Q30_BASES"]["min"],
+        picard_qym_Q30_BASES_min=f'{config["picard"]["QualityYieldMetrics"]["Q30_BASES"]["min"]:.1E}',
         picard_qym_perc_Q30_BASES_description=config["picard"]["QualityYieldMetrics"][
             "perc_Q30_BASES"
         ]["description"],
@@ -117,18 +115,18 @@ def main(template_f, qc_config, outfile):
         bcftools_stats_number_of_records_description=config["bcftools_stats"]["number_of_records"][
             "description"
         ],
-        bcftools_stats_number_of_records_min=config["bcftools_stats"]["number_of_records"]["min"],
-        bcftools_stats_number_of_records_max=config["bcftools_stats"]["number_of_records"]["max"],
+        bcftools_stats_number_of_records_min=f'{config["bcftools_stats"]["number_of_records"]["min"]:.1E}',
+        bcftools_stats_number_of_records_max=f'{config["bcftools_stats"]["number_of_records"]["max"]:.1E}',
         bcftools_stats_number_of_SNPs_description=config["bcftools_stats"]["number_of_SNPs"][
             "description"
         ],
-        bcftools_stats_number_of_SNPs_min=config["bcftools_stats"]["number_of_SNPs"]["min"],
-        bcftools_stats_number_of_SNPs_max=config["bcftools_stats"]["number_of_SNPs"]["max"],
+        bcftools_stats_number_of_SNPs_min=f'{config["bcftools_stats"]["number_of_SNPs"]["min"]:.1E}',
+        bcftools_stats_number_of_SNPs_max=f'{config["bcftools_stats"]["number_of_SNPs"]["max"]:.1E}',
         bcftools_stats_number_of_indels_description=config["bcftools_stats"]["number_of_indels"][
             "description"
         ],
-        bcftools_stats_number_of_indels_min=config["bcftools_stats"]["number_of_indels"]["min"],
-        bcftools_stats_number_of_indels_max=config["bcftools_stats"]["number_of_indels"]["max"],
+        bcftools_stats_number_of_indels_min=f'{config["bcftools_stats"]["number_of_indels"]["min"]:.1E}',
+        bcftools_stats_number_of_indels_max=f'{config["bcftools_stats"]["number_of_indels"]["max"]:.1E}',
         bcftools_stats_perc_snps_description=config["bcftools_stats"]["perc_snps"]["description"],
         bcftools_stats_perc_snps_min=config["bcftools_stats"]["perc_snps"]["min"],
         bcftools_stats_perc_snps_max=config["bcftools_stats"]["perc_snps"]["max"],

@@ -272,11 +272,11 @@ custom_data:
             PCT_PF_READS_ALIGNED_val:
                 min: 98
                 max: 100
-                description: "% of Pass filter(PF) reads that aligned to the reference sequence. PF_READS_ALIGNED / PF_READS (min: 98, max: 100)"
+                description: "% of Pass filter (PF) reads that aligned to the reference sequence. PF_READS_ALIGNED / PF_READS (min: 98, max: 100)"
                 hidden: True
             PF_HQ_ALIGNED_Q20_BASES_val:
-                min: 100000000000
-                description: "The subset of PF_HQ_ALIGNED_BASES where the base call quality was Q20 or higher. (min: 100000000000)"
+                min: 1.0E+11
+                description: "The subset of PF_HQ_ALIGNED_BASES where the base call quality was Q20 or higher. (min: 1.0E+11)"
                 hidden: True
             PCT_ADAPTER_val:
                 min: 0
@@ -289,8 +289,8 @@ custom_data:
                 description: "The number of chimeric pairs expressed as a % of the total of all outward facing pairs, inward-facing pairs, and chimeric pairs. (min: 0, max: 1)"
                 hidden: True
             Q30_BASES_val:
-                min: 80000000000
-                description: "The number of bases in all reads that achieve quality score 30 or higher (min: 80000000000)"
+                min: 8.0E+10
+                description: "The number of bases in all reads that achieve quality score 30 or higher (min: 8.0E+10)"
                 hidden: True
             perc_Q30_BASES_val:
                 min: 85
@@ -307,7 +307,7 @@ custom_data:
                 description: "% of bases that attained at least 15X sequence coverage in post-filtering bases. (min: 90, max: 100)"
                 hidden: True
             PCT_PF_READS_ALIGNED:
-                description: "% of Pass filter(PF) reads that aligned to the reference sequence. PF_READS_ALIGNED / PF_READS"
+                description: "% of Pass filter (PF) reads that aligned to the reference sequence. PF_READS_ALIGNED / PF_READS"
             PF_HQ_ALIGNED_Q20_BASES:
                 description: "The subset of PF_HQ_ALIGNED_BASES where the base call quality was Q20 or higher."
             PCT_ADAPTER:
@@ -336,19 +336,19 @@ custom_data:
             scale: "Blues"
         headers:
             number_of_records_val:
-                min: 4900000
-                max: 6100000
-                description: "Total number of variants (min: 4900000, max: 6100000)"
+                min: 4.9E+06
+                max: 6.1E+06
+                description: "Total number of variants (min: 4.9E+06, max: 6.1E+06)"
                 hidden: True
             number_of_SNPs_val:
-                min: 4000000
-                max: 5000000
-                description: "Total number of SNPs (min: 4000000, max: 5000000)"
+                min: 4.0E+06
+                max: 5.0E+06
+                description: "Total number of SNPs (min: 4.0E+06, max: 5.0E+06)"
                 hidden: True
             number_of_indels_val:
-                min: 820000
-                max: 1150000
-                description: "Total number of Indels (min: 820000, max: 1150000)"
+                min: 8.2E+05
+                max: 1.2E+06
+                description: "Total number of Indels (min: 8.2E+05, max: 1.2E+06)"
                 hidden: True
             perc_snps_val:
                 min: 80
@@ -557,12 +557,12 @@ custom_data:
             FREEMIX_val:
                 min: 0
                 max: 2
-                description: "% Cross-sample contamination (min: 0, max: 2)"
+                description: "% Cross-human-sample contamination (min: 0, max: 2)"
                 title: "Contamination(%)_val"
                 hidden: True
             FREEMIX:
                 title: "Contamination(%)"
-                description: "% Cross-sample contamination"
+                description: "% Cross-human-sample contamination"
 
 # define file pattern for custom configs
 sp:
