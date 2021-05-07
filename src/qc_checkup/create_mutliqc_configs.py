@@ -107,6 +107,16 @@ def main(template_f, qc_config, outfile):
         picard_wgs_PCT_15X_description=config["picard"]["WgsMetrics"]["PCT_15X"]["description"],
         picard_wgs_PCT_15X_min=config["picard"]["WgsMetrics"]["PCT_15X"]["min"],
         picard_wgs_PCT_15X_max=config["picard"]["WgsMetrics"]["PCT_15X"]["max"],
+        # picard duplication
+        picard_dups_PERCENT_DUPLICATION_description=config["picard"]["MarkDuplicates"][
+            "PERCENT_DUPLICATION"
+        ]["description"],
+        picard_dups_PERCENT_DUPLICATION_min=config["picard"]["MarkDuplicates"][
+            "PERCENT_DUPLICATION"
+        ]["min"],
+        picard_dups_PERCENT_DUPLICATION_max=config["picard"]["MarkDuplicates"][
+            "PERCENT_DUPLICATION"
+        ]["max"],
         # verifybamid
         verifybamid_freemix_description=config["verifybamid"]["FREEMIX"]["description"],
         verifybamid_freemix_min=config["verifybamid"]["FREEMIX"]["min"],

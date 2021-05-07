@@ -265,7 +265,7 @@ custom_data:
         file_format: "yaml"
         plot_type: "table"
         pconfig:
-            table_title: "Qualimap - Overall stats - QC checkup"
+            table_title: "Picard - Overall stats - QC checkup"
             only_defined_headers: False
             scale: "Blues"
         headers:
@@ -322,6 +322,24 @@ custom_data:
                 description: "% of aligned bases excluded due to all filters."
             PCT_15X:
                 description: "% of bases that attained at least 15X sequence coverage in post-filtering bases."
+
+    qc_checkup_picard_dups:
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_picard_dups"
+        section_name: "Picard-dups"
+        description: 'Quick summary of picard-duplication metrics. See <a href="#picard-1">Picard</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "Picard duplication - Overall stats - QC checkup"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            PERCENT_DUPLICATION_val:
+                min: 0
+                max: 15
+                description: "% of mapped reads that are marked as duplicates (min: 0, max: 15)"
+                hidden: True
 
     qc_checkup_bcftools_stats:
         parent_id: "cgds_qc_checkup"
@@ -576,6 +594,8 @@ sp:
         fn: "qc_checkup_qualimap_overall.yaml"
     qc_checkup_picard:
         fn: "qc_checkup_picard.yaml"
+    qc_checkup_picard_dups:
+        fn: "qc_checkup_picard_dups.yaml"
     qc_checkup_qualimap_chromosome_stats:
         fn: "qc_checkup_qualimap_chromosome_stats.yaml"
     qc_checkup_bcftools_stats:

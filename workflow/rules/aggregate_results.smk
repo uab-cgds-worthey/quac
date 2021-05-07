@@ -18,6 +18,7 @@ rule multiqc_by_sample_initial_pass:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_AlignmentSummaryMetrics.txt"),
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_QualityYieldMetrics.txt"),
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_wgsmetrics.txt"),
+        protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_dups.txt"),
     # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab (small var caller pipeline repo)
     message:
         "Aggregates QC results using multiqc. First pass. Output will be used for the internal QC checkup. Sample: {wildcards.sample}"
@@ -39,6 +40,7 @@ rule qc_checkup:
         picard_asm=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_AlignmentSummaryMetrics.txt",
         picard_qym=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_QualityYieldMetrics.txt",
         picard_wgs=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_wgsmetrics.txt",
+        picard_dups=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_dups.txt",
         bcftools_index=OUT_DIR / "{sample}" / "qc" / "bcftools-index" / "{sample}.bcftools.index.tsv",
     output:
         protected(
@@ -50,6 +52,10 @@ rule qc_checkup:
                     "fastq_screen",
                     "qualimap_overall",
                     "qualimap_chromosome_stats",
+                    "picard",
+                    "picard_dups",
+                    "verifybamid",
+                    "bcftools_stats",
                     "variant_per_contig",
                 ],
             )
@@ -74,6 +80,7 @@ rule qc_checkup:
             --picard_asm {input.picard_asm} \
             --picard_qym {input.picard_qym} \
             --picard_wgs {input.picard_wgs} \
+            --picard_dups {input.picard_dups} \
             --bcftools_index {input.bcftools_index} \
             --sample {params.sample} \
             --outdir {params.outdir}

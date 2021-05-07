@@ -72,6 +72,12 @@ picard:
       min: 90
       max: 100
 
+  MarkDuplicates:
+    PERCENT_DUPLICATION:
+      description: "% of mapped reads that are marked as duplicates"
+      min: 0
+      max: 15
+
 fastqc:
   - per_base_sequence_quality
   - per_tile_sequence_quality

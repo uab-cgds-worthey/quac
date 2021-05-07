@@ -261,11 +261,11 @@ custom_data:
         parent_id: "cgds_qc_checkup"
         id: "qc_checkup_picard"
         section_name: "Picard"
-        description: 'Quick summary of picard metrics. See <a href="#picard-1">Picard</a> section below for detailed results.'
+        description: 'Quick summary of picard metrics. Note: Picard-Duplication is reported separately (bcoz reasons!).  See <a href="#picard-1">Picard</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
-            table_title: "Qualimap - Overall stats - QC checkup"
+            table_title: "Picard - Overall stats - QC checkup"
             only_defined_headers: False
             scale: "Blues"
         headers:
@@ -322,6 +322,24 @@ custom_data:
                 description: "{{ picard_wgs_PCT_EXC_TOTAL_description }}"
             PCT_15X:
                 description: "{{ picard_wgs_PCT_15X_description }}"
+
+    qc_checkup_picard_dups:
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_picard_dups"
+        section_name: "Picard-dups"
+        description: 'Quick summary of picard-duplication metrics. See <a href="#picard-1">Picard</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "Picard duplication - Overall stats - QC checkup"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            PERCENT_DUPLICATION_val:
+                min: {{ picard_dups_PERCENT_DUPLICATION_min }}
+                max: {{ picard_dups_PERCENT_DUPLICATION_max }}
+                description: "{{ picard_dups_PERCENT_DUPLICATION_description }} (min: {{ picard_dups_PERCENT_DUPLICATION_min }}, max: {{ picard_dups_PERCENT_DUPLICATION_max }})"
+                hidden: True
 
     qc_checkup_bcftools_stats:
         parent_id: "cgds_qc_checkup"
@@ -576,6 +594,8 @@ sp:
         fn: "qc_checkup_qualimap_overall.yaml"
     qc_checkup_picard:
         fn: "qc_checkup_picard.yaml"
+    qc_checkup_picard_dups:
+        fn: "qc_checkup_picard_dups.yaml"
     qc_checkup_qualimap_chromosome_stats:
         fn: "qc_checkup_qualimap_chromosome_stats.yaml"
     qc_checkup_bcftools_stats:
