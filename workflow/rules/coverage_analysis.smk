@@ -24,6 +24,7 @@ rule qualimap_bamqc:
         "stats bam using qualimap. Sample: {wildcards.sample}"
     conda:
         str(WORKFLOW_PATH / "configs/env/qualimap.yaml")
+    threads: 2
     params:
         outdir=lambda wildcards, output: str(Path(output["html_report"]).parent),
         capture_bed=lambda wildcards, input: f"--feature-file {input.target_regions}" if input.target_regions else "",
