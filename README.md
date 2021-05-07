@@ -13,10 +13,10 @@
       - [Prepare verifybamid datasets for exome analysis](#prepare-verifybamid-datasets-for-exome-analysis)
     - [Run pipeline](#run-pipeline)
     - [Example usage](#example-usage)
+  - [Output](#output)
   - [Testing pipeline](#testing-pipeline)
     - [How to run](#how-to-run)
     - [Expected output files](#expected-output-files)
-  - [Output](#output)
   - [Visualization of workflow](#visualization-of-workflow)
   - [Contributing](#contributing)
   - [Changelog](#changelog)
@@ -32,16 +32,16 @@ processed at CGDS. It is a companion pipeline that should be run after samples i
 small variant caller
 pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
 
-**Note**: While QuaC does the heavy lifting running several QC tools, the small variant caller pipeline also runs few QC tools (fastqc,
-fastq-screen, picard's markduplicates). This setup was chosen deliberately as completely divorcing QC from small variant
-caller pipeline would need some tricky, unnecessary implementations.
+**Note**: While QuaC does the heavy lifting running several QC tools, the small variant caller pipeline also runs few QC
+tools (fastqc, fastq-screen, picard's markduplicates). This setup was chosen deliberately as completely divorcing QC
+from small variant caller pipeline would need some tricky, unnecessary implementations.
 
 In short, QuaC performs the following:
 
 - Runs various QC tools using data produced by the small variant caller pipeline
 - Performs QC checkup based on the expected thresholds and summarizes the results
-- Aggregates QC output produced here as well as those produced by the small variant caller pipeline using
-  mulitqc, both at sample level and project level.
+- Aggregates QC output produced here as well as those produced by the small variant caller pipeline using mulitqc, both
+  at sample level and project level.
 
 ### QC tools included
 
@@ -75,7 +75,7 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 
 ## Pipeline installation
 
-Installation simply requires fetching the source code. Following are required:
+Installation simply requires fetching the source code.
 
 ### Requirements
 
@@ -190,9 +190,10 @@ verifyBamID:
 
 #### Prepare verifybamid datasets for exome analysis
 
-*This step is necessary only for exome samples.* verifybamid has provided auxiliary resource files, which are necessary
-for analysis. However, chromosome contigs do not include `chr` prefix in their exome resource files, which are expected
-for our analyses at CGDS. Follow these steps to setup resource files with `chr` prefix in their contig names.
+*This step is necessary only for exome samples.* [verifybamid](https://github.com/Griffan/VerifyBamID) has provided
+auxiliary resource files, which are necessary for analysis. However, chromosome contigs do not include `chr` prefix in
+their exome resource files, which are expected for our analyses at CGDS. Follow these steps to setup resource files with
+`chr` prefix in their contig names.
 
 ```sh
 # cd into exome resources dir
@@ -205,8 +206,8 @@ cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.V 1000g.phase3.10k.b38_chr.exome.vcf.gz
 
 ### Run pipeline
 
-After activating the conda environment, QuaC pipeline is run using the wrapper script `src/run_quac.py`. Here are all
-the options available:
+After activating the conda environment, QuaC pipeline can be run using the wrapper script `src/run_quac.py`. Here are
+all the options available:
 
 ```sh
 $ ./src/run_quac.py -h
@@ -267,14 +268,12 @@ python src/run_quac.py \
       --pedigree "path/to/project_duck/pedigree_file.ped"
 ```
 
-Note that options `--project_name` and `--pedigree` are required. Only the samples that are supplied in pedigree file
+*Note that options `--project_name` and `--pedigree` are required*. Only the samples that are supplied in pedigree file
 via `--pedigree` will be processed by QuaC and all of these samples must belong to the same project. This repo also
 includes a handy script [`src/create_dummy_ped.py`](src/create_dummy_ped.py) that can create a dummy pedigree file,
 which will lack sex (unless project tracking sheet is provided), relatedness and affectedness info. See header of the
-script for usage instructions.
-
-Note that we plan to use [phenotips](https://phenotips.com/) in future to produce fully capable pedigree file. One may
-manually create them as well, but this could be error-prone.
+script for usage instructions. Note that we plan to use [phenotips](https://phenotips.com/) in future to produce fully
+capable pedigree file. One could manually create them as well, but this would be error-prone.
 
 
 **NOTE:**
@@ -291,8 +290,6 @@ Besides the basic features, wrapper script [`src/run_quac.py`](./src/run_quac.py
 
 
 ### Example usage
-
-Options `project_name` and `pedigree` are required to run the tool.
 
 ```sh
 # to quack on a WGS project
@@ -322,14 +319,20 @@ python src/run_quac.py \
       --exome
 ```
 
+## Output
+
+TODO: Improve
+
+QuaC results are stored at the path specified via option `--outdir` (default: `$USER_SCRATCH/tmp/quac/results`). This
+includes aggregated QC results produced by [multiqc](https://multiqc.info/).
+
 
 ## Testing pipeline
 
 The system-level testing implemented for this pipeline tests whether the pipeline runs from start to finish without any
-error using:
-
-- Test datasets present in [`.test/ngs-data/test_project`](.test/ngs-data/test_project), which reflects a test project
-  containing two samples. [See here](.test/README.md) for more info on how they were created.
+error. This testing uses test datasets present in [`.test/ngs-data/test_project`](.test/ngs-data/test_project), which
+reflects a test project containing two samples. [See here](.test/README.md) for more info on how these test datasets
+were created.
 
 > **_NOTE:_**  This testing does not verify that pipeline's output are correct. Instead, its purpose is just to ensure
 > that pipeline runs from beginning to end without any execution error for the given test dataset.
@@ -399,13 +402,6 @@ $ tree $USER_SCRATCH/tmp/quac/results/test_project/ -d -L 4
             └── relatedness
                 └── ...
 ```
-
-
-## Output
-
-QuaC results are stored at path specified via option `--outdir` (default: `$USER_SCRATCH/tmp/quac/results`). This
-includes aggregated QC results produced by [multiqc](https://multiqc.info/).
-
 
 ## Visualization of workflow
 
