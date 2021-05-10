@@ -274,14 +274,6 @@ python src/run_quac.py \
       --pedigree "path/to/lake/with/pedigree_file.ped"
 ```
 
-*Note that options `--project_name` and `--pedigree` are required*. Only the samples that are supplied in pedigree file
-via `--pedigree` will be processed by QuaC and all of these samples must belong to the same project. This repo also
-includes a handy script [`src/create_dummy_ped.py`](src/create_dummy_ped.py) that can create a dummy pedigree file,
-which will lack sex (unless project tracking sheet is provided), relatedness and affectedness info. See header of the
-script for usage instructions. Note that we plan to use [phenotips](https://phenotips.com/) in future to produce fully
-capable pedigree file. One could manually create them as well, but this would be error-prone.
-
-
 **NOTE:**
 
 Besides the basic features, wrapper script [`src/run_quac.py`](./src/run_quac.py) offers the following:
@@ -293,6 +285,22 @@ Besides the basic features, wrapper script [`src/run_quac.py`](./src/run_quac.py
   still be submitted to Slurm.
 - Reruns failed jobs once again by default. This may be modified using `--rerun_failed`.
 - Override slurm partition used via `--slurm_partition`.
+
+
+### Input requirements
+
+* Pedigree file supplied via `--pedigree`. Only the samples that are supplied in pedigree file
+will be processed by QuaC and all of these samples must belong to the same project. This repo also
+includes a handy script [`src/create_dummy_ped.py`](src/create_dummy_ped.py) that can create a dummy pedigree file,
+which will lack sex (unless project tracking sheet is provided), relatedness and affectedness info. See header of the
+script for usage instructions. Note that we plan to use [phenotips](https://phenotips.com/) in future to produce fully
+capable pedigree file. One could manually create them as well, but this would be error-prone.
+* Output produced by [the small variant caller
+  pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
+  This includes bam, vcf and QC output. Refer to [test sample dataset](.test/ngs-data/test_project/analysis/A), which is
+  representative of the input required.
+* [QuaC config file](#set-up-workflow-config-file)
+* When run in exome mode, QuaC requires a capture-regions bed file at path `path_to_sample/configs/small_variant_caller/<capture_regions>.bed`.
 
 
 ### Example usage
@@ -325,7 +333,7 @@ python src/run_quac.py \
       --exome
 ```
 
-## Output
+### Output
 
 QuaC results are stored at the path specified via option `--outdir` (default:
 `$USER_SCRATCH/tmp/quac/results/test_project/analysis`).  Refer to the [testing's output](#expected-output-files) to
@@ -333,6 +341,7 @@ learn about output directory structure. Most important output files are aggregat
 [multiqc](https://multiqc.info/), both at sample-level as well as at the project-level. These multiqc reports also
 include summary of QC-checkup results.
 
+Note that QuaC's output directory structure takes the output structure of the small variant caller pipeline.
 
 ## Testing pipeline
 
@@ -439,7 +448,6 @@ module load Anaconda3/2020.02
 conda activate quac
 DAG_DIR="pipeline_visualized"
 
-
 ###### WGS mode ######
 # DAG
 python src/run_quac.py \
@@ -462,7 +470,7 @@ python src/run_quac.py \
       --projects_path .test/ngs-data/ \
       --pedigree .test/configs/project.ped \
       --exome \
-      --run_locally --extra_args "--dag -F | dot -Tpng > ${DAG_DIR}/wgs_dag.png"
+      --run_locally --extra_args "--dag -F | dot -Tpng > ${DAG_DIR}/exome_dag.png"
 
 # Rulegraph - less informative than DAG at sample level but less dense than DAG makes this easier to skim
 python src/run_quac.py \
@@ -470,7 +478,7 @@ python src/run_quac.py \
       --projects_path .test/ngs-data/ \
       --pedigree .test/configs/project.ped \
       --exome \
-      --run_locally --extra_args "--rulegraph -F | dot -Tpng > ${DAG_DIR}/wgs_rulegraph.png"
+      --run_locally --extra_args "--rulegraph -F | dot -Tpng > ${DAG_DIR}/exome_rulegraph.png"
 ```
 
 ## Contributing

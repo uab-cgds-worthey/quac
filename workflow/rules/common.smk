@@ -135,3 +135,4 @@ SAMPLES = get_samples(PEDIGREE_FPATH)
 
 logger.info(f"// Processing project: {PROJECT_NAME}")
 logger.info(f'// Project path: "{PROJECT_PATH}"')
+logger.info(f'// Exome mode: {EXOME_MODE}')
