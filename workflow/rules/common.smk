@@ -40,8 +40,8 @@ def get_capture_regions_bed(wildcards):
         raise SystemExit(1)
 
     bed = list(config_dir.glob("*.bed"))
-    if len(bed) > 1:
-        logger.error(f"ERROR: More then one capture bed file found for sample {wildcards.sample} - {bed}")
+    if len(bed) != 1:
+        logger.error(f"ERROR: No or >1 capture bed file found for sample {wildcards.sample} - {bed}")
         raise SystemExit(1)
 
     return bed
