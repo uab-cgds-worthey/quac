@@ -11,6 +11,7 @@
     - [Set up workflow config file](#set-up-workflow-config-file)
       - [Prepare verifybamid datasets for exome analysis](#prepare-verifybamid-datasets-for-exome-analysis)
     - [Run pipeline](#run-pipeline)
+    - [Create singularity+conda environments for tools used in QuaC pipeline](#create-singularityconda-environments-for-tools-used-in-quac-pipeline)
     - [Input requirements](#input-requirements)
     - [Example usage](#example-usage)
     - [Output](#output)
@@ -140,6 +141,7 @@ In order to run the QuaC pipeline, user needs to
 
 1. Install the pipeline and set up the conda environment ([see above](#installation))
 2. Set up config files specifying paths required by QC tools used in the pipeline.
+3. Run QuaC pipeline just to create singularity+conda environments using testing dataset (optional)
 
 ### Requirements
 
@@ -292,6 +294,32 @@ Besides the basic features, wrapper script [`src/run_quac.py`](./src/run_quac.py
   still be submitted to Slurm.
 - Reruns failed jobs once again by default. This may be modified using `--rerun_failed`.
 - Override slurm partition used via `--slurm_partition`.
+
+
+### Create singularity+conda environments for tools used in QuaC pipeline
+
+All the jobs initiated by QuaC would be run inside a conda environment, which themselves were created inside a
+singularity container. It may be a good idea to create these environments even before they are run with actual samples.
+While this step is optional, this will ensure that there will not be any conflicts when running multiple instances of
+the pipeline.
+
+Running the commands below will submit a slurm job to just create these singularity+conda environments. Note that this
+slurm job will exit right after creating the environments, and it will not run any QC analyzes on the input samples
+provided.
+
+```sh
+module reset
+module load Anaconda3/2020.02
+conda activate quac
+
+# WGS mode
+python src/run_quac.py \
+      --project_name test_project \
+      --projects_path ".test/ngs-data/" \
+      --pedigree ".test/configs/project.ped" \
+      --outdir "$USER_SCRATCH/tmp/quac/results/test_project_wgs/analysis" \
+      -e="--conda-create-envs-only"
+```
 
 
 ### Input requirements
