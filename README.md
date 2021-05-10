@@ -40,10 +40,10 @@ In short, QuaC performs the following:
 
 **Note**:
 
-1. While QuaC does the heavy lifting in performing QC, the small variant caller pipeline also runs few QC tools
-(fastqc, fastq-screen, picard's markduplicates). This setup was chosen deliberately for pragmatic reasons.
-2. *Use QC-checkup results with extreme caution when run in exome mode.* Though QuaC can be run in exome mode, QC-checkup will
-   still be utilizing thresholds defined for WGS data.
+1. While QuaC does the heavy lifting in performing QC, the small variant caller pipeline also runs few QC tools (fastqc,
+   fastq-screen, picard's markduplicates). This setup was chosen deliberately for pragmatic reasons.
+2. *Use QC-checkup results with extreme caution when run in exome mode.* Though QuaC can be run in exome mode,
+   QC-checkup will still be utilizing thresholds defined for WGS data.
 
 
 ### QC tools included
@@ -52,18 +52,18 @@ QuaC quacks using the tools listed below:
 
 | Tool                                                                                                                       | Use                                                                                           |
 | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| **BAM QC**                                                                                                                 |                                                                                               |
+| *BAM QC*                                                                                                                 |                                                                                               |
 | [Qualimap](http://qualimap.conesalab.org/)                                                                                 | QCs alignment data in SAM/BAM files                                                           |
 | [Picard-CollectMultipleMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectMultipleMetrics) | summarizes alignment metrics from a SAM/BAM file using several modules                        |
 | [Picard-CollectWgsMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectWgsMetrics)           | Collects metrics about coverage and performance of whole genome sequencing (WGS) experiments. |
 | [mosdepth](https://github.com/brentp/mosdepth)                                                                             | Fast BAM/CRAM depth calculation                                                               |
-| [indexcov](https://github.com/brentp/goleft/tree/master/indexcov)                                                          | Estimate coverage from whole-genome bam or cram index                                         |
-| [covviz](https://github.com/brwnj/covviz)                                                                                  | Identifies large, coverage-based anomalies                                                    |
-| **VCF QC**                                                                                                                 |                                                                                               |
+| [indexcov](https://github.com/brentp/goleft/tree/master/indexcov)                                                          | Estimate coverage from whole-genome bam or cram index (Not run in exome mode)                                         |
+| [covviz](https://github.com/brwnj/covviz)                                                                                  | Identifies large, coverage-based anomalies (Not run in exome mode)                                                   |
+| *VCF QC*                                                                                                                 |                                                                                               |
 | [bcftools stats](https://samtools.github.io/bcftools/bcftools.html#stats)                                                  | Stats variants in VCF                                                                         |
-| **Within-species contamination**                                                                                           |                                                                                               |
+| *Within-species contamination*                                                                                           |                                                                                               |
 | [verifybamid](https://github.com/Griffan/VerifyBamID)                                                                      | Estimates within-species (i.e. cross-sample) contamination                                    |
-| **Sex, ancestry and relatedness estimation**                                                                               |                                                                                               |
+| *Sex, ancestry and relatedness estimation*                                                                               |                                                                                               |
 | [somalier](https://github.com/brentp/somalier)                                                                             | Estimation of sex, ancestry and relatedness                                                   |
 
 
@@ -79,10 +79,10 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 
 ### CGDS QC-checkup
 
-After running all the QC tools for sample(s), QuaC summarizes if samples have passed the QC thresholds (defined via config
-file [`qc_checkup_config.yaml`](configs/qc_checkup/qc_checkup_config.yaml)), both at the sample level as well as project
-level. This summary makes it easy to quickly review if sample or samples have sufficient quality and highlight samples
-that need further review.
+After running all the QC tools for sample(s), QuaC summarizes if samples have passed the QC thresholds (defined via
+config file [`qc_checkup_config.yaml`](configs/qc_checkup/qc_checkup_config.yaml)), both at the sample level as well as
+project level. This summary makes it easy to quickly review if sample or samples have sufficient quality and highlight
+samples that need further review.
 
 ## Installation
 
@@ -327,10 +327,11 @@ python src/run_quac.py \
 
 ## Output
 
-TODO: Improve
-
-QuaC results are stored at the path specified via option `--outdir` (default: `$USER_SCRATCH/tmp/quac/results`). This
-includes aggregated QC results produced by [multiqc](https://multiqc.info/).
+QuaC results are stored at the path specified via option `--outdir` (default:
+`$USER_SCRATCH/tmp/quac/results/test_project/analysis`).  Refer to the [testing's output](#expected-output-files) to
+learn about output directory structure. Most important output files are aggregated QC results produced by
+[multiqc](https://multiqc.info/), both at sample-level as well as at the project-level. These multiqc reports also
+include summary of QC-checkup results.
 
 
 ## Testing pipeline
@@ -358,7 +359,7 @@ python src/run_quac.py \
       --pedigree ".test/configs/project.ped" \
       --outdir "$USER_SCRATCH/tmp/quac/results/test_project_wgs/analysis"
 
-# exome mode
+# Exome mode
 python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
@@ -419,6 +420,9 @@ $ tree $USER_SCRATCH/tmp/quac/results/test_project/ -d -L 4
                 └── ...
 ```
 
+Certain tools (eg. indexcov and covviz) are not executed when QuaC is run in exome mode (`--exome`).
+
+
 ## Visualization of workflow
 
 [Visualization of the pipeline](https://snakemake.readthedocs.io/en/stable/executing/cluster-cloud.html#visualization)
@@ -426,22 +430,46 @@ based on the test datasets are available in [directory `dag_pipeline`](./dag_pip
 visualization:
 
 ```sh
+# open interactive node
+srun --ntasks=1 --cpus-per-task=1 --mem-per-cpu=4096 --partition=express --pty /bin/bash
+
+# setup environment
 module reset
 module load Anaconda3/2020.02
 conda activate quac
 DAG_DIR="pipeline_visualized"
 
-###### WGS ######
+
+###### WGS mode ######
+# DAG
 python src/run_quac.py \
       --project_name test_project \
       --projects_path .test/ngs-data/ \
       --pedigree .test/configs/project.ped \
       --run_locally --extra_args "--dag -F | dot -Tpng > ${DAG_DIR}/wgs_dag.png"
 
+# Rulegraph - less informative than DAG at sample level but less dense than DAG makes this easier to skim
 python src/run_quac.py \
       --project_name test_project \
       --projects_path .test/ngs-data/ \
       --pedigree .test/configs/project.ped \
+      --run_locally --extra_args "--rulegraph -F | dot -Tpng > ${DAG_DIR}/wgs_rulegraph.png"
+
+###### Exome mode ######
+# DAG
+python src/run_quac.py \
+      --project_name test_project \
+      --projects_path .test/ngs-data/ \
+      --pedigree .test/configs/project.ped \
+      --exome \
+      --run_locally --extra_args "--dag -F | dot -Tpng > ${DAG_DIR}/wgs_dag.png"
+
+# Rulegraph - less informative than DAG at sample level but less dense than DAG makes this easier to skim
+python src/run_quac.py \
+      --project_name test_project \
+      --projects_path .test/ngs-data/ \
+      --pedigree .test/configs/project.ped \
+      --exome \
       --run_locally --extra_args "--rulegraph -F | dot -Tpng > ${DAG_DIR}/wgs_rulegraph.png"
 ```
 
