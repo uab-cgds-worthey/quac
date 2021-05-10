@@ -153,7 +153,7 @@ bcftools_stats:
   heterozygosity_ratio:
     description: "No. of het sites in an individual divided by the no. of non-reference hom sites. Note: This varies heavily across populations."
     min: 1.6
-    max:
+    max: 2.5
 
 perc_variant_per_contig:
   chr1:
