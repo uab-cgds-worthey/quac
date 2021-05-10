@@ -285,7 +285,8 @@ custom_data:
                 hidden: True
             heterozygosity_ratio_val:
                 min: 1.6
-                description: "No. of het sites in an individual divided by the no. of non-reference hom sites. Note: This varies heavily across populations. (min: 1.6)"
+                max: 2.5
+                description: "No. of het sites in an individual divided by the no. of non-reference hom sites. Note: This varies heavily across populations. (min: 1.6, max: 2.5)"
                 hidden: True
             number_of_records:
                 description: "Total number of variants"

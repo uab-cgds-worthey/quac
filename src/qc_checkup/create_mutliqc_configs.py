@@ -154,6 +154,9 @@ def main(template_f, qc_config, outfile):
         bcftools_stats_heterozygosity_ratio_min=config["bcftools_stats"]["heterozygosity_ratio"][
             "min"
         ],
+        bcftools_stats_heterozygosity_ratio_max=config["bcftools_stats"]["heterozygosity_ratio"][
+            "max"
+        ],
         # variant freq per contig
         perc_variant_per_contig_chr1_min=config["perc_variant_per_contig"]["chr1"]["min"],
         perc_variant_per_contig_chr1_max=config["perc_variant_per_contig"]["chr1"]["max"],

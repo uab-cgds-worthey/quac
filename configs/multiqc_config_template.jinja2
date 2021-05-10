@@ -285,7 +285,8 @@ custom_data:
                 hidden: True
             heterozygosity_ratio_val:
                 min: {{ bcftools_stats_heterozygosity_ratio_min }}
-                description: "{{ bcftools_stats_heterozygosity_ratio_description }} (min: {{ bcftools_stats_heterozygosity_ratio_min }})"
+                max: {{ bcftools_stats_heterozygosity_ratio_max }}
+                description: "{{ bcftools_stats_heterozygosity_ratio_description }} (min: {{ bcftools_stats_heterozygosity_ratio_min }}, max: {{ bcftools_stats_heterozygosity_ratio_max }})"
                 hidden: True
             number_of_records:
                 description: "{{ bcftools_stats_number_of_records_description }}"
