@@ -8,7 +8,7 @@ import pandas as pd
 WORKFLOW_PATH = Path(workflow.basedir).parent
 
 
-configfile: WORKFLOW_PATH / "configs/workflow.yaml"
+configfile: config["workflow_config"]
 
 
 # singularity image to use

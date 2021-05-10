@@ -33,12 +33,11 @@ def make_dir(d):
     return None
 
 
-def read_workflow_config(repo_path):
+def read_workflow_config(workflow_config_fpath):
     """
     Read workflow config file and identify paths to be mounted for singularity
     """
 
-    workflow_config_fpath = repo_path / "configs/workflow.yaml"
     with open(workflow_config_fpath) as fh:
         data = yaml.safe_load(fh)
 
@@ -58,7 +57,9 @@ def read_workflow_config(repo_path):
     return mount_paths
 
 
-def gather_mount_paths(projects_path, project_name, pedigree_path, out_dir, log_dir, repo_path):
+def gather_mount_paths(
+    projects_path, project_name, pedigree_path, out_dir, log_dir, qc_checkup_config, workflow_config
+):
     """
     Returns paths that need to be mounted to singularity
     """
@@ -80,8 +81,11 @@ def gather_mount_paths(projects_path, project_name, pedigree_path, out_dir, log_
     # logs dirpath
     mount_paths.add(log_dir)
 
+    # QC checkup configfile
+    mount_paths.add(qc_checkup_config)
+
     # read paths in workflow config file
-    mount_paths.update(read_workflow_config(repo_path))
+    mount_paths.update(read_workflow_config(workflow_config))
 
     return ",".join([str(x) for x in mount_paths])
 
@@ -108,6 +112,8 @@ def create_snakemake_command(args, repo_path, mount_paths):
         "project_name": args.project_name,
         "projects_path": args.projects_path,
         "ped": args.pedigree,
+        "qc_checkup_config": args.qc_checkup_config,
+        "workflow_config": args.workflow_config,
         "out_dir": args.outdir,
         "log_dir": args.log_dir,
         "exome": args.exome,
@@ -148,7 +154,13 @@ def main(args):
 
     # process user's input-output config file and get singularity bind paths
     mount_paths = gather_mount_paths(
-        args.projects_path, args.project_name, args.pedigree, args.outdir, args.log_dir, repo_path
+        args.projects_path,
+        args.project_name,
+        args.pedigree,
+        args.outdir,
+        args.log_dir,
+        args.qc_checkup_config,
+        args.workflow_config,
     )
 
     # get snakemake command to execute for the pipeline
@@ -198,18 +210,24 @@ def main(args):
     return None
 
 
+def get_full_path(x):
+    full_path = Path(x).resolve()
+
+    return str(full_path)
+
+
 def is_valid_file(p, arg):
     if not Path(arg).is_file():
         p.error("The file '%s' does not exist!" % arg)
     else:
-        return arg
+        return get_full_path(arg)
 
 
 def is_valid_dir(p, arg):
     if not Path(os.path.expandvars(arg)).is_dir():
         p.error("The directory '%s' does not exist!" % arg)
     else:
-        return os.path.expandvars(arg)
+        return get_full_path(os.path.expandvars(arg))
 
 
 if __name__ == "__main__":
@@ -238,6 +256,20 @@ if __name__ == "__main__":
     WORKFLOW.add_argument(
         "--pedigree",
         help="Pedigree filepath. Must correspond to the project supplied via --project_name",
+        type=lambda x: is_valid_file(PARSER, x),
+        metavar="",
+    )
+    WORKFLOW.add_argument(
+        "--qc_checkup_config",
+        help="YAML config path specifying QC thresholds for QC checkup",
+        default="configs/qc_checkup/qc_checkup_config.yaml",
+        type=lambda x: is_valid_file(PARSER, x),
+        metavar="",
+    )
+    WORKFLOW.add_argument(
+        "--workflow_config",
+        help="YAML config path specifying filepath to dependencies of tools used in QuaC",
+        default="configs/workflow.yaml",
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )

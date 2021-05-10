@@ -32,7 +32,7 @@ rule multiqc_by_sample_initial_pass:
 
 rule qc_checkup:
     input:
-        qc_config=WORKFLOW_PATH / "configs" / "qc_checkup" / "qc_checkup_config.yaml",
+        qc_config=config["qc_checkup_config"],
         multiqc_stats=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt",
         fastqc_trimmed=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc_trimmed.txt",
         fastq_screen=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt",

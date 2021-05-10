@@ -107,7 +107,7 @@ rule create_multiqc_config:
     input:
         script=WORKFLOW_PATH / "src" / "qc_checkup" / "create_mutliqc_configs.py",
         template=WORKFLOW_PATH / "configs" / "multiqc_config_template.jinja2",
-        qc_checkup_config=WORKFLOW_PATH / "configs" / "qc_checkup" / "qc_checkup_config.yaml",
+        qc_checkup_config=config["qc_checkup_config"],
     output:
         WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
     message:
@@ -135,4 +135,4 @@ SAMPLES = get_samples(PEDIGREE_FPATH)
 
 logger.info(f"// Processing project: {PROJECT_NAME}")
 logger.info(f'// Project path: "{PROJECT_PATH}"')
-logger.info(f'// Exome mode: {EXOME_MODE}')
+logger.info(f"// Exome mode: {EXOME_MODE}")

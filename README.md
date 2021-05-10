@@ -26,7 +26,7 @@
 
 ## What is QuaC?
 
-QuaC is a pipeline, developed using snakemake, that runs several QC tools and summarizes results for WGS/WES samples
+QuaC is a snakemake-based pipeline that runs several QC tools and summarizes results for WGS/WES samples
 processed at CGDS using internally defined QC thresholds. It is a companion pipeline that should be run after samples in
 a project are run through [CGDS's small variant caller
 pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
@@ -79,7 +79,7 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 
 ### CGDS QC-checkup
 
-After running all the QC tools for sample(s), QuaC summarizes if samples have passed the QC thresholds (defined via
+After running all the QC tools for samples, QuaC summarizes if samples have passed the QC thresholds (defined via
 config file [`qc_checkup_config.yaml`](configs/qc_checkup/qc_checkup_config.yaml)), both at the sample level as well as
 project level. This summary makes it easy to quickly review if sample or samples have sufficient quality and highlight
 samples that need further review.
@@ -218,48 +218,54 @@ all the options available:
 ```sh
 $ ./src/run_quac.py -h
 usage: run_quac.py [-h] [--project_name] [--projects_path] [--pedigree]
-                   [--outdir] [--exome] [--cluster_config] [--log_dir] [-e]
-                   [-n] [-l] [--rerun_failed] [--slurm_partition]
+                   [--qc_checkup_config] [--workflow_config] [--outdir]
+                   [--exome] [--cluster_config] [--log_dir] [-e] [-n] [-l]
+                   [--rerun_failed] [--slurm_partition]
 
 Wrapper tool for QuaC pipeline.
 
 optional arguments:
-  -h, --help          show this help message and exit
+  -h, --help            show this help message and exit
 
 QuaC workflow options:
-  --project_name      Project name (default: None)
-  --projects_path     Path where all projects are hosted. Do not include
-                      project name here. (default:
-                      /data/project/worthey_lab/projects/)
-  --pedigree          Pedigree filepath. Must correspond to the project
-                      supplied via --project_name (default: None)
-  --outdir            Out directory path (default:
-                      $USER_SCRATCH/tmp/quac/results/test_project/analysis)
-  --exome             Flag to run in exome mode (default: False)
+  --project_name        Project name (default: None)
+  --projects_path       Path where all projects are hosted. Do not include
+                        project name here. (default:
+                        /data/project/worthey_lab/projects/)
+  --pedigree            Pedigree filepath. Must correspond to the project
+                        supplied via --project_name (default: None)
+  --qc_checkup_config   YAML config path specifying QC thresholds for QC
+                        checkup (default:
+                        configs/qc_checkup/qc_checkup_config.yaml)
+  --workflow_config     YAML config path specifying filepath to dependencies
+                        of tools used in QuaC (default: configs/workflow.yaml)
+  --outdir              Out directory path (default:
+                        $USER_SCRATCH/tmp/quac/results/test_project/analysis)
+  --exome               Flag to run in exome mode (default: False)
 
 QuaC wrapper options:
-  --cluster_config    Cluster config json file. Needed for snakemake to run
-                      jobs in cluster. (default: /data/project/worthey_lab/pro
-                      jects/experimental_pipelines/mana/quac/configs/cluster_c
-                      onfig.json)
-  --log_dir           Directory path where logs (both workflow's and
-                      wrapper's) will be stored (default:
-                      $USER_SCRATCH/tmp/quac/logs)
-  -e , --extra_args   Pass additional custom args to snakemake. Equal symbol
-                      is needed for assignment as in this example: -e='--
-                      forceall' (default: None)
-  -n, --dryrun        Flag to dry-run snakemake. Does not execute anything,
-                      and just display what would be done. Equivalent to '--
-                      extra_args "-n"' (default: False)
-  -l, --run_locally   Flag to run the snakemake locally and not as a Slurm
-                      job. Useful for testing purposes. (default: False)
-  --rerun_failed      Number of times snakemake restarts failed jobs. This may
-                      be set to >0 to avoid pipeline failing due to job fails
-                      due to random SLURM issues (default: 0)
-  --slurm_partition   Request a specific partition for the slurm resource
-                      allocation for QuaC workflow. Available partitions in
-                      Cheaha are: express(max 2 hrs), short(max 12 hrs),
-                      medium(max 50 hrs), long(max 150 hrs) (default: short)
+  --cluster_config      Cluster config json file. Needed for snakemake to run
+                        jobs in cluster. (default: /data/project/worthey_lab/p
+                        rojects/experimental_pipelines/mana/quac/configs/clust
+                        er_config.json)
+  --log_dir             Directory path where logs (both workflow's and
+                        wrapper's) will be stored (default:
+                        $USER_SCRATCH/tmp/quac/logs)
+  -e , --extra_args     Pass additional custom args to snakemake. Equal symbol
+                        is needed for assignment as in this example: -e='--
+                        forceall' (default: None)
+  -n, --dryrun          Flag to dry-run snakemake. Does not execute anything,
+                        and just display what would be done. Equivalent to '--
+                        extra_args "-n"' (default: False)
+  -l, --run_locally     Flag to run the snakemake locally and not as a Slurm
+                        job. Useful for testing purposes. (default: False)
+  --rerun_failed        Number of times snakemake restarts failed jobs. This
+                        may be set to >0 to avoid pipeline failing due to job
+                        fails due to random SLURM issues (default: 0)
+  --slurm_partition     Request a specific partition for the slurm resource
+                        allocation for QuaC workflow. Available partitions in
+                        Cheaha are: express(max 2 hrs), short(max 12 hrs),
+                        medium(max 50 hrs), long(max 150 hrs) (default: short)
 ```
 
 To run the wrapper script, which in turn will execute the QuaC pipeline:
