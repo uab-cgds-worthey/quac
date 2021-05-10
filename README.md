@@ -1,14 +1,13 @@
 - [QuaC](#quac)
   - [What is QuaC?](#what-is-quac)
     - [QC tools included](#qc-tools-included)
-  - [Pipeline installation](#pipeline-installation)
+    - [QC checkup](#qc-checkup)
+  - [Installation](#installation)
     - [Requirements](#requirements)
     - [Retrieve pipeline source code](#retrieve-pipeline-source-code)
-  - [Environment Setup](#environment-setup)
-    - [Requirements](#requirements-1)
     - [Create conda environment](#create-conda-environment)
   - [How to run QuaC](#how-to-run-quac)
-    - [Requirements](#requirements-2)
+    - [Requirements](#requirements-1)
     - [Set up workflow config file](#set-up-workflow-config-file)
       - [Prepare verifybamid datasets for exome analysis](#prepare-verifybamid-datasets-for-exome-analysis)
     - [Run pipeline](#run-pipeline)
@@ -28,20 +27,24 @@
 ## What is QuaC?
 
 QuaC is a pipeline, developed using snakemake, that runs several QC tools and summarizes results for WGS/WES samples
-processed at CGDS. It is a companion pipeline that should be run after samples in a project are run through [CGDS's
-small variant caller
+processed at CGDS using internally defined QC thresholds. It is a companion pipeline that should be run after samples in
+a project are run through [CGDS's small variant caller
 pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
-
-**Note**: While QuaC does the heavy lifting running several QC tools, the small variant caller pipeline also runs few QC
-tools (fastqc, fastq-screen, picard's markduplicates). This setup was chosen deliberately as completely divorcing QC
-from small variant caller pipeline would need some tricky, unnecessary implementations.
 
 In short, QuaC performs the following:
 
 - Runs various QC tools using data produced by the small variant caller pipeline
-- Performs QC checkup based on the expected thresholds and summarizes the results
-- Aggregates QC output produced here as well as those produced by the small variant caller pipeline using mulitqc, both
-  at sample level and project level.
+- Performs QC checkup based on the expected thresholds and summarizes the results for easy consumption
+- Aggregates QC output produced here as well as those by the small variant caller pipeline using mulitqc, both at sample
+  level and project level
+
+**Note**:
+
+1. While QuaC does the heavy lifting in performing QC, the small variant caller pipeline also runs few QC tools
+(fastqc, fastq-screen, picard's markduplicates). This setup was chosen deliberately for pragmatic reasons.
+2. *Use QC-checkup results with extreme caution when run in exome mode.* Though QuaC can be run in exome mode, QC-checkup will
+   still be utilizing thresholds defined for WGS data.
+
 
 ### QC tools included
 
@@ -73,21 +76,33 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 | [FastQ Screen](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/)                             | Screens fastq for other-species contamination     |
 | [Picard's MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) | Determines level of read duplication on bam files |
 
-## Pipeline installation
 
-Installation simply requires fetching the source code.
+### CGDS QC-checkup
+
+After running all the QC tools for sample(s), QuaC summarizes if samples have passed the QC thresholds (defined via config
+file [`qc_checkup_config.yaml`](configs/qc_checkup/qc_checkup_config.yaml)), both at the sample level as well as project
+level. This summary makes it easy to quickly review if sample or samples have sufficient quality and highlight samples
+that need further review.
+
+## Installation
+
+Installation requires
+
+- fetching the source code
+- creating the conda environment
 
 ### Requirements
 
 - Git v2.0+
 - CGDS GitLab access
 - [SSH Key for access](https://docs.uabgrid.uab.edu/wiki/Cheaha_GettingStarted#Logging_in_to_Cheaha) to Cheaha cluster
-
+- Anaconda/miniconda
+    - Tested with Anaconda3/2020.02
 
 ### Retrieve pipeline source code
 
-Pipeline installation simply requires fetching the source code. This repository use git submodules, which needs to be
-pulled when cloning. Go to the directory of your choice and run the command below.
+This repository use git submodules, which need to be pulled when cloning. Go to the directory of your choice and run the
+command below.
 
 ```sh
 git clone -b master \
@@ -98,22 +113,13 @@ git clone -b master \
 Note that downloading this repository from GitLab, instead of cloning, may not fetch the submodules included.
 
 
-## Environment Setup
-
-After pipeline installation is completed, a conda environment needs to be created as described below. This conda
-environment will install all necessary dependencies to run QuaC workflow.
-
-### Requirements
-
-- [Deep clone of repo](#pipeline-installation) created
-- Anaconda/miniconda
-    - Tested with Anaconda3/2020.02
-
 ### Create conda environment
 
-Necessary dependencies for QuaC can installed in a conda environment as shown below:
+Conda environment will install all necessary dependencies, including snakemake, to run the QuaC workflow.
 
 ```sh
+cd /path/to/quac/repo
+
 module reset
 module load Anaconda3/2020.02
 
@@ -131,7 +137,7 @@ conda env update --file configs/env/quac.yaml
 
 In order to run the QuaC pipeline, user needs to
 
-1. Set up conda environment (see above)
+1. Install the pipeline and set up the conda environment ([see above](#installation))
 2. Set up config files specifying paths required by QC tools used in the pipeline.
 
 ### Requirements
@@ -152,12 +158,12 @@ In order to run the QuaC pipeline, user needs to
 
 - Anaconda/miniconda
     - Tested with Anaconda3/2020.02
+    - Available as module from cheaha
 - Singularity
     - Tested with v3.5.2
-    - Will be loaded as a module
+    - Will be loaded as a module when running QuaC
 
-
-Tools below are used in the pipeline, and snakemake automatically installs them in conda environments inside the
+Tools below are used in the QuaC pipeline, and snakemake automatically installs them in conda environments inside the
 singularity container. Therefore, they don't need to be manually installed. For tool versions used, refer to the
 snakemake rules.
 
@@ -190,10 +196,10 @@ verifyBamID:
 
 #### Prepare verifybamid datasets for exome analysis
 
-*This step is necessary only for exome samples.* [verifybamid](https://github.com/Griffan/VerifyBamID) has provided
-auxiliary resource files, which are necessary for analysis. However, chromosome contigs do not include `chr` prefix in
-their exome resource files, which are expected for our analyses at CGDS. Follow these steps to setup resource files with
-`chr` prefix in their contig names.
+*This step is necessary only if QuaC will be run in exome moe (`--exome`).*
+[verifybamid](https://github.com/Griffan/VerifyBamID) has provided auxiliary resource files, which are necessary for
+analysis. However, chromosome contigs do not include `chr` prefix in their exome resource files, which are expected for
+our analyses at CGDS. Follow these steps to setup resource files with `chr` prefix in their contig names.
 
 ```sh
 # cd into exome resources dir
@@ -265,7 +271,7 @@ conda activate quac
 
 python src/run_quac.py \
       --project_name PROJECT_DUCK \
-      --pedigree "path/to/project_duck/pedigree_file.ped"
+      --pedigree "path/to/lake/with/pedigree_file.ped"
 ```
 
 *Note that options `--project_name` and `--pedigree` are required*. Only the samples that are supplied in pedigree file
@@ -345,10 +351,20 @@ module reset
 module load Anaconda3/2020.02
 conda activate quac
 
+# WGS mode
 python src/run_quac.py \
       --project_name test_project \
-      --projects_path .test/ngs-data/ \
-      --pedigree .test/configs/project.ped
+      --projects_path ".test/ngs-data/" \
+      --pedigree ".test/configs/project.ped" \
+      --outdir "$USER_SCRATCH/tmp/quac/results/test_project_wgs/analysis"
+
+# exome mode
+python src/run_quac.py \
+      --project_name test_project \
+      --projects_path ".test/ngs-data/" \
+      --pedigree ".test/configs/project.ped" \
+      --outdir "$USER_SCRATCH/tmp/quac/results/test_project_exome/analysis" \
+      --exome
 ```
 
 ### Expected output files
