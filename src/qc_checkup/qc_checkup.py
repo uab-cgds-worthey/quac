@@ -46,13 +46,6 @@ def main(
     fastqc_outfile = f"{out_filepath_prefix}_fastqc.yaml"
     qc_checks_dict["fastqc"] = fastqc.fastqc(fastqc_f, config_dict["fastqc"], fastqc_outfile)
 
-    # fastq screen
-    LOGGER.info("-" * 80)
-    fastq_screen_outfile = f"{out_filepath_prefix}_fastq_screen.yaml"
-    qc_checks_dict["fastq_screen"] = fastq_screen.fastq_screen(
-        fastq_screen_f, config_dict["fastq_screen"], fastq_screen_outfile
-    )
-
     # read multiqc's general stats
     LOGGER.info("-" * 80)
     multiqc_general_stats_df = multiqc_general_stats.read_stats(multiqc_stats_f)
@@ -90,19 +83,6 @@ def main(
         picard_dup_f, config_dict["picard"]["MarkDuplicates"], picard_dup_outfile
     )
 
-    # verifyBamID
-    LOGGER.info("-" * 80)
-    verifybamid_outfile = f"{out_filepath_prefix}_verifybamid.yaml"
-    verifybamid_prefix = "VerifyBAMID_mqc-generalstats-verifybamid"
-    qc_checks_dict["verifybamid"] = multiqc_general_stats.check_thresholds(
-        multiqc_general_stats_df,
-        sample,
-        "verifybamid",
-        config_dict["verifybamid"],
-        verifybamid_prefix,
-        verifybamid_outfile,
-    )
-
     # bcftools-stats
     LOGGER.info("-" * 80)
     bcftools_stats_outfile = f"{out_filepath_prefix}_bcftools_stats.yaml"
@@ -123,6 +103,26 @@ def main(
         sample,
         config_dict["perc_variant_per_contig"],
         bcftools_index_outfile,
+    )
+
+    # verifyBamID
+    LOGGER.info("-" * 80)
+    verifybamid_outfile = f"{out_filepath_prefix}_verifybamid.yaml"
+    verifybamid_prefix = "VerifyBAMID_mqc-generalstats-verifybamid"
+    qc_checks_dict["verifybamid"] = multiqc_general_stats.check_thresholds(
+        multiqc_general_stats_df,
+        sample,
+        "verifybamid",
+        config_dict["verifybamid"],
+        verifybamid_prefix,
+        verifybamid_outfile,
+    )
+
+    # fastq screen
+    LOGGER.info("-" * 80)
+    fastq_screen_outfile = f"{out_filepath_prefix}_fastq_screen.yaml"
+    qc_checks_dict["fastq_screen"] = fastq_screen.fastq_screen(
+        fastq_screen_f, config_dict["fastq_screen"], fastq_screen_outfile
     )
 
     # write QC check results to file

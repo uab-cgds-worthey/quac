@@ -96,106 +96,6 @@ custom_data:
         pconfig:
             table_title: "FastQC - QC checkup"
 
-    qc_checkup_fastq_screen:
-        parent_id: "cgds_qc_checkup"
-        id: "qc_checkup_fastq_screen"
-        section_name: "FastQ Screen (trimmed)"
-        description: 'Quick summary of FastQ Screen (trimmed) results. See <a href="#fastq_screen-1">FastQ Screen</a> section below for detailed results.'
-        file_format: "yaml"
-        plot_type: "table"
-        pconfig:
-            table_title: "FastQ Screen - QC checkup"
-            only_defined_headers: False
-            scale: "Blues"
-        headers:
-            "%Human":
-                placement: 900
-            "%Mouse":
-                placement: 920
-            "%Rat":
-                placement: 940
-            "%No hits":
-                placement: 960
-            "%Human_val":
-                min: {{ fastq_screen_human_min }}
-                max: {{ fastq_screen_human_max }}
-                description: "%Human (min: {{ fastq_screen_human_min }}, max: {{ fastq_screen_human_max }})"
-                hidden: True
-                placement: 910
-            "%Mouse_val":
-                min: {{ fastq_screen_mouse_min }}
-                max: {{ fastq_screen_mouse_max }}
-                description: "%Mouse (min: {{ fastq_screen_mouse_min }}, max: {{ fastq_screen_mouse_max }})"
-                hidden: True
-                placement: 930
-            "%Rat_val":
-                min: {{ fastq_screen_rat_min }}
-                max: {{ fastq_screen_rat_max }}
-                description: "%Rat (min: {{ fastq_screen_rat_min }}, max: {{ fastq_screen_rat_max }})"
-                hidden: True
-                placement: 950
-            "%Drosophila_val":
-                min: {{ fastq_screen_drosophila_min }}
-                max: {{ fastq_screen_drosophila_max }}
-                description: "%Drosophila (min: {{ fastq_screen_drosophila_min }}, max: {{ fastq_screen_drosophila_max }})"
-                hidden: True
-            "%Arabidopsis_val":
-                min: {{ fastq_screen_arabidopsis_min }}
-                max: {{ fastq_screen_arabidopsis_max }}
-                description: "%Arabidopsis (min: {{ fastq_screen_arabidopsis_min }}, max: {{ fastq_screen_arabidopsis_max }})"
-                hidden: True
-            "%No hits_val":
-                min: {{ fastq_screen_nohits_min }}
-                max: {{ fastq_screen_nohits_max }}
-                description: "%No hits (min: {{ fastq_screen_nohits_min }}, max: {{ fastq_screen_nohits_max }})"
-                hidden: True
-                placement: 970
-            "%Adapters_val":
-                min: {{ fastq_screen_others_min }}
-                max: {{ fastq_screen_others_max }}
-                description: "%Adapters (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
-                hidden: True
-            "%Ecoli_val":
-                min: {{ fastq_screen_others_min }}
-                max: {{ fastq_screen_others_max }}
-                description: "%Ecoli (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
-                hidden: True
-            "%Lambda_val":
-                min: {{ fastq_screen_others_min }}
-                max: {{ fastq_screen_others_max }}
-                description: "%Lambda (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
-                hidden: True
-            "%MT_val":
-                min: {{ fastq_screen_others_min }}
-                max: {{ fastq_screen_others_max }}
-                description: "%MT (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
-                hidden: True
-            "%PhiX_val":
-                min: {{ fastq_screen_others_min }}
-                max: {{ fastq_screen_others_max }}
-                description: "%PhiX (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
-                hidden: True
-            "%Vectors_val":
-                min: {{ fastq_screen_others_min }}
-                max: {{ fastq_screen_others_max }}
-                description: "%Vectors (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
-                hidden: True
-            "%Worm_val":
-                min: {{ fastq_screen_others_min }}
-                max: {{ fastq_screen_others_max }}
-                description: "%Worm (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
-                hidden: True
-            "%Yeast_val":
-                min: {{ fastq_screen_others_min }}
-                max: {{ fastq_screen_others_max }}
-                description: "%Yeast (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
-                hidden: True
-            "%rRNA_val":
-                min: {{ fastq_screen_others_min }}
-                max: {{ fastq_screen_others_max }}
-                description: "%rRNA (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
-                hidden: True
-
     qc_checkup_qualimap_overall:
         parent_id: "cgds_qc_checkup"
         id: "qc_checkup_qualimap_overall"
@@ -582,25 +482,126 @@ custom_data:
                 title: "Contamination(%)"
                 description: "{{ verifybamid_freemix_description }}"
 
+    qc_checkup_fastq_screen:
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_fastq_screen"
+        section_name: "FastQ Screen (trimmed)"
+        description: 'Quick summary of FastQ Screen (trimmed) results. See <a href="#fastq_screen-1">FastQ Screen</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "FastQ Screen - QC checkup"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            "%Human":
+                placement: 900
+            "%Mouse":
+                placement: 920
+            "%Rat":
+                placement: 940
+            "%No hits":
+                placement: 960
+            "%Human_val":
+                min: {{ fastq_screen_human_min }}
+                max: {{ fastq_screen_human_max }}
+                description: "%Human (min: {{ fastq_screen_human_min }}, max: {{ fastq_screen_human_max }})"
+                hidden: True
+                placement: 910
+            "%Mouse_val":
+                min: {{ fastq_screen_mouse_min }}
+                max: {{ fastq_screen_mouse_max }}
+                description: "%Mouse (min: {{ fastq_screen_mouse_min }}, max: {{ fastq_screen_mouse_max }})"
+                hidden: True
+                placement: 930
+            "%Rat_val":
+                min: {{ fastq_screen_rat_min }}
+                max: {{ fastq_screen_rat_max }}
+                description: "%Rat (min: {{ fastq_screen_rat_min }}, max: {{ fastq_screen_rat_max }})"
+                hidden: True
+                placement: 950
+            "%Drosophila_val":
+                min: {{ fastq_screen_drosophila_min }}
+                max: {{ fastq_screen_drosophila_max }}
+                description: "%Drosophila (min: {{ fastq_screen_drosophila_min }}, max: {{ fastq_screen_drosophila_max }})"
+                hidden: True
+            "%Arabidopsis_val":
+                min: {{ fastq_screen_arabidopsis_min }}
+                max: {{ fastq_screen_arabidopsis_max }}
+                description: "%Arabidopsis (min: {{ fastq_screen_arabidopsis_min }}, max: {{ fastq_screen_arabidopsis_max }})"
+                hidden: True
+            "%No hits_val":
+                min: {{ fastq_screen_nohits_min }}
+                max: {{ fastq_screen_nohits_max }}
+                description: "%No hits (min: {{ fastq_screen_nohits_min }}, max: {{ fastq_screen_nohits_max }})"
+                hidden: True
+                placement: 970
+            "%Adapters_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%Adapters (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%Ecoli_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%Ecoli (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%Lambda_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%Lambda (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%MT_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%MT (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%PhiX_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%PhiX (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%Vectors_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%Vectors (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%Worm_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%Worm (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%Yeast_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%Yeast (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%rRNA_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%rRNA (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+
+
 # define file pattern for custom configs
 sp:
     qc_checkup_overall_summary:
         fn: "qc_checkup_overall_summary.yaml"
     qc_checkup_fastqc:
         fn: "qc_checkup_fastqc.yaml"
-    qc_checkup_fastq_screen:
-        fn: "qc_checkup_fastq_screen.yaml"
     qc_checkup_qualimap_overall:
         fn: "qc_checkup_qualimap_overall.yaml"
+    qc_checkup_qualimap_chromosome_stats:
+        fn: "qc_checkup_qualimap_chromosome_stats.yaml"
     qc_checkup_picard:
         fn: "qc_checkup_picard.yaml"
     qc_checkup_picard_dups:
         fn: "qc_checkup_picard_dups.yaml"
-    qc_checkup_qualimap_chromosome_stats:
-        fn: "qc_checkup_qualimap_chromosome_stats.yaml"
     qc_checkup_bcftools_stats:
         fn: "qc_checkup_bcftools_stats.yaml"
     qc_checkup_variant_per_contig:
         fn: "qc_checkup_variant_per_contig.yaml"
     qc_checkup_verifybamid:
         fn: "qc_checkup_verifybamid.yaml"
+    qc_checkup_fastq_screen:
+        fn: "qc_checkup_fastq_screen.yaml"

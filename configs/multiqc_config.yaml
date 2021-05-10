@@ -96,106 +96,6 @@ custom_data:
         pconfig:
             table_title: "FastQC - QC checkup"
 
-    qc_checkup_fastq_screen:
-        parent_id: "cgds_qc_checkup"
-        id: "qc_checkup_fastq_screen"
-        section_name: "FastQ Screen (trimmed)"
-        description: 'Quick summary of FastQ Screen (trimmed) results. See <a href="#fastq_screen-1">FastQ Screen</a> section below for detailed results.'
-        file_format: "yaml"
-        plot_type: "table"
-        pconfig:
-            table_title: "FastQ Screen - QC checkup"
-            only_defined_headers: False
-            scale: "Blues"
-        headers:
-            "%Human":
-                placement: 900
-            "%Mouse":
-                placement: 920
-            "%Rat":
-                placement: 940
-            "%No hits":
-                placement: 960
-            "%Human_val":
-                min: 98.5
-                max: 100
-                description: "%Human (min: 98.5, max: 100)"
-                hidden: True
-                placement: 910
-            "%Mouse_val":
-                min: 8.1
-                max: 11
-                description: "%Mouse (min: 8.1, max: 11)"
-                hidden: True
-                placement: 930
-            "%Rat_val":
-                min: 9.0
-                max: 11
-                description: "%Rat (min: 9.0, max: 11)"
-                hidden: True
-                placement: 950
-            "%Drosophila_val":
-                min: 1.1
-                max: 1.8
-                description: "%Drosophila (min: 1.1, max: 1.8)"
-                hidden: True
-            "%Arabidopsis_val":
-                min: 0.8
-                max: 1.2
-                description: "%Arabidopsis (min: 0.8, max: 1.2)"
-                hidden: True
-            "%No hits_val":
-                min: 0
-                max: 1
-                description: "%No hits (min: 0, max: 1)"
-                hidden: True
-                placement: 970
-            "%Adapters_val":
-                min: 0
-                max: 1.0
-                description: "%Adapters (min: 0, max: 1.0)"
-                hidden: True
-            "%Ecoli_val":
-                min: 0
-                max: 1.0
-                description: "%Ecoli (min: 0, max: 1.0)"
-                hidden: True
-            "%Lambda_val":
-                min: 0
-                max: 1.0
-                description: "%Lambda (min: 0, max: 1.0)"
-                hidden: True
-            "%MT_val":
-                min: 0
-                max: 1.0
-                description: "%MT (min: 0, max: 1.0)"
-                hidden: True
-            "%PhiX_val":
-                min: 0
-                max: 1.0
-                description: "%PhiX (min: 0, max: 1.0)"
-                hidden: True
-            "%Vectors_val":
-                min: 0
-                max: 1.0
-                description: "%Vectors (min: 0, max: 1.0)"
-                hidden: True
-            "%Worm_val":
-                min: 0
-                max: 1.0
-                description: "%Worm (min: 0, max: 1.0)"
-                hidden: True
-            "%Yeast_val":
-                min: 0
-                max: 1.0
-                description: "%Yeast (min: 0, max: 1.0)"
-                hidden: True
-            "%rRNA_val":
-                min: 0
-                max: 1.0
-                description: "%rRNA (min: 0, max: 1.0)"
-                hidden: True
-
     qc_checkup_qualimap_overall:
         parent_id: "cgds_qc_checkup"
         id: "qc_checkup_qualimap_overall"
@@ -286,7 +186,7 @@ custom_data:
             PCT_CHIMERAS_val:
                 min: 0
                 max: 1
-                description: "The number of chimeric pairs expressed as a % of the total of all outward facing pairs, inward-facing pairs, and chimeric pairs. (min: 0, max: 1)"
+                description: "The fraction of reads that map outside of a maximum insert size (usually 100kb) or that have the two ends mapping to different chromosomes. (min: 0, max: 1)"
                 hidden: True
             Q30_BASES_val:
                 min: 8.0E+10
@@ -313,7 +213,7 @@ custom_data:
             PCT_ADAPTER:
                 description: "% of Pass filter(PF) reads that are unaligned and match to a known adapter sequence right from the start of the read."
             PCT_CHIMERAS:
-                description: "The number of chimeric pairs expressed as a % of the total of all outward facing pairs, inward-facing pairs, and chimeric pairs."
+                description: "The fraction of reads that map outside of a maximum insert size (usually 100kb) or that have the two ends mapping to different chromosomes."
             Q30_BASES:
                 description: "The number of bases in all reads that achieve quality score 30 or higher"
             perc_Q30_BASES:
@@ -582,25 +482,126 @@ custom_data:
                 title: "Contamination(%)"
                 description: "% Cross-human-sample contamination"
 
+    qc_checkup_fastq_screen:
+        parent_id: "cgds_qc_checkup"
+        id: "qc_checkup_fastq_screen"
+        section_name: "FastQ Screen (trimmed)"
+        description: 'Quick summary of FastQ Screen (trimmed) results. See <a href="#fastq_screen-1">FastQ Screen</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "FastQ Screen - QC checkup"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            "%Human":
+                placement: 900
+            "%Mouse":
+                placement: 920
+            "%Rat":
+                placement: 940
+            "%No hits":
+                placement: 960
+            "%Human_val":
+                min: 98.5
+                max: 100
+                description: "%Human (min: 98.5, max: 100)"
+                hidden: True
+                placement: 910
+            "%Mouse_val":
+                min: 8.1
+                max: 11
+                description: "%Mouse (min: 8.1, max: 11)"
+                hidden: True
+                placement: 930
+            "%Rat_val":
+                min: 9.0
+                max: 11
+                description: "%Rat (min: 9.0, max: 11)"
+                hidden: True
+                placement: 950
+            "%Drosophila_val":
+                min: 1.1
+                max: 1.8
+                description: "%Drosophila (min: 1.1, max: 1.8)"
+                hidden: True
+            "%Arabidopsis_val":
+                min: 0.8
+                max: 1.2
+                description: "%Arabidopsis (min: 0.8, max: 1.2)"
+                hidden: True
+            "%No hits_val":
+                min: 0
+                max: 1
+                description: "%No hits (min: 0, max: 1)"
+                hidden: True
+                placement: 970
+            "%Adapters_val":
+                min: 0
+                max: 1.0
+                description: "%Adapters (min: 0, max: 1.0)"
+                hidden: True
+            "%Ecoli_val":
+                min: 0
+                max: 1.0
+                description: "%Ecoli (min: 0, max: 1.0)"
+                hidden: True
+            "%Lambda_val":
+                min: 0
+                max: 1.0
+                description: "%Lambda (min: 0, max: 1.0)"
+                hidden: True
+            "%MT_val":
+                min: 0
+                max: 1.0
+                description: "%MT (min: 0, max: 1.0)"
+                hidden: True
+            "%PhiX_val":
+                min: 0
+                max: 1.0
+                description: "%PhiX (min: 0, max: 1.0)"
+                hidden: True
+            "%Vectors_val":
+                min: 0
+                max: 1.0
+                description: "%Vectors (min: 0, max: 1.0)"
+                hidden: True
+            "%Worm_val":
+                min: 0
+                max: 1.0
+                description: "%Worm (min: 0, max: 1.0)"
+                hidden: True
+            "%Yeast_val":
+                min: 0
+                max: 1.0
+                description: "%Yeast (min: 0, max: 1.0)"
+                hidden: True
+            "%rRNA_val":
+                min: 0
+                max: 1.0
+                description: "%rRNA (min: 0, max: 1.0)"
+                hidden: True
+
+
 # define file pattern for custom configs
 sp:
     qc_checkup_overall_summary:
         fn: "qc_checkup_overall_summary.yaml"
     qc_checkup_fastqc:
         fn: "qc_checkup_fastqc.yaml"
-    qc_checkup_fastq_screen:
-        fn: "qc_checkup_fastq_screen.yaml"
     qc_checkup_qualimap_overall:
         fn: "qc_checkup_qualimap_overall.yaml"
+    qc_checkup_qualimap_chromosome_stats:
+        fn: "qc_checkup_qualimap_chromosome_stats.yaml"
     qc_checkup_picard:
         fn: "qc_checkup_picard.yaml"
     qc_checkup_picard_dups:
         fn: "qc_checkup_picard_dups.yaml"
-    qc_checkup_qualimap_chromosome_stats:
-        fn: "qc_checkup_qualimap_chromosome_stats.yaml"
     qc_checkup_bcftools_stats:
         fn: "qc_checkup_bcftools_stats.yaml"
     qc_checkup_variant_per_contig:
         fn: "qc_checkup_variant_per_contig.yaml"
     qc_checkup_verifybamid:
         fn: "qc_checkup_verifybamid.yaml"
+    qc_checkup_fastq_screen:
+        fn: "qc_checkup_fastq_screen.yaml"
