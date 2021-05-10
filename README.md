@@ -1,7 +1,7 @@
 - [QuaC](#quac)
   - [What is QuaC?](#what-is-quac)
     - [QC tools included](#qc-tools-included)
-    - [QC checkup](#qc-checkup)
+    - [CGDS QC-checkup](#cgds-qc-checkup)
   - [Installation](#installation)
     - [Requirements](#requirements)
     - [Retrieve pipeline source code](#retrieve-pipeline-source-code)
@@ -11,8 +11,9 @@
     - [Set up workflow config file](#set-up-workflow-config-file)
       - [Prepare verifybamid datasets for exome analysis](#prepare-verifybamid-datasets-for-exome-analysis)
     - [Run pipeline](#run-pipeline)
+    - [Input requirements](#input-requirements)
     - [Example usage](#example-usage)
-  - [Output](#output)
+    - [Output](#output)
   - [Testing pipeline](#testing-pipeline)
     - [How to run](#how-to-run)
     - [Expected output files](#expected-output-files)
@@ -26,9 +27,9 @@
 
 ## What is QuaC?
 
-QuaC is a snakemake-based pipeline that runs several QC tools and summarizes results for WGS/WES samples
-processed at CGDS using internally defined QC thresholds. It is a companion pipeline that should be run after samples in
-a project are run through [CGDS's small variant caller
+QuaC is a snakemake-based pipeline that runs several QC tools and summarizes results for WGS/WES samples processed at
+CGDS using internally defined QC thresholds. It is a companion pipeline that should be run after samples in a project
+are run through [CGDS's small variant caller
 pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
 
 In short, QuaC performs the following:
@@ -52,18 +53,18 @@ QuaC quacks using the tools listed below:
 
 | Tool                                                                                                                       | Use                                                                                           |
 | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| *BAM QC*                                                                                                                 |                                                                                               |
+| *BAM QC*                                                                                                                   |                                                                                               |
 | [Qualimap](http://qualimap.conesalab.org/)                                                                                 | QCs alignment data in SAM/BAM files                                                           |
 | [Picard-CollectMultipleMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectMultipleMetrics) | summarizes alignment metrics from a SAM/BAM file using several modules                        |
 | [Picard-CollectWgsMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectWgsMetrics)           | Collects metrics about coverage and performance of whole genome sequencing (WGS) experiments. |
 | [mosdepth](https://github.com/brentp/mosdepth)                                                                             | Fast BAM/CRAM depth calculation                                                               |
-| [indexcov](https://github.com/brentp/goleft/tree/master/indexcov)                                                          | Estimate coverage from whole-genome bam or cram index (Not run in exome mode)                                         |
-| [covviz](https://github.com/brwnj/covviz)                                                                                  | Identifies large, coverage-based anomalies (Not run in exome mode)                                                   |
-| *VCF QC*                                                                                                                 |                                                                                               |
+| [indexcov](https://github.com/brentp/goleft/tree/master/indexcov)                                                          | Estimate coverage from whole-genome bam or cram index (Not run in exome mode)                 |
+| [covviz](https://github.com/brwnj/covviz)                                                                                  | Identifies large, coverage-based anomalies (Not run in exome mode)                            |
+| *VCF QC*                                                                                                                   |                                                                                               |
 | [bcftools stats](https://samtools.github.io/bcftools/bcftools.html#stats)                                                  | Stats variants in VCF                                                                         |
-| *Within-species contamination*                                                                                           |                                                                                               |
+| *Within-species contamination*                                                                                             |                                                                                               |
 | [verifybamid](https://github.com/Griffan/VerifyBamID)                                                                      | Estimates within-species (i.e. cross-sample) contamination                                    |
-| *Sex, ancestry and relatedness estimation*                                                                               |                                                                                               |
+| *Sex, ancestry and relatedness estimation*                                                                                 |                                                                                               |
 | [somalier](https://github.com/brentp/somalier)                                                                             | Estimation of sex, ancestry and relatedness                                                   |
 
 
@@ -79,10 +80,10 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 
 ### CGDS QC-checkup
 
-After running all the QC tools for samples, QuaC summarizes if samples have passed the QC thresholds (defined via
-config file [`qc_checkup_config.yaml`](configs/qc_checkup/qc_checkup_config.yaml)), both at the sample level as well as
-project level. This summary makes it easy to quickly review if sample or samples have sufficient quality and highlight
-samples that need further review.
+After running all the QC tools for samples, QuaC summarizes if samples have passed the QC thresholds (defined via config
+file [`qc_checkup_config.yaml`](configs/qc_checkup/qc_checkup_config.yaml); can be user-configured), both at the sample
+level as well as project level. This summary makes it easy to quickly review if sample or samples have sufficient
+quality and highlight samples that need further review.
 
 ## Installation
 
@@ -295,18 +296,19 @@ Besides the basic features, wrapper script [`src/run_quac.py`](./src/run_quac.py
 
 ### Input requirements
 
-* Pedigree file supplied via `--pedigree`. Only the samples that are supplied in pedigree file
-will be processed by QuaC and all of these samples must belong to the same project. This repo also
-includes a handy script [`src/create_dummy_ped.py`](src/create_dummy_ped.py) that can create a dummy pedigree file,
-which will lack sex (unless project tracking sheet is provided), relatedness and affectedness info. See header of the
-script for usage instructions. Note that we plan to use [phenotips](https://phenotips.com/) in future to produce fully
-capable pedigree file. One could manually create them as well, but this would be error-prone.
+* Pedigree file supplied via `--pedigree`. Only the samples that are supplied in pedigree file will be processed by QuaC
+  and all of these samples must belong to the same project. This repo also includes a handy script
+  [`src/create_dummy_ped.py`](src/create_dummy_ped.py) that can create a dummy pedigree file, which will lack sex
+  (unless project tracking sheet is provided), relatedness and affectedness info. See header of the script for usage
+  instructions. Note that we plan to use [phenotips](https://phenotips.com/) in future to produce fully capable pedigree
+  file. One could manually create them as well, but this would be error-prone.
 * Output produced by [the small variant caller
   pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
   This includes bam, vcf and QC output. Refer to [test sample dataset](.test/ngs-data/test_project/analysis/A), which is
   representative of the input required.
 * [QuaC config file](#set-up-workflow-config-file)
-* When run in exome mode, QuaC requires a capture-regions bed file at path `path_to_sample/configs/small_variant_caller/<capture_regions>.bed`.
+* When run in exome mode, QuaC requires a capture-regions bed file at path
+  `path_to_sample/configs/small_variant_caller/<capture_regions>.bed`.
 
 
 ### Example usage
