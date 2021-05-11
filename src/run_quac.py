@@ -133,7 +133,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
         f"--profile '{snakemake_profile_dir}'",
         f"--cluster-config '{args.cluster_config}'",
         "--cluster 'sbatch --ntasks {cluster.ntasks} --partition {cluster.partition}"
-        " --cpus-per-task {cluster.cpus-per-task} --mem {cluster.mem}"
+        " --cpus-per-task {cluster.cpus-per-task} --mem-per-cpu {cluster.mem-per-cpu}"
         " --job-name {cluster.jobname} --output {cluster.output} --parsable'",
     ]
 
