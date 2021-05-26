@@ -327,7 +327,7 @@ python src/run_quac.py \
 * Pedigree file supplied via `--pedigree`. Only the samples that are supplied in pedigree file will be processed by QuaC
   and all of these samples must belong to the same project. This repo also includes a handy script
   [`src/create_dummy_ped.py`](src/create_dummy_ped.py) that can create a dummy pedigree file, which will lack sex
-  (unless project tracking sheet is provided), relatedness and affectedness info. See header of the script for usage
+  (unless project tracking sheet is provided), relatedness and affected status info. See header of the script for usage
   instructions. Note that we plan to use [phenotips](https://phenotips.com/) in future to produce fully capable pedigree
   file. One could manually create them as well, but this would be error-prone.
 * Output produced by [the small variant caller
