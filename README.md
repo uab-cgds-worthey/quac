@@ -304,7 +304,7 @@ While this step is optional, this will ensure that there will not be any conflic
 the pipeline.
 
 Running the commands below will submit a slurm job to just create these singularity+conda environments. Note that this
-slurm job will exit right after creating the environments, and it will not run any QC analyzes on the input samples
+slurm job will exit right after creating the environments, and it will not run any QC analyses on the input samples
 provided.
 
 ```sh
