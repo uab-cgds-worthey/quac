@@ -9,7 +9,7 @@ rule somalier_extract:
     message:
         "Running somalier extract. Sample: {wildcards.sample}"
     singularity:
-        "docker://brentp/somalier:v0.2.12"
+        "docker://brentp/somalier:v0.2.13"
     params:
         outdir=lambda wildcards, output: Path(output[0]).parent,
     shell:
@@ -36,7 +36,7 @@ rule somalier_relate:
     message:
         "Running somalier relate"
     singularity:
-        "docker://brentp/somalier:v0.2.12"
+        "docker://brentp/somalier:v0.2.13"
     log:
         log=OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.log",
     params:
@@ -68,7 +68,7 @@ rule somalier_ancestry:
     message:
         "Running somalier ancestry."
     singularity:
-        "docker://brentp/somalier:v0.2.12"
+        "docker://brentp/somalier:v0.2.13"
     log:
         log=OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.log",
     params:
