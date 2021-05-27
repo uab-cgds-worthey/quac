@@ -44,8 +44,6 @@ rule somalier_relate:
         infiles=lambda wildcards: str(OUT_DIR / "project_level_qc" / "somalier" / "extract" / f"{{{','.join(SAMPLES)}}}.somalier"),
     shell:
         r"""
-        echo "Heads up: Somalier is run on all samples in the input directory; Not just the files mentioned in the rule's input."
-
         somalier relate \
             --ped {input.ped} \
             --infer \
