@@ -327,7 +327,7 @@ if __name__ == "__main__":
         help="Flag to run the snakemake locally and not as a Slurm job. "
         "Useful for testing purposes.",
     )
-    RERUN_FAILED_DEFAULT = 0
+    RERUN_FAILED_DEFAULT = 1
     WRAPPER.add_argument(
         "--rerun_failed",
         help=f"Number of times snakemake restarts failed jobs. This may be set to >0 "
