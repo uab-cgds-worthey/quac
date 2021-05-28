@@ -1,4 +1,5 @@
 qualimap:
+  # TODO: verify the limits used
   avg_gc:
     description: "Mean GC content"
     min: 40.5
