@@ -124,7 +124,6 @@ def create_snakemake_command(args, repo_path, mount_paths):
     cmd = [
         "snakemake",
         f"--snakefile '{snakefile_path}'",
-        "--wms-monitor http://10.111.161.152/panoptes",
         f"--config {quac_configs}",
         f"--restart-times {args.rerun_failed}",
         "--use-conda",
