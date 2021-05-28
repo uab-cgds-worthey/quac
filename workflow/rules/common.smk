@@ -116,7 +116,10 @@ rule create_multiqc_config:
         str(WORKFLOW_PATH / "configs/env/qc_checkup.yaml")
     shell:
         r"""
-        python {input.script}
+        python {input.script} \
+            --template_f  {input.template} \
+            --qc_config {input.qc_checkup_config} \
+            --outfile {output}
         """
 
 

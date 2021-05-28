@@ -82,7 +82,7 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 ### CGDS QC-checkup
 
 After running all the QC tools for samples, QuaC summarizes if samples have passed the QC thresholds (defined via config
-file [`qc_checkup_config.yaml`](configs/qc_checkup/qc_checkup_config.yaml); can be user-configured), both at the sample
+file [`wgs_qc_checkup_config.yaml`](configs/qc_checkup/wgs_qc_checkup_config.yaml); can be user-configured), both at the sample
 level as well as project level. This summary makes it easy to quickly review if sample or samples have sufficient
 quality and highlight samples that need further review.
 
@@ -239,7 +239,7 @@ QuaC workflow options:
                         supplied via --project_name (default: None)
   --qc_checkup_config   YAML config path specifying QC thresholds for QC
                         checkup (default:
-                        configs/qc_checkup/qc_checkup_config.yaml)
+                        configs/qc_checkup/wgs_qc_checkup_config.yaml)
   --workflow_config     YAML config path specifying filepath to dependencies
                         of tools used in QuaC (default: configs/workflow.yaml)
   --outdir              Out directory path (default:

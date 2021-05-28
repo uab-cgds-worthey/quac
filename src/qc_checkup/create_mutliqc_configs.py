@@ -4,6 +4,7 @@ Creates multiqc config file based on jinja templating and values from qc-checkup
 
 from jinja2 import Template, StrictUndefined
 import yaml
+import fire
 
 
 def main(template_f, qc_config, outfile):
@@ -217,7 +218,13 @@ def main(template_f, qc_config, outfile):
 
 
 if __name__ == "__main__":
-    TEMPLATE_F = "configs/multiqc_config_template.jinja2"
-    QC_CONFIG = "configs/qc_checkup/qc_checkup_config.yaml"
-    OUTFILE = "configs/multiqc_config.yaml"
-    main(TEMPLATE_F, QC_CONFIG, OUTFILE)
+    FIRE_MODE = True
+    # FIRE_MODE = False
+
+    if FIRE_MODE:
+        fire.Fire(main)
+    else:
+        TEMPLATE_F = "configs/multiqc_config_template.jinja2"
+        QC_CONFIG = "configs/qc_checkup/wgs_qc_checkup_config.yaml"
+        OUTFILE = "configs/multiqc_config.yaml"
+        main(TEMPLATE_F, QC_CONFIG, OUTFILE)

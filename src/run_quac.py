@@ -261,7 +261,7 @@ if __name__ == "__main__":
     WORKFLOW.add_argument(
         "--qc_checkup_config",
         help="YAML config path specifying QC thresholds for QC checkup",
-        default="configs/qc_checkup/qc_checkup_config.yaml",
+        default="configs/qc_checkup/wgs_qc_checkup_config.yaml",
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
