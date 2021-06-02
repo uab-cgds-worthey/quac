@@ -283,7 +283,7 @@ if __name__ == "__main__":
     WORKFLOW.add_argument(
         "--exome",
         action="store_true",
-        help="Flag to run in exome mode",
+        help="Flag to run in exome mode. WARNING: Please provide appropriate configs via --qc_checkup_config.",
     )
 
     ############ Args for QuaC wrapper tool  ############
