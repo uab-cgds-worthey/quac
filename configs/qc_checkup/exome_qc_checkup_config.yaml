@@ -12,18 +12,18 @@ qualimap:
 
   mean_coverage:
     description: "Mean coverage"
-    min: 30
+    min: 100
     max:
 
   median_coverage:
     description: "Median coverage"
-    min: 30
+    min: 100
     max:
 
   mean_cov:median_cov:
     description: "Ratio of Mean coverage to Median coverage"
-    min: 0.95
-    max: 1.05
+    min: 0.9
+    max: 1.1
 
   median_insert_size:
     description: "Median insert size"
