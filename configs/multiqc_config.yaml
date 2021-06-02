@@ -115,12 +115,12 @@ custom_data:
                 hidden: True
             # if you change coverage limits, also change values in "qc_checkup_qualimap_chromosome_stats"
             mean_coverage_val:
-                min: 30
-                description: "Mean coverage (min: 30)"
+                min: 100
+                description: "Mean coverage (min: 100)"
                 hidden: True
             median_coverage_val:
-                min: 30
-                description: "Median coverage (min: 30)"
+                min: 100
+                description: "Median coverage (min: 100)"
                 hidden: True
             percentage_aligned_val:
                 min: 99
@@ -128,9 +128,9 @@ custom_data:
                 description: "% mapped reads (min: 99, max: 100)"
                 hidden: True
             "mean_cov:median_cov_val":
-                min: 0.95
-                max: 1.05
-                description: "Ratio of Mean coverage to Median coverage (min: 0.95, max: 1.05)"
+                min: 0.9
+                max: 1.1
+                description: "Ratio of Mean coverage to Median coverage (min: 0.9, max: 1.1)"
                 hidden: True
             median_insert_size_val:
                 min: 250
@@ -152,7 +152,7 @@ custom_data:
             ylab: "Coverage (X)"
             extra_series:
                 name: "Minimum required"
-                data: [[0, 30], [21, 30], [22, 15.0], [23, 15.0]]
+                data: [[0, 100], [21, 100], [22, 50.0], [23, 50.0]]
                 dashStyle: "Dash"
                 showInLegend: False
                 color: "PaleVioletRed"
@@ -254,34 +254,34 @@ custom_data:
             scale: "Blues"
         headers:
             number_of_records_val:
-                min: 4.9E+06
-                max: 6.1E+06
-                description: "Total number of variants (min: 4.9E+06, max: 6.1E+06)"
+                min: 8.2E+04
+                max: 1.0E+05
+                description: "Total number of variants (min: 8.2E+04, max: 1.0E+05)"
                 hidden: True
             number_of_SNPs_val:
-                min: 4.0E+06
-                max: 5.0E+06
-                description: "Total number of SNPs (min: 4.0E+06, max: 5.0E+06)"
+                min: 7.2E+04
+                max: 9.0E+04
+                description: "Total number of SNPs (min: 7.2E+04, max: 9.0E+04)"
                 hidden: True
             number_of_indels_val:
-                min: 8.2E+05
-                max: 1.2E+06
-                description: "Total number of Indels (min: 8.2E+05, max: 1.2E+06)"
+                min: 9.5E+03
+                max: 1.3E+04
+                description: "Total number of Indels (min: 9.5E+03, max: 1.3E+04)"
                 hidden: True
             perc_snps_val:
-                min: 80
-                max: 83
-                description: "%SNPs among all variants (min: 80, max: 83)"
+                min: 86
+                max: 89
+                description: "%SNPs among all variants (min: 86, max: 89)"
                 hidden: True
             perc_indels_val:
-                min: 17
-                max: 20
-                description: "%Indels among all variants (min: 17, max: 20)"
+                min: 11
+                max: 14
+                description: "%Indels among all variants (min: 11, max: 14)"
                 hidden: True
             tstv_val:
-                min: 1.92
-                max: 1.95
-                description: "Transition to Transversion ratio (min: 1.92, max: 1.95)"
+                min: 2.3
+                max: 2.5
+                description: "Transition to Transversion ratio (min: 2.3, max: 2.5)"
                 hidden: True
             heterozygosity_ratio_val:
                 min: 1.6
@@ -317,148 +317,148 @@ custom_data:
         headers:
         headers:
             chr1_val:
-                min: 0.15
-                max: 0.2
-                description: "chr1 (min: 0.15, max: 0.2)"
-                format: '{:,.3f}'
+                min: 0.003
+                max: 0.004
+                description: "chr1 (min: 0.003, max: 0.004)"
+                format: '{:,.4f}'
                 hidden: True
             chr2_val:
-                min: 0.155
-                max: 0.2
-                description: "chr2 (min: 0.155, max: 0.2)"
-                format: '{:,.3f}'
+                min: 0.002
+                max: 0.003
+                description: "chr2 (min: 0.002, max: 0.003)"
+                format: '{:,.4f}'
                 hidden: True
             chr3_val:
-                min: 0.16
-                max: 0.21
-                description: "chr3 (min: 0.16, max: 0.21)"
-                format: '{:,.3f}'
+                min: 0.002
+                max: 0.003
+                description: "chr3 (min: 0.002, max: 0.003)"
+                format: '{:,.4f}'
                 hidden: True
             chr4_val:
-                min: 0.17
-                max: 0.22
-                description: "chr4 (min: 0.17, max: 0.22)"
-                format: '{:,.3f}'
+                min: 0.0016
+                max: 0.0022
+                description: "chr4 (min: 0.0016, max: 0.0022)"
+                format: '{:,.4f}'
                 hidden: True
             chr5_val:
-                min: 0.15
-                max: 0.2
-                description: "chr5 (min: 0.15, max: 0.2)"
-                format: '{:,.3f}'
+                min: 0.0018
+                max: 0.0025
+                description: "chr5 (min: 0.0018, max: 0.0025)"
+                format: '{:,.4f}'
                 hidden: True
             chr6_val:
-                min: 0.17
-                max: 0.21
-                description: "chr6 (min: 0.17, max: 0.21)"
-                format: '{:,.3f}'
+                min: 0.002
+                max: 0.0036
+                description: "chr6 (min: 0.002, max: 0.0036)"
+                format: '{:,.4f}'
                 hidden: True
             chr7_val:
-                min: 0.17
-                max: 0.22
-                description: "chr7 (min: 0.17, max: 0.22)"
-                format: '{:,.3f}'
+                min: 0.0028
+                max: 0.0036
+                description: "chr7 (min: 0.0028, max: 0.0036)"
+                format: '{:,.4f}'
                 hidden: True
             chr8_val:
-                min: 0.16
-                max: 0.22
-                description: "chr8 (min: 0.16, max: 0.22)"
-                format: '{:,.3f}'
+                min: 0.0019
+                max: 0.0026
+                description: "chr8 (min: 0.0019, max: 0.0026)"
+                format: '{:,.4f}'
                 hidden: True
             chr9_val:
-                min: 0.15
-                max: 0.2
-                description: "chr9 (min: 0.15, max: 0.2)"
-                format: '{:,.3f}'
+                min: 0.0021
+                max: 0.0031
+                description: "chr9 (min: 0.0021, max: 0.0031)"
+                format: '{:,.4f}'
                 hidden: True
             chr10_val:
-                min: 0.175
-                max: 0.23
-                description: "chr10 (min: 0.175, max: 0.23)"
-                format: '{:,.3f}'
+                min: 0.0025
+                max: 0.0032
+                description: "chr10 (min: 0.0025, max: 0.0032)"
+                format: '{:,.4f}'
                 hidden: True
             chr11_val:
-                min: 0.17
-                max: 0.22
-                description: "chr11 (min: 0.17, max: 0.22)"
-                format: '{:,.3f}'
+                min: 0.0035
+                max: 0.0043
+                description: "chr11 (min: 0.0035, max: 0.0043)"
+                format: '{:,.4f}'
                 hidden: True
             chr12_val:
-                min: 0.16
-                max: 0.21
-                description: "chr12 (min: 0.16, max: 0.21)"
-                format: '{:,.3f}'
+                min: 0.0031
+                max: 0.0041
+                description: "chr12 (min: 0.0031, max: 0.0041)"
+                format: '{:,.4f}'
                 hidden: True
             chr13_val:
-                min: 0.157
-                max: 0.2
-                description: "chr13 (min: 0.157, max: 0.2)"
-                format: '{:,.3f}'
+                min: 0.0013
+                max: 0.0017
+                description: "chr13 (min: 0.0013, max: 0.0017)"
+                format: '{:,.4f}'
                 hidden: True
             chr14_val:
-                min: 0.134
-                max: 0.18
-                description: "chr14 (min: 0.134, max: 0.18)"
-                format: '{:,.3f}'
+                min: 0.0026
+                max: 0.0037
+                description: "chr14 (min: 0.0026, max: 0.0037)"
+                format: '{:,.4f}'
                 hidden: True
             chr15_val:
-                min: 0.134
-                max: 0.18
-                description: "chr15 (min: 0.134, max: 0.18)"
-                format: '{:,.3f}'
+                min: 0.0022
+                max: 0.0032
+                description: "chr15 (min: 0.0022, max: 0.0032)"
+                format: '{:,.4f}'
                 hidden: True
             chr16_val:
-                min: 0.156
-                max: 0.21
-                description: "chr16 (min: 0.156, max: 0.21)"
-                format: '{:,.3f}'
+                min: 0.0037
+                max: 0.0053
+                description: "chr16 (min: 0.0037, max: 0.0053)"
+                format: '{:,.4f}'
                 hidden: True
             chr17_val:
-                min: 0.16
-                max: 0.22
-                description: "chr17 (min: 0.16, max: 0.22)"
-                format: '{:,.3f}'
+                min: 0.0052
+                max: 0.007
+                description: "chr17 (min: 0.0052, max: 0.007)"
+                format: '{:,.4f}'
                 hidden: True
             chr18_val:
-                min: 0.16
-                max: 0.21
-                description: "chr18 (min: 0.16, max: 0.21)"
-                format: '{:,.3f}'
+                min: 0.0015
+                max: 0.002
+                description: "chr18 (min: 0.0015, max: 0.002)"
+                format: '{:,.4f}'
                 hidden: True
             chr19_val:
-                min: 0.178
-                max: 0.26
-                description: "chr19 (min: 0.178, max: 0.26)"
-                format: '{:,.3f}'
+                min: 0.0097
+                max: 0.0131
+                description: "chr19 (min: 0.0097, max: 0.0131)"
+                format: '{:,.4f}'
                 hidden: True
             chr20_val:
-                min: 0.19
-                max: 0.25
-                description: "chr20 (min: 0.19, max: 0.25)"
-                format: '{:,.3f}'
+                min: 0.0029
+                max: 0.0039
+                description: "chr20 (min: 0.0029, max: 0.0039)"
+                format: '{:,.4f}'
                 hidden: True
             chr21_val:
-                min: 0.17
-                max: 0.24
-                description: "chr21 (min: 0.17, max: 0.24)"
-                format: '{:,.3f}'
+                min: 0.0021
+                max: 0.0031
+                description: "chr21 (min: 0.0021, max: 0.0031)"
+                format: '{:,.4f}'
                 hidden: True
             chr22_val:
-                min: 0.153
-                max: 0.21
-                description: "chr22 (min: 0.153, max: 0.21)"
-                format: '{:,.3f}'
+                min: 0.0034
+                max: 0.0046
+                description: "chr22 (min: 0.0034, max: 0.0046)"
+                format: '{:,.4f}'
                 hidden: True
             chrX_val:
-                min: 0.07
-                max: 0.15
-                description: "chrX (min: 0.07, max: 0.15)"
-                format: '{:,.3f}'
+                min: 0.0007
+                max: 0.0015
+                description: "chrX (min: 0.0007, max: 0.0015)"
+                format: '{:,.4f}'
                 hidden: True
             chrY_val:
-                min: 0.02
-                max: 0.04
-                description: "chrY (min: 0.02, max: 0.04)"
-                format: '{:,.3f}'
+                min: 2e-05
+                max: 6e-05
+                description: "chrY (min: 2e-05, max: 6e-05)"
+                format: '{:,.6f}'
                 hidden: True
 
     qc_checkup_verifybamid:
