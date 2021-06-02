@@ -13,7 +13,7 @@ def read_file(f):
     "Reads bcftools index file and calculates %variant-freq per contig"
 
     df = pd.read_csv(f, sep="\t", names=["contig", "length", "variant_count"], index_col="contig")
-    df["var_freq"] = ((df["variant_count"] / df["length"]) * 100).round(4)
+    df["var_freq"] = (df["variant_count"] / df["length"]) * 100
 
     return df
 
@@ -49,7 +49,7 @@ def stat_by_chromosome(bcftools_index_f, sample_name, variant_freq_config, outfi
         if chrom in df.index:
             variant_freq = df.loc[chrom, "var_freq"]
             result = present_within_range(variant_freq, minimum, maximum)
-            results_dict[sample_name][f"{chrom}_val"] = float(f"{variant_freq:.3f}")
+            results_dict[sample_name][f"{chrom}_val"] = float(f"{variant_freq:.6f}")
         else:
             result = False
             results_dict[sample_name][f"{chrom}_val"] = 0

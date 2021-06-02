@@ -1,5 +1,5 @@
+# NOTE: Use these thresholds with caution
 qualimap:
-  # TODO: verify the limits used
   avg_gc:
     description: "Mean GC content"
     min: 40.5
@@ -157,74 +157,74 @@ bcftools_stats:
 
 perc_variant_per_contig:
   chr1:
-    min: 0.15
-    max: 0.20
+    min: 0.003
+    max: 0.004
   chr2:
-    min: 0.155
-    max: 0.20
+    min: 0.002
+    max: 0.003
   chr3:
-    min: 0.16
-    max: 0.21
+    min: 0.002
+    max: 0.003
   chr4:
-    min: 0.17
-    max: 0.22
+    min: 0.0016
+    max: 0.0022
   chr5:
-    min: 0.15
-    max: 0.20
+    min: 0.0018
+    max: 0.0025
   chr6:
-    min: 0.17
-    max: 0.21
+    min: 0.0020
+    max: 0.0036
   chr7:
-    min: 0.17
-    max: 0.22
+    min: 0.0028
+    max: 0.0036
   chr8:
-    min: 0.16
-    max: 0.22
+    min: 0.0019
+    max: 0.0026
   chr9:
-    min: 0.15
-    max: 0.20
+    min: 0.0021
+    max: 0.0031
   chr10:
-    min: 0.175
-    max: 0.23
+    min: 0.0025
+    max: 0.0032
   chr11:
-    min: 0.17
-    max: 0.22
+    min: 0.0035
+    max: 0.0043
   chr12:
-    min: 0.16
-    max: 0.21
+    min: 0.0031
+    max: 0.0041
   chr13:
-    min: 0.157
-    max: 0.20
+    min: 0.0013
+    max: 0.0017
   chr14:
-    min: 0.134
-    max: 0.18
+    min: 0.0026
+    max: 0.0037
   chr15:
-    min: 0.134
-    max: 0.18
+    min: 0.0022
+    max: 0.0032
   chr16:
-    min: 0.156
-    max: 0.21
+    min: 0.0037
+    max: 0.0053
   chr17:
-    min: 0.16
-    max: 0.22
+    min: 0.0052
+    max: 0.0070
   chr18:
-    min: 0.16
-    max: 0.21
+    min: 0.0015
+    max: 0.0020
   chr19:
-    min: 0.178
-    max: 0.26
+    min: 0.0097
+    max: 0.0131
   chr20:
-    min: 0.19
-    max: 0.25
+    min: 0.0029
+    max: 0.0039
   chr21:
-    min: 0.17
-    max: 0.24
+    min: 0.0021
+    max: 0.0031
   chr22:
-    min: 0.153
-    max: 0.21
+    min: 0.0034
+    max: 0.0046
   chrX:
-    min: 0.07
-    max: 0.15
+    min: 0.0007
+    max: 0.0015
   chrY:
-    min: 0.02
-    max: 0.04
+    min: 0
+    max: 0.000060
