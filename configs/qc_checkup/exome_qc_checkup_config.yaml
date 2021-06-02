@@ -122,33 +122,33 @@ verifybamid:
 bcftools_stats:
   number_of_records:
     description: "Total number of variants"
-    min: 4.9e+6
-    max: 6.1e+6
+    min: 82000
+    max: 103000
 
   number_of_SNPs:
     description: "Total number of SNPs"
-    min: 4.0e+6
-    max: 5.0e+6
+    min: 71500
+    max: 90000
 
   number_of_indels:
     description: "Total number of Indels"
-    min: 0.82e+6
-    max: 1.15e+6
+    min: 9500
+    max: 13000
 
   perc_snps:
     description: "%SNPs among all variants"
-    min: 80
-    max: 83
+    min: 86
+    max: 89
 
   perc_indels:
     description: "%Indels among all variants"
-    min: 17
-    max: 20
+    min: 11
+    max: 14
 
   tstv:
     description: "Transition to Transversion ratio"
-    min: 1.92
-    max: 1.95
+    min: 2.3
+    max: 2.5
 
   heterozygosity_ratio:
     description: "No. of het sites in an individual divided by the no. of non-reference hom sites. Note: This varies heavily across populations."
