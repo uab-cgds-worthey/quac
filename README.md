@@ -45,7 +45,7 @@ In short, QuaC performs the following:
 1. While QuaC does the heavy lifting in performing QC, the small variant caller pipeline also runs few QC tools (fastqc,
    fastq-screen, picard's markduplicates). This setup was chosen deliberately for pragmatic reasons.
 2. *Use QC-checkup results with extreme caution when run in exome mode.* Though QuaC can be run in exome mode,
-   QC-checkup will still be utilizing thresholds defined for WGS data.
+   QC-checkup thresholds utilized are not yet as reliable as that used for WGS datasets.
 
 
 ### QC tools included
@@ -199,7 +199,7 @@ verifyBamID:
 
 #### Prepare verifybamid datasets for exome analysis
 
-*This step is necessary only if QuaC will be run in exome moe (`--exome`).*
+*This step is necessary only if QuaC will be run in exome mode (`--exome`).*
 [verifybamid](https://github.com/Griffan/VerifyBamID) has provided auxiliary resource files, which are necessary for
 analysis. However, chromosome contigs do not include `chr` prefix in their exome resource files, which are expected for
 our analyses at CGDS. Follow these steps to setup resource files with `chr` prefix in their contig names.
@@ -244,7 +244,9 @@ QuaC workflow options:
                         of tools used in QuaC (default: configs/workflow.yaml)
   --outdir              Out directory path (default:
                         $USER_SCRATCH/tmp/quac/results/test_project/analysis)
-  --exome               Flag to run in exome mode (default: False)
+  --exome               Flag to run in exome mode. WARNING: Please provide
+                        appropriate configs via --qc_checkup_config. (default:
+                        False)
 
 QuaC wrapper options:
   --cluster_config      Cluster config json file. Needed for snakemake to run
@@ -264,7 +266,7 @@ QuaC wrapper options:
                         job. Useful for testing purposes. (default: False)
   --rerun_failed        Number of times snakemake restarts failed jobs. This
                         may be set to >0 to avoid pipeline failing due to job
-                        fails due to random SLURM issues (default: 0)
+                        fails due to random SLURM issues (default: 1)
   --slurm_partition     Request a specific partition for the slurm resource
                         allocation for QuaC workflow. Available partitions in
                         Cheaha are: express(max 2 hrs), short(max 12 hrs),
@@ -324,18 +326,18 @@ python src/run_quac.py \
 
 ### Input requirements
 
-* Pedigree file supplied via `--pedigree`. Only the samples that are supplied in pedigree file will be processed by QuaC
+- Pedigree file supplied via `--pedigree`. Only the samples that are supplied in pedigree file will be processed by QuaC
   and all of these samples must belong to the same project. This repo also includes a handy script
   [`src/create_dummy_ped.py`](src/create_dummy_ped.py) that can create a dummy pedigree file, which will lack sex
   (unless project tracking sheet is provided), relatedness and affected status info. See header of the script for usage
   instructions. Note that we plan to use [phenotips](https://phenotips.com/) in future to produce fully capable pedigree
   file. One could manually create them as well, but this would be error-prone.
-* Output produced by [the small variant caller
+- Output produced by [the small variant caller
   pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
   This includes bam, vcf and QC output. Refer to [test sample dataset](.test/ngs-data/test_project/analysis/A), which is
   representative of the input required.
-* [QuaC config file](#set-up-workflow-config-file)
-* When run in exome mode, QuaC requires a capture-regions bed file at path
+- [QuaC config file](#set-up-workflow-config-file)
+- When run in exome mode, QuaC requires a capture-regions bed file at path
   `path_to_sample/configs/small_variant_caller/<capture_regions>.bed`.
 
 
@@ -359,6 +361,7 @@ python src/run_quac.py \
 python src/run_quac.py \
       --project_name HCC \
       --pedigree "data/raw/ped/HCC.ped" \
+      --qc_checkup_config "configs/qc_checkup/exome_qc_checkup_config.yaml" \
       --exome
 
 # to quack on an exome project which is not in the default CGDS projects_path
@@ -366,6 +369,7 @@ python src/run_quac.py \
       --project_name UnusualCancers_CMGalluzi \
       --projects_path "/data/project/sloss/cgds_path_cmgalluzzi/" \
       --pedigree "data/raw/ped/UnusualCancers_CMGalluzi.ped" \
+      --qc_checkup_config "configs/qc_checkup/exome_qc_checkup_config.yaml" \
       --exome
 ```
 
@@ -410,6 +414,7 @@ python src/run_quac.py \
       --projects_path ".test/ngs-data/" \
       --pedigree ".test/configs/project.ped" \
       --outdir "$USER_SCRATCH/tmp/quac/results/test_project_exome/analysis" \
+      --qc_checkup_config "configs/qc_checkup/exome_qc_checkup_config.yaml" \
       --exome
 ```
 
@@ -506,6 +511,7 @@ python src/run_quac.py \
       --projects_path .test/ngs-data/ \
       --pedigree .test/configs/project.ped \
       --exome \
+      --qc_checkup_config "configs/qc_checkup/exome_qc_checkup_config.yaml" \
       --run_locally --extra_args "--dag -F | dot -Tpng > ${DAG_DIR}/exome_dag.png"
 
 # Rulegraph - less informative than DAG at sample level but less dense than DAG makes this easier to skim
@@ -514,6 +520,7 @@ python src/run_quac.py \
       --projects_path .test/ngs-data/ \
       --pedigree .test/configs/project.ped \
       --exome \
+      --qc_checkup_config "configs/qc_checkup/exome_qc_checkup_config.yaml" \
       --run_locally --extra_args "--rulegraph -F | dot -Tpng > ${DAG_DIR}/exome_rulegraph.png"
 ```
 
