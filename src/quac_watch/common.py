@@ -1,5 +1,5 @@
 """
-Functions to help with QC checkup tool
+Functions to help with QuaC-Watch tool
 """
 
 from pathlib import Path
@@ -82,7 +82,7 @@ def qc_logger(module_name):
         module_name {str} -- module name
     """
 
-    config_f = "configs/qc_checkup/logging.ini"
+    config_f = "configs/quac_watch/logging.ini"
     logging.config.fileConfig(config_f, disable_existing_loggers=False)
     qc_logger = logging.getLogger(module_name)
 

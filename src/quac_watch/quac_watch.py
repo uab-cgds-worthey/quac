@@ -1,10 +1,10 @@
 """
 Analyzes results from various QC output files, and identifies
-if they have passed criteria defined in QC-checkup config file.
+if they have passed criteria defined in QuaC-Watch config file.
 Writes results in mutliqc-friendly format.
 
 NOTE: Multiqc config file has hard-coded parameters, which is based
-on the QC-checkup config file. If parameters in QC-checkup config
+on the QuaC-Watch config file. If parameters in QuaC-Watch config
 file get modified, multiqc config file may need to be edited as well.
 Helper script create_mutliqc_configs.py can help with this task.
 """
@@ -38,7 +38,7 @@ def main(
     # read config from file
     config_dict = get_configs(config_f)
 
-    out_filepath_prefix = str(Path(outdir) / "qc_checkup")
+    out_filepath_prefix = str(Path(outdir) / "quac_watch")
     qc_checks_dict = {}
 
     # fastqc

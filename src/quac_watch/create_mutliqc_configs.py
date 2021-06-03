@@ -1,5 +1,5 @@
 """
-Creates multiqc config file based on jinja templating and values from qc-checkup config file.
+Creates multiqc config file based on jinja templating and values from QuaC-Watch config file.
 """
 
 from jinja2 import Template, StrictUndefined
@@ -230,6 +230,6 @@ if __name__ == "__main__":
         fire.Fire(main)
     else:
         TEMPLATE_F = "configs/multiqc_config_template.jinja2"
-        QC_CONFIG = "configs/qc_checkup/wgs_qc_checkup_config.yaml"
+        QC_CONFIG = "configs/quac_watch/wgs_quac_watch_config.yaml"
         OUTFILE = "configs/multiqc_config.yaml"
         main(TEMPLATE_F, QC_CONFIG, OUTFILE)

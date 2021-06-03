@@ -58,7 +58,7 @@ def read_workflow_config(workflow_config_fpath):
 
 
 def gather_mount_paths(
-    projects_path, project_name, pedigree_path, out_dir, log_dir, qc_checkup_config, workflow_config
+    projects_path, project_name, pedigree_path, out_dir, log_dir, quac_watch_config, workflow_config
 ):
     """
     Returns paths that need to be mounted to singularity
@@ -81,8 +81,8 @@ def gather_mount_paths(
     # logs dirpath
     mount_paths.add(log_dir)
 
-    # QC checkup configfile
-    mount_paths.add(qc_checkup_config)
+    # QuaC-Watch configfile
+    mount_paths.add(quac_watch_config)
 
     # read paths in workflow config file
     mount_paths.update(read_workflow_config(workflow_config))
@@ -112,7 +112,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
         "project_name": args.project_name,
         "projects_path": args.projects_path,
         "ped": args.pedigree,
-        "qc_checkup_config": args.qc_checkup_config,
+        "quac_watch_config": args.quac_watch_config,
         "workflow_config": args.workflow_config,
         "out_dir": args.outdir,
         "log_dir": args.log_dir,
@@ -158,7 +158,7 @@ def main(args):
         args.pedigree,
         args.outdir,
         args.log_dir,
-        args.qc_checkup_config,
+        args.quac_watch_config,
         args.workflow_config,
     )
 
@@ -259,9 +259,9 @@ if __name__ == "__main__":
         metavar="",
     )
     WORKFLOW.add_argument(
-        "--qc_checkup_config",
-        help="YAML config path specifying QC thresholds for QC checkup",
-        default="configs/qc_checkup/wgs_qc_checkup_config.yaml",
+        "--quac_watch_config",
+        help="YAML config path specifying QC thresholds for QuaC-Watch",
+        default="configs/quac_watch/wgs_quac_watch_config.yaml",
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
@@ -283,7 +283,7 @@ if __name__ == "__main__":
     WORKFLOW.add_argument(
         "--exome",
         action="store_true",
-        help="Flag to run in exome mode. WARNING: Please provide appropriate configs via --qc_checkup_config.",
+        help="Flag to run in exome mode. WARNING: Please provide appropriate configs via --quac_watch_config.",
     )
 
     ############ Args for QuaC wrapper tool  ############
