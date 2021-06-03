@@ -1,7 +1,7 @@
 - [QuaC](#quac)
   - [What is QuaC?](#what-is-quac)
     - [QC tools included](#qc-tools-included)
-    - [CGDS QC-checkup](#cgds-qc-checkup)
+    - [QuaC-Watch](#quac-watch)
   - [Installation](#installation)
     - [Requirements](#requirements)
     - [Retrieve pipeline source code](#retrieve-pipeline-source-code)
@@ -36,7 +36,8 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 In short, QuaC performs the following:
 
 - Runs various QC tools using data produced by the small variant caller pipeline
-- Performs QC checkup based on the expected thresholds and summarizes the results for easy consumption
+- Using *QuaC-Watch* tool, it performs QC checkup based on the expected thresholds and summarizes the results for
+  easy consumption
 - Aggregates QC output produced here as well as those by the small variant caller pipeline using mulitqc, both at sample
   level and project level
 
@@ -44,8 +45,8 @@ In short, QuaC performs the following:
 
 1. While QuaC does the heavy lifting in performing QC, the small variant caller pipeline also runs few QC tools (fastqc,
    fastq-screen, picard's markduplicates). This setup was chosen deliberately for pragmatic reasons.
-2. *Use QC-checkup results with extreme caution when run in exome mode.* Though QuaC can be run in exome mode,
-   QC-checkup thresholds utilized are not yet as reliable as that used for WGS datasets.
+2. *Use QuaC-Watch results with extreme caution when run in exome mode.* Though QuaC can be run in exome mode,
+   QuaC-Watch thresholds utilized are not yet as reliable as that used for WGS datasets.
 
 
 ### QC tools included
@@ -79,11 +80,12 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 | [Picard's MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) | Determines level of read duplication on bam files |
 
 
-### CGDS QC-checkup
+### QuaC-Watch
 
-After running all the QC tools for samples, QuaC summarizes if samples have passed the QC thresholds (defined via config
-file [`wgs_qc_checkup_config.yaml`](configs/qc_checkup/wgs_qc_checkup_config.yaml); can be user-configured), both at the sample
-level as well as project level. This summary makes it easy to quickly review if sample or samples have sufficient
+QuaC includes a tool called QuaC-Watch. After running all the QC tools for samples, QuaC-Watch summarizes if samples
+have passed the QC thresholds (defined via config file
+[`wgs_quac_watch_config.yaml`](configs/quac_watch/wgs_quac_watch_config.yaml); can be user-configured), both at the
+sample level as well as project level. This summary makes it easy to quickly review if sample or samples have sufficient
 quality and highlight samples that need further review.
 
 ## Installation
@@ -221,7 +223,7 @@ all the options available:
 ```sh
 $ ./src/run_quac.py -h
 usage: run_quac.py [-h] [--project_name] [--projects_path] [--pedigree]
-                   [--qc_checkup_config] [--workflow_config] [--outdir]
+                   [--quac_watch_config] [--workflow_config] [--outdir]
                    [--exome] [--cluster_config] [--log_dir] [-e] [-n] [-l]
                    [--rerun_failed] [--slurm_partition]
 
@@ -237,15 +239,15 @@ QuaC workflow options:
                         /data/project/worthey_lab/projects/)
   --pedigree            Pedigree filepath. Must correspond to the project
                         supplied via --project_name (default: None)
-  --qc_checkup_config   YAML config path specifying QC thresholds for QC
-                        checkup (default:
-                        configs/qc_checkup/wgs_qc_checkup_config.yaml)
+  --quac_watch_config   YAML config path specifying QC thresholds for QuaC-
+                        Watch (default:
+                        configs/quac_watch/wgs_quac_watch_config.yaml)
   --workflow_config     YAML config path specifying filepath to dependencies
                         of tools used in QuaC (default: configs/workflow.yaml)
   --outdir              Out directory path (default:
                         $USER_SCRATCH/tmp/quac/results/test_project/analysis)
   --exome               Flag to run in exome mode. WARNING: Please provide
-                        appropriate configs via --qc_checkup_config. (default:
+                        appropriate configs via --quac_watch_config. (default:
                         False)
 
 QuaC wrapper options:
@@ -361,7 +363,7 @@ python src/run_quac.py \
 python src/run_quac.py \
       --project_name HCC \
       --pedigree "data/raw/ped/HCC.ped" \
-      --qc_checkup_config "configs/qc_checkup/exome_qc_checkup_config.yaml" \
+      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --exome
 
 # to quack on an exome project which is not in the default CGDS projects_path
@@ -369,7 +371,7 @@ python src/run_quac.py \
       --project_name UnusualCancers_CMGalluzi \
       --projects_path "/data/project/sloss/cgds_path_cmgalluzzi/" \
       --pedigree "data/raw/ped/UnusualCancers_CMGalluzi.ped" \
-      --qc_checkup_config "configs/qc_checkup/exome_qc_checkup_config.yaml" \
+      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --exome
 ```
 
@@ -379,7 +381,7 @@ QuaC results are stored at the path specified via option `--outdir` (default:
 `$USER_SCRATCH/tmp/quac/results/test_project/analysis`).  Refer to the [testing's output](#expected-output-files) to
 learn about output directory structure. Most important output files are aggregated QC results produced by
 [multiqc](https://multiqc.info/), both at sample-level as well as at the project-level. These multiqc reports also
-include summary of QC-checkup results.
+include summary of QuaC-Watch results.
 
 Note that QuaC's output directory structure takes the output structure of the small variant caller pipeline.
 
@@ -414,7 +416,7 @@ python src/run_quac.py \
       --projects_path ".test/ngs-data/" \
       --pedigree ".test/configs/project.ped" \
       --outdir "$USER_SCRATCH/tmp/quac/results/test_project_exome/analysis" \
-      --qc_checkup_config "configs/qc_checkup/exome_qc_checkup_config.yaml" \
+      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --exome
 ```
 
@@ -440,7 +442,7 @@ $ tree $USER_SCRATCH/tmp/quac/results/test_project/ -d -L 4
     │       │   └── A_multiqc.html
     │       ├── picard-stats
     │       │   └── ...
-    │       ├── qc_checkup
+    │       ├── quac_watch
     │       │   └── ...
     │       ├── qualimap
     │       │   └── ...
@@ -511,7 +513,7 @@ python src/run_quac.py \
       --projects_path .test/ngs-data/ \
       --pedigree .test/configs/project.ped \
       --exome \
-      --qc_checkup_config "configs/qc_checkup/exome_qc_checkup_config.yaml" \
+      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --run_locally --extra_args "--dag -F | dot -Tpng > ${DAG_DIR}/exome_dag.png"
 
 # Rulegraph - less informative than DAG at sample level but less dense than DAG makes this easier to skim
@@ -520,7 +522,7 @@ python src/run_quac.py \
       --projects_path .test/ngs-data/ \
       --pedigree .test/configs/project.ped \
       --exome \
-      --qc_checkup_config "configs/qc_checkup/exome_qc_checkup_config.yaml" \
+      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --run_locally --extra_args "--rulegraph -F | dot -Tpng > ${DAG_DIR}/exome_rulegraph.png"
 ```
 
