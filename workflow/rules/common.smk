@@ -105,20 +105,20 @@ localrules:
 
 rule create_multiqc_config:
     input:
-        script=WORKFLOW_PATH / "src" / "qc_checkup" / "create_mutliqc_configs.py",
+        script=WORKFLOW_PATH / "src" / "quac_watch" / "create_mutliqc_configs.py",
         template=WORKFLOW_PATH / "configs" / "multiqc_config_template.jinja2",
-        qc_checkup_config=config["qc_checkup_config"],
+        quac_watch_config=config["quac_watch_config"],
     output:
         WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
     message:
-        "Creates multiqc configs from jinja-template based on QC-checkup configs"
+        "Creates multiqc configs from jinja-template based on QuaC-Watch configs"
     conda:
-        str(WORKFLOW_PATH / "configs/env/qc_checkup.yaml")
+        str(WORKFLOW_PATH / "configs/env/quac_watch.yaml")
     shell:
         r"""
         python {input.script} \
             --template_f  {input.template} \
-            --qc_config {input.qc_checkup_config} \
+            --qc_config {input.quac_watch_config} \
             --outfile {output}
         """
 

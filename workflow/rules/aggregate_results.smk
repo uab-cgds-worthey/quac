@@ -21,7 +21,7 @@ rule multiqc_by_sample_initial_pass:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_dups.txt"),
     # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab (small var caller pipeline repo)
     message:
-        "Aggregates QC results using multiqc. First pass. Output will be used for the internal QC checkup. Sample: {wildcards.sample}"
+        "Aggregates QC results using multiqc. First pass. Output will be used for the QuaC-Watch. Sample: {wildcards.sample}"
     params:
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file
@@ -30,9 +30,9 @@ rule multiqc_by_sample_initial_pass:
         "0.64.0/bio/multiqc"
 
 
-rule qc_checkup:
+rule quac_watch:
     input:
-        qc_config=config["qc_checkup_config"],
+        qc_config=config["quac_watch_config"],
         multiqc_stats=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt",
         fastqc_trimmed=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc_trimmed.txt",
         fastq_screen=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt",
@@ -45,7 +45,7 @@ rule qc_checkup:
     output:
         protected(
             expand(
-                OUT_DIR / "{{sample}}" / "qc" / "qc_checkup" / "qc_checkup_{suffix}.yaml",
+                OUT_DIR / "{{sample}}" / "qc" / "quac_watch" / "quac_watch_{suffix}.yaml",
                 suffix=[
                     "overall_summary",
                     "fastqc",
@@ -62,16 +62,16 @@ rule qc_checkup:
         ),
     # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab
     message:
-        "Runs QC checkup on various QC tool output, based on custom defined QC thresholds. "
+        "Runs QuaC-Watch on various QC tool output, based on custom defined QC thresholds. "
         "Note that this will NOT work as expected for multi-sample analysis. Sample: {wildcards.sample}"
     params:
         sample="{sample}",
         outdir=lambda wildcards, output: str(Path(output[0]).parent),
     conda:
-        str(WORKFLOW_PATH / "configs/env/qc_checkup.yaml")
+        str(WORKFLOW_PATH / "configs/env/quac_watch.yaml")
     shell:
         r"""
-        python src/qc_checkup/qc_checkup.py \
+        python src/quac_watch/quac_watch.py \
             --config {input.qc_config} \
             --multiqc_stats {input.multiqc_stats} \
             --fastqc {input.fastqc_trimmed} \
@@ -96,7 +96,7 @@ rule multiqc_by_sample_final_pass:
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
-        OUT_DIR / "{sample}" / "qc" / "qc_checkup" / "qc_checkup_overall_summary.yaml",
+        OUT_DIR / "{sample}" / "qc" / "quac_watch" / "quac_watch_overall_summary.yaml",
         multiqc_config=WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
         rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
     output:
@@ -104,7 +104,7 @@ rule multiqc_by_sample_final_pass:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt"),
     # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab
     message:
-        "Aggregates QC results using multiqc. Final pass, where QC checkup results are also aggregated. Sample: {wildcards.sample}"
+        "Aggregates QC results using multiqc. Final pass, where QuaC-Watch results are also aggregated. Sample: {wildcards.sample}"
     params:
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file
@@ -148,7 +148,7 @@ rule multiqc_aggregation_all_samples:
                 OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
                 OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
                 OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
-                OUT_DIR / "{sample}" / "qc" / "qc_checkup" / "qc_checkup_overall_summary.yaml",
+                OUT_DIR / "{sample}" / "qc" / "quac_watch" / "quac_watch_overall_summary.yaml",
             ],
             sample=SAMPLES,
             unit=[1],
