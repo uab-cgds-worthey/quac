@@ -29,6 +29,11 @@ qualimap:
     min: 250
     max:
 
+  general_error_rate:
+    description: "Alignment error rate"
+    min: 0
+    max: 0.8
+
 picard:
   AlignmentSummaryMetrics:
     PCT_PF_READS_ALIGNED:

@@ -136,6 +136,11 @@ custom_data:
                 min: 250
                 description: "Median insert size (min: 250)"
                 hidden: True
+            general_error_rate_val:
+                min: 0
+                max: 0.8
+                description: "Alignment error rate (min: 0, max: 0.8)"
+                hidden: True
 
     qc_checkup_qualimap_chromosome_stats:
         parent_id: "cgds_qc_checkup"
@@ -315,7 +320,6 @@ custom_data:
             only_defined_headers: False
             scale: "Blues"
         headers:
-        headers:
             chr1_val:
                 min: 0.003
                 max: 0.004
@@ -455,9 +459,9 @@ custom_data:
                 format: '{:,.4f}'
                 hidden: True
             chrY_val:
-                min: 2e-05
+                min: 0
                 max: 6e-05
-                description: "chrY (min: 2e-05, max: 6e-05)"
+                description: "chrY (min: 0, max: 6e-05)"
                 format: '{:,.6f}'
                 hidden: True
 

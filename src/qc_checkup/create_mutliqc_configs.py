@@ -53,6 +53,11 @@ def main(template_f, qc_config, outfile):
         ],
         qualimap_percentage_aligned_min=config["qualimap"]["percentage_aligned"]["min"],
         qualimap_percentage_aligned_max=config["qualimap"]["percentage_aligned"]["max"],
+        qualimap_general_error_rate_description=config["qualimap"]["general_error_rate"][
+            "description"
+        ],
+        qualimap_general_error_rate_min=config["qualimap"]["general_error_rate"]["min"],
+        qualimap_general_error_rate_max=config["qualimap"]["general_error_rate"]["max"],
         # picard_AlignmentSummaryMetrics
         picard_asm_PCT_PF_READS_ALIGNED_description=config["picard"]["AlignmentSummaryMetrics"][
             "PCT_PF_READS_ALIGNED"

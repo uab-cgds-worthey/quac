@@ -136,6 +136,11 @@ custom_data:
                 min: {{ qualimap_median_insert_size_min }}
                 description: "{{ qualimap_median_insert_size_description }} (min: {{ qualimap_median_insert_size_min }})"
                 hidden: True
+            general_error_rate_val:
+                min: {{ qualimap_general_error_rate_min }}
+                max: {{ qualimap_general_error_rate_max }}
+                description: "{{ qualimap_general_error_rate_description }} (min: {{ qualimap_general_error_rate_min }}, max: {{ qualimap_general_error_rate_max }})"
+                hidden: True
 
     qc_checkup_qualimap_chromosome_stats:
         parent_id: "cgds_qc_checkup"
@@ -314,7 +319,6 @@ custom_data:
             table_title: "%Variant per contig - QC checkup"
             only_defined_headers: False
             scale: "Blues"
-        headers:
         headers:
             chr1_val:
                 min: {{ perc_variant_per_contig_chr1_min }}
