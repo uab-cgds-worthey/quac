@@ -31,7 +31,7 @@ table_columns_placement:
 
 # order of modules to show in report
 module_order:
-    - cgds_qc_checkup
+    - cgds_quac_watch
     - qualimap
     - picard
     - samtools
@@ -71,40 +71,40 @@ qualimap_config:
         - 200
 
 # configs for CGDS QC check-ups
-# NOTE: This multiqc config file has hard-coded parameters, which is based on the QC-checkup config file.
-# If parameters in QC-checkup config file get modified, this file may need to be edited correspondingly.
+# NOTE: This multiqc config file has hard-coded parameters, which is based on the QuaC-Watch config file.
+# If parameters in QuaC-Watch config file get modified, this file may need to be edited correspondingly.
 custom_data:
-    qc_checkup_overall_summary:
-        parent_id: "cgds_qc_checkup"
-        parent_name: "CGDS - QC checkup"
+    quac_watch_overall_summary:
+        parent_id: "cgds_quac_watch"
+        parent_name: "CGDS - QuaC-Watch"
         parent_description: "This section contains CGDS's QC checking results (Might not work well for WES)."
-        id: "qc_checkup_overall_summary"
-        section_name: "Overall QC checkup summary"
-        description: "Overall QC checkup summary of results from several QC tools"
+        id: "quac_watch_overall_summary"
+        section_name: "Overall QuaC-Watch summary"
+        description: "Overall QuaC-Watch summary of results from several QC tools"
         file_format: "yaml"
         plot_type: "table"
         pconfig:
-            table_title: "Overall QC checkup summary"
+            table_title: "Overall QuaC-Watch summary"
 
-    qc_checkup_fastqc:
-        parent_id: "cgds_qc_checkup"
-        id: "qc_checkup_fastqc"
+    quac_watch_fastqc:
+        parent_id: "cgds_quac_watch"
+        id: "quac_watch_fastqc"
         section_name: "FastQC (trimmed)"
         description: 'Quick summary of FastQC (trimmed) results. See <a href="#trimmed">FastQC</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
-            table_title: "FastQC - QC checkup"
+            table_title: "FastQC - QuaC-Watch"
 
-    qc_checkup_qualimap_overall:
-        parent_id: "cgds_qc_checkup"
-        id: "qc_checkup_qualimap_overall"
+    quac_watch_qualimap_overall:
+        parent_id: "cgds_quac_watch"
+        id: "quac_watch_qualimap_overall"
         section_name: "Qualimap - Overall stats"
         description: 'Quick summary of Qualimap results. See <a href="#qualimap">QualiMap</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
-            table_title: "Qualimap - Overall stats - QC checkup"
+            table_title: "Qualimap - Overall stats - QuaC-Watch"
             only_defined_headers: False
             scale: "Blues"
         headers:
@@ -113,7 +113,7 @@ custom_data:
                 max: {{ qualimap_avg_gc_max }}
                 description: "{{ qualimap_avg_gc_description }} (min: {{ qualimap_avg_gc_min }}, max: {{ qualimap_avg_gc_max }})"
                 hidden: True
-            # if you change coverage limits, also change values in "qc_checkup_qualimap_chromosome_stats"
+            # if you change coverage limits, also change values in "quac_watch_qualimap_chromosome_stats"
             mean_coverage_val:
                 min: {{ qualimap_mean_coverage_min }}
                 description: "{{ qualimap_mean_coverage_description }} (min: {{ qualimap_mean_coverage_min }})"
@@ -142,15 +142,15 @@ custom_data:
                 description: "{{ qualimap_general_error_rate_description }} (min: {{ qualimap_general_error_rate_min }}, max: {{ qualimap_general_error_rate_max }})"
                 hidden: True
 
-    qc_checkup_qualimap_chromosome_stats:
-        parent_id: "cgds_qc_checkup"
-        id: "qc_checkup_qualimap_chromosome_stats"
+    quac_watch_qualimap_chromosome_stats:
+        parent_id: "cgds_quac_watch"
+        id: "quac_watch_qualimap_chromosome_stats"
         section_name: "Qualimap - Chromosome stats"
         description: 'Quick summary chromosome-level coverage info using Qualimap results. See <a href="#qualimap">QualiMap</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "linegraph"
         pconfig:
-            id: qc_checkup_qualimap_chromosome_stats
+            id: quac_watch_qualimap_chromosome_stats
             ymin: 0
             ymax: 100
             categories: True
@@ -162,15 +162,15 @@ custom_data:
                 showInLegend: False
                 color: "PaleVioletRed"
 
-    qc_checkup_picard:
-        parent_id: "cgds_qc_checkup"
-        id: "qc_checkup_picard"
+    quac_watch_picard:
+        parent_id: "cgds_quac_watch"
+        id: "quac_watch_picard"
         section_name: "Picard"
         description: 'Quick summary of picard metrics. Note: Picard-Duplication is reported separately (bcoz reasons!).  See <a href="#picard-1">Picard</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
-            table_title: "Picard - Overall stats - QC checkup"
+            table_title: "Picard - Overall stats - QuaC-Watch"
             only_defined_headers: False
             scale: "Blues"
         headers:
@@ -228,15 +228,15 @@ custom_data:
             PCT_15X:
                 description: "{{ picard_wgs_PCT_15X_description }}"
 
-    qc_checkup_picard_dups:
-        parent_id: "cgds_qc_checkup"
-        id: "qc_checkup_picard_dups"
+    quac_watch_picard_dups:
+        parent_id: "cgds_quac_watch"
+        id: "quac_watch_picard_dups"
         section_name: "Picard-dups"
         description: 'Quick summary of picard-duplication metrics. See <a href="#picard-1">Picard</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
-            table_title: "Picard duplication - Overall stats - QC checkup"
+            table_title: "Picard duplication - Overall stats - QuaC-Watch"
             only_defined_headers: False
             scale: "Blues"
         headers:
@@ -246,15 +246,15 @@ custom_data:
                 description: "{{ picard_dups_PERCENT_DUPLICATION_description }} (min: {{ picard_dups_PERCENT_DUPLICATION_min }}, max: {{ picard_dups_PERCENT_DUPLICATION_max }})"
                 hidden: True
 
-    qc_checkup_bcftools_stats:
-        parent_id: "cgds_qc_checkup"
-        id: "qc_checkup_bcftools_stats"
+    quac_watch_bcftools_stats:
+        parent_id: "cgds_quac_watch"
+        id: "quac_watch_bcftools_stats"
         section_name: "Bcftools stats"
         description: 'Quick summary of Bcftools-stats results. See <a href="#bcftools">Bcftools</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
-            table_title: "Bcftools stats - QC checkup"
+            table_title: "Bcftools stats - QuaC-Watch"
             only_defined_headers: False
             scale: "Blues"
         headers:
@@ -308,15 +308,15 @@ custom_data:
             heterozygosity_ratio:
                 description: "{{ bcftools_stats_heterozygosity_ratio_description }}"
 
-    qc_checkup_variant_per_contig:
-        parent_id: "cgds_qc_checkup"
-        id: "qc_checkup_variant_per_contig"
+    quac_watch_variant_per_contig:
+        parent_id: "cgds_quac_watch"
+        id: "quac_watch_variant_per_contig"
         section_name: "Variant frequency per contig"
         description: "Quick summary of %variant per contig results."
         file_format: "yaml"
         plot_type: "table"
         pconfig:
-            table_title: "%Variant per contig - QC checkup"
+            table_title: "%Variant per contig - QuaC-Watch"
             only_defined_headers: False
             scale: "Blues"
         headers:
@@ -465,15 +465,15 @@ custom_data:
                 format: '{:,.6f}'
                 hidden: True
 
-    qc_checkup_verifybamid:
-        parent_id: "cgds_qc_checkup"
-        id: "qc_checkup_verifybamid"
+    quac_watch_verifybamid:
+        parent_id: "cgds_quac_watch"
+        id: "quac_watch_verifybamid"
         section_name: "VerifyBAMID"
         description: 'Quick summary of VerifyBAMID results. See <a href="#verifybamid-1">VerifyBAMID</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
-            table_title: "VerifyBAMID - QC checkup"
+            table_title: "VerifyBAMID - QuaC-Watch"
             only_defined_headers: False
             scale: "Blues"
         headers:
@@ -487,15 +487,15 @@ custom_data:
                 title: "Contamination(%)"
                 description: "{{ verifybamid_freemix_description }}"
 
-    qc_checkup_fastq_screen:
-        parent_id: "cgds_qc_checkup"
-        id: "qc_checkup_fastq_screen"
+    quac_watch_fastq_screen:
+        parent_id: "cgds_quac_watch"
+        id: "quac_watch_fastq_screen"
         section_name: "FastQ Screen (trimmed)"
         description: 'Quick summary of FastQ Screen (trimmed) results. See <a href="#fastq_screen-1">FastQ Screen</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
-            table_title: "FastQ Screen - QC checkup"
+            table_title: "FastQ Screen - QuaC-Watch"
             only_defined_headers: False
             scale: "Blues"
         headers:
@@ -590,23 +590,23 @@ custom_data:
 
 # define file pattern for custom configs
 sp:
-    qc_checkup_overall_summary:
-        fn: "qc_checkup_overall_summary.yaml"
-    qc_checkup_fastqc:
-        fn: "qc_checkup_fastqc.yaml"
-    qc_checkup_qualimap_overall:
-        fn: "qc_checkup_qualimap_overall.yaml"
-    qc_checkup_qualimap_chromosome_stats:
-        fn: "qc_checkup_qualimap_chromosome_stats.yaml"
-    qc_checkup_picard:
-        fn: "qc_checkup_picard.yaml"
-    qc_checkup_picard_dups:
-        fn: "qc_checkup_picard_dups.yaml"
-    qc_checkup_bcftools_stats:
-        fn: "qc_checkup_bcftools_stats.yaml"
-    qc_checkup_variant_per_contig:
-        fn: "qc_checkup_variant_per_contig.yaml"
-    qc_checkup_verifybamid:
-        fn: "qc_checkup_verifybamid.yaml"
-    qc_checkup_fastq_screen:
-        fn: "qc_checkup_fastq_screen.yaml"
+    quac_watch_overall_summary:
+        fn: "quac_watch_overall_summary.yaml"
+    quac_watch_fastqc:
+        fn: "quac_watch_fastqc.yaml"
+    quac_watch_qualimap_overall:
+        fn: "quac_watch_qualimap_overall.yaml"
+    quac_watch_qualimap_chromosome_stats:
+        fn: "quac_watch_qualimap_chromosome_stats.yaml"
+    quac_watch_picard:
+        fn: "quac_watch_picard.yaml"
+    quac_watch_picard_dups:
+        fn: "quac_watch_picard_dups.yaml"
+    quac_watch_bcftools_stats:
+        fn: "quac_watch_bcftools_stats.yaml"
+    quac_watch_variant_per_contig:
+        fn: "quac_watch_variant_per_contig.yaml"
+    quac_watch_verifybamid:
+        fn: "quac_watch_verifybamid.yaml"
+    quac_watch_fastq_screen:
+        fn: "quac_watch_fastq_screen.yaml"
