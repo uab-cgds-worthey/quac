@@ -31,7 +31,7 @@ table_columns_placement:
 
 # order of modules to show in report
 module_order:
-    - cgds_quac_watch
+    - quac_watch
     - qualimap
     - picard
     - samtools
@@ -70,24 +70,24 @@ qualimap_config:
         - 100
         - 200
 
-# configs for CGDS QC check-ups
+# configs for QuaC-Watch
 # NOTE: This multiqc config file has hard-coded parameters, which is based on the QuaC-Watch config file.
 # If parameters in QuaC-Watch config file get modified, this file may need to be edited correspondingly.
 custom_data:
     quac_watch_overall_summary:
-        parent_id: "cgds_quac_watch"
-        parent_name: "CGDS - QuaC-Watch"
-        parent_description: "This section contains CGDS's QC checking results (Might not work well for WES)."
+        parent_id: "quac_watch"
+        parent_name: "QuaC-Watch"
+        parent_description: "This section contains QuaC-Watch results. QuaC-Watch summarizes if samples have passed the QC thresholds (Might not work well for WES)."
         id: "quac_watch_overall_summary"
-        section_name: "Overall QuaC-Watch summary"
+        section_name: "Overall QuaC-Watch Summary"
         description: "Overall QuaC-Watch summary of results from several QC tools"
         file_format: "yaml"
         plot_type: "table"
         pconfig:
-            table_title: "Overall QuaC-Watch summary"
+            table_title: "Overall QuaC-Watch Summary"
 
     quac_watch_fastqc:
-        parent_id: "cgds_quac_watch"
+        parent_id: "quac_watch"
         id: "quac_watch_fastqc"
         section_name: "FastQC (trimmed)"
         description: 'Quick summary of FastQC (trimmed) results. See <a href="#trimmed">FastQC</a> section below for detailed results.'
@@ -97,7 +97,7 @@ custom_data:
             table_title: "FastQC - QuaC-Watch"
 
     quac_watch_qualimap_overall:
-        parent_id: "cgds_quac_watch"
+        parent_id: "quac_watch"
         id: "quac_watch_qualimap_overall"
         section_name: "Qualimap - Overall stats"
         description: 'Quick summary of Qualimap results. See <a href="#qualimap">QualiMap</a> section below for detailed results.'
@@ -143,7 +143,7 @@ custom_data:
                 hidden: True
 
     quac_watch_qualimap_chromosome_stats:
-        parent_id: "cgds_quac_watch"
+        parent_id: "quac_watch"
         id: "quac_watch_qualimap_chromosome_stats"
         section_name: "Qualimap - Chromosome stats"
         description: 'Quick summary chromosome-level coverage info using Qualimap results. See <a href="#qualimap">QualiMap</a> section below for detailed results.'
@@ -163,7 +163,7 @@ custom_data:
                 color: "PaleVioletRed"
 
     quac_watch_picard:
-        parent_id: "cgds_quac_watch"
+        parent_id: "quac_watch"
         id: "quac_watch_picard"
         section_name: "Picard"
         description: 'Quick summary of picard metrics. Note: Picard-Duplication is reported separately (bcoz reasons!).  See <a href="#picard-1">Picard</a> section below for detailed results.'
@@ -229,7 +229,7 @@ custom_data:
                 description: "{{ picard_wgs_PCT_15X_description }}"
 
     quac_watch_picard_dups:
-        parent_id: "cgds_quac_watch"
+        parent_id: "quac_watch"
         id: "quac_watch_picard_dups"
         section_name: "Picard-dups"
         description: 'Quick summary of picard-duplication metrics. See <a href="#picard-1">Picard</a> section below for detailed results.'
@@ -247,7 +247,7 @@ custom_data:
                 hidden: True
 
     quac_watch_bcftools_stats:
-        parent_id: "cgds_quac_watch"
+        parent_id: "quac_watch"
         id: "quac_watch_bcftools_stats"
         section_name: "Bcftools stats"
         description: 'Quick summary of Bcftools-stats results. See <a href="#bcftools">Bcftools</a> section below for detailed results.'
@@ -309,7 +309,7 @@ custom_data:
                 description: "{{ bcftools_stats_heterozygosity_ratio_description }}"
 
     quac_watch_variant_per_contig:
-        parent_id: "cgds_quac_watch"
+        parent_id: "quac_watch"
         id: "quac_watch_variant_per_contig"
         section_name: "Variant frequency per contig"
         description: "Quick summary of %variant per contig results."
@@ -466,7 +466,7 @@ custom_data:
                 hidden: True
 
     quac_watch_verifybamid:
-        parent_id: "cgds_quac_watch"
+        parent_id: "quac_watch"
         id: "quac_watch_verifybamid"
         section_name: "VerifyBAMID"
         description: 'Quick summary of VerifyBAMID results. See <a href="#verifybamid-1">VerifyBAMID</a> section below for detailed results.'
@@ -488,7 +488,7 @@ custom_data:
                 description: "{{ verifybamid_freemix_description }}"
 
     quac_watch_fastq_screen:
-        parent_id: "cgds_quac_watch"
+        parent_id: "quac_watch"
         id: "quac_watch_fastq_screen"
         section_name: "FastQ Screen (trimmed)"
         description: 'Quick summary of FastQ Screen (trimmed) results. See <a href="#fastq_screen-1">FastQ Screen</a> section below for detailed results.'
