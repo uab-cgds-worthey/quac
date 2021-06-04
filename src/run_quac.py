@@ -130,7 +130,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
         f"--restart-times {args.rerun_failed}",
         "--use-conda",
         "--use-singularity",
-        f"--singularity-args '--bind {tmp_dir}:/tmp --bind {mount_paths}'",
+        f"--singularity-args '--cleanenv --bind {tmp_dir}:/tmp --bind {mount_paths}'",
         f"--profile '{snakemake_profile_dir}'",
         f"--cluster-config '{args.cluster_config}'",
         "--cluster 'sbatch --ntasks {cluster.ntasks} --partition {cluster.partition}"
