@@ -105,7 +105,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
 
     # directory to use as tmp in singularity container
     # If not exist, singularity will complain
-    tmp_dir = os.path.expandvars("$USER_SCRATCH/tmp/quac")
+    tmp_dir = os.path.expandvars("$USER_SCRATCH/tmp/quac/tmp")
     make_dir(tmp_dir)
 
     quac_configs = {
