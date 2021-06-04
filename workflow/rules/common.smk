@@ -98,41 +98,8 @@ def aggregate_rename_configs(rename_config_files, outfile):
     return None
 
 
-##########################   Staging rules  ##########################
-localrules:
-    create_multiqc_config,
-
-OUT_DIR = Path(config["out_dir"])
-# from tempfile import NamedTemporaryFile
-# MULTIQC_CONFIG = NamedTemporaryFile(dir="$USER_SCRATCH/tmp/quac/tmp", suffix=".yaml").name
-import uuid
-uuu=str(uuid.uuid4())
-MULTIQC_CONFIG = OUT_DIR / "project_level_qc" / "multiqc" / "configs" / f"{uuu}.yaml"
-print ('mmmmm', MULTIQC_CONFIG)
-
-rule create_multiqc_config:
-    input:
-        script=WORKFLOW_PATH / "src" / "quac_watch" / "create_mutliqc_configs.py",
-        template=WORKFLOW_PATH / "configs" / "multiqc_config_template.jinja2",
-        quac_watch_config=config["quac_watch_config"],
-    output:
-        # WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
-        temp(MULTIQC_CONFIG)
-    message:
-        "Creates multiqc configs from jinja-template based on QuaC-Watch configs"
-    conda:
-        str(WORKFLOW_PATH / "configs/env/quac_watch.yaml")
-    shell:
-        r"""
-        python {input.script} \
-            --template_f  {input.template} \
-            --qc_config {input.quac_watch_config} \
-            --outfile {output}
-        """
-
-
 ##########################   Configs from CLI  ##########################
-# OUT_DIR = Path(config["out_dir"])
+OUT_DIR = Path(config["out_dir"])
 PROJECT_NAME = config["project_name"]
 PROJECT_PATH = Path(config["projects_path"]) / PROJECT_NAME / "analysis"
 PEDIGREE_FPATH = config["ped"]
@@ -143,6 +110,7 @@ RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"
 RULE_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
 SAMPLES = get_samples(PEDIGREE_FPATH)
+MULTIQC_CONFIG_FILE = OUT_DIR / "project_level_qc" / "multiqc" / "configs" / f"tmp_multiqc_config-{config['unique_id']}.yaml"
 
 logger.info(f"// Processing project: {PROJECT_NAME}")
 logger.info(f'// Project path: "{PROJECT_PATH}"')

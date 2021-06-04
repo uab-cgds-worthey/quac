@@ -18,6 +18,7 @@ python src/run_quac.py --project_name UnusualCancers_CMGalluzi --projects_path /
 
 import argparse
 from pathlib import Path
+import uuid
 import os.path
 import yaml
 from utility_cgds.cgds.pipeline.src.submit_slurm_job import submit_slurm_job
@@ -114,6 +115,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
         "ped": args.pedigree,
         "quac_watch_config": args.quac_watch_config,
         "workflow_config": args.workflow_config,
+        "unique_id": str(uuid.uuid4()),
         "out_dir": args.outdir,
         "log_dir": args.log_dir,
         "exome": args.exome,

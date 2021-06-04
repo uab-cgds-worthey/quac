@@ -1,3 +1,27 @@
+##########################     Create Multiqc config file    ##########################
+localrules:
+    create_multiqc_config,
+
+rule create_multiqc_config:
+    input:
+        script=WORKFLOW_PATH / "src" / "quac_watch" / "create_mutliqc_configs.py",
+        template=WORKFLOW_PATH / "configs" / "multiqc_config_template.jinja2",
+        quac_watch_config=config["quac_watch_config"],
+    output:
+        temp(MULTIQC_CONFIG_FILE)
+    message:
+        "Creates multiqc configs from jinja-template based on QuaC-Watch configs"
+    conda:
+        str(WORKFLOW_PATH / "configs/env/quac_watch.yaml")
+    shell:
+        r"""
+        python {input.script} \
+            --template_f  {input.template} \
+            --qc_config {input.quac_watch_config} \
+            --outfile {output}
+        """
+
+
 ##########################   Single-sample-level QC aggregation  ##########################
 rule multiqc_by_sample_initial_pass:
     input:
@@ -8,8 +32,7 @@ rule multiqc_by_sample_initial_pass:
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
-        # multiqc_config=WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
-        multiqc_config=MULTIQC_CONFIG,
+        multiqc_config=MULTIQC_CONFIG_FILE,
         rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc.html"),
@@ -98,8 +121,7 @@ rule multiqc_by_sample_final_pass:
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         OUT_DIR / "{sample}" / "qc" / "quac_watch" / "quac_watch_overall_summary.yaml",
-        # multiqc_config=WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
-        multiqc_config=MULTIQC_CONFIG,
+        multiqc_config=MULTIQC_CONFIG_FILE,
         rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html"),
@@ -127,7 +149,7 @@ rule aggregate_sample_rename_configs:
             sample=SAMPLES,
         ),
     output:
-        protected(OUT_DIR / "project_level_qc" / "multiqc" / "aggregated_rename_configs.tsv"),
+        protected(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv"),
     message:
         "Aggregate all sample rename-config files."
     run:
@@ -156,9 +178,8 @@ rule multiqc_aggregation_all_samples:
             unit=[1],
             read=["R1", "R2"],
         ),
-        # multiqc_config=WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
-        multiqc_config=MULTIQC_CONFIG,
-        rename_config=OUT_DIR / "project_level_qc" / "multiqc" / "aggregated_rename_configs.tsv",
+        multiqc_config=MULTIQC_CONFIG_FILE,
+        rename_config=OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv",
     output:
         protected(OUT_DIR / "project_level_qc" / "multiqc" / "multiqc_report.html"),
     message:
