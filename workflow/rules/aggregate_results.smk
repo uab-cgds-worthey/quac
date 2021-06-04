@@ -8,7 +8,8 @@ rule multiqc_by_sample_initial_pass:
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
-        multiqc_config=WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
+        # multiqc_config=WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
+        multiqc_config=MULTIQC_CONFIG,
         rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc.html"),
@@ -97,7 +98,8 @@ rule multiqc_by_sample_final_pass:
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         OUT_DIR / "{sample}" / "qc" / "quac_watch" / "quac_watch_overall_summary.yaml",
-        multiqc_config=WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
+        # multiqc_config=WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
+        multiqc_config=MULTIQC_CONFIG,
         rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html"),
@@ -154,7 +156,8 @@ rule multiqc_aggregation_all_samples:
             unit=[1],
             read=["R1", "R2"],
         ),
-        multiqc_config=WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
+        # multiqc_config=WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
+        multiqc_config=MULTIQC_CONFIG,
         rename_config=OUT_DIR / "project_level_qc" / "multiqc" / "aggregated_rename_configs.tsv",
     output:
         protected(OUT_DIR / "project_level_qc" / "multiqc" / "multiqc_report.html"),

@@ -102,6 +102,13 @@ def aggregate_rename_configs(rename_config_files, outfile):
 localrules:
     create_multiqc_config,
 
+OUT_DIR = Path(config["out_dir"])
+# from tempfile import NamedTemporaryFile
+# MULTIQC_CONFIG = NamedTemporaryFile(dir="$USER_SCRATCH/tmp/quac/tmp", suffix=".yaml").name
+import uuid
+uuu=str(uuid.uuid4())
+MULTIQC_CONFIG = OUT_DIR / "project_level_qc" / "multiqc" / "configs" / f"{uuu}.yaml"
+print ('mmmmm', MULTIQC_CONFIG)
 
 rule create_multiqc_config:
     input:
@@ -109,7 +116,8 @@ rule create_multiqc_config:
         template=WORKFLOW_PATH / "configs" / "multiqc_config_template.jinja2",
         quac_watch_config=config["quac_watch_config"],
     output:
-        WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
+        # WORKFLOW_PATH / "configs" / "multiqc_config.yaml",
+        temp(MULTIQC_CONFIG)
     message:
         "Creates multiqc configs from jinja-template based on QuaC-Watch configs"
     conda:
@@ -124,7 +132,7 @@ rule create_multiqc_config:
 
 
 ##########################   Configs from CLI  ##########################
-OUT_DIR = Path(config["out_dir"])
+# OUT_DIR = Path(config["out_dir"])
 PROJECT_NAME = config["project_name"]
 PROJECT_PATH = Path(config["projects_path"]) / PROJECT_NAME / "analysis"
 PEDIGREE_FPATH = config["ped"]
