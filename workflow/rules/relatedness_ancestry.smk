@@ -57,7 +57,7 @@ rule somalier_ancestry:
     input:
         extracted=expand(OUT_DIR / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier", sample=SAMPLES),
         labels_1kg=config["somalier"]["labels_1kg"],
-        somalier_1kg=directory(config["somalier"]["somalier_1kg"]),
+        somalier_1kg_directory=config["somalier"]["somalier_1kg"],
     output:
         out=protected(
             expand(
@@ -79,7 +79,7 @@ rule somalier_ancestry:
         somalier ancestry \
             --output-prefix {params.outdir}/somalier \
             --labels {input.labels_1kg} \
-            {input.somalier_1kg}/*.somalier ++ \
+            {input.somalier_1kg_directory}/*.somalier ++ \
             {params.infiles} \
             > {log} 2>&1
         """
