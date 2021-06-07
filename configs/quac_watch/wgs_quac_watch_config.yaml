@@ -179,7 +179,7 @@ perc_variant_per_contig:
     min: 0.17
     max: 0.21
   chr7:
-    min: 0.17
+    min: 0.165
     max: 0.22
   chr8:
     min: 0.16
