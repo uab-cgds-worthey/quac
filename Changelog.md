@@ -23,6 +23,7 @@ YYYY-MM-DD  John Doe
 * QuaC is heavily reworked to be a companion pipeline to small variant caller pipeline and will now perform most of the
   QC analyses for WGS/WES data. While the small caller pipeline will still run few QC tools (for pragmatic reasons),
   QuaC will now take over the heavylifting of QC, including the QC-checkup, which is now called as QuaC-Watch.
+* Runs in containerized environment using Singularity.
 * QuaC can perform both sample-level and project-level QC. This is the major reason why it was decided to separate QC from small-variant caller pipeline, as it could only perform single-sample QC.
 * More QC tools were added
 * For QC checkup (ie. QuaC-Watch), QuaC now heavily expands to vcf metrics and adds significant amount of QC thresholds for bam metrics.
