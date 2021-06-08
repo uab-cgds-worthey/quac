@@ -8,7 +8,8 @@ ml Anaconda3
 conda activate quac_common
 
 # Example
-python src/create_dummy_ped.py --project_path "/data/project/worthey_lab/projects/CF_CFF_PFarrell/" --outfile test.ped
+PROJECT="CF_TLOAF_PFarrell"
+python src/create_dummy_ped.py --project_path "/data/project/worthey_lab/projects/${PROJECT}/" --outfile "data/raw/ped/${PROJECT}.ped"
 """
 
 from pathlib import Path

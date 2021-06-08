@@ -1,36 +1,113 @@
-TARGETS_COVERAGE = [
-    # indexcov
-    get_targets("indexcov") if {"all", "indexcov"}.intersection(MODULES_TO_RUN) and not EXOME_MODE else [],
-    # covviz
-    get_targets("covviz") if {"all", "covviz"}.intersection(MODULES_TO_RUN) and not EXOME_MODE else [],
-    # mosdepth
-    get_targets("mosdepth", SAMPLES) if {"all", "mosdepth"}.intersection(MODULES_TO_RUN) else [],
-]
+##########################   Samtools   ##########################
+rule samtools_stats:
+    input:
+        PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+    output:
+        protected(OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt"),
+    message:
+        "stats bam using samtools. Sample: {wildcards.sample}"
+    wrapper:
+        "0.64.0/bio/samtools/stats"
+
+
+##########################   Qualimap   ##########################
+rule qualimap_bamqc:
+    input:
+        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+        index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
+        target_regions=get_capture_regions_bed if EXOME_MODE else [],
+    output:
+        html_report=protected(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html"),
+        coverage=protected(OUT_DIR / "{sample}" / "qc/qualimap/{sample}/raw_data_qualimapReport/coverage_across_reference.txt"),
+        summary=protected(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt"),
+    message:
+        "stats bam using qualimap. Sample: {wildcards.sample}"
+    conda:
+        str(WORKFLOW_PATH / "configs/env/qualimap.yaml")
+    threads: 2
+    params:
+        outdir=lambda wildcards, output: str(Path(output["html_report"]).parent),
+        capture_bed=lambda wildcards, input: f"--feature-file {input.target_regions}" if input.target_regions else "",
+        java_mem="24G",
+    shell:
+        r"""
+        unset DISPLAY
+        qualimap bamqc \
+            -bam {input.bam} \
+            {params.capture_bed} \
+            -outdir {params.outdir} \
+            -outformat HTML \
+            --paint-chromosome-limits \
+            --genome-gc-distr HUMAN \
+            -nt {threads} \
+            --java-mem-size={params.java_mem}
+        """
+
+
+##########################   Picard   ##########################
+rule picard_collect_multiple_metrics:
+    input:
+        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+        index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
+        ref=config["ref"],
+    output:
+        multiext(
+            str(OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}"),
+            ".alignment_summary_metrics",
+            ".quality_yield_metrics",
+        ),
+    message:
+        "stats bam using Picard's collectmultiplemetrics. Sample: {wildcards.sample}"
+    params:
+        "PROGRAM=null ",
+    wrapper:
+        "0.73.0/bio/picard/collectmultiplemetrics"
+
+
+rule picard_collect_wgs_metrics:
+    input:
+        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+        index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
+        ref=config["ref"],
+    output:
+        OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
+    message:
+        "stats bam using Picard-CollectMultipleMetrics. Sample: {wildcards.sample}"
+    conda:
+        str(WORKFLOW_PATH / "configs/env/picard.yaml")
+    shell:
+        r"""
+        picard CollectWgsMetrics \
+            I={input.bam} \
+            O={output} \
+            R={input.ref}
+        """
 
 
 ##########################   Mosdepth   ##########################
 rule mosdepth_coverage:
     input:
-        bam=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+        bam_index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
+        target_regions=get_capture_regions_bed if EXOME_MODE else [],
     output:
-        dist=OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt",
-        summary=OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.summary.txt",
+        dist=protected(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt"),
+        summary=protected(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.summary.txt"),
     message:
         "Running mosdepth for coverage. Sample: {wildcards.sample}"
-    group:
-        "mosdepth"
     conda:
         str(WORKFLOW_PATH / "configs/env/mosdepth.yaml")
     threads: 4
     params:
         out_prefix=lambda wildcards, output: output["summary"].replace(".mosdepth.summary.txt", ""),
+        capture_bed=lambda wildcards, input: f"--by {input.target_regions}" if input.target_regions else "",
     shell:
         r"""
         mosdepth \
             --no-per-base \
             --threads {threads} \
             --fast-mode \
+            {params.capture_bed} \
             {params.out_prefix} \
             {input.bam}
         """
@@ -39,25 +116,21 @@ rule mosdepth_coverage:
 rule mosdepth_plot:
     input:
         dist=expand(
-            str(OUT_DIR / "mosdepth" / "results" / "{sample}.mosdepth.global.dist.txt"), sample=SAMPLES
+            OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt",
+            sample=SAMPLES,
         ),
         script=WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
-        OUT_DIR / "mosdepth" / f"mosdepth.html",
+        protected(OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html"),
     message:
         "Running mosdepth plotting"
-    group:
-        "mosdepth"
     params:
-        in_dir=lambda wildcards, input: Path(input[0]).parent,
+        infiles=lambda wildcards: str(OUT_DIR / f"{{{','.join(SAMPLES)}}}" / "qc" / "mosdepth" / "*.mosdepth.global.dist.txt"),
     shell:
         r"""
-        echo "Heads up: Mosdepth-plotting is run on all samples in "{params.in_dir}"; Not just the files mentioned in the rule's input."
-
-        cd {params.in_dir}  # if not in directory, mosdepth uses filepath as sample name :(
         python {input.script} \
             --output {output} \
-            *.mosdepth.global.dist.txt
+            {params.infiles}
         """
 
 
@@ -65,31 +138,30 @@ rule mosdepth_plot:
 rule indexcov:
     input:
         bam=expand(
-            str(PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam"),
+            PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
             sample=SAMPLES,
         ),
         bam_index=expand(
-            str(PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai"),
+            PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
             sample=SAMPLES,
         ),
-        goleft_tool=config["goleft"]["tool"],
     output:
-        html=OUT_DIR / "indexcov" / "index.html",
-        bed=OUT_DIR / "indexcov" / f"indexcov-indexcov.bed.gz",
+        html=protected(OUT_DIR / "project_level_qc" / "indexcov" / "index.html"),
+        bed=protected(OUT_DIR / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz"),
     message:
         "Running indexcov"
     log:
-        OUT_DIR / "indexcov" / "stdout.log",
+        OUT_DIR / "project_level_qc" / "indexcov" / "stdout.log",
+    conda:
+        str(WORKFLOW_PATH / "configs/env/goleft.yaml")
     params:
         outdir=lambda wildcards, output: Path(output[0]).parent,
-        project_dir=lambda wildcards, input: str(Path(input["bam"][0]).parents[2]),
+        infiles=lambda wildcards: str(PROJECT_PATH / f"{{{','.join(SAMPLES)}}}" / "bam" / "*.bam"),
     shell:
         r"""
-        echo "Heads up: Indexcov is run on all samples in the "project directory"; Not just the files mentioned in the rule's input."
-
-        {input.goleft_tool} indexcov \
+        goleft indexcov \
             --directory {params.outdir} \
-            {params.project_dir}/[LU][WD]*/bam/*.bam \
+            {params.infiles} \
             > {log} 2>&1
         """
 
@@ -97,14 +169,14 @@ rule indexcov:
 ##########################   covviz   ##########################
 rule covviz:
     input:
-        bed=OUT_DIR / "indexcov" / f"indexcov-indexcov.bed.gz",
+        bed=OUT_DIR / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz",
         ped=PEDIGREE_FPATH,
     output:
-        html=OUT_DIR / "covviz" / "covviz_report.html",
+        html=protected(OUT_DIR / "project_level_qc" / "covviz" / "covviz_report.html"),
     message:
         "Running covviz"
     log:
-        OUT_DIR / "covviz" / "stdout.log",
+        OUT_DIR / "project_level_qc" / "covviz" / "stdout.log",
     conda:
         str(WORKFLOW_PATH / "configs/env/covviz.yaml")
     shell:

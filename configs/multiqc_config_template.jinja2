@@ -1,0 +1,612 @@
+# general statistics table config
+table_columns_visible:
+    QualiMap:
+        1_x_pc: False
+        5_x_pc: False
+        10_x_pc: False
+        20_x_pc: False
+        50_x_pc: False
+        60_x_pc: False
+        100_x_pc: False
+        200_x_pc: False
+
+    Picard:
+        MEDIAN_COVERAGE: False
+        PCT_30X: False
+
+    "Bcftools Stats":
+        number_of_SNPs: False
+        number_of_indels: False
+
+    Samtools:
+        non-primary_alignments: False
+        reads_mapped: False
+        reads_mapped_percent: False
+        raw_total_sequences: False
+
+    "FastQC (raw)": False
+
+table_columns_placement:
+    verifybamid: 900
+
+# order of modules to show in report
+module_order:
+    - quac_watch
+    - qualimap
+    - picard
+    - samtools
+    - bcftools
+    - fastqc:
+          name: "FastQC (trimmed)"
+          anchor: "trimmed"
+          info: "This section of the report shows FastQC results after adapter trimming."
+          target: ""
+          path_filters:
+              - "*/qc/fastqc-trimmed/*_fastqc.zip"
+    - fastqc:
+          name: "FastQC (raw)"
+          anchor: "raw"
+          path_filters:
+              - "*/qc/fastqc-raw/*_fastqc.zip"
+    - fastq_screen:
+          name: "FastQ Screen (trimmed)"
+          path_filters:
+              - "*/qc/fastq_screen-trimmed/*"
+    - verifybamid
+    - somalier
+
+# qualimap related
+qualimap_config:
+    general_stats_coverage:
+        - 1
+        - 5
+        - 10
+        - 15
+        - 20
+        - 30
+        - 40
+        - 50
+        - 60
+        - 100
+        - 200
+
+# configs for QuaC-Watch
+# NOTE: This multiqc config file has hard-coded parameters, which is based on the QuaC-Watch config file.
+# If parameters in QuaC-Watch config file get modified, this file may need to be edited correspondingly.
+custom_data:
+    quac_watch_overall_summary:
+        parent_id: "quac_watch"
+        parent_name: "QuaC-Watch"
+        parent_description: "This section contains QuaC-Watch results. QuaC-Watch summarizes if samples have passed the QC thresholds (Might not work well for WES)."
+        id: "quac_watch_overall_summary"
+        section_name: "Overall QuaC-Watch Summary"
+        description: "Overall QuaC-Watch summary of results from several QC tools"
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "Overall QuaC-Watch Summary"
+
+    quac_watch_fastqc:
+        parent_id: "quac_watch"
+        id: "quac_watch_fastqc"
+        section_name: "FastQC (trimmed)"
+        description: 'Quick summary of FastQC (trimmed) results. See <a href="#trimmed">FastQC</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "FastQC - QuaC-Watch"
+
+    quac_watch_qualimap_overall:
+        parent_id: "quac_watch"
+        id: "quac_watch_qualimap_overall"
+        section_name: "Qualimap - Overall stats"
+        description: 'Quick summary of Qualimap results. See <a href="#qualimap">QualiMap</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "Qualimap - Overall stats - QuaC-Watch"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            avg_gc_val:
+                min: {{ qualimap_avg_gc_min }}
+                max: {{ qualimap_avg_gc_max }}
+                description: "{{ qualimap_avg_gc_description }} (min: {{ qualimap_avg_gc_min }}, max: {{ qualimap_avg_gc_max }})"
+                hidden: True
+            # if you change coverage limits, also change values in "quac_watch_qualimap_chromosome_stats"
+            mean_coverage_val:
+                min: {{ qualimap_mean_coverage_min }}
+                description: "{{ qualimap_mean_coverage_description }} (min: {{ qualimap_mean_coverage_min }})"
+                hidden: True
+            median_coverage_val:
+                min: {{ qualimap_median_coverage_min }}
+                description: "{{ qualimap_median_coverage_description }} (min: {{ qualimap_median_coverage_min }})"
+                hidden: True
+            percentage_aligned_val:
+                min: {{ qualimap_percentage_aligned_min }}
+                max: {{ qualimap_percentage_aligned_max }}
+                description: "{{ qualimap_percentage_aligned_description }} (min: {{ qualimap_percentage_aligned_min }}, max: {{ qualimap_percentage_aligned_max }})"
+                hidden: True
+            "mean_cov:median_cov_val":
+                min: {{ qualimap_mean_median_coverage_ratio_min }}
+                max: {{ qualimap_mean_median_coverage_ratio_max }}
+                description: "{{ qualimap_mean_median_coverage_ratio_description }} (min: {{ qualimap_mean_median_coverage_ratio_min }}, max: {{ qualimap_mean_median_coverage_ratio_max }})"
+                hidden: True
+            median_insert_size_val:
+                min: {{ qualimap_median_insert_size_min }}
+                description: "{{ qualimap_median_insert_size_description }} (min: {{ qualimap_median_insert_size_min }})"
+                hidden: True
+            general_error_rate_val:
+                min: {{ qualimap_general_error_rate_min }}
+                max: {{ qualimap_general_error_rate_max }}
+                description: "{{ qualimap_general_error_rate_description }} (min: {{ qualimap_general_error_rate_min }}, max: {{ qualimap_general_error_rate_max }})"
+                hidden: True
+
+    quac_watch_qualimap_chromosome_stats:
+        parent_id: "quac_watch"
+        id: "quac_watch_qualimap_chromosome_stats"
+        section_name: "Qualimap - Chromosome stats"
+        description: 'Quick summary chromosome-level coverage info using Qualimap results. See <a href="#qualimap">QualiMap</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "linegraph"
+        pconfig:
+            id: quac_watch_qualimap_chromosome_stats
+            ymin: 0
+            ymax: 100
+            categories: True
+            ylab: "Coverage (X)"
+            extra_series:
+                name: "Minimum required"
+                data: [[0, {{ qualimap_mean_coverage_min }}], [21, {{ qualimap_mean_coverage_min }}], [22, {{ qualimap_mean_coverage_min / 2 }}], [23, {{ qualimap_mean_coverage_min / 2}}]]
+                dashStyle: "Dash"
+                showInLegend: False
+                color: "PaleVioletRed"
+
+    quac_watch_picard:
+        parent_id: "quac_watch"
+        id: "quac_watch_picard"
+        section_name: "Picard"
+        description: 'Quick summary of picard metrics. Note: Picard-Duplication is reported separately (bcoz reasons!).  See <a href="#picard-1">Picard</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "Picard - Overall stats - QuaC-Watch"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            PCT_PF_READS_ALIGNED_val:
+                min: {{ picard_asm_PCT_PF_READS_ALIGNED_min }}
+                max: {{ picard_asm_PCT_PF_READS_ALIGNED_max }}
+                description: "{{ picard_asm_PCT_PF_READS_ALIGNED_description }} (min: {{ picard_asm_PCT_PF_READS_ALIGNED_min }}, max: {{ picard_asm_PCT_PF_READS_ALIGNED_max }})"
+                hidden: True
+            PF_HQ_ALIGNED_Q20_BASES_val:
+                min: {{ picard_asm_PF_HQ_ALIGNED_Q20_BASES_min }}
+                description: "{{ picard_asm_PF_HQ_ALIGNED_Q20_BASES_description }} (min: {{ picard_asm_PF_HQ_ALIGNED_Q20_BASES_min }})"
+                hidden: True
+            PCT_ADAPTER_val:
+                min: {{ picard_asm_PCT_ADAPTER_min }}
+                max: {{ picard_asm_PCT_ADAPTER_max }}
+                description: "{{ picard_asm_PCT_ADAPTER_description }} (min: {{ picard_asm_PCT_ADAPTER_min }}, max: {{ picard_asm_PCT_ADAPTER_max }})"
+                hidden: True
+            PCT_CHIMERAS_val:
+                min: {{ picard_asm_PCT_CHIMERAS_min }}
+                max: {{ picard_asm_PCT_CHIMERAS_max }}
+                description: "{{ picard_asm_PCT_CHIMERAS_description }} (min: {{ picard_asm_PCT_CHIMERAS_min }}, max: {{ picard_asm_PCT_CHIMERAS_max }})"
+                hidden: True
+            Q30_BASES_val:
+                min: {{ picard_qym_Q30_BASES_min }}
+                description: "{{ picard_qym_Q30_BASES_description }} (min: {{ picard_qym_Q30_BASES_min }})"
+                hidden: True
+            perc_Q30_BASES_val:
+                min: {{ picard_qym_perc_Q30_BASES_min }}
+                description: "{{ picard_qym_perc_Q30_BASES_description }} (min: {{ picard_qym_perc_Q30_BASES_min }})"
+                hidden: True
+            PCT_EXC_TOTAL_val:
+                min: {{ picard_wgs_PCT_EXC_TOTAL_min }}
+                max: {{ picard_wgs_PCT_EXC_TOTAL_max }}
+                description: "{{ picard_wgs_PCT_EXC_TOTAL_description }} (min: {{ picard_wgs_PCT_EXC_TOTAL_min }}, max: {{ picard_wgs_PCT_EXC_TOTAL_max }})"
+                hidden: True
+            PCT_15X_val:
+                min: {{ picard_wgs_PCT_15X_min }}
+                max: {{ picard_wgs_PCT_15X_max }}
+                description: "{{ picard_wgs_PCT_15X_description }} (min: {{ picard_wgs_PCT_15X_min }}, max: {{ picard_wgs_PCT_15X_max }})"
+                hidden: True
+            PCT_PF_READS_ALIGNED:
+                description: "{{ picard_asm_PCT_PF_READS_ALIGNED_description }}"
+            PF_HQ_ALIGNED_Q20_BASES:
+                description: "{{ picard_asm_PF_HQ_ALIGNED_Q20_BASES_description }}"
+            PCT_ADAPTER:
+                description: "{{ picard_asm_PCT_ADAPTER_description }}"
+            PCT_CHIMERAS:
+                description: "{{ picard_asm_PCT_CHIMERAS_description }}"
+            Q30_BASES:
+                description: "{{ picard_qym_Q30_BASES_description }}"
+            perc_Q30_BASES:
+                description: "{{ picard_qym_perc_Q30_BASES_description }}"
+            PCT_EXC_TOTAL:
+                description: "{{ picard_wgs_PCT_EXC_TOTAL_description }}"
+            PCT_15X:
+                description: "{{ picard_wgs_PCT_15X_description }}"
+
+    quac_watch_picard_dups:
+        parent_id: "quac_watch"
+        id: "quac_watch_picard_dups"
+        section_name: "Picard-dups"
+        description: 'Quick summary of picard-duplication metrics. See <a href="#picard-1">Picard</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "Picard duplication - Overall stats - QuaC-Watch"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            PERCENT_DUPLICATION_val:
+                min: {{ picard_dups_PERCENT_DUPLICATION_min }}
+                max: {{ picard_dups_PERCENT_DUPLICATION_max }}
+                description: "{{ picard_dups_PERCENT_DUPLICATION_description }} (min: {{ picard_dups_PERCENT_DUPLICATION_min }}, max: {{ picard_dups_PERCENT_DUPLICATION_max }})"
+                hidden: True
+
+    quac_watch_bcftools_stats:
+        parent_id: "quac_watch"
+        id: "quac_watch_bcftools_stats"
+        section_name: "Bcftools stats"
+        description: 'Quick summary of Bcftools-stats results. See <a href="#bcftools">Bcftools</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "Bcftools stats - QuaC-Watch"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            number_of_records_val:
+                min: {{ bcftools_stats_number_of_records_min }}
+                max: {{ bcftools_stats_number_of_records_max }}
+                description: "{{ bcftools_stats_number_of_records_description }} (min: {{ bcftools_stats_number_of_records_min }}, max: {{ bcftools_stats_number_of_records_max }})"
+                hidden: True
+            number_of_SNPs_val:
+                min: {{ bcftools_stats_number_of_SNPs_min }}
+                max: {{ bcftools_stats_number_of_SNPs_max }}
+                description: "{{ bcftools_stats_number_of_SNPs_description }} (min: {{ bcftools_stats_number_of_SNPs_min }}, max: {{ bcftools_stats_number_of_SNPs_max }})"
+                hidden: True
+            number_of_indels_val:
+                min: {{ bcftools_stats_number_of_indels_min }}
+                max: {{ bcftools_stats_number_of_indels_max }}
+                description: "{{ bcftools_stats_number_of_indels_description }} (min: {{ bcftools_stats_number_of_indels_min }}, max: {{ bcftools_stats_number_of_indels_max }})"
+                hidden: True
+            perc_snps_val:
+                min: {{ bcftools_stats_perc_snps_min }}
+                max: {{ bcftools_stats_perc_snps_max }}
+                description: "{{ bcftools_stats_perc_snps_description }} (min: {{ bcftools_stats_perc_snps_min }}, max: {{ bcftools_stats_perc_snps_max }})"
+                hidden: True
+            perc_indels_val:
+                min: {{ bcftools_stats_perc_indels_min }}
+                max: {{ bcftools_stats_perc_indels_max }}
+                description: "{{ bcftools_stats_perc_indels_description }} (min: {{ bcftools_stats_perc_indels_min }}, max: {{ bcftools_stats_perc_indels_max }})"
+                hidden: True
+            tstv_val:
+                min: {{ bcftools_stats_tstv_min }}
+                max: {{ bcftools_stats_tstv_max }}
+                description: "{{ bcftools_stats_tstv_description }} (min: {{ bcftools_stats_tstv_min }}, max: {{ bcftools_stats_tstv_max }})"
+                hidden: True
+            heterozygosity_ratio_val:
+                min: {{ bcftools_stats_heterozygosity_ratio_min }}
+                max: {{ bcftools_stats_heterozygosity_ratio_max }}
+                description: "{{ bcftools_stats_heterozygosity_ratio_description }} (min: {{ bcftools_stats_heterozygosity_ratio_min }}, max: {{ bcftools_stats_heterozygosity_ratio_max }})"
+                hidden: True
+            number_of_records:
+                description: "{{ bcftools_stats_number_of_records_description }}"
+            number_of_SNPs:
+                description: "{{ bcftools_stats_number_of_SNPs_description }}"
+            number_of_indels:
+                description: "{{ bcftools_stats_number_of_indels_description }}"
+            perc_snps:
+                description: "{{ bcftools_stats_perc_snps_description }}"
+            perc_indels:
+                description: "{{ bcftools_stats_perc_indels_description }}"
+            tstv:
+                description: "{{ bcftools_stats_tstv_description }}"
+            heterozygosity_ratio:
+                description: "{{ bcftools_stats_heterozygosity_ratio_description }}"
+
+    quac_watch_variant_per_contig:
+        parent_id: "quac_watch"
+        id: "quac_watch_variant_per_contig"
+        section_name: "Variant frequency per contig"
+        description: "Quick summary of %variant per contig results."
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "%Variant per contig - QuaC-Watch"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            chr1_val:
+                min: {{ perc_variant_per_contig_chr1_min }}
+                max: {{ perc_variant_per_contig_chr1_max }}
+                description: "chr1 (min: {{ perc_variant_per_contig_chr1_min }}, max: {{ perc_variant_per_contig_chr1_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr2_val:
+                min: {{ perc_variant_per_contig_chr2_min }}
+                max: {{ perc_variant_per_contig_chr2_max }}
+                description: "chr2 (min: {{ perc_variant_per_contig_chr2_min }}, max: {{ perc_variant_per_contig_chr2_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr3_val:
+                min: {{ perc_variant_per_contig_chr3_min }}
+                max: {{ perc_variant_per_contig_chr3_max }}
+                description: "chr3 (min: {{ perc_variant_per_contig_chr3_min }}, max: {{ perc_variant_per_contig_chr3_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr4_val:
+                min: {{ perc_variant_per_contig_chr4_min }}
+                max: {{ perc_variant_per_contig_chr4_max }}
+                description: "chr4 (min: {{ perc_variant_per_contig_chr4_min }}, max: {{ perc_variant_per_contig_chr4_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr5_val:
+                min: {{ perc_variant_per_contig_chr5_min }}
+                max: {{ perc_variant_per_contig_chr5_max }}
+                description: "chr5 (min: {{ perc_variant_per_contig_chr5_min }}, max: {{ perc_variant_per_contig_chr5_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr6_val:
+                min: {{ perc_variant_per_contig_chr6_min }}
+                max: {{ perc_variant_per_contig_chr6_max }}
+                description: "chr6 (min: {{ perc_variant_per_contig_chr6_min }}, max: {{ perc_variant_per_contig_chr6_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr7_val:
+                min: {{ perc_variant_per_contig_chr7_min }}
+                max: {{ perc_variant_per_contig_chr7_max }}
+                description: "chr7 (min: {{ perc_variant_per_contig_chr7_min }}, max: {{ perc_variant_per_contig_chr7_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr8_val:
+                min: {{ perc_variant_per_contig_chr8_min }}
+                max: {{ perc_variant_per_contig_chr8_max }}
+                description: "chr8 (min: {{ perc_variant_per_contig_chr8_min }}, max: {{ perc_variant_per_contig_chr8_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr9_val:
+                min: {{ perc_variant_per_contig_chr9_min }}
+                max: {{ perc_variant_per_contig_chr9_max }}
+                description: "chr9 (min: {{ perc_variant_per_contig_chr9_min }}, max: {{ perc_variant_per_contig_chr9_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr10_val:
+                min: {{ perc_variant_per_contig_chr10_min }}
+                max: {{ perc_variant_per_contig_chr10_max }}
+                description: "chr10 (min: {{ perc_variant_per_contig_chr10_min }}, max: {{ perc_variant_per_contig_chr10_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr11_val:
+                min: {{ perc_variant_per_contig_chr11_min }}
+                max: {{ perc_variant_per_contig_chr11_max }}
+                description: "chr11 (min: {{ perc_variant_per_contig_chr11_min }}, max: {{ perc_variant_per_contig_chr11_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr12_val:
+                min: {{ perc_variant_per_contig_chr12_min }}
+                max: {{ perc_variant_per_contig_chr12_max }}
+                description: "chr12 (min: {{ perc_variant_per_contig_chr12_min }}, max: {{ perc_variant_per_contig_chr12_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr13_val:
+                min: {{ perc_variant_per_contig_chr13_min }}
+                max: {{ perc_variant_per_contig_chr13_max }}
+                description: "chr13 (min: {{ perc_variant_per_contig_chr13_min }}, max: {{ perc_variant_per_contig_chr13_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr14_val:
+                min: {{ perc_variant_per_contig_chr14_min }}
+                max: {{ perc_variant_per_contig_chr14_max }}
+                description: "chr14 (min: {{ perc_variant_per_contig_chr14_min }}, max: {{ perc_variant_per_contig_chr14_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr15_val:
+                min: {{ perc_variant_per_contig_chr15_min }}
+                max: {{ perc_variant_per_contig_chr15_max }}
+                description: "chr15 (min: {{ perc_variant_per_contig_chr15_min }}, max: {{ perc_variant_per_contig_chr15_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr16_val:
+                min: {{ perc_variant_per_contig_chr16_min }}
+                max: {{ perc_variant_per_contig_chr16_max }}
+                description: "chr16 (min: {{ perc_variant_per_contig_chr16_min }}, max: {{ perc_variant_per_contig_chr16_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr17_val:
+                min: {{ perc_variant_per_contig_chr17_min }}
+                max: {{ perc_variant_per_contig_chr17_max }}
+                description: "chr17 (min: {{ perc_variant_per_contig_chr17_min }}, max: {{ perc_variant_per_contig_chr17_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr18_val:
+                min: {{ perc_variant_per_contig_chr18_min }}
+                max: {{ perc_variant_per_contig_chr18_max }}
+                description: "chr18 (min: {{ perc_variant_per_contig_chr18_min }}, max: {{ perc_variant_per_contig_chr18_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr19_val:
+                min: {{ perc_variant_per_contig_chr19_min }}
+                max: {{ perc_variant_per_contig_chr19_max }}
+                description: "chr19 (min: {{ perc_variant_per_contig_chr19_min }}, max: {{ perc_variant_per_contig_chr19_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr20_val:
+                min: {{ perc_variant_per_contig_chr20_min }}
+                max: {{ perc_variant_per_contig_chr20_max }}
+                description: "chr20 (min: {{ perc_variant_per_contig_chr20_min }}, max: {{ perc_variant_per_contig_chr20_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr21_val:
+                min: {{ perc_variant_per_contig_chr21_min }}
+                max: {{ perc_variant_per_contig_chr21_max }}
+                description: "chr21 (min: {{ perc_variant_per_contig_chr21_min }}, max: {{ perc_variant_per_contig_chr21_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chr22_val:
+                min: {{ perc_variant_per_contig_chr22_min }}
+                max: {{ perc_variant_per_contig_chr22_max }}
+                description: "chr22 (min: {{ perc_variant_per_contig_chr22_min }}, max: {{ perc_variant_per_contig_chr22_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chrX_val:
+                min: {{ perc_variant_per_contig_chrX_min }}
+                max: {{ perc_variant_per_contig_chrX_max }}
+                description: "chrX (min: {{ perc_variant_per_contig_chrX_min }}, max: {{ perc_variant_per_contig_chrX_max }})"
+                format: '{:,.4f}'
+                hidden: True
+            chrY_val:
+                min: {{ perc_variant_per_contig_chrY_min }}
+                max: {{ perc_variant_per_contig_chrY_max }}
+                description: "chrY (min: {{ perc_variant_per_contig_chrY_min }}, max: {{ perc_variant_per_contig_chrY_max }})"
+                format: '{:,.6f}'
+                hidden: True
+
+    quac_watch_verifybamid:
+        parent_id: "quac_watch"
+        id: "quac_watch_verifybamid"
+        section_name: "VerifyBAMID"
+        description: 'Quick summary of VerifyBAMID results. See <a href="#verifybamid-1">VerifyBAMID</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "VerifyBAMID - QuaC-Watch"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            FREEMIX_val:
+                min: {{ verifybamid_freemix_min }}
+                max: {{ verifybamid_freemix_max }}
+                description: "{{ verifybamid_freemix_description }} (min: {{ verifybamid_freemix_min }}, max: {{ verifybamid_freemix_max }})"
+                title: "Contamination(%)_val"
+                hidden: True
+            FREEMIX:
+                title: "Contamination(%)"
+                description: "{{ verifybamid_freemix_description }}"
+
+    quac_watch_fastq_screen:
+        parent_id: "quac_watch"
+        id: "quac_watch_fastq_screen"
+        section_name: "FastQ Screen (trimmed)"
+        description: 'Quick summary of FastQ Screen (trimmed) results. See <a href="#fastq_screen-1">FastQ Screen</a> section below for detailed results.'
+        file_format: "yaml"
+        plot_type: "table"
+        pconfig:
+            table_title: "FastQ Screen - QuaC-Watch"
+            only_defined_headers: False
+            scale: "Blues"
+        headers:
+            "%Human":
+                placement: 900
+            "%Mouse":
+                placement: 920
+            "%Rat":
+                placement: 940
+            "%No hits":
+                placement: 960
+            "%Human_val":
+                min: {{ fastq_screen_human_min }}
+                max: {{ fastq_screen_human_max }}
+                description: "%Human (min: {{ fastq_screen_human_min }}, max: {{ fastq_screen_human_max }})"
+                hidden: True
+                placement: 910
+            "%Mouse_val":
+                min: {{ fastq_screen_mouse_min }}
+                max: {{ fastq_screen_mouse_max }}
+                description: "%Mouse (min: {{ fastq_screen_mouse_min }}, max: {{ fastq_screen_mouse_max }})"
+                hidden: True
+                placement: 930
+            "%Rat_val":
+                min: {{ fastq_screen_rat_min }}
+                max: {{ fastq_screen_rat_max }}
+                description: "%Rat (min: {{ fastq_screen_rat_min }}, max: {{ fastq_screen_rat_max }})"
+                hidden: True
+                placement: 950
+            "%Drosophila_val":
+                min: {{ fastq_screen_drosophila_min }}
+                max: {{ fastq_screen_drosophila_max }}
+                description: "%Drosophila (min: {{ fastq_screen_drosophila_min }}, max: {{ fastq_screen_drosophila_max }})"
+                hidden: True
+            "%Arabidopsis_val":
+                min: {{ fastq_screen_arabidopsis_min }}
+                max: {{ fastq_screen_arabidopsis_max }}
+                description: "%Arabidopsis (min: {{ fastq_screen_arabidopsis_min }}, max: {{ fastq_screen_arabidopsis_max }})"
+                hidden: True
+            "%No hits_val":
+                min: {{ fastq_screen_nohits_min }}
+                max: {{ fastq_screen_nohits_max }}
+                description: "%No hits (min: {{ fastq_screen_nohits_min }}, max: {{ fastq_screen_nohits_max }})"
+                hidden: True
+                placement: 970
+            "%Adapters_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%Adapters (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%Ecoli_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%Ecoli (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%Lambda_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%Lambda (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%MT_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%MT (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%PhiX_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%PhiX (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%Vectors_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%Vectors (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%Worm_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%Worm (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%Yeast_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%Yeast (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+            "%rRNA_val":
+                min: {{ fastq_screen_others_min }}
+                max: {{ fastq_screen_others_max }}
+                description: "%rRNA (min: {{ fastq_screen_others_min }}, max: {{ fastq_screen_others_max }})"
+                hidden: True
+
+
+# define file pattern for custom configs
+sp:
+    quac_watch_overall_summary:
+        fn: "quac_watch_overall_summary.yaml"
+    quac_watch_fastqc:
+        fn: "quac_watch_fastqc.yaml"
+    quac_watch_qualimap_overall:
+        fn: "quac_watch_qualimap_overall.yaml"
+    quac_watch_qualimap_chromosome_stats:
+        fn: "quac_watch_qualimap_chromosome_stats.yaml"
+    quac_watch_picard:
+        fn: "quac_watch_picard.yaml"
+    quac_watch_picard_dups:
+        fn: "quac_watch_picard_dups.yaml"
+    quac_watch_bcftools_stats:
+        fn: "quac_watch_bcftools_stats.yaml"
+    quac_watch_variant_per_contig:
+        fn: "quac_watch_variant_per_contig.yaml"
+    quac_watch_verifybamid:
+        fn: "quac_watch_verifybamid.yaml"
+    quac_watch_fastq_screen:
+        fn: "quac_watch_fastq_screen.yaml"

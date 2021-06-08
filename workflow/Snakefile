@@ -1,5 +1,6 @@
 """
-QuaC pipeline
+QuaC Pipeline to perform QC on bams and vcfs.
+Works at project level.
 """
 
 import pandas as pd
@@ -7,7 +8,11 @@ import pandas as pd
 WORKFLOW_PATH = Path(workflow.basedir).parent
 
 
-configfile: WORKFLOW_PATH / "configs/workflow.yaml"
+configfile: config["workflow_config"]
+
+
+# singularity image to use
+singularity: "docker://continuumio/miniconda3:4.7.12"
 
 
 ##############   MODULES   ##############
@@ -15,6 +20,7 @@ include: "rules/common.smk"
 include: "rules/relatedness_ancestry.smk"
 include: "rules/coverage_analysis.smk"
 include: "rules/within_species_contamintation.smk"
+include: "rules/vcf_stats.smk"
 include: "rules/aggregate_results.smk"
 
 
@@ -30,9 +36,49 @@ wildcard_constraints:
 #########################################
 
 
+WGS_ONLY_COVERAGE_TARGETS = []
+if not EXOME_MODE:
+    WGS_ONLY_COVERAGE_TARGETS = [
+        # indexcov
+        OUT_DIR / "project_level_qc" / "indexcov" / "index.html",
+        # covviz
+        OUT_DIR / "project_level_qc" / "covviz" / "covviz_report.html",
+    ]
+
+
 rule all:
     input:
-        TARGETS_SOMALIER,
-        TARGETS_COVERAGE,
-        TARGETS_CONTAMINATION,
-        OUT_DIR / "multiqc/multiqc_report.html",
+        ##### ancestry and relatedness #####
+        # somalier
+        OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
+        OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
+        ##### coverage #####
+        # samtools
+        expand(OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt", sample=SAMPLES),
+        # qualimap
+        expand(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html", sample=SAMPLES),
+        # picard
+        expand(
+            OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.{ext}",
+            sample=SAMPLES,
+            ext=[
+                "alignment_summary_metrics",
+                "quality_yield_metrics",
+                "collect_wgs_metrics",
+            ],
+        ),
+        # mosdepth
+        expand(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt", sample=SAMPLES),
+        OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html",
+        # indexcov and covviz
+        WGS_ONLY_COVERAGE_TARGETS,
+        ##### cross-sample contamination #####
+        # verifyBamID
+        expand(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry", sample=SAMPLES),
+        ##### VCF stats #####
+        # bcftools
+        expand(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats", sample=SAMPLES),
+        expand(OUT_DIR / "{sample}" / "qc" / "bcftools-index" / "{sample}.bcftools.index.tsv", sample=SAMPLES),
+        ##### results aggregation #####
+        expand(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html", sample=SAMPLES),
+        OUT_DIR / "project_level_qc" / "multiqc" / "multiqc_report.html",

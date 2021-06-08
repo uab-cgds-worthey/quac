@@ -1,8 +1,3 @@
-TARGETS_CONTAMINATION = [
-    get_targets("verifybamid", SAMPLES) if {"all", "verifybamid"}.intersection(MODULES_TO_RUN) else [],
-]
-
-
 def get_svd(wildcards):
     if EXOME_MODE:
         return expand(f"{config['verifyBamID']['svd_dat_exome']}.{{ext}}", ext=["bed", "mu", "UD"])
@@ -12,13 +7,13 @@ def get_svd(wildcards):
 
 rule verifybamid:
     input:
-        bam=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam",
-        bam_index=PROJECTS_PATH / PROJECT_NAME / "analysis" / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+        bam_index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
         ref_genome=config["ref"],
         svd=get_svd,
     output:
-        ancestry=OUT_DIR / "verifyBamID/{sample}.Ancestry",
-        selfsm=OUT_DIR / "verifyBamID/{sample}.selfSM",
+        ancestry=protected(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry"),
+        selfsm=protected(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.selfSM"),
     message:
         "Running VerifyBamID to detect within-species contamination. sample: {wildcards.sample}"
     conda:
@@ -26,10 +21,11 @@ rule verifybamid:
     params:
         svd_prefix=lambda wildcards, input: input["svd"][0].replace(Path(input["svd"][0]).suffix, ""),
         out_prefix=lambda wildcards, output: output["ancestry"].replace(".Ancestry", ""),
+        sanity_check="--DisableSanityCheck" if is_testing_mode() else "",
     threads: 4
     shell:
         r"""
-        verifybamid2 \
+        verifybamid2 {params.sanity_check} \
             --NumThread {threads} \
             --SVDPrefix {params.svd_prefix} \
             --Reference {input.ref_genome} \

@@ -3,14 +3,21 @@
         "ntasks": 1,
         "partition": "express",
         "cpus-per-task": "{threads}",
-        "mem": "8G",
+        "mem-per-cpu": "8G",
+        "jobname": "QuaC.{rule}.{jobid}",
         "output": "{RULE_LOGS_PATH}/{rule}-%j.log"
     },
-    "mosdepth": {
+    "qualimap_bamqc": {
         "partition": "short",
-        "cpus-per-task": 12
+        "mem-per-cpu": "{params.java_mem}"
     },
-    "somalier": {
-        "cpus-per-task": 8
+    "picard_collect_multiple_metrics": {
+        "partition": "short"
+    },
+    "picard_collect_wgs_metrics": {
+        "partition": "short"
+    },
+    "multiqc_aggregation_all_samples": {
+        "mem-per-cpu": "24G"
     }
 }
