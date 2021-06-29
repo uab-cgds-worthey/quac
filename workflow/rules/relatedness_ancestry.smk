@@ -41,14 +41,13 @@ rule somalier_relate:
         log=OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.log",
     params:
         outdir=lambda wildcards, output: Path(output["out"][0]).parent,
-        infiles=lambda wildcards: str(OUT_DIR / "project_level_qc" / "somalier" / "extract" / f"{{{','.join(SAMPLES)}}}.somalier"),
     shell:
         r"""
         somalier relate \
             --ped {input.ped} \
             --infer \
             --output-prefix {params.outdir}/somalier \
-            {params.infiles} \
+            {input.extracted} \
             > {log} 2>&1
         """
 
@@ -73,13 +72,12 @@ rule somalier_ancestry:
         log=OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.log",
     params:
         outdir=lambda wildcards, output: Path(output["out"][0]).parent,
-        infiles=lambda wildcards: str(OUT_DIR / "project_level_qc" / "somalier" / "extract" / f"{{{','.join(SAMPLES)}}}.somalier"),
     shell:
         r"""
         somalier ancestry \
             --output-prefix {params.outdir}/somalier \
             --labels {input.labels_1kg} \
             {input.somalier_1kg_directory}/*.somalier ++ \
-            {params.infiles} \
+            {input.extracted} \
             > {log} 2>&1
         """

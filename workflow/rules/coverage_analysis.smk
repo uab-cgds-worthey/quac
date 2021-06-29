@@ -124,13 +124,11 @@ rule mosdepth_plot:
         protected(OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html"),
     message:
         "Running mosdepth plotting"
-    params:
-        infiles=lambda wildcards: str(OUT_DIR / f"{{{','.join(SAMPLES)}}}" / "qc" / "mosdepth" / "*.mosdepth.global.dist.txt"),
     shell:
         r"""
         python {input.script} \
             --output {output} \
-            {params.infiles}
+            {input.dist}
         """
 
 
@@ -156,12 +154,11 @@ rule indexcov:
         str(WORKFLOW_PATH / "configs/env/goleft.yaml")
     params:
         outdir=lambda wildcards, output: Path(output[0]).parent,
-        infiles=lambda wildcards: str(PROJECT_PATH / f"{{{','.join(SAMPLES)}}}" / "bam" / "*.bam"),
     shell:
         r"""
         goleft indexcov \
             --directory {params.outdir} \
-            {params.infiles} \
+            {input.bam} \
             > {log} 2>&1
         """
 
