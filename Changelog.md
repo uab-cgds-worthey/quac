@@ -30,3 +30,8 @@ YYYY-MM-DD  John Doe
 * QuaC's input are output from the small variant caller pipeline, and former's output will fit seemlessly with the latter's output.
 * QuaC accepts pedigree file as input. A dummy pedigree file creator script is provided, which will be handy until phenotips is made available to us.
 * System-level testing is added
+
+2021-06-08  Manavalan Gajapathy
+
+* Bugfix: Fixes error when there is only one sample in input ped file (#34)
+* Adds system-testing for such only-one-sample-in-input setup (#35).

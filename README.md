@@ -318,7 +318,7 @@ conda activate quac
 python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
-      --pedigree ".test/configs/project.ped" \
+      --pedigree ".test/configs/project_2_samples.ped" \
       --outdir "$USER_SCRATCH/tmp/quac/results/test_project_wgs/analysis" \
       -e="--conda-create-envs-only"
 ```
@@ -402,27 +402,30 @@ module load Anaconda3/2020.02
 conda activate quac
 
 # WGS mode
+PROJECT="project_2_samples"
 python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
-      --pedigree ".test/configs/project.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_project_wgs/analysis"
+      --pedigree ".test/configs/${PROJECT}.ped" \
+      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT}_wgs/analysis"
 
 # Exome mode
 python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
-      --pedigree ".test/configs/project.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_project_exome/analysis" \
+      --pedigree ".test/configs/${PROJECT}.ped" \
+      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT}_exome/analysis" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --exome
 ```
 
+Note: Use `PROJECT="project_1_sample"` to test out a project with only one sample.
+
 ### Expected output files
 
 ```sh
-$ tree $USER_SCRATCH/tmp/quac/results/test_project/ -d -L 4
-/data/scratch/manag/tmp/quac/results/test_project/
+$ tree $USER_SCRATCH/tmp/quac/results/test_project_2_samples/ -d -L 4
+/data/scratch/manag/tmp/quac/results/test_project_2_samples/
 └── analysis
     ├── A
     │   └── qc
@@ -494,14 +497,14 @@ DAG_DIR="pipeline_visualized"
 python src/run_quac.py \
       --project_name test_project \
       --projects_path .test/ngs-data/ \
-      --pedigree .test/configs/project.ped \
+      --pedigree .test/configs/project_2_samples.ped \
       --run_locally --extra_args "--dag -F | dot -Tpng > ${DAG_DIR}/wgs_dag.png"
 
 # Rulegraph - less informative than DAG at sample level but less dense than DAG makes this easier to skim
 python src/run_quac.py \
       --project_name test_project \
       --projects_path .test/ngs-data/ \
-      --pedigree .test/configs/project.ped \
+      --pedigree .test/configs/project_2_samples.ped \
       --run_locally --extra_args "--rulegraph -F | dot -Tpng > ${DAG_DIR}/wgs_rulegraph.png"
 
 ###### Exome mode ######
@@ -509,7 +512,7 @@ python src/run_quac.py \
 python src/run_quac.py \
       --project_name test_project \
       --projects_path .test/ngs-data/ \
-      --pedigree .test/configs/project.ped \
+      --pedigree .test/configs/project_2_samples.ped \
       --exome \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --run_locally --extra_args "--dag -F | dot -Tpng > ${DAG_DIR}/exome_dag.png"
@@ -518,7 +521,7 @@ python src/run_quac.py \
 python src/run_quac.py \
       --project_name test_project \
       --projects_path .test/ngs-data/ \
-      --pedigree .test/configs/project.ped \
+      --pedigree .test/configs/project_2_samples.ped \
       --exome \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --run_locally --extra_args "--rulegraph -F | dot -Tpng > ${DAG_DIR}/exome_rulegraph.png"
