@@ -43,17 +43,17 @@ def read_workflow_config(workflow_config_fpath):
         data = yaml.safe_load(fh)
 
     mount_paths = set()
-
+    datasets = data["datasets"]
     # ref genome
-    mount_paths.add(Path(data["ref"]).parent)
+    mount_paths.add(Path(datasets["ref"]).parent)
 
     # somalier resource files
-    for resource in data["somalier"]:
-        mount_paths.add(Path(data["somalier"][resource]).parent)
+    for resource in datasets["somalier"]:
+        mount_paths.add(Path(datasets["somalier"][resource]).parent)
 
     # verifyBamID resource files
-    for resource in data["verifyBamID"]:
-        mount_paths.add(Path(data["verifyBamID"][resource]).parent)
+    for resource in datasets["verifyBamID"]:
+        mount_paths.add(Path(datasets["verifyBamID"][resource]).parent)
 
     return mount_paths
 

@@ -185,18 +185,24 @@ snakemake rules.
 
 ### Set up workflow config file
 
-QuaC requires a workflow config file in yaml format (`configs/workflow.yaml`), which provides filepaths to necessary
-dependencies required by certain QC tools. Their format should look like:
+QuaC requires a workflow config file in yaml format ([`configs/workflow.yaml`](./configs/workflow.yaml)), which provides filepaths to necessary
+dataset dependencies required by certain QC tools. In addition, hardware resources can be configured (refer to [`configs/workflow.yaml`](./configs/workflow.y) for more info). File format should look like:
 
 ```yaml
-ref: "path to ref genome path"
-somalier:
-    sites: "path to somalier's site file"
-    labels_1kg: "path to somalier's ancestry-labels-1kg file"
-    somalier_1kg: "dirpath to somalier's 1kg-somalier files"
-verifyBamID:
-    svd_dat_wgs: "path to WGS resources .dat files"
-    svd_dat_exome: "path to exome resources .dat files"
+datasets:
+    ref: "path to ref genome path"
+    somalier:
+        sites: "path to somalier's site file"
+        labels_1kg: "path to somalier's ancestry-labels-1kg file"
+        somalier_1kg: "dirpath to somalier's 1kg-somalier files"
+    verifyBamID:
+        svd_dat_wgs: "path to WGS resources .dat files"
+        svd_dat_exome: "path to exome resources .dat files"
+
+#### hardware resources ####
+resources:
+    ...
+    ...
 ```
 
 #### Prepare verifybamid datasets for exome analysis

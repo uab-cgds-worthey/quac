@@ -35,3 +35,8 @@ YYYY-MM-DD  John Doe
 
 * Bugfix: Fixes error when there is only one sample in input ped file (#34)
 * Adds system-testing for such only-one-sample-in-input setup (#35).
+
+2022-04-07  Manavalan Gajapathy
+
+* Previously hardcoded hardware resources for snakemake rules can now be supplied via `configs/workflow.yaml` (closes #48)
+* Modified multiqc conda env config to use explicit dependencies to get around installation issues (closes #47)
