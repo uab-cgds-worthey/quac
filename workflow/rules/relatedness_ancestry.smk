@@ -2,8 +2,8 @@ rule somalier_extract:
     input:
         bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
         bam_index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
-        sites=config["somalier"]["sites"],
-        ref_genome=config["ref"],
+        sites=config["datasets"]["somalier"]["sites"],
+        ref_genome=config["datasets"]["ref"],
     output:
         protected(OUT_DIR / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier"),
     message:
@@ -55,8 +55,8 @@ rule somalier_relate:
 rule somalier_ancestry:
     input:
         extracted=expand(OUT_DIR / "project_level_qc" / "somalier" / "extract" / "{sample}.somalier", sample=SAMPLES),
-        labels_1kg=config["somalier"]["labels_1kg"],
-        somalier_1kg_directory=config["somalier"]["somalier_1kg"],
+        labels_1kg=config["datasets"]["somalier"]["labels_1kg"],
+        somalier_1kg_directory=config["datasets"]["somalier"]["somalier_1kg"],
     output:
         out=protected(
             expand(

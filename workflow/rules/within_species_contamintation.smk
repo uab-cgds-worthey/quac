@@ -1,15 +1,15 @@
 def get_svd(wildcards):
     if EXOME_MODE:
-        return expand(f"{config['verifyBamID']['svd_dat_exome']}.{{ext}}", ext=["bed", "mu", "UD"])
+        return expand(f"{config['datasets']['verifyBamID']['svd_dat_exome']}.{{ext}}", ext=["bed", "mu", "UD"])
     else:
-        return expand(f"{config['verifyBamID']['svd_dat_wgs']}.{{ext}}", ext=["bed", "mu", "UD"])
+        return expand(f"{config['datasets']['verifyBamID']['svd_dat_wgs']}.{{ext}}", ext=["bed", "mu", "UD"])
 
 
 rule verifybamid:
     input:
         bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
         bam_index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
-        ref_genome=config["ref"],
+        ref_genome=config["datasets"]["ref"],
         svd=get_svd,
     output:
         ancestry=protected(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry"),
@@ -22,7 +22,7 @@ rule verifybamid:
         svd_prefix=lambda wildcards, input: input["svd"][0].replace(Path(input["svd"][0]).suffix, ""),
         out_prefix=lambda wildcards, output: output["ancestry"].replace(".Ancestry", ""),
         sanity_check="--DisableSanityCheck" if is_testing_mode() else "",
-    threads: 4
+    threads: config["resources"]["verifybamid"]["no_cpu"]
     shell:
         r"""
         verifybamid2 {params.sanity_check} \

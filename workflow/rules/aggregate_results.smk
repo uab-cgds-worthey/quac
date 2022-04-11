@@ -50,6 +50,9 @@ rule multiqc_by_sample_initial_pass:
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file
         extra=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}",
+    conda:
+        ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
+        str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
     wrapper:
         "0.64.0/bio/multiqc"
 
@@ -133,8 +136,12 @@ rule multiqc_by_sample_final_pass:
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file
         extra=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}",
+    conda:
+        ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
+        str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
     wrapper:
         "0.64.0/bio/multiqc"
+
 
 
 ##########################   Multi-sample QC aggregation  ##########################
@@ -192,5 +199,8 @@ rule multiqc_aggregation_all_samples:
                                             --sample-names {input.rename_config} \
                                             --cl_config "max_table_rows: 2000"'
         ),
+    conda:
+        ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
+        str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
     wrapper:
         "0.64.0/bio/multiqc"
