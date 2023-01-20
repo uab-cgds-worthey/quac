@@ -4,6 +4,9 @@ rule samtools_stats:
         PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt"),
+    conda:
+        ### see issue #49 on why local conda env is used to sidestep snakemake-wrapper's ###
+        str(WORKFLOW_PATH / "configs/env/samtools.yaml")
     message:
         "stats bam using samtools. Sample: {wildcards.sample}"
     wrapper:
@@ -56,6 +59,9 @@ rule picard_collect_multiple_metrics:
             ".alignment_summary_metrics",
             ".quality_yield_metrics",
         ),
+    conda:
+        ### see issue #49 on why local conda env is used to sidestep snakemake-wrapper's ###
+        str(WORKFLOW_PATH / "configs/env/picard_smk.yaml")
     message:
         "stats bam using Picard's collectmultiplemetrics. Sample: {wildcards.sample}"
     params:
@@ -174,8 +180,8 @@ rule covviz:
         "Running covviz"
     log:
         OUT_DIR / "project_level_qc" / "covviz" / "stdout.log",
-    conda:
-        str(WORKFLOW_PATH / "configs/env/covviz.yaml")
+    singularity:
+        "docker://brwnj/covviz:v1.2.2"
     shell:
         r"""
         covviz \

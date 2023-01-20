@@ -1,4 +1,5 @@
 import re
+from pathlib import PurePath
 from snakemake.logging import logger
 
 
@@ -20,7 +21,9 @@ def get_samples(ped_fpath):
 def is_testing_mode():
     "checks if testing dataset is used as input for the pipeline"
 
-    if ".test/" in str(PROJECT_PATH):
+    query = ".test"
+    if query in PurePath(PROJECT_PATH).parts:
+        logger.info(f"// WARNING: '{query}' present in the path supplied via --projects_path. So testing mode is used.")
         return True
 
     return None
@@ -87,7 +90,7 @@ def aggregate_rename_configs(rename_config_files, outfile):
 
                 if not line_no:
                     if line != "Original labels\tRenamed labels":
-                        print(f"Unexpected header string in file '{fpath}'")
+                        logger.error(f"Unexpected header string in file '{fpath}'")
                         raise SystemExit(1)
                 else:
                     aggregated_data.append(line)
@@ -104,6 +107,8 @@ PROJECT_NAME = config["project_name"]
 PROJECT_PATH = Path(config["projects_path"]) / PROJECT_NAME / "analysis"
 PEDIGREE_FPATH = config["ped"]
 EXOME_MODE = config["exome"]
+ALLOW_SAMPLE_RENAMING = config["allow_sample_renaming"]
+INCLUDE_PRIOR_QC_DATA = config["include_prior_qc_data"]
 
 #### configs from configfile ####
 RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"
@@ -115,3 +120,4 @@ MULTIQC_CONFIG_FILE = OUT_DIR / "project_level_qc" / "multiqc" / "configs" / f"t
 logger.info(f"// Processing project: {PROJECT_NAME}")
 logger.info(f'// Project path: "{PROJECT_PATH}"')
 logger.info(f"// Exome mode: {EXOME_MODE}")
+logger.info(f"// Include prior QC data: {INCLUDE_PRIOR_QC_DATA}")

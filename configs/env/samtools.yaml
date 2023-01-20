@@ -1,0 +1,25 @@
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - samtools=1.10
+  # other dependencies
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - bzip2=1.0.8
+  - ca-certificates=2021.5.30
+  - htslib=1.10.2
+  - krb5=1.17.2
+  - libcurl=7.71.1
+  - libdeflate=1.6
+  - libedit=3.1.20191231
+  - libgcc-ng=11.1.0
+  - libgomp=11.1.0
+  - libssh2=1.9.0
+  - libstdcxx-ng=11.1.0
+  - ncurses=6.2
+  - openssl=1.1.1k
+  - tk=8.6.10
+  - xz=5.2.5
+  - zlib=1.2.11

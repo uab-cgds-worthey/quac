@@ -1,55 +1,27 @@
-- [QuaC](#quac)
-  - [What is QuaC?](#what-is-quac)
-    - [QC tools included](#qc-tools-included)
-    - [QuaC-Watch](#quac-watch)
-  - [Installation](#installation)
-    - [Requirements](#requirements)
-    - [Retrieve pipeline source code](#retrieve-pipeline-source-code)
-    - [Create conda environment](#create-conda-environment)
-  - [How to run QuaC](#how-to-run-quac)
-    - [Requirements](#requirements-1)
-    - [Set up workflow config file](#set-up-workflow-config-file)
-      - [Prepare verifybamid datasets for exome analysis](#prepare-verifybamid-datasets-for-exome-analysis)
-    - [Run pipeline](#run-pipeline)
-    - [Create singularity+conda environments for tools used in QuaC pipeline](#create-singularityconda-environments-for-tools-used-in-quac-pipeline)
-    - [Input requirements](#input-requirements)
-    - [Example usage](#example-usage)
-    - [Output](#output)
-  - [Testing pipeline](#testing-pipeline)
-    - [How to run](#how-to-run)
-    - [Expected output files](#expected-output-files)
-  - [Visualization of workflow](#visualization-of-workflow)
-  - [Contributing](#contributing)
-  - [Changelog](#changelog)
-
 # QuaC
 
 🦆🦆 Don't duck that QC thingy 🦆🦆
 
 ## What is QuaC?
 
-QuaC is a snakemake-based pipeline that runs several QC tools and summarizes results for WGS/WES samples processed at
-CGDS using internally defined QC thresholds. It is a companion pipeline that should be run after samples in a project
-are run through [CGDS's small variant caller
-pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
+QuaC is a snakemake-based **pipeline** that runs several QC tools for WGS/WES samples and then summarizes their results
+using pre-defined, configurable QC thresholds. 
 
-In short, QuaC performs the following:
+In summary, QuaC performs the following:
 
-- Runs various QC tools using data produced by the small variant caller pipeline
-- Using *QuaC-Watch* tool, it performs QC checkup based on the expected thresholds and summarizes the results for
-  easy consumption
-- Aggregates QC output produced here as well as those by the small variant caller pipeline using mulitqc, both at sample
-  level and project level
-
-**Note**:
-
-1. While QuaC does the heavy lifting in performing QC, the small variant caller pipeline also runs few QC tools (fastqc,
-   fastq-screen, picard's markduplicates). This setup was chosen deliberately for pragmatic reasons.
-2. *Use QuaC-Watch results with extreme caution when run in exome mode.* Though QuaC can be run in exome mode,
-   QuaC-Watch thresholds utilized are not yet as reliable as that used for WGS datasets.
+- Runs several QC tools using `BAM` and `VCF` files as input. At our center CGDS, these files are produced as part of
+  the [small variant caller
+  pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
+- Using *QuaC-Watch* tool, it performs QC checkup based on the expected thresholds for certain QC metrics and summarizes
+  the results for easier human consumption
+- Aggregates QC output produced here as well as those by the small variant caller pipeline using mulitqc, both at the
+  sample level and project level.
+- Optionally, above mentioned QC checkup and QC aggregation steps can accept pre-run results from few QC tools (fastqc,
+   fastq-screen, picard's markduplicates). At CGDS, these files are produced as part of the [small variant caller
+   pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
 
 
-### QC tools included
+### QC tools utilized
 
 QuaC quacks using the tools listed below:
 
@@ -57,7 +29,7 @@ QuaC quacks using the tools listed below:
 | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | *BAM QC*                                                                                                                   |                                                                                               |
 | [Qualimap](http://qualimap.conesalab.org/)                                                                                 | QCs alignment data in SAM/BAM files                                                           |
-| [Picard-CollectMultipleMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectMultipleMetrics) | summarizes alignment metrics from a SAM/BAM file using several modules                        |
+| [Picard-CollectMultipleMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectMultipleMetrics) | Summarizes alignment metrics from a SAM/BAM file using several modules                        |
 | [Picard-CollectWgsMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectWgsMetrics)           | Collects metrics about coverage and performance of whole genome sequencing (WGS) experiments. |
 | [mosdepth](https://github.com/brentp/mosdepth)                                                                             | Fast BAM/CRAM depth calculation                                                               |
 | [indexcov](https://github.com/brentp/goleft/tree/master/indexcov)                                                          | Estimate coverage from whole-genome bam or cram index (Not run in exome mode)                 |
@@ -69,9 +41,11 @@ QuaC quacks using the tools listed below:
 | *Sex, ancestry and relatedness estimation*                                                                                 |                                                                                               |
 | [somalier](https://github.com/brentp/somalier)                                                                             | Estimation of sex, ancestry and relatedness                                                   |
 
+### Optional tools' results consumption
 
-In addition to this, QuaC also utilizes QC results produced by following tools as part of the [small variant caller
-pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/small_variant_caller_pipeline/).
+In addition to the above tools, optionally QuaC can also utilize QC results produced by the tools below when run with
+flag `--include_prior_qc`. At CGDS, these files are produced as part of the [small variant caller
+pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
 
 | Tool                                                                                                         | Use                                               |
 | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- |
@@ -83,10 +57,10 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 ### QuaC-Watch
 
 QuaC includes a tool called QuaC-Watch. After running all the QC tools for samples, QuaC-Watch summarizes if samples
-have passed the QC thresholds (defined via config file
-[`wgs_quac_watch_config.yaml`](configs/quac_watch/wgs_quac_watch_config.yaml); can be user-configured), both at the
-sample level as well as project level. This summary makes it easy to quickly review if sample or samples have sufficient
-quality and highlight samples that need further review.
+have passed the configurable QC thresholds defined using config files (available at
+[`configs/quac_watch/`](./configs/quac_watch/)), both at the sample level as well as project level. This summary makes
+it easy to quickly review whether sample or samples are of sufficient quality and highlight samples that need further
+review.
 
 ## Installation
 
@@ -102,19 +76,16 @@ Installation requires
 - [SSH Key for access](https://docs.uabgrid.uab.edu/wiki/Cheaha_GettingStarted#Logging_in_to_Cheaha) to Cheaha cluster
 - Anaconda/miniconda
     - Tested with Anaconda3/2020.02
+    - Available as module from cheaha at UAB
 
 ### Retrieve pipeline source code
 
-This repository use git submodules, which need to be pulled when cloning. Go to the directory of your choice and run the
-command below.
+Go to the directory of your choice and run the command below.
 
 ```sh
 git clone -b master \
-    --recurse-submodules \
     git@gitlab.rc.uab.edu:center-for-computational-genomics-and-data-science/sciops/pipelines/quac.git
 ```
-
-Note that downloading this repository from GitLab, instead of cloning, may not fetch the submodules included.
 
 
 ### Create conda environment
@@ -124,11 +95,13 @@ Conda environment will install all necessary dependencies, including snakemake, 
 ```sh
 cd /path/to/quac/repo
 
+# For use only at Cheaha in UAB. Load conda into environment.
 module reset
 module load Anaconda3/2020.02
 
 # create conda environment. Needed only the first time.
 conda env create --file configs/env/quac.yaml
+
 # activate conda environment
 conda activate quac
 
@@ -143,17 +116,17 @@ In order to run the QuaC pipeline, user needs to
 
 1. Install the pipeline and set up the conda environment ([see above](#installation))
 2. Set up config files specifying paths required by QC tools used in the pipeline.
-3. Run QuaC pipeline just to create singularity+conda environments using testing dataset (optional)
+3. Run QuaC pipeline just to create singularity+conda environments using the testing dataset (optional)
 
 ### Requirements
 
 ***Direct***
 
-- Snakemake
+- Snakemake-minimal
     - Tested with v6.0.5
     - Gets installed as part of conda environment
 - Python
-    - Tested with v3.6.3
+    - Tested with v3.6.13
     - Gets installed as part of conda environment
 - slurmpy
     - Tested with v0.0.8
@@ -163,10 +136,10 @@ In order to run the QuaC pipeline, user needs to
 
 - Anaconda/miniconda
     - Tested with Anaconda3/2020.02
-    - Available as module from cheaha
+    - Available as module from cheaha at UAB
 - Singularity
     - Tested with v3.5.2
-    - Will be loaded as a module when running QuaC
+    - Available as module from cheaha at UAB
 
 Tools below are used in the QuaC pipeline, and snakemake automatically installs them in conda environments inside the
 singularity container. Therefore, they don't need to be manually installed. For tool versions used, refer to the
@@ -185,25 +158,13 @@ snakemake rules.
 
 ### Set up workflow config file
 
-QuaC requires a workflow config file in yaml format ([`configs/workflow.yaml`](./configs/workflow.yaml)), which provides filepaths to necessary
-dataset dependencies required by certain QC tools. In addition, hardware resources can be configured (refer to [`configs/workflow.yaml`](./configs/workflow.y) for more info). File format should look like:
+QuaC requires a workflow config file in yaml format (default is [`configs/workflow.yaml`](./configs/workflow.yaml)),
+which provides:
 
-```yaml
-datasets:
-    ref: "path to ref genome path"
-    somalier:
-        sites: "path to somalier's site file"
-        labels_1kg: "path to somalier's ancestry-labels-1kg file"
-        somalier_1kg: "dirpath to somalier's 1kg-somalier files"
-    verifyBamID:
-        svd_dat_wgs: "path to WGS resources .dat files"
-        svd_dat_exome: "path to exome resources .dat files"
+- Filepaths to necessary dataset dependencies required by certain QC tools
+- Hardware resource configs
 
-#### hardware resources ####
-resources:
-    ...
-    ...
-```
+Custom workflow config file can be provided to QuaC via `--workflow_config`.
 
 #### Prepare verifybamid datasets for exome analysis
 
@@ -227,10 +188,11 @@ After activating the conda environment, QuaC pipeline can be run using the wrapp
 all the options available:
 
 ```sh
-$ ./src/run_quac.py -h
+$ python src/run_quac.py -h
 usage: run_quac.py [-h] [--project_name] [--projects_path] [--pedigree]
                    [--quac_watch_config] [--workflow_config] [--outdir]
-                   [--exome] [--cluster_config] [--log_dir] [-e] [-n] [-l]
+                   [--exome] [--include_prior_qc] [--allow_sample_renaming]
+                   [--cluster_config] [--log_dir] [-e] [-n] [-l]
                    [--rerun_failed] [--slurm_partition]
 
 Wrapper tool for QuaC pipeline.
@@ -252,9 +214,14 @@ QuaC workflow options:
                         of tools used in QuaC (default: configs/workflow.yaml)
   --outdir              Out directory path (default:
                         $USER_SCRATCH/tmp/quac/results/test_project/analysis)
-  --exome               Flag to run in exome mode. WARNING: Please provide
-                        appropriate configs via --quac_watch_config. (default:
-                        False)
+  --exome               Flag to run the workflow in exome mode. WARNING:
+                        Please provide appropriate configs via
+                        --quac_watch_config. (default: False)
+  --include_prior_qc    Flag to additionally use prior QC data as input. See
+                        documentation for more info. (default: False)
+  --allow_sample_renaming
+                        Flag to allow sample renaming in MultiQC report. See
+                        documentation for more info. (default: False)
 
 QuaC wrapper options:
   --cluster_config      Cluster config json file. Needed for snakemake to run
@@ -279,11 +246,12 @@ QuaC wrapper options:
                         medium(max 50 hrs), long(max 150 hrs) (default: short)
 ```
 
-To run the wrapper script, which in turn will execute the QuaC pipeline:
+Minimal example to run the wrapper script, which in turn will execute the QuaC pipeline:
 
 ```sh
 module reset
 module load Anaconda3/2020.02
+module load Singularity/3.5.2-GCC-5.4.0-2.26
 conda activate quac
 
 python src/run_quac.py \
@@ -307,7 +275,7 @@ Besides the basic features, wrapper script [`src/run_quac.py`](./src/run_quac.py
 ### Create singularity+conda environments for tools used in QuaC pipeline
 
 All the jobs initiated by QuaC would be run inside a conda environment, which themselves were created inside a
-singularity container. It may be a good idea to create these environments even before they are run with actual samples.
+singularity container. It may be a good idea to create these environments before they are run with actual samples.
 While this step is optional, this will ensure that there will not be any conflicts when running multiple instances of
 the pipeline.
 
@@ -318,13 +286,14 @@ provided.
 ```sh
 module reset
 module load Anaconda3/2020.02
+module load Singularity/3.5.2-GCC-5.4.0-2.26
 conda activate quac
 
 # WGS mode
 python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
-      --pedigree ".test/configs/project_2_samples.ped" \
+      --pedigree ".test/configs/no_priorQC/project_2samples.ped" \
       --outdir "$USER_SCRATCH/tmp/quac/results/test_project_wgs/analysis" \
       -e="--conda-create-envs-only"
 ```
@@ -333,48 +302,58 @@ python src/run_quac.py \
 ### Input requirements
 
 - Pedigree file supplied via `--pedigree`. Only the samples that are supplied in pedigree file will be processed by QuaC
-  and all of these samples must belong to the same project. This repo also includes a handy script
-  [`src/create_dummy_ped.py`](src/create_dummy_ped.py) that can create a dummy pedigree file, which will lack sex
-  (unless project tracking sheet is provided), relatedness and affected status info. See header of the script for usage
-  instructions. Note that we plan to use [phenotips](https://phenotips.com/) in future to produce fully capable pedigree
-  file. One could manually create them as well, but this would be error-prone.
+  and all of these samples must belong to the same project.
+  - *For CGDS use only*: This repo includes a handy script [`src/create_dummy_ped.py`](src/create_dummy_ped.py) that can
+  create a dummy pedigree file, which will lack sex (unless project tracking sheet is provided), relatedness and
+  affected status info. See header of the script for usage instructions. Note that we plan to use
+  [phenotips](https://phenotips.com/) in future to produce fully capable pedigree file. One could manually create them
+  as well, but this could be error-prone.
 - Output produced by [the small variant caller
   pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
   This includes bam, vcf and QC output. Refer to [test sample dataset](.test/ngs-data/test_project/analysis/A), which is
   representative of the input required.
-- [QuaC config file](#set-up-workflow-config-file)
+
+- QuaC workflow config file. Refer to [section here](#set-up-workflow-config-file) for more info.
+
 - When run in exome mode, QuaC requires a capture-regions bed file at path
-  `path_to_sample/configs/small_variant_caller/<capture_regions>.bed`.
+  `path_to_sample/configs/small_variant_caller/<capture_regions>.bed` for each sample.
 
 
 ### Example usage
 
 ```sh
-# to quack on a WGS project
+# to quack on a WGS project, which also has prior QC data
+PROJECT="Quack_Quack"
 python src/run_quac.py \
-      --project_name CF_CFF_PFarrell \
-      --pedigree "data/raw/ped/CF_CFF_PFarrell.ped"
+      --project_name $PROJECT \
+      --pedigree "data/raw/ped/${PROJECT}.ped" \
+      --include_prior_qc \
+      --allow_sample_renaming
 
-# to quack on a WGS project and write results to a dir of choice
-PROJECT="CF_CFF_PFarrell"
+
+# to quack on a WGS project, run in a medium slurm partition and write results to a dir of choice
+PROJECT="Quack_This"
 python src/run_quac.py \
       --slurm_partition medium \
-      --project_name ${PROJECT} \
+      --project_name $PROJECT \
       --pedigree "data/raw/ped/${PROJECT}.ped" \
-      --outdir "/data/scratch/manag/tmp/quac/results/test_${PROJECT}/analysis"
+      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT}/analysis"
+
 
 # to quack on an exome project
+PROJECT="Quack_That"
 python src/run_quac.py \
-      --project_name HCC \
-      --pedigree "data/raw/ped/HCC.ped" \
+      --project_name $PROJECT \
+      --pedigree "data/raw/ped/${PROJECT}.ped" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --exome
 
-# to quack on an exome project which is not in the default CGDS projects_path
+# to quack on an exome project by providing path to that project
+PROJECT="Quack_That"
 python src/run_quac.py \
-      --project_name UnusualCancers_CMGalluzi \
-      --projects_path "/data/project/sloss/cgds_path_cmgalluzzi/" \
-      --pedigree "data/raw/ped/UnusualCancers_CMGalluzi.ped" \
+      --project_name $PROJECT \
+      --projects_path "/path/to/project/${$PROJECT}/" \
+      --pedigree "data/raw/ped/${PROJECT}.ped" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --exome
 ```
@@ -383,21 +362,22 @@ python src/run_quac.py \
 
 QuaC results are stored at the path specified via option `--outdir` (default:
 `$USER_SCRATCH/tmp/quac/results/test_project/analysis`).  Refer to the [testing's output](#expected-output-files) to
-learn about output directory structure. Most important output files are aggregated QC results produced by
-[multiqc](https://multiqc.info/), both at sample-level as well as at the project-level. These multiqc reports also
-include summary of QuaC-Watch results.
+learn more about the output directory structure. Users may primarily be interested in the the aggregated QC results
+produced by [multiqc](https://multiqc.info/), both at sample-level as well as at the project-level. These multiqc
+reports also include summary of QuaC-Watch results.
 
-Note that QuaC's output directory structure takes the output structure of the small variant caller pipeline.
+Note that QuaC's output directory structure has been designed based on the output structure of the [small variant caller
+pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
 
 ## Testing pipeline
 
 The system-level testing implemented for this pipeline tests whether the pipeline runs from start to finish without any
 error. This testing uses test datasets present in [`.test/ngs-data/test_project`](.test/ngs-data/test_project), which
-reflects a test project containing two samples. [See here](.test/README.md) for more info on how these test datasets
-were created.
+reflects a test project containing four samples (2 with input needed when `include_priorQC` is used and 2 other samples
+without priorQC data). [See here](.test/README.md) for more info on how these test datasets were created.
 
-> **_NOTE:_**  This testing does not verify that pipeline's output are correct. Instead, its purpose is just to ensure
-> that pipeline runs from beginning to end without any execution error for the given test dataset.
+> **_NOTE:_**  This testing does not verify that pipeline's output are correct. Instead, its purpose is to ensure that
+> pipeline runs from beginning to end without any execution error for the given test dataset.
 
 
 ### How to run
@@ -405,27 +385,56 @@ were created.
 ```sh
 module reset
 module load Anaconda3/2020.02
+module load Singularity/3.5.2-GCC-5.4.0-2.26
 conda activate quac
 
+########## No prior QC data involved ##########
+PROJECT_CONFIG="project_2samples"
+PRIOR_QC_STATUS="no_priorQC"
+
 # WGS mode
-PROJECT="project_2_samples"
 python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
-      --pedigree ".test/configs/${PROJECT}.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT}_wgs/analysis"
+      --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" 
 
 # Exome mode
 python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
-      --pedigree ".test/configs/${PROJECT}.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT}_exome/analysis" \
+      --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
+      --exome
+
+
+########## Includes prior QC data and allows sample renaming ##########
+PROJECT_CONFIG="project_2samples"
+PRIOR_QC_STATUS="include_priorQC"
+
+# WGS mode
+python src/run_quac.py \
+      --project_name test_project \
+      --projects_path ".test/ngs-data/" \
+      --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
+      --include_prior_qc \
+      --allow_sample_renaming
+
+# Exome mode
+python src/run_quac.py \
+      --project_name test_project \
+      --projects_path ".test/ngs-data/" \
+      --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
+      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
+      --include_prior_qc \
+      --allow_sample_renaming \
       --exome
 ```
 
-Note: Use `PROJECT="project_1_sample"` to test out a project with only one sample.
+Note: Use `PROJECT="project_1sample"` to test out a project with only one sample.
 
 ### Expected output files
 
@@ -479,7 +488,7 @@ $ tree $USER_SCRATCH/tmp/quac/results/test_project_2_samples/ -d -L 4
                 └── ...
 ```
 
-Certain tools (eg. indexcov and covviz) are not executed when QuaC is run in exome mode (`--exome`).
+Note: Certain tools (eg. indexcov and covviz) are not executed when QuaC is run in exome mode (`--exome`).
 
 
 ## Visualization of workflow
@@ -495,7 +504,9 @@ srun --ntasks=1 --cpus-per-task=1 --mem-per-cpu=4096 --partition=express --pty /
 # setup environment
 module reset
 module load Anaconda3/2020.02
+module load Singularity/3.5.2-GCC-5.4.0-2.26
 conda activate quac
+
 DAG_DIR="pipeline_visualized"
 
 ###### WGS mode ######
@@ -540,3 +551,10 @@ If you like to make changes to the source code, please see the [contribution gui
 ## Changelog
 
 See [here](./Changelog.md).
+
+## Repo owner
+
+* *Mana*valan Gajapathy
+
+
+

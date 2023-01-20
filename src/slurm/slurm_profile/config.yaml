@@ -1,0 +1,6 @@
+cluster-status: "slurm-status.py"
+keep-going: True
+printshellcmds: True
+jobs: 30
+max-jobs-per-second: 7
+max-status-checks-per-second: 7

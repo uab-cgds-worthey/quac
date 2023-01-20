@@ -1,29 +1,34 @@
 # Testing
 
-Output from [Small variant caller
-pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline)
-are the inputs to QuaC pipeline. Hence following datasets are necessary for testing:
+Input directory structure to QuaC is based on the output directory structure of the [Small variant caller
+pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
+Following files are necessary for testing:
 
 1. bams
 2. vcfs
-3. QC output (from tools fastqc, fastq-screen and picard-markduplicates)
-4. Sample rename config
+3. Capture regions bed file - Required only for exome mode
+4. QC output from tools fastqc, fastq-screen and picard-markduplicates - Required only if `priorQC` is used
+5. Sample rename config - Required only if `priorQC` is used
 
-Note: Be sure to preserve directory structure used in the output of Small variant caller
+**Note**: If `priorQC` is used, be sure to preserve directory structure used in the output of CGDS Small variant caller
 pipeline.
 
 ## Setup test datasets
 
-* To setup test bam and vcf files, which are from sub-sampled NA12878 data, run:
+### Required
+
+* To setup test bam, vcf and capture region bed files, which are from sub-sampled NA12878 data, run:
 
 ```sh
 cd .test
 ./setup_test_datasets.sh
 ```
 
-* QuaC also needs test QC outputs for fastq (and sample rename config), which get created by small var caller pipeline.
-  This was achieved by running the small variant caller pipeline using its test datasets with some modifications. Steps
-  are briefly shown here:
+### Optional - priorQC mode
+
+* If used in `priorQC` mode, QuaC also needs test QC outputs for fastq (and sample rename config), which at CGDS get
+  created by the small var caller pipeline. Below, we create fastq QC and sample rename config using the small variant
+  caller pipeline for samples `A` and `B`.
 
 ```sh
 cd <small_var_caller_pipeline_dir>

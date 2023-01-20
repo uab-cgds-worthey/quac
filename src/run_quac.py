@@ -21,7 +21,7 @@ from pathlib import Path
 import uuid
 import os.path
 import yaml
-from utility_cgds.cgds.pipeline.src.submit_slurm_job import submit_slurm_job
+from slurm.submit_slurm_job import submit_slurm_job
 
 
 def make_dir(d):
@@ -97,17 +97,15 @@ def create_snakemake_command(args, repo_path, mount_paths):
     """
 
     # slurm profile dir for snakemake to properly handle to cluster job fails
-    snakemake_profile_dir = (
-        repo_path / "configs/snakemake_slurm_profile//{{cookiecutter.profile_name}}/"
-    )
+    snakemake_profile_dir = repo_path / "src/slurm/slurm_profile"
 
     # use absolute path to run it from anywhere
     snakefile_path = repo_path / "workflow" / "Snakefile"
 
     # directory to use as tmp in singularity container
     # If not exist, singularity will complain
-    tmp_dir = os.path.expandvars("$USER_SCRATCH/tmp/quac/tmp")
-    make_dir(tmp_dir)
+    tmp_dir = args.tmp_dir
+    # make_dir(tmp_dir)
 
     quac_configs = {
         "project_name": args.project_name,
@@ -119,6 +117,8 @@ def create_snakemake_command(args, repo_path, mount_paths):
         "out_dir": args.outdir,
         "log_dir": args.log_dir,
         "exome": args.exome,
+        "include_prior_qc_data": args.include_prior_qc,
+        "allow_sample_renaming": args.allow_sample_renaming,
     }
     quac_configs = " ".join([f"{k}='{v}'" for k, v in quac_configs.items()])
 
@@ -168,13 +168,7 @@ def main(args):
     snakemake_cmd = create_snakemake_command(args, repo_path, mount_paths)
 
     # put together pipeline command to be run
-    singularity_module = "Singularity/3.5.2-GCC-5.4.0-2.26"
-    pipeline_cmd = "\n".join(
-        [
-            f"module load {singularity_module}",
-            " \\\n\t".join(snakemake_cmd),
-        ]
-    )
+    pipeline_cmd = " \\\n\t".join(snakemake_cmd)
 
     print(
         f'{"#" * 40}\n'
@@ -282,10 +276,28 @@ if __name__ == "__main__":
         type=lambda x: is_valid_dir(PARSER, x),
         metavar="",
     )
+    TMPDIR_DEFAULT = "$USER_SCRATCH/tmp/quac/tmp"
+    WORKFLOW.add_argument(
+        "--tmp_dir",
+        help="Directory path to store temporary files created by the workflow",
+        default=TMPDIR_DEFAULT,
+        type=lambda x: is_valid_dir(PARSER, x),
+        metavar="",
+    )
     WORKFLOW.add_argument(
         "--exome",
         action="store_true",
-        help="Flag to run in exome mode. WARNING: Please provide appropriate configs via --quac_watch_config.",
+        help="Flag to run the workflow in exome mode. WARNING: Please provide appropriate configs via --quac_watch_config.",
+    )
+    WORKFLOW.add_argument(
+        "--include_prior_qc",
+        action="store_true",
+        help="Flag to additionally use prior QC data as input. See documentation for more info.",
+    )
+    WORKFLOW.add_argument(
+        "--allow_sample_renaming",
+        action="store_true",
+        help="Flag to allow sample renaming in MultiQC report. See documentation for more info.",
     )
 
     ############ Args for QuaC wrapper tool  ############
