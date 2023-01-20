@@ -40,3 +40,15 @@ YYYY-MM-DD  John Doe
 
 * Previously hardcoded hardware resources for snakemake rules can now be supplied via `configs/workflow.yaml` (closes #48)
 * Modified multiqc conda env config to use explicit dependencies to get around installation issues (closes #47)
+
+
+2023-01-20  Manavalan Gajapathy
+
+As part of making QuaC publicly available, following updates were made to make it more generic to the environment and user friendly:
+
+* Removes prerun QC from small variant caller pipeline as requirement to QuaC (closes #45)
+* Explicitly defines conda environments (closes #49)
+* Uses container solution for `covviz` installation instead of conda to avoid pip based installation (closes #52)
+* Removes git submodules and instead saves their local copy to repo (closes #53)
+* Loads singularity module loading prior to executing the runner script
+* Uses minimal snakemake instead of full-featured snakemake (closes #56)

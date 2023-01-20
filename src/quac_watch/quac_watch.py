@@ -43,8 +43,11 @@ def main(
 
     # fastqc
     LOGGER.info("-" * 80)
-    fastqc_outfile = f"{out_filepath_prefix}_fastqc.yaml"
-    qc_checks_dict["fastqc"] = fastqc.fastqc(fastqc_f, config_dict["fastqc"], fastqc_outfile)
+    if fastqc_f is not None:
+        fastqc_outfile = f"{out_filepath_prefix}_fastqc.yaml"
+        qc_checks_dict["fastqc"] = fastqc.fastqc(fastqc_f, config_dict["fastqc"], fastqc_outfile)
+    else:
+        LOGGER.info("Skipping fastqc component as it was not supplied by the user")
 
     # read multiqc's general stats
     LOGGER.info("-" * 80)
@@ -78,10 +81,13 @@ def main(
 
     # picard duplication
     LOGGER.info("-" * 80)
-    picard_dup_outfile = f"{out_filepath_prefix}_picard_dups.yaml"
-    qc_checks_dict["picard_dups"] = picard.duplication(
-        picard_dup_f, config_dict["picard"]["MarkDuplicates"], picard_dup_outfile
-    )
+    if picard_dup_f is not None:
+        picard_dup_outfile = f"{out_filepath_prefix}_picard_dups.yaml"
+        qc_checks_dict["picard_dups"] = picard.duplication(
+            picard_dup_f, config_dict["picard"]["MarkDuplicates"], picard_dup_outfile
+        )
+    else:
+        LOGGER.info("Skipping Picard-duplication component as it was not supplied by the user")
 
     # bcftools-stats
     LOGGER.info("-" * 80)
@@ -120,10 +126,13 @@ def main(
 
     # fastq screen
     LOGGER.info("-" * 80)
-    fastq_screen_outfile = f"{out_filepath_prefix}_fastq_screen.yaml"
-    qc_checks_dict["fastq_screen"] = fastq_screen.fastq_screen(
-        fastq_screen_f, config_dict["fastq_screen"], fastq_screen_outfile
-    )
+    if fastq_screen_f is not None:
+        fastq_screen_outfile = f"{out_filepath_prefix}_fastq_screen.yaml"
+        qc_checks_dict["fastq_screen"] = fastq_screen.fastq_screen(
+            fastq_screen_f, config_dict["fastq_screen"], fastq_screen_outfile
+        )
+    else:
+        LOGGER.info("Skipping fastq_screen component as it was not supplied by the user")
 
     # write QC check results to file
     LOGGER.info("-" * 80)

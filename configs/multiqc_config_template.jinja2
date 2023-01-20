@@ -70,14 +70,12 @@ qualimap_config:
         - 100
         - 200
 
-# configs for QuaC-Watch
-# NOTE: This multiqc config file has hard-coded parameters, which is based on the QuaC-Watch config file.
-# If parameters in QuaC-Watch config file get modified, this file may need to be edited correspondingly.
+# configs for QuaC-Watch (based on the QuaC-Watch config file).
 custom_data:
     quac_watch_overall_summary:
         parent_id: "quac_watch"
         parent_name: "QuaC-Watch"
-        parent_description: "This section contains QuaC-Watch results. QuaC-Watch summarizes if samples have passed the QC thresholds (Might not work well for WES)."
+        parent_description: "This section contains QuaC-Watch results. QuaC-Watch summarizes if samples have passed the QC thresholds."
         id: "quac_watch_overall_summary"
         section_name: "Overall QuaC-Watch Summary"
         description: "Overall QuaC-Watch summary of results from several QC tools"

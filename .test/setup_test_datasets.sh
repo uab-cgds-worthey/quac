@@ -19,7 +19,8 @@ TARGET_REGION="chr20:59993-3653078"
 samtools view -s 0.03 -b $NA12878_BAM $TARGET_REGION > $SUBSAMPLED_BAM
 
 PROJECT_DIR="ngs-data/test_project/analysis"
-for sample in A B; do
+SAMPLES="A B C D"
+for sample in $SAMPLES; do
     ### bams ###
     BAM_DIR="${PROJECT_DIR}/${sample}/bam"
     mkdir -p $BAM_DIR
@@ -44,7 +45,7 @@ rm -f $SUBSAMPLED_BAM
 echo "Setting up test vcf files..."
 NA12878_VCF="/data/project/worthey_lab/samples/NA12878/analysis/small_variants/na12878.vcf.gz"
 
-for sample in A B; do
+for sample in $SAMPLES; do
     VCF_DIR="${PROJECT_DIR}/${sample}/vcf"
     mkdir -p $VCF_DIR
     OUT_vcf=${VCF_DIR}/${sample}.vcf.gz
@@ -57,7 +58,9 @@ done
 
 ############# Regions file #############
 
-# Treat sample B as exome dataset and add a capture-regions bed file
-CAPTURE_FILE="${PROJECT_DIR}/B/configs/small_variant_caller/capture_regions.bed"
-mkdir -p $(dirname $CAPTURE_FILE)
-echo -e "chr20\t59992\t3653078\n" > $CAPTURE_FILE
+# For exome mode testing, add capture-regions bed file
+for sample in $SAMPLES; do
+    CAPTURE_FILE="${PROJECT_DIR}/${sample}/configs/small_variant_caller/capture_regions.bed"
+    mkdir -p $(dirname $CAPTURE_FILE)
+    echo -e "chr20\t59992\t3653078\n" > $CAPTURE_FILE
+done

@@ -3,8 +3,6 @@ QuaC Pipeline to perform QC on bams and vcfs.
 Works at project level.
 """
 
-import pandas as pd
-
 WORKFLOW_PATH = Path(workflow.basedir).parent
 
 
