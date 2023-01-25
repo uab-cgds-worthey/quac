@@ -1,0 +1,12 @@
+site_name: QuaC pipeline
+nav:
+  - Home: index.md
+
+theme:
+  name: readthedocs
+  highlightjs: true
+
+markdown_extensions:
+  - markdown_include.include:
+      base_path: .
+  - admonition
