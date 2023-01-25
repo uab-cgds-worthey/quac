@@ -1,9 +1,11 @@
 # Installation
 
-Installation requires
+Installation involves
 
 - fetching the source code
 - creating the conda environment
+
+Quac is expected to work in linux environments.
 
 ## Requirements
 

@@ -1,6 +1,6 @@
 # Command line interface
 
-After activating the conda environment, QuaC pipeline can be run using the wrapper/CLI script src/run_quac.py. Here are all the options available:
+After activating the conda environment, QuaC pipeline can be run using the wrapper/CLI script `src/run_quac.py`. Here are all the options available:
 
 ```sh
 $ python src/run_quac.py -h
