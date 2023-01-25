@@ -51,3 +51,17 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 | [fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)                                         | Performs QC on raw sequence reads data (FASTQ)    | FASTQ quality |
 | [FastQ Screen](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/)                             | Screens FASTQ for other-species contamination     | FASTQ quality |
 | [Picard's MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) | Determines level of read duplication on BAM files | BAM quality   |
+
+
+## Contributing
+
+If you like to make changes to the source code, please see the [contribution guidelines](./CONTRIBUTING.md).
+
+## Changelog
+
+See [here](./Changelog.md).
+
+## Repo owner
+
+* *Mana*valan Gajapathy
+
