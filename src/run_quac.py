@@ -227,7 +227,7 @@ def is_valid_dir(p, arg):
 
 if __name__ == "__main__":
     PARSER = argparse.ArgumentParser(
-        description="Wrapper tool for QuaC pipeline.",
+        description="Command line interface to QuaC pipeline.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 

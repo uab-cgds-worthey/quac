@@ -2,6 +2,8 @@ site_name: QuaC pipeline
 nav:
   - Home: index.md
   - Installation: installation.md
+  - Requirements and Configs: reqts_configs.md
+  - Command line interface: quac_cli.md
   - Miscellaneous:
       - ReadTheDocs- hosting docs: static_site.md
 
