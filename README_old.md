@@ -62,54 +62,6 @@ have passed the configurable QC thresholds defined using config files (available
 it easy to quickly review whether sample or samples are of sufficient quality and highlight samples that need further
 review.
 
-## Installation
-
-Installation requires
-
-- fetching the source code
-- creating the conda environment
-
-### Requirements
-
-- Git v2.0+
-- CGDS GitLab access
-- [SSH Key for access](https://docs.uabgrid.uab.edu/wiki/Cheaha_GettingStarted#Logging_in_to_Cheaha) to Cheaha cluster
-- Anaconda/miniconda
-    - Tested with Anaconda3/2020.02
-    - Available as module from cheaha at UAB
-
-### Retrieve pipeline source code
-
-Go to the directory of your choice and run the command below.
-
-```sh
-git clone -b master \
-    git@gitlab.rc.uab.edu:center-for-computational-genomics-and-data-science/sciops/pipelines/quac.git
-```
-
-
-### Create conda environment
-
-Conda environment will install all necessary dependencies, including snakemake, to run the QuaC workflow.
-
-```sh
-cd /path/to/quac/repo
-
-# For use only at Cheaha in UAB. Load conda into environment.
-module reset
-module load Anaconda3/2020.02
-
-# create conda environment. Needed only the first time.
-conda env create --file configs/env/quac.yaml
-
-# activate conda environment
-conda activate quac
-
-# if you need to update the existing environment
-conda env update --file configs/env/quac.yaml
-```
-
-
 ## How to run QuaC
 
 In order to run the QuaC pipeline, user needs to
