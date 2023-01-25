@@ -21,14 +21,6 @@ In summary, QuaC performs the following:
    pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
 
 
-### QuaC-Watch
-
-QuaC includes a tool called QuaC-Watch. After running all the QC tools for samples, QuaC-Watch summarizes if samples
-have passed the configurable QC thresholds defined using config files (available at
-[`configs/quac_watch/`](./configs/quac_watch/)), both at the sample level as well as project level. This summary makes
-it easy to quickly review whether sample or samples are of sufficient quality and highlight samples that need further
-review.
-
 ## How to run QuaC
 
 ### Input requirements
