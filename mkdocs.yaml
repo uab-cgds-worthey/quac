@@ -5,6 +5,7 @@ nav:
   - Requirements and Configs: reqts_configs.md
   - Command line interface: quac_cli.md
   - QuaC-Watch: quac_watch.md
+  - System testing: system_testing.md
   - Miscellaneous:
       - ReadTheDocs- hosting docs: static_site.md
 

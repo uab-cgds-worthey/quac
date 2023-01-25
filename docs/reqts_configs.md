@@ -77,6 +77,8 @@ provided.
 module reset
 module load Anaconda3/2020.02
 module load Singularity/3.5.2-GCC-5.4.0-2.26
+
+# activate conda env
 conda activate quac
 
 # WGS mode

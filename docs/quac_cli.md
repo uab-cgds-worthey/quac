@@ -73,6 +73,8 @@ Minimal example to run the wrapper script, which in turn will execute the QuaC p
 module reset
 module load Anaconda3/2020.02
 module load Singularity/3.5.2-GCC-5.4.0-2.26
+
+# activate conda env
 conda activate quac
 
 # run CLI/wrapper script
