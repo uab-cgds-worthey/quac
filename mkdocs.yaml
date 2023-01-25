@@ -4,6 +4,7 @@ nav:
   - Installation: installation.md
   - Requirements and Configs: reqts_configs.md
   - Command line interface: quac_cli.md
+  - Input/Output: input_output.md
   - QuaC-Watch: quac_watch.md
   - System testing: system_testing.md
   - Miscellaneous:
