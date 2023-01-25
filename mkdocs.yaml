@@ -2,7 +2,7 @@ site_name: QuaC pipeline
 nav:
   - Home: index.md
   - Miscellaneous:
-      - Static site generation: static_site.md
+      - ReadTheDocs- hosting docs: static_site.md
 
 theme:
   name: readthedocs
