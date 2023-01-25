@@ -308,6 +308,55 @@ python src/run_quac.py \
   affected status info. See header of the script for usage instructions. Note that we plan to use
   [phenotips](https://phenotips.com/) in future to produce fully capable pedigree file. One could manually create them
   as well, but this could be error-prone.
+
+- Input `BAM` and `VCF` files 
+
+```
+X/
+├── bam
+│   ├── X.bam
+│   └── X.bam.bai
+└── vcf
+    ├── X.vcf.gz
+    └── X.vcf.gz.tbi
+```
+
+```
+X/
+├── bam
+│   ├── X.bam
+│   └── X.bam.bai
+├── configs
+│   └── small_variant_caller
+│       └── capture_regions.bed
+└── vcf
+    ├── X.vcf.gz
+    └── X.vcf.gz.tbi
+```
+
+```
+A/
+├── bam
+│   ├── A.bam
+│   └── A.bam.bai
+├── qc
+│   ├── dedup
+│   │   ├── A-1.metrics.txt
+│   │   └── A-2.metrics.txt
+│   ├── fastqc-raw
+│   │   ├── ....
+│   ├── fastqc-trimmed
+│   │   ├── ....
+│   ├── fastq_screen-trimmed
+│   │   └── ....
+│   └── multiqc_initial_pass
+│       └── multiqc_sample_rename_config
+│           └── A_rename_config.tsv
+└── vcf
+    ├── A.vcf.gz
+    └── A.vcf.gz.tbi
+```
+
 - Output produced by [the small variant caller
   pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
   This includes bam, vcf and QC output. Refer to [test sample dataset](.test/ngs-data/test_project/analysis/A), which is
@@ -557,4 +606,8 @@ See [here](./Changelog.md).
 * *Mana*valan Gajapathy
 
 
+```
+cd /data/temporary-scratch/manag/tmp/quac/results/test_project_2_samples_wgs/analysis/ rm -rf
+./*/qc/multiqc_*/ ./*/qc/quac_watch rm -rf ./project_level_qc/multiqc/
+```
 
