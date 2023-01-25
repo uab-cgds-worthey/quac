@@ -55,18 +55,6 @@ python src/run_quac.py \
       --exome
 ```
 
-## Contributing
-
-If you like to make changes to the source code, please see the [contribution guidelines](./CONTRIBUTING.md).
-
-## Changelog
-
-See [here](./Changelog.md).
-
-## Repo owner
-
-* *Mana*valan Gajapathy
-
 
 ```
 cd /data/temporary-scratch/manag/tmp/quac/results/test_project_2_samples_wgs/analysis/ rm -rf

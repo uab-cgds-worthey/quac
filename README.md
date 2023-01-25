@@ -55,11 +55,11 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 
 ## Contributing
 
-If you like to make changes to the source code, please see the [contribution guidelines](./CONTRIBUTING.md).
+If you like to make changes to the source code, please see the [contribution guidelines](./docs/CONTRIBUTING.md).
 
 ## Changelog
 
-See [here](./Changelog.md).
+See [here](./docs/Changelog.md).
 
 ## Repo owner
 
