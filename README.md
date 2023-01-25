@@ -63,5 +63,5 @@ See [here](./docs/Changelog.md).
 
 ## Repo owner
 
-* *Mana*valan Gajapathy
+* **Mana**valan Gajapathy
 

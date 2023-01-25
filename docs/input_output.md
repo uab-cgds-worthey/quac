@@ -13,6 +13,8 @@
     affected status info. See header of the script for usage instructions. 
 
 
+- Input `BAM` and `VCF` files 
+
 ```
 X/
 ├── bam

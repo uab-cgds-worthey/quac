@@ -64,6 +64,18 @@ QuaC wrapper options:
                         medium(max 50 hrs), long(max 150 hrs) (default: short)
 ```
 
+## Useful features
+
+Besides the basic features, wrapper script [`src/run_quac.py`](./src/run_quac.py) offers the following:
+
+- Pass custom snakemake args using option `--extra_args`.
+- Dry-run snakemake using flag `--dryrun`. Note that this is same as `--extra_args='-n'`.
+- Override cluster config file passed to snakemake using `--cluster_config`.
+- Run snakemake locally, instead of submitting it to Slurm, using `--run_locally`. Note that jobs triggered by snakemake
+  workflow will still be submitted to Slurm.
+- Reruns failed jobs once again by default. This may be modified using `--rerun_failed`.
+- Override slurm partition used via `--slurm_partition`.
+
 ## Minimal example
 
 Minimal example to run the wrapper script, which in turn will execute the QuaC pipeline:
@@ -83,16 +95,41 @@ python src/run_quac.py \
       --pedigree "path/to/lake/with/pedigree_file.ped"
 ```
 
+## Example usage
 
-## Useful features
+```sh
+# to quack on a WGS project, which also has prior QC data
+PROJECT="Quack_Quack"
+python src/run_quac.py \
+      --project_name $PROJECT \
+      --pedigree "data/raw/ped/${PROJECT}.ped" \
+      --include_prior_qc \
+      --allow_sample_renaming
 
-Besides the basic features, wrapper script [`src/run_quac.py`](./src/run_quac.py) offers the following:
 
-- Pass custom snakemake args using option `--extra_args`.
-- Dry-run snakemake using flag `--dryrun`. Note that this is same as `--extra_args='-n'`.
-- Override cluster config file passed to snakemake using `--cluster_config`.
-- Run snakemake locally, instead of submitting it to Slurm, using `--run_locally`. Note that jobs triggered by snakemake
-  workflow will still be submitted to Slurm.
-- Reruns failed jobs once again by default. This may be modified using `--rerun_failed`.
-- Override slurm partition used via `--slurm_partition`.
+# to quack on a WGS project, run in a medium slurm partition and write results to a dir of choice
+PROJECT="Quack_This"
+python src/run_quac.py \
+      --slurm_partition medium \
+      --project_name $PROJECT \
+      --pedigree "data/raw/ped/${PROJECT}.ped" \
+      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT}/analysis"
 
+
+# to quack on an exome project
+PROJECT="Quack_That"
+python src/run_quac.py \
+      --project_name $PROJECT \
+      --pedigree "data/raw/ped/${PROJECT}.ped" \
+      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
+      --exome
+
+# to quack on an exome project by providing path to that project
+PROJECT="Quack_That"
+python src/run_quac.py \
+      --project_name $PROJECT \
+      --projects_path "/path/to/project/${$PROJECT}/" \
+      --pedigree "data/raw/ped/${PROJECT}.ped" \
+      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
+      --exome
+```
