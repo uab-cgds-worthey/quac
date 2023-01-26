@@ -12,8 +12,8 @@ nav:
       - Sample QC review system: sample_qc_review_system.md
   - Miscellaneous:
       - Pipeline visualization: visualize_pipeline.md
-      - ReadTheDocs- hosting docs: static_site.md
       - Contributing: CONTRIBUTING.md
+      - ReadTheDocs- hosting docs: static_site.md
 
 theme:
   name: readthedocs

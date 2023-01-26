@@ -1,8 +1,8 @@
-## Read the Docs for hosting
+# Read the Docs for hosting
 
 [mkdocs](https://www.mkdocs.org/) is used to serve up the static website, and [TODO] [Read the Docs](https://docs.readthedocs.io/) is used for hosting it online.
 
-### Use mkdocs for development
+## Use mkdocs for development
 
 mkdocs can be used in the local machine during development to test website is building correctly. Commands used:
 
