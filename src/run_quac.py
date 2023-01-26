@@ -132,11 +132,15 @@ def create_snakemake_command(args, repo_path, mount_paths):
         "--use-singularity",
         f"--singularity-args '--cleanenv --bind {tmp_dir}:/tmp --bind {mount_paths}'",
         f"--profile '{snakemake_profile_dir}'",
-        f"--cluster-config '{args.cluster_config}'",
-        "--cluster 'sbatch --ntasks {cluster.ntasks} --partition {cluster.partition}"
-        " --cpus-per-task {cluster.cpus-per-task} --mem-per-cpu {cluster.mem-per-cpu}"
-        " --job-name {cluster.jobname} --output {cluster.output} --parsable'",
     ]
+
+    if args.use_slurm:
+        cmd += [
+            f"--cluster-config '{args.cluster_config}'",
+            "--cluster 'sbatch --ntasks {cluster.ntasks} --partition {cluster.partition}"
+            " --cpus-per-task {cluster.cpus-per-task} --mem-per-cpu {cluster.mem-per-cpu}"
+            " --job-name {cluster.jobname} --output {cluster.output} --parsable'",
+        ]        
 
     # add any user provided extra args for snakemake
     if args.extra_args:
@@ -298,6 +302,11 @@ if __name__ == "__main__":
         "--allow_sample_renaming",
         action="store_true",
         help="Flag to allow sample renaming in MultiQC report. See documentation for more info.",
+    )
+    WORKFLOW.add_argument(
+        "--use_slurm",
+        action="store_true",
+        help="Flag to submit jobs triggered by snakemake to the Slurm scheduler.",
     )
 
     ############ Args for QuaC wrapper tool  ############
