@@ -26,7 +26,7 @@ qualimap:
 
   median_insert_size:
     description: "Median insert size"
-    min: 250
+    min: 350
     max:
 
   general_error_rate:
