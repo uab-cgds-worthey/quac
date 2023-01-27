@@ -1,5 +1,7 @@
 # Contributing
 
+If you like to make changes to the source code, please follow these contribution guidelines.
+
 ## How to contribute?
 
 Follow the [CGDS' best practices for code

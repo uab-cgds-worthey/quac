@@ -53,14 +53,6 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 | [Picard's MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) | Determines level of read duplication on BAM files | BAM quality   |
 
 
-## Contributing
-
-If you like to make changes to the source code, please see the [contribution guidelines](./docs/CONTRIBUTING.md).
-
-## Changelog
-
-See [here](./docs/Changelog.md).
-
 ## Repo owner
 
 * **Mana**valan Gajapathy
