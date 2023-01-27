@@ -8,10 +8,8 @@ and readily highlight samples that need further review.
 Reasonable default thresholds for QC metrics have been built into QuaC-Watch but can be configured by a user for
 scenarios using `--quac_watch_config`. Default thresholds:
 
-* [For Genome
-  sequencing](https://github.com/uab-cgds-worthey/quac/blob/master/configs/quac_watch/wgs_quac_watch_config.yaml)
-* [For Exome
-  sequencing](https://github.com/uab-cgds-worthey/quac/blob/master/configs/quac_watch/exome_quac_watch_config.yaml)
+* For Genome sequencing - [quac_watch/wgs_quac_watch_config.yaml](../quac_watch/wgs_quac_watch_config.yaml)
+* For Exome sequencing - [quac_watch/exome_quac_watch_config.yaml](../quac_watch/exome_quac_watch_config.yaml)
 
 These thresholds were curated based on
 

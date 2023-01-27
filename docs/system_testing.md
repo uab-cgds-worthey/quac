@@ -1,9 +1,9 @@
 # System testing
 
 The system testing implemented for this pipeline tests whether the pipeline runs from start to finish without any error.
-This testing uses test datasets present in [`.test/ngs-data/test_project`](.test/ngs-data/test_project), which reflects
+This testing uses test datasets present in [`.test/ngs-data/test_project`](../.test/ngs-data/test_project), which reflects
 a test project containing four samples (2 with input needed when `include_priorQC` is used and 2 other samples without
-priorQC data). [See here](.test/README.md) for more info on how these test datasets were created.
+priorQC data). [See here](../.test/README.md) for more info on how these test datasets were created.
 
 !!! warning
 

@@ -66,7 +66,7 @@ QuaC wrapper options:
 
 ## Useful features
 
-Besides the basic features, wrapper script [`src/run_quac.py`](./src/run_quac.py) offers the following:
+Besides the basic features, wrapper script [`src/run_quac.py`](../src/run_quac.py) offers the following:
 
 - Pass custom snakemake args using option `--extra_args`.
 - Dry-run snakemake using flag `--dryrun`. Note that this is same as `--extra_args='-n'`.

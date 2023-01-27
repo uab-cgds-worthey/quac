@@ -63,7 +63,7 @@ A/
 
 - Output produced by [the small variant caller
   pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
-  This includes bam, vcf and QC output. Refer to [test sample dataset](.test/ngs-data/test_project/analysis/A), which is
+  This includes bam, vcf and QC output. Refer to [test sample dataset](../.test/ngs-data/test_project/analysis/A), which is
   representative of the input required.
 
 - QuaC workflow config file. Refer to [section here](#set-up-workflow-config-file) for more info.

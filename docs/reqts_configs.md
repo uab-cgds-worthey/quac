@@ -39,7 +39,7 @@ QuaC requires a workflow config file in yaml format, which provides:
 - Filepaths to necessary dataset dependencies required by certain QC tools
 - Hardware resource configs
 
-Refer to the default config file [`configs/workflow.yaml`](https://github.com/uab-cgds-worthey/quac/blob/master/configs/workflow.yaml) to set up your own.
+Refer to the default config file [`configs/workflow.yaml`](../configs/workflow.yaml) to set up your own.
 
 !!! tip
     Custom workflow config file can be provided to QuaC via `--workflow_config`.
