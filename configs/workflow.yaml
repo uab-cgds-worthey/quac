@@ -20,3 +20,11 @@ resources:
         no_cpu: 4
     verifybamid:
         no_cpu: 4
+
+#### slurm partitions ####
+slurm_partitions:
+    # modify below to provide partitions available in your slurm and their time limits
+    express: "02:00:00"
+    short: "12:00:00"
+    medium: "50:00:00"
+    long: "150:00:00"

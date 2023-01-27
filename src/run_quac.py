@@ -36,7 +36,9 @@ def make_dir(d):
 
 def read_workflow_config(workflow_config_fpath):
     """
-    Read workflow config file and identify paths to be mounted for singularity
+    Read workflow config file to 
+    (1) identify paths to be mounted for singularity.
+    (2) get slurm partitions.
     """
 
     with open(workflow_config_fpath) as fh:
@@ -54,8 +56,11 @@ def read_workflow_config(workflow_config_fpath):
     # verifyBamID resource files
     for resource in datasets["verifyBamID"]:
         mount_paths.add(Path(datasets["verifyBamID"][resource]).parent)
+        
+    # get slurm partitions
+    slurm_partitions_dict = data["slurm_partitions"]
 
-    return mount_paths
+    return mount_paths, slurm_partitions_dict
 
 
 def gather_mount_paths(
@@ -86,7 +91,8 @@ def gather_mount_paths(
     mount_paths.add(quac_watch_config)
 
     # read paths in workflow config file
-    mount_paths.update(read_workflow_config(workflow_config))
+    paths_in_wokflow_config, _ = read_workflow_config(workflow_config)
+    mount_paths.update(paths_in_wokflow_config)
 
     return ",".join([str(x) for x in mount_paths])
 
@@ -182,19 +188,14 @@ def main(args):
     )
 
     # submit snakemake command as a slurm job
-    slurm_partition_times = {
-        "express": "02:00:00",
-        "short": "12:00:00",
-        "medium": "50:00:00",
-        "long": "150:00:00",
-    }
+    _, slurm_partition_times = read_workflow_config(args.workflow_config)
 
     slurm_resources = {
         "partition": args.slurm_partition,  # express(max 2 hrs), short(max 12 hrs), medium(max 50 hrs), long(max 150 hrs)
         "ntasks": "1",
         "time": slurm_partition_times[args.slurm_partition],
-        "cpus-per-task": "1",
-        "mem": "8G",
+        "cpus-per-task": "1" if args.use_slurm else "4",
+        "mem-per-cpu": "8G",
     }
 
     job_dict = {
@@ -361,11 +362,9 @@ if __name__ == "__main__":
 
     WRAPPER.add_argument(
         "--slurm_partition",
-        help="Request a specific partition for the slurm resource allocation for QuaC workflow. "
-        "Available partitions in Cheaha are: express(max 2 hrs), short(max 12 hrs), "
-        "medium(max 50 hrs), long(max 150 hrs)",
+        help="Request a specific partition for the slurm resource allocation to run snakemake."
+        " See 'slurm_partitions' supplied via workflow_config for available partitions",
         default="short",
-        choices=["express", "short", "medium", "long"],
         metavar="",
     )
 
