@@ -5,7 +5,7 @@
 ## What is QuaC?
 
 QuaC is a snakemake-based pipeline that runs several QC tools for WGS/WES samples and then summarizes their results
-using pre-defined, configurable QC thresholds. 
+using pre-defined, configurable QC thresholds.
 
 In summary, QuaC performs the following:
 
@@ -14,11 +14,18 @@ In summary, QuaC performs the following:
   pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
 - Using *QuaC-Watch* tool, it performs QC checkup based on the expected thresholds for certain QC metrics and summarizes
   the results for easier human consumption
-- Aggregates QC output produced here as well as those by the small variant caller pipeline using mulitqc, both at the
-  sample level and project level.
-- Optionally, above mentioned QC checkup and QC aggregation steps can accept pre-run results from few QC tools (fastqc,
-   fastq-screen, picard's markduplicates). At CGDS, these files are produced as part of the [small variant caller
-   pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
+- Aggregates QC output as well as QuaC-Watch output using MulitQC, both at the sample level and project level.
+- Optionally, above mentioned QuaC-Watch and QC aggregation steps can accept pre-run results from few QC tools (fastqc,
+   fastq-screen, picard's markduplicates) when run with flag `--include_prior_qc`. 
+   
+   
+!!! note "CGDS users only"
+
+     * At CGDS, BAM and VCF files produced by the 
+     [small variant caller pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline) 
+     are used as input to QuaC.
+     * Tools fastqc, fastq-screen, and picard's markduplicates, whose output are accepted by QuaC when used with 
+     flag `--include_prior_qc`, are produced by this small_variant_caller_pipeline.
 
 
 ### QC tools utilized

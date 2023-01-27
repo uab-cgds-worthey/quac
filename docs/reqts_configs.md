@@ -10,7 +10,8 @@ In order to run the QuaC pipeline, user needs to
 
 - [Singularity](https://apptainer.org/) is required but not provided. QuaC pipeline was developed and tested using Singularity v3.5.2.
 
-!!! Cheaha-users-only 
+!!! note "Cheaha users only"
+
     Singularity is available as module in Cheaha - `Singularity/3.5.2-GCC-5.4.0-2.26`
 
 - Following dependencies are installed as part of the `quac` conda environment. See [installation](./installation.md) for info on creating this conda environment.

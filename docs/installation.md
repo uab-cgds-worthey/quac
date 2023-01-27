@@ -13,7 +13,9 @@ Quac is expected to work in linux environments.
 - Anaconda/miniconda
     - Tested with Anaconda3/2020.02
 
-!!! Cheaha-users-only 
+
+!!! note "Cheaha users only"
+   
     Available as module in Cheaha - `Anaconda3/2020.02`
 
 

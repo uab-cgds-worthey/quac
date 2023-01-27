@@ -6,7 +6,7 @@
   and all of these samples must belong to the same project.
 
 
-!!! CGDS-users-only
+!!! note "CGDS users only"
 
     QuaC repo includes a handy script [`src/create_dummy_ped.py`](src/create_dummy_ped.py) to
     create a dummy pedigree file, which will lack sex (unless project tracking sheet is provided), relatedness and
