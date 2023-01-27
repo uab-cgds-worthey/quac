@@ -52,3 +52,13 @@ As part of making QuaC publicly available, following updates were made to make i
 * Removes git submodules and instead saves their local copy to repo (closes #53)
 * Loads singularity module loading prior to executing the runner script
 * Uses minimal snakemake instead of full-featured snakemake (closes #56)
+
+
+2023-01-27  Manavalan Gajapathy
+
+In efforts to make the repo generic to non-cheaha users, following changes were made:
+
+* Removes default quac_watch_config as it can lead to errors (#39)
+* Makes slurm schedule as dependency; now quac can be run locally. Local run is the default and `--use_slurm` allows running snakemake-triggered jobs in slurm. (#57)
+* Allows users to define custom slurm partitions and time limits via workflow configs (#58)
+* Updates median insert size threshold in quac-watch config (#54)
