@@ -17,8 +17,8 @@ In summary, QuaC performs the following:
 - Aggregates QC output as well as QuaC-Watch output using MulitQC, both at the sample level and project level.
 - Optionally, above mentioned QuaC-Watch and QC aggregation steps can accept pre-run results from few QC tools (fastqc,
    fastq-screen, picard's markduplicates) when run with flag `--include_prior_qc`. 
-   
-   
+
+
 !!! note "CGDS users only"
 
      * At CGDS, BAM and VCF files produced by the 
@@ -28,7 +28,9 @@ In summary, QuaC performs the following:
      flag `--include_prior_qc`, are produced by this small_variant_caller_pipeline.
 
 
-### QC tools utilized
+## QC tools 
+
+### Tools run by QuaC
 
 QuaC quacks using the tools listed below:
 
@@ -45,11 +47,12 @@ QuaC quacks using the tools listed below:
 | [somalier](https://github.com/brentp/somalier)                                                                             | Estimation of sex, ancestry and relatedness using BAM file                                              | Sex, ancestry and relatedness estimation |
 
 
-#### Optional tools' results consumption
+### Optional QC output consumed by QuaC
 
-[TODO clean up this paragraph] In addition to the above tools, optionally QuaC can also utilize QC results produced by
-the tools below when run with flag `--include_prior_qc`. At CGDS, these files are produced as part of the [small variant
-caller
+[TODO clean up this paragraph] In addition to the above tools, 
+
+Optionally QuaC can also utilize QC results produced by the tools listed below when run with flag `--include_prior_qc`. At
+CGDS, these files are produced as part of the [small variant caller
 pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
 
 
@@ -58,6 +61,11 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 | [fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)                                         | Performs QC on raw sequence reads data (FASTQ)    | FASTQ quality |
 | [FastQ Screen](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/)                             | Screens FASTQ for other-species contamination     | FASTQ quality |
 | [Picard's MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) | Determines level of read duplication on BAM files | BAM quality   |
+
+
+!!! note "CGDS users only"
+
+     * At CGDS, these optional tools are produced by our small_variant_caller_pipeline.
 
 
 ## Repo owner
