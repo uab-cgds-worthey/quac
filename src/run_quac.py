@@ -261,7 +261,7 @@ if __name__ == "__main__":
     WORKFLOW.add_argument(
         "--quac_watch_config",
         help=("YAML config path specifying QC thresholds for QuaC-Watch." 
-              "See directory 'configs/quac_watch/' in quac repo for the included config files."),
+              " See directory 'configs/quac_watch/' in quac repo for the included config files."),
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
@@ -370,5 +370,9 @@ if __name__ == "__main__":
     )
 
     ARGS = PARSER.parse_args()
+    
+    # Didn't find a argparse friendly solution without having to refactor. Good enough solution
+    if not ARGS.quac_watch_config:
+        raise SystemExit("Error. Quac-watch config is missing. Please supply using --quac_watch_config.")
 
     main(ARGS)
