@@ -49,8 +49,6 @@ QuaC quacks using the tools listed below:
 
 ### Optional QC output consumed by QuaC
 
-[TODO clean up this paragraph] In addition to the above tools, 
-
 Optionally QuaC can also utilize QC results produced by the tools listed below when run with flag `--include_prior_qc`. At
 CGDS, these files are produced as part of the [small variant caller
 pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
