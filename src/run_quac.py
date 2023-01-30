@@ -191,7 +191,7 @@ def main(args):
     _, slurm_partition_times = read_workflow_config(args.workflow_config)
 
     slurm_resources = {
-        "partition": args.slurm_partition,  # express(max 2 hrs), short(max 12 hrs), medium(max 50 hrs), long(max 150 hrs)
+        "partition": args.slurm_partition, 
         "ntasks": "1",
         "time": slurm_partition_times[args.slurm_partition],
         "cpus-per-task": "1" if args.use_slurm else "4",
