@@ -1,13 +1,12 @@
 # Sample QC review system
 
-[TODO] clean up this para.
-
-When sample QC review is performed, we record the summarized QC review results in ["Sample Tracking Log" in
-wrike](https://www.wrike.com/open.htm?id=569244847), in addition to relatively detailed descriptions at per-proband
-level in wrike. This QC summary results can be used as the QC database, and it can be used to filter out problematic
-samples for downstream analysis.
-
-
+Consistent and understandable dissemination of QC review results can be challenging when quality issues are found, and
+even more so when said issues alter the ability to accurately perform downstream analyses. To reduce this burden we
+devised a “Sample QC review system” where QC review results get stored using controlled flags and get accompanied by
+comments in free text as needed. This review system allows downstream users to quickly identify problematic samples and
+their potential causes, and empowers them to quickly determine if those samples can be used for intended data analyses.
+As not all users are proficient in interpreting results from various QC tools, this review system is of major assistance
+and enables those less versed in QC of GS and ES to assess and ensure the quality of their samples.
 
 !!! warning
 
@@ -20,9 +19,15 @@ samples for downstream analysis.
     * Our QC criteria may change over time as we gain more knowledge and implement new algorithms 
     tools. QC review results for older samples during such a scenario may or may not be kept up-to-date.
 
+
+!!! note "CGDS users only"
+
+    * AT CGDS, Sample QC review system is incorporated into "Sample Tracking Log" in Wrike.
+    See fields/columns with prefix `[QC]` in "Sample Tracking Log" section for your project. 
+
 ## Description of fields
 
-Fields shown in the table below are used to capture the summarized QC results, and they all have prefix `[QC]` in wrike.
+Fields shown in the table below are used to capture the summarized QC results.
 
 | Field                       | Explanation                                                                       | Allowed values |
 | --------------------------- | --------------------------------------------------------------------------------- | -------------- |
