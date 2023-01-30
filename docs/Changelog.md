@@ -17,13 +17,15 @@ YYYY-MM-DD  John Doe
 In efforts to make the repo generic to non-cheaha users, following changes were made:
 
 * Removes default quac_watch_config as it can lead to errors (#39)
-* Makes slurm schedule as dependency; now quac can be run locally. Local run is the default and `--use_slurm` allows running snakemake-triggered jobs in slurm. (#57)
+* Makes slurm schedule as dependency; now quac can be run locally. Local run is the default and `--use_slurm` allows
+  running snakemake-triggered jobs in slurm. (#57)
 * Allows users to define custom slurm partitions and time limits via workflow configs (#58)
 * Updates median insert size threshold in quac-watch config (#54)
 
 2023-01-20  Manavalan Gajapathy
 
-As part of making QuaC publicly available, following updates were made to make it more generic to the environment and user friendly:
+As part of making QuaC publicly available, following updates were made to make it more generic to the environment and
+user friendly:
 
 * Removes prerun QC from small variant caller pipeline as requirement to QuaC (closes #45)
 * Explicitly defines conda environments (closes #49)
@@ -35,7 +37,8 @@ As part of making QuaC publicly available, following updates were made to make i
 
 2022-04-07  Manavalan Gajapathy
 
-* Previously hardcoded hardware resources for snakemake rules can now be supplied via `configs/workflow.yaml` (closes #48)
+* Previously hardcoded hardware resources for snakemake rules can now be supplied via `configs/workflow.yaml` (closes
+  #48)
 * Modified multiqc conda env config to use explicit dependencies to get around installation issues (closes #47)
 
 
@@ -51,11 +54,15 @@ As part of making QuaC publicly available, following updates were made to make i
   QC analyses for WGS/WES data. While the small caller pipeline will still run few QC tools (for pragmatic reasons),
   QuaC will now take over the heavylifting of QC, including the QC-checkup, which is now called as QuaC-Watch.
 * Runs in containerized environment using Singularity.
-* QuaC can perform both sample-level and project-level QC. This is the major reason why it was decided to separate QC from small-variant caller pipeline, as it could only perform single-sample QC.
+* QuaC can perform both sample-level and project-level QC. This is the major reason why it was decided to separate QC
+  from small-variant caller pipeline, as it could only perform single-sample QC.
 * More QC tools were added
-* For QC checkup (ie. QuaC-Watch), QuaC now heavily expands to vcf metrics and adds significant amount of QC thresholds for bam metrics.
-* QuaC's input are output from the small variant caller pipeline, and former's output will fit seemlessly with the latter's output.
-* QuaC accepts pedigree file as input. A dummy pedigree file creator script is provided, which will be handy until phenotips is made available to us.
+* For QC checkup (ie. QuaC-Watch), QuaC now heavily expands to vcf metrics and adds significant amount of QC thresholds
+  for bam metrics.
+* QuaC's input are output from the small variant caller pipeline, and former's output will fit seemlessly with the
+  latter's output.
+* QuaC accepts pedigree file as input. A dummy pedigree file creator script is provided, which will be handy until
+  phenotips is made available to us.
 * System-level testing is added
 
 
