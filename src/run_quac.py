@@ -140,7 +140,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
         f"--profile '{snakemake_profile_dir}'",
     ]
 
-    if args.use_slurm:
+    if args.subtasks_slurm:
         cmd += [
             f"--cluster-config '{args.cluster_config}'",
             "--cluster 'sbatch --ntasks {cluster.ntasks} --partition {cluster.partition}"
@@ -194,14 +194,14 @@ def main(args):
         "partition": args.slurm_partition, 
         "ntasks": "1",
         "time": slurm_partition_times[args.slurm_partition],
-        "cpus-per-task": "1" if args.use_slurm else "4",
+        "cpus-per-task": "1" if args.subtasks_slurm else "4",
         "mem-per-cpu": "8G",
     }
 
     job_dict = {
         "basename": "quac-",
         "log_dir": args.log_dir,
-        "run_locally": args.run_locally,
+        "run_locally": False if args.snakemake_slurm else True,
         "resources": slurm_resources,
     }
 
@@ -305,9 +305,10 @@ if __name__ == "__main__":
         help="Flag to allow sample renaming in MultiQC report. See documentation for more info.",
     )
     WORKFLOW.add_argument(
-        "--use_slurm",
+        "--subtasks_slurm",
         action="store_true",
-        help="Flag to submit jobs triggered by snakemake to the Slurm scheduler.",
+        help="Flag indicating that the main Snakemake process of QuaC should submit subtasks of"
+        " the workflow as Slurm jobs instead of running them on the same machine as itself"
     )
 
     ############ Args for QuaC wrapper tool  ############
@@ -345,11 +346,11 @@ if __name__ == "__main__":
         "just display what would be done. Equivalent to '--extra_args \"-n\"'",
     )
     WRAPPER.add_argument(
-        "-l",
-        "--run_locally",
+        "--snakemake_slurm",
         action="store_true",
-        help="Flag to run the snakemake locally and not as a Slurm job. "
-        "Useful for testing purposes.",
+        help="Flag indicating that the main Snakemake process of QuaC should be" 
+        " submitted to run in a Slurm job instead of executing in the current" 
+        " environment. Useful for headless execution on Slurm-based HPC systems."
     )
     RERUN_FAILED_DEFAULT = 1
     WRAPPER.add_argument(
