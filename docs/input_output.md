@@ -17,54 +17,68 @@ supplied in pedigree file will be processed by QuaC and all of these samples mus
 Each sample must have `BAM` and `VCF` files available in the directory structure shown below for sample `X`.
 
 ```
-X/
-├── bam
-│   ├── X.bam
-│   └── X.bam.bai
-└── vcf
-    ├── X.vcf.gz
-    └── X.vcf.gz.tbi
+test_project/
+└── analysis
+    ├── X
+    │   ├── bam
+    │   │   ├── X.bam
+    │   │   └── X.bam.bai
+    │   └── vcf
+    │       ├── X.vcf.gz
+    │       └── X.vcf.gz.tbi
+    └── Y
+        └── ....
 ```
 
 When run in exome mode using flag `--exome`, QuaC requires a capture-regions bed file at the path
 `path_to_sample/configs/small_variant_caller/<capture_regions>.bed` for each sample.
 
 ```
-X/
-├── bam
-│   ├── X.bam
-│   └── X.bam.bai
-├── configs
-│   └── small_variant_caller
-│       └── capture_regions.bed
-└── vcf
-    ├── X.vcf.gz
-    └── X.vcf.gz.tbi
+test_project/
+└── analysis
+    ├── X
+    │   ├── bam
+    │   │   ├── X.bam
+    │   │   └── X.bam.bai
+    │   ├── configs
+    │   │   └── small_variant_caller
+    │   │       └── capture_regions.bed
+    │   └── vcf
+    │       ├── X.vcf.gz
+    │       └── X.vcf.gz.tbi
+    └── Y
+        └── ....
 ```
 
-*Optionally*, QuaC can also utilize QC results produced by [certain tools](./index.md#optional-qc-output-consumed-by-quac) when run with flag `--include_prior_qc`. In this case, following directory structure is expected.
+*Optionally*, QuaC can also utilize QC results produced by [certain
+tools](./index.md#optional-qc-output-consumed-by-quac) when run with flag `--include_prior_qc`. In this case, following
+directory structure is expected.
 
 ```
-X/
-├── bam
-│   ├── X.bam
-│   └── X.bam.bai
-├── qc
-│   ├── dedup
-│   │   ├── X-1.metrics.txt
-│   │   └── X-2.metrics.txt
-│   ├── fastqc-raw
-│   │   ├── ....
-│   ├── fastqc-trimmed
-│   │   ├── ....
-│   ├── fastq_screen-trimmed
-│   │   └── ....
-│   └── multiqc_initial_pass    <--- needed only when --allow_sample_renaming flag is used
-│       └── multiqc_sample_rename_config
-│           └── X_rename_config.tsv
-└── vcf
-    ├── X.vcf.gz
-    └── X.vcf.gz.tbi
+test_project/
+└── analysis
+    ├── X
+    │   ├── bam
+    │   │   ├── X.bam
+    │   │   └── X.bam.bai
+    │   ├── qc
+    │   │   ├── dedup
+    │   │   │   ├── X-1.metrics.txt
+    │   │   │   └── X-2.metrics.txt
+    │   │   ├── fastqc-raw
+    │   │   │   ├── ....
+    │   │   ├── fastqc-trimmed
+    │   │   │   ├── ....
+    │   │   ├── fastq_screen-trimmed
+    │   │   │   └── ....
+    │   │   └── multiqc_initial_pass    <--- needed only when `--allow_sample_renaming` flag is used
+    │   │       └── multiqc_sample_rename_config
+    │   │           └── X_rename_config.tsv
+    │   └── vcf
+    │       ├── X.vcf.gz
+    │       └── X.vcf.gz.tbi
+    └── Y
+        └── ....
 ```
 
 
