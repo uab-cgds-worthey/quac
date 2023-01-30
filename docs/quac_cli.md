@@ -11,8 +11,9 @@ $ python src/run_quac.py -h
 usage: run_quac.py [-h] [--project_name] [--projects_path] [--pedigree]
                    [--quac_watch_config] [--workflow_config] [--outdir]
                    [--tmp_dir] [--exome] [--include_prior_qc]
-                   [--allow_sample_renaming] [--cluster_config] [--log_dir]
-                   [-e] [-n] [-l] [--rerun_failed] [--slurm_partition]
+                   [--allow_sample_renaming] [--subtasks_slurm]
+                   [--cluster_config] [--log_dir] [-e] [-n]
+                   [--snakemake_slurm] [--rerun_failed] [--slurm_partition]
 
 Command line interface to QuaC pipeline.
 
@@ -27,8 +28,8 @@ QuaC workflow options:
   --pedigree            Pedigree filepath. Must correspond to the project
                         supplied via --project_name (default: None)
   --quac_watch_config   YAML config path specifying QC thresholds for QuaC-
-                        Watch (default:
-                        configs/quac_watch/wgs_quac_watch_config.yaml)
+                        Watch. See directory 'configs/quac_watch/' in quac
+                        repo for the included config files. (default: None)
   --workflow_config     YAML config path specifying filepath to dependencies
                         of tools used in QuaC (default: configs/workflow.yaml)
   --outdir              Out directory path (default:
@@ -43,11 +44,14 @@ QuaC workflow options:
   --allow_sample_renaming
                         Flag to allow sample renaming in MultiQC report. See
                         documentation for more info. (default: False)
+  --subtasks_slurm      Flag indicating that the main Snakemake process of
+                        QuaC should submit subtasks of the workflow as Slurm
+                        jobs instead of running them on the same machine as
+                        itself (default: False)
 
 QuaC wrapper options:
   --cluster_config      Cluster config json file. Needed for snakemake to run
-                        jobs in cluster. 
-                        (default: working_dir/quac/configs/cluster_config.json)
+                        jobs in cluster. (default: quac/configs/cluster_config.json)
   --log_dir             Directory path where logs (both workflow's and
                         wrapper's) will be stored (default:
                         $USER_SCRATCH/tmp/quac/logs)
@@ -57,15 +61,18 @@ QuaC wrapper options:
   -n, --dryrun          Flag to dry-run snakemake. Does not execute anything,
                         and just display what would be done. Equivalent to '--
                         extra_args "-n"' (default: False)
-  -l, --run_locally     Flag to run the snakemake locally and not as a Slurm
-                        job. Useful for testing purposes. (default: False)
+  --snakemake_slurm     Flag indicating that the main Snakemake process of
+                        QuaC should be submitted to run in a Slurm job instead
+                        of executing in the current environment. Useful for
+                        headless execution on Slurm-based HPC systems.
+                        (default: False)
   --rerun_failed        Number of times snakemake restarts failed jobs. This
                         may be set to >0 to avoid pipeline failing due to job
                         fails due to random SLURM issues (default: 1)
   --slurm_partition     Request a specific partition for the slurm resource
-                        allocation for QuaC workflow. Available partitions in
-                        Cheaha are: express(max 2 hrs), short(max 12 hrs),
-                        medium(max 50 hrs), long(max 150 hrs) (default: short)
+                        allocation to run snakemake. See 'slurm_partitions'
+                        supplied via workflow_config for available partitions
+                        (default: short)
 ```
 
 ### Useful features
@@ -75,10 +82,10 @@ Besides the basic features, wrapper script [`src/run_quac.py`](../src/run_quac.p
 - Pass custom snakemake args using option `--extra_args`.
 - Dry-run snakemake using flag `--dryrun`. Note that this is same as `--extra_args='-n'`.
 - Override cluster config file passed to snakemake using `--cluster_config`.
-- Run snakemake locally, instead of submitting it to Slurm, using `--run_locally`. Note that jobs triggered by snakemake
-  workflow will still be submitted to Slurm.
+- Submit snakemake process to Slurm, instead of running it locally, using `--snakemake_slurm`. 
+- Override slurm partition used for the snakemake procees via `--slurm_partition`.
+- Submit jobs triggered by snakemake workflow to Slurm using `--subtasks_slurm`.
 - Reruns failed jobs once again by default. This may be modified using `--rerun_failed`.
-- Override slurm partition used via `--slurm_partition`.
 
 ## Minimal example
 
