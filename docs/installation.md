@@ -9,7 +9,7 @@ Quac is expected to work in linux environments.
 
 ## Requirements
 
-- Git v2.0+
+- Git
 - Anaconda/miniconda
     - Tested with Anaconda3/2020.02
 
