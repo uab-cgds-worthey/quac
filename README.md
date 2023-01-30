@@ -70,3 +70,8 @@ pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-s
 
 * **Mana**valan Gajapathy
 
+
+## Installation
+
+For documentation on installation and how to run QuaC, please refer to <TODO static site link>.
+

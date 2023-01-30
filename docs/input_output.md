@@ -2,8 +2,9 @@
 
 ## Input
 
-- Pedigree file supplied via `--pedigree`. Only the samples that are supplied in pedigree file will be processed by QuaC
-  and all of these samples must belong to the same project.
+Samples belonging to a project are provided as input via `--pedigree` to QuaC in [pedigree file
+format](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format). Only the samples that are
+supplied in pedigree file will be processed by QuaC and all of these samples must belong to the same project.
 
 
 !!! note "CGDS users only"
@@ -13,7 +14,7 @@
     affected status info. See header of the script for usage instructions. 
 
 
-- Input `BAM` and `VCF` files 
+Each sample must have `BAM` and `VCF` files available in the directory structure shown below for sample `X`.
 
 ```
 X/
@@ -24,6 +25,9 @@ X/
     ├── X.vcf.gz
     └── X.vcf.gz.tbi
 ```
+
+When run in exome mode using flag `--exome`, QuaC requires a capture-regions bed file at the path
+`path_to_sample/configs/small_variant_caller/<capture_regions>.bed` for each sample.
 
 ```
 X/
@@ -38,38 +42,38 @@ X/
     └── X.vcf.gz.tbi
 ```
 
+*Optionally*, QuaC can also utilize QC results produced by [certain tools](./index.md#optional-qc-output-consumed-by-quac) when run with flag `--include_prior_qc`. In this case, following directory structure is expected.
+
 ```
-A/
+X/
 ├── bam
-│   ├── A.bam
-│   └── A.bam.bai
+│   ├── X.bam
+│   └── X.bam.bai
 ├── qc
 │   ├── dedup
-│   │   ├── A-1.metrics.txt
-│   │   └── A-2.metrics.txt
+│   │   ├── X-1.metrics.txt
+│   │   └── X-2.metrics.txt
 │   ├── fastqc-raw
 │   │   ├── ....
 │   ├── fastqc-trimmed
 │   │   ├── ....
 │   ├── fastq_screen-trimmed
 │   │   └── ....
-│   └── multiqc_initial_pass
+│   └── multiqc_initial_pass    <--- needed only when --allow_sample_renaming flag is used
 │       └── multiqc_sample_rename_config
-│           └── A_rename_config.tsv
+│           └── X_rename_config.tsv
 └── vcf
-    ├── A.vcf.gz
-    └── A.vcf.gz.tbi
+    ├── X.vcf.gz
+    └── X.vcf.gz.tbi
 ```
 
-- Output produced by [the small variant caller
-  pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
-  This includes bam, vcf and QC output. Refer to [test sample dataset](../.test/ngs-data/test_project/analysis/A), which is
-  representative of the input required.
 
-- QuaC workflow config file. Refer to [section here](#set-up-workflow-config-file) for more info.
+!!! note "CGDS users only"
+    Output (bam, vcf and QC output) produced by CGDS's small variant caller pipeline can be readily used as input to QuaC with flags `--include_prior_qc` and `--allow_sample_renaming`.
 
-- When run in exome mode, QuaC requires a capture-regions bed file at path
-  `path_to_sample/configs/small_variant_caller/<capture_regions>.bed` for each sample.
+### Example project structure
+
+Refer to system testing directory `.test/` in the repo for an example project to see an example project with above mentioned directory structure needed as input. In this setup, projects A and B have prior QC data included, whereas samples C and D do not have them. Refer to pedigree files under `.test/configs/` on how these example samples were used as input to QuaC. 
 
 
 ## Output
@@ -84,6 +88,8 @@ learn more about the output directory structure.
     both at sample-level as well as at the project-level. These multiqc reports also include summary of QuaC-Watch
     results at the top.
 
-Note that QuaC's output directory structure was designed based on the output structure of the [CGDS small variant caller
-pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
+!!! note "CGDS users only"
+
+    QuaC's output directory structure was designed based on the output structure of the [CGDS small variant caller
+    pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
 
