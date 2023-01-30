@@ -12,29 +12,11 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
-2023-01-20  Manavalan Gajapathy
+2021-03-16  Manavalan Gajapathy
 
-As part of making QuaC publicly available, following updates were made to make it more generic to the environment and user friendly:
-
-* Removes prerun QC from small variant caller pipeline as requirement to QuaC (closes #45)
-* Explicitly defines conda environments (closes #49)
-* Uses container solution for `covviz` installation instead of conda to avoid pip based installation (closes #52)
-* Removes git submodules and instead saves their local copy to repo (closes #53)
-* Loads singularity module loading prior to executing the runner script
-* Uses minimal snakemake instead of full-featured snakemake (closes #56)
-
-
-2022-04-07  Manavalan Gajapathy
-
-* Previously hardcoded hardware resources for snakemake rules can now be supplied via `configs/workflow.yaml` (closes #48)
-* Modified multiqc conda env config to use explicit dependencies to get around installation issues (closes #47)
-
-
-2021-06-08  Manavalan Gajapathy
-
-* Bugfix: Fixes error when there is only one sample in input ped file (#34)
-* Adds system-testing for such only-one-sample-in-input setup (#35).
-
+* Creates QuaC workflow, which can run somalier, mosdepth, indexcov, covviz and verifybamid2
+* Uses pedigree file as input
+* Makes it production ready.
 
 2021-05-28  Manavalan Gajapathy
 
@@ -49,9 +31,34 @@ As part of making QuaC publicly available, following updates were made to make i
 * QuaC accepts pedigree file as input. A dummy pedigree file creator script is provided, which will be handy until phenotips is made available to us.
 * System-level testing is added
 
+2021-06-08  Manavalan Gajapathy
 
-2021-03-16  Manavalan Gajapathy
+* Bugfix: Fixes error when there is only one sample in input ped file (#34)
+* Adds system-testing for such only-one-sample-in-input setup (#35).
 
-* Creates QuaC workflow, which can run somalier, mosdepth, indexcov, covviz and verifybamid2
-* Uses pedigree file as input
-* Makes it production ready.
+2022-04-07  Manavalan Gajapathy
+
+* Previously hardcoded hardware resources for snakemake rules can now be supplied via `configs/workflow.yaml` (closes #48)
+* Modified multiqc conda env config to use explicit dependencies to get around installation issues (closes #47)
+
+
+2023-01-20  Manavalan Gajapathy
+
+As part of making QuaC publicly available, following updates were made to make it more generic to the environment and user friendly:
+
+* Removes prerun QC from small variant caller pipeline as requirement to QuaC (closes #45)
+* Explicitly defines conda environments (closes #49)
+* Uses container solution for `covviz` installation instead of conda to avoid pip based installation (closes #52)
+* Removes git submodules and instead saves their local copy to repo (closes #53)
+* Loads singularity module loading prior to executing the runner script
+* Uses minimal snakemake instead of full-featured snakemake (closes #56)
+
+
+2023-01-27  Manavalan Gajapathy
+
+In efforts to make the repo generic to non-cheaha users, following changes were made:
+
+* Removes default quac_watch_config as it can lead to errors (#39)
+* Makes slurm schedule as dependency; now quac can be run locally. Local run is the default and `--use_slurm` allows running snakemake-triggered jobs in slurm. (#57)
+* Allows users to define custom slurm partitions and time limits via workflow configs (#58)
+* Updates median insert size threshold in quac-watch config (#54)
