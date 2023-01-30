@@ -4,10 +4,12 @@ If you like to make changes to the source code, please follow these contribution
 
 ## How to contribute?
 
+<!-- markdown-link-check-disable -->
 Follow the [CGDS' best practices for code
 development](http://cgds.uab.edu/manual-of-operations/standards-definitions/#standard-practices) (see sections IDE,
 Source Control, Peer Reviews). The [Repo owner](../README.md#repo-owner) is responsible for reviewing, keeping standards,
 and accepting the pull request into `origin/master`. Below is the brief listing of this process:
+<!-- markdown-link-check-enable -->
 
 - Create new Git branch based off of the relevant branch (e.g., `origin/master`).
 - Make your changes/additions within the new branch.
