@@ -1,6 +1,10 @@
-# Command line interface
+# How to run QuaC pipeline
 
-After activating the conda environment, QuaC pipeline can be run using the wrapper/CLI script `src/run_quac.py`. Here are all the options available:
+After [fulfilling the necessary requirements and setting up the workflow configs](./reqts_configs.md) and [activating the conda environment](./installation.md), QuaC pipeline can
+be run using the wrapper/CLI (command line interface) tool `src/run_quac.py`
+
+
+## Command line interface
 
 ```sh
 $ python src/run_quac.py -h
@@ -64,7 +68,7 @@ QuaC wrapper options:
                         medium(max 50 hrs), long(max 150 hrs) (default: short)
 ```
 
-## Useful features
+### Useful features
 
 Besides the basic features, wrapper script [`src/run_quac.py`](../src/run_quac.py) offers the following:
 
@@ -96,6 +100,8 @@ python src/run_quac.py \
 ```
 
 ## Example usage
+
+[TODO] Modify examples based on new PR under review
 
 ```sh
 # to quack on a WGS project, which also has prior QC data
