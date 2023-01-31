@@ -72,12 +72,12 @@ Optionally QuaC can also utilize QC results produced by the tools listed below w
      * At CGDS, these optional tools were run by our small_variant_caller_pipeline.
 
 
+## Documentation
+
+Full documentation, including installation and how to run QuaC, is available at https://quac.readthedocs.io.
+
+
 ## Repo owner
 
 * **Mana**valan Gajapathy
-
-
-## Installation
-
-For documentation on installation and how to run QuaC, please refer to <TODO static site link>.
 
