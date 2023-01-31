@@ -102,47 +102,11 @@ conda activate quac
 
 # run CLI/wrapper script
 python src/run_quac.py \
-      --project_name PROJECT_DUCK \
-      --pedigree "path/to/lake/with/pedigree_file.ped"
+      --project_name "PROJECT_DUCK" \
+      --pedigree "path/to/lake/with/ducks_pedigree_file.ped" \
+      --quac_watch_config "path/to/quac_watch_config.yaml"
 ```
 
 ## Example usage
 
-[TODO] Modify examples based on new PR under review
-
-```sh
-# to quack on a WGS project, which also has prior QC data
-PROJECT="Quack_Quack"
-python src/run_quac.py \
-      --project_name $PROJECT \
-      --pedigree "data/raw/ped/${PROJECT}.ped" \
-      --include_prior_qc \
-      --allow_sample_renaming
-
-
-# to quack on a WGS project, run in a medium slurm partition and write results to a dir of choice
-PROJECT="Quack_This"
-python src/run_quac.py \
-      --slurm_partition medium \
-      --project_name $PROJECT \
-      --pedigree "data/raw/ped/${PROJECT}.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT}/analysis"
-
-
-# to quack on an exome project
-PROJECT="Quack_That"
-python src/run_quac.py \
-      --project_name $PROJECT \
-      --pedigree "data/raw/ped/${PROJECT}.ped" \
-      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
-      --exome
-
-# to quack on an exome project by providing path to that project
-PROJECT="Quack_That"
-python src/run_quac.py \
-      --project_name $PROJECT \
-      --projects_path "/path/to/project/${$PROJECT}/" \
-      --pedigree "data/raw/ped/${PROJECT}.ped" \
-      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
-      --exome
-```
+Refer to commands used in [system testing](./system_testing.md) for example usage.

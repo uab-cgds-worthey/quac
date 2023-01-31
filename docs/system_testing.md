@@ -15,7 +15,7 @@ priorQC data). [See here](../.test/README.md) for more info on how these test da
 
 !!! info
 
-    Choose the value of variable `USE_SLURM` depending on if you would like to use slurm or 
+    Choose the value of variable `USE_SLURM` below depending on if you would like to use slurm or 
     not to run jobs.
 
 ```sh
