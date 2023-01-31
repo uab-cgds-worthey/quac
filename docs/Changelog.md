@@ -12,6 +12,21 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-01-31  Manavalan Gajapathy
+
+Restructures the docs to make it clearer to non-Cheaha users, updates documentation to reflect recent CLI option changes, and hosts docs publicly using readthedocs.
+
+* `Readme.md` has grown bigger and became difficult to navigate. Especially for non-Cheaha users. So documentation in readme.md is now restructured to break into multiple files and is now easier to consume.
+     * Makes the doc generic to non-Cheaha users
+     * Identifies parts of the docs that are specific to Cheaha or CGDS users
+* Updates doc to reflect changes made in #59 
+* Now hosts doc for "Sample QC review system".
+* Uses [mkdocs](https://www.mkdocs.org/) to create static site for documentation.
+* Hosts QuaC docs using [ReadTheDocs](https://readthedocs.org/) 
+* Migrates Gitlab MR template to Github PR template
+* Adds github action to identify broken links in markdown files
+
+
 2023-01-27  Manavalan Gajapathy
 
 In efforts to make the repo generic to non-cheaha users, following changes were made:
