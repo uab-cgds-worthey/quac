@@ -97,3 +97,7 @@ python src/run_quac.py \
       $USE_SLURM \
       -e="--conda-create-envs-only"
 ```
+
+!!! info
+
+    In Cheaha, it took 25 mins to complete this task. Resources used for the task: 1 CPU and 8GB memory.
