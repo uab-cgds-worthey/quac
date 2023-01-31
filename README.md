@@ -2,6 +2,14 @@
 
 🦆🦆 Don't duck that QC thingy 🦆🦆
 
+
+!!! Note
+
+    In the past life, QuaC repo used to live at [UAB
+    Gitlab](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/quac). It was
+    migrated to Github in Jan 2023, and the Gitlab version has been archived.
+
+
 ## What is QuaC?
 
 QuaC is a snakemake-based pipeline that runs several QC tools for WGS/WES samples and then summarizes their results
@@ -61,7 +69,7 @@ Optionally QuaC can also utilize QC results produced by the tools listed below w
 
 !!! note "CGDS users only"
 
-     * At CGDS, these optional tools are produced by our small_variant_caller_pipeline.
+     * At CGDS, these optional tools were run by our small_variant_caller_pipeline.
 
 
 ## Repo owner
