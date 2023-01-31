@@ -94,10 +94,10 @@ python src/run_quac.py \
 ## Expected output files
 
 ```sh
-$ tree $USER_SCRATCH/tmp/quac/results/test_project_2_samples/ -d -L 4
-/data/scratch/manag/tmp/quac/results/test_project_2_samples/
+$ tree -d $USER_SCRATCH/tmp/quac/results/test_project_2samples_wgs-no_priorQC/ -L 5
+$USER_SCRATCH/tmp/quac/results/test_project_2samples_wgs-no_priorQC/
 └── analysis
-    ├── A
+    ├── C
     │   └── qc
     │       ├── bcftools-index
     │       │   └── ...
@@ -107,10 +107,10 @@ $ tree $USER_SCRATCH/tmp/quac/results/test_project_2_samples/ -d -L 4
     │       │   └── ...
     │       ├── multiqc_final_pass
     │       │   ├── ...
-    │       │   └── A_multiqc.html
+    │       │   └── C_multiqc.html
     │       ├── multiqc_initial_pass
     │       │   ├── ...
-    │       │   └── A_multiqc.html
+    │       │   └── C_multiqc.html
     │       ├── picard-stats
     │       │   └── ...
     │       ├── quac_watch
@@ -121,9 +121,9 @@ $ tree $USER_SCRATCH/tmp/quac/results/test_project_2_samples/ -d -L 4
     │       │   └── ...
     │       └── verifyBamID
     │           └── ...
-    ├── B
+    ├── D
     │   └── qc
-    │       └── same directory structure as that of sample A
+    │       └── same directory structure as that of sample C
     └── project_level_qc
         ├── covviz
         │   └── ...
