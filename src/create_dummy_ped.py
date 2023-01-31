@@ -8,7 +8,7 @@ ml Anaconda3
 conda activate quac_common
 
 # Example
-PROJECT="CF_TLOAF_PFarrell"
+PROJECT="TEST_PROJECT"
 python src/create_dummy_ped.py --project_path "/data/project/worthey_lab/projects/${PROJECT}/" --outfile "data/raw/ped/${PROJECT}.ped"
 """
 
@@ -77,6 +77,6 @@ if __name__ == "__main__":
     if FIRE_MODE:
         fire.Fire(main)
     else:
-        PROJECT_PATH = "/data/project/worthey_lab/projects/CF_CFF_PFarrell/"
+        PROJECT_PATH = "/data/project/worthey_lab/projects/TEST_PROJECT/"
         OUTFILE = "out.ped"
         main(PROJECT_PATH, OUTFILE)

@@ -38,7 +38,7 @@ QuaC requires a workflow config file in yaml format, which provides:
 
 - Filepaths to necessary dataset dependencies required by certain QC tools
 - Hardware resource configs
-- Slurm resources
+- Slurm partition resources
 
 Refer to the default config file [`configs/workflow.yaml`](../configs/workflow.yaml) to set up your own.
 
