@@ -7,11 +7,11 @@ nav:
   - Input/Output: input_output.md
   - QuaC-Watch: quac_watch.md
   - System testing: system_testing.md
+  - Pipeline visualization: visualize_pipeline.md
   - Changelog: Changelog.md
   - QC review:
       - Sample QC review system: sample_qc_review_system.md
   - Miscellaneous:
-      - Pipeline visualization: visualize_pipeline.md
       - Contributing: CONTRIBUTING.md
       - ReadTheDocs- hosting docs: static_site.md
 
