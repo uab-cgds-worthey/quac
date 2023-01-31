@@ -65,13 +65,12 @@ cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.V 1000g.phase3.10k.b38_chr.exome.vcf.gz
 
 ## Create singularity+conda environments for tools used in QuaC pipeline
 
-All the jobs initiated by QuaC's snakemake workflow would be run in Singularity or Singularity+Conda environment. It may
-be a good idea to create these environments before they are run with actual samples. While this step is optional, this
-will ensure that there will not be any conflicts when running multiple instances of the pipeline.
+All the jobs initiated by QuaC's snakemake workflow would be run in Singularity or Singularity+Conda environment as
+needed. It may be a good idea to create these environments before they are run with actual samples. While this step is
+optional, this will ensure that there will not be any conflicts when running multiple instances of the pipeline.
 
-Running the commands below will submit a slurm job to just create these Singularity/Singularity+conda environments. Note
-that this slurm job will exit right after creating the environments, and it will not run any QC analyses on the input
-samples provided.
+Running the commands below will create the Singularity/Singularity+conda environments. Note that it will exit right
+after creating the environments, and it will not run any QC analyses on the input samples provided.
 
 ```sh
 # For Cheaha users only. Set up environment. 
@@ -82,11 +81,19 @@ module load Singularity/3.5.2-GCC-5.4.0-2.26
 # activate conda env
 conda activate quac
 
-# WGS mode
+PROJECT_CONFIG="project_2samples"
+PRIOR_QC_STATUS="no_priorQC"
+
+USE_SLURM="--snakemake_slurm --subtasks_slurm"
+# USE_SLURM=""  # uncomment and use this out if you don't want to use slurm at all
+
 python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
-      --pedigree ".test/configs/no_priorQC/project_2samples.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_project_wgs/analysis" \
+      --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
+      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
+      --exome \
+      $USE_SLURM \
       -e="--conda-create-envs-only"
 ```

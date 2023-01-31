@@ -93,6 +93,8 @@ python src/run_quac.py \
 
 ## Expected output files
 
+Output directory structure for WGS + `include_prior_qc` mode would look like this.
+
 ```sh
 $ tree -d $USER_SCRATCH/tmp/quac/results/test_project_2samples_wgs-no_priorQC/ -L 5
 $USER_SCRATCH/tmp/quac/results/test_project_2samples_wgs-no_priorQC/
@@ -143,8 +145,6 @@ $USER_SCRATCH/tmp/quac/results/test_project_2samples_wgs-no_priorQC/
                 └── ...
 ```
 
-!!! note 
-    
+!!! note
+
     Certain tools (eg. indexcov and covviz) are not executed when QuaC is run in exome mode (`--exome`).
-
-
