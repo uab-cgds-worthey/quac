@@ -5,7 +5,7 @@ title: ''
 labels: bug
 assignees: ''
 
-# modelled after https://github.com/snakemake/snakemake
+# template modelled after https://github.com/snakemake/snakemake
 ---
 
 **QuaC version**
