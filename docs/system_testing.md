@@ -33,7 +33,7 @@ conda activate quac
 # use this to submit jobs to slurm for the parent snakemake process 
 # as well as for the snakemake triggered jobs
 USE_SLURM="--snakemake_slurm --subtasks_slurm"
-# USE_SLURM=""  # uncomment and use this out if you don't want to use slurm at all
+# USE_SLURM=""  # uncomment this, comment out the above line, and use this if you don't want to use slurm at all
 
 
 ########## No prior QC data involved ##########
