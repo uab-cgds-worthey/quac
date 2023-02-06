@@ -20,6 +20,10 @@ These thresholds were curated based on
 * knowledge gained from our past sample QC experiences 
 
 
+!!! info
+
+    QuaC is built to use with Human WGS/WES data. If you would like to use it with non-human data, please modify the pipeline as needed -- especially the thresholds used in QuaC-Watch configs.
+
 ## QuaC-Watch in MultiQC report
 
 QuaC aggregates QC results from multiple tools using MultiQC into a single stand-alone interactive HTML report. QuaC-Watch results are available at the top of this report, and they serve as the first-stop for QC reviewers to quickly check for sample quality. Here is an example screenshot:

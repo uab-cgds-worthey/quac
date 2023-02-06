@@ -35,6 +35,10 @@ In summary, QuaC performs the following:
      * Tools fastqc, fastq-screen, and picard's markduplicates, whose output are accepted by QuaC when used with 
      flag `--include_prior_qc`, are produced by this small_variant_caller_pipeline.
 
+!!! info
+
+    QuaC is built to use with Human WGS/WES data. If you would like to use it with non-human data, please modify the pipeline as needed -- especially the thresholds used in QuaC-Watch configs.
+
 
 ## QC tools 
 
