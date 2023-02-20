@@ -4,16 +4,10 @@
 QuaC pipeline runner tool.
 
 Reads user input data, constructs snakemake command to run the pipeline,
-and submits them as slurm job.
+and submits them as slurm job or local job.
 
 Run the script with --help flag to see its available options.
 
-Example usage:
-# First create environment as described in documentation
-python src/run_quac.py --project_name CF_CFF_PFarrell --pedigree data/raw/ped/CF_CFF_PFarrell.ped
-python src/run_quac.py --project_name HCC --pedigree data/raw/ped/HCC.ped --exome
-python src/run_quac.py --project_name UnusualCancers_CMGalluzi --projects_path /data/project/sloss/cgds_path_cmgalluzzi/ \
-        --pedigree data/raw/ped/UnusualCancers_CMGalluzi.ped --exome
 """
 
 import argparse
@@ -232,7 +226,7 @@ def is_valid_dir(p, arg):
 
 if __name__ == "__main__":
     PARSER = argparse.ArgumentParser(
-        description="Wrapper tool for QuaC pipeline.",
+        description="Command line interface to QuaC pipeline.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 

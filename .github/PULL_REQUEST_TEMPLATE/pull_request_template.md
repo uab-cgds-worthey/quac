@@ -1,4 +1,4 @@
-# Merge request
+# Pull request
 
 Please fill in the checklist below and comment as needed.
 
@@ -12,4 +12,4 @@ Please fill in the checklist below and comment as needed.
 - [ ] Updated `Changelog.md` file with change logs in recommended format?
 
 
-### Anything else reviewer should know?
+## Anything else reviewer should know?

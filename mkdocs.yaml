@@ -1,0 +1,25 @@
+site_name: QuaC pipeline
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Requirements and Configs: reqts_configs.md
+  - How to run QuaC: quac_cli.md
+  - Input/Output: input_output.md
+  - QuaC-Watch: quac_watch.md
+  - System testing: system_testing.md
+  - Pipeline visualization: visualize_pipeline.md
+  - Changelog: Changelog.md
+  - QC review:
+      - Sample QC review system: sample_qc_review_system.md
+  - Miscellaneous:
+      - Contributing: CONTRIBUTING.md
+      - ReadTheDocs- hosting docs: static_site.md
+
+theme:
+  name: readthedocs
+  highlightjs: true
+
+markdown_extensions:
+  - markdown_include.include:
+      base_path: .
+  - admonition
