@@ -12,6 +12,12 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-02-28  Manavalan Gajapathy
+
+* Adds license
+* Bugfix: Changes github PR template filepath
+
+
 2023-01-31  Manavalan Gajapathy
 
 Restructures the docs to make it clearer to non-Cheaha users, updates documentation to reflect recent CLI option changes, and hosts docs publicly using readthedocs.
