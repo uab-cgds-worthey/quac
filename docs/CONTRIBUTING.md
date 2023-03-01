@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-:grin: :tada: Thank you for taking the time to contribute! :grin: :tada:
+😁 🎉 Thank you for taking the time to contribute! 😁 🎉
 
 The following is a set of guidelines for contributing to QuaC.
 
