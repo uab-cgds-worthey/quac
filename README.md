@@ -1,4 +1,4 @@
-[![Snakemake](https://img.shields.io/badge/snakemake-≥5.6.0-brightgreen.svg?style=flat)](https://snakemake.readthedocs.io)
+[![Snakemake](https://img.shields.io/badge/snakemake-6.0.5-brightgreen.svg?style=flat)](https://snakemake.readthedocs.io)
 
 # QuaC
 
