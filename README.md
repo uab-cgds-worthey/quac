@@ -50,4 +50,4 @@ Full documentation, including installation and how to run QuaC, is available at 
 
 ## Contributing
 
-See [here](./docs/CONTRIBUTING.md) contributing guidelines.
+See [here](./docs/CONTRIBUTING.md) for contributing guidelines.
