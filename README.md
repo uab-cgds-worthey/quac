@@ -38,3 +38,6 @@ Full documentation, including installation and how to run QuaC, is available at 
 
 * **Mana**valan Gajapathy
 
+## License
+
+[GNU GPLv3](./LICENSE)
