@@ -2,10 +2,13 @@
 
 ## Input
 
+<!-- markdown-link-check-disable -->
+
 Samples belonging to a project are provided as input via `--pedigree` to QuaC in [pedigree file
 format](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format). Only the samples that are
 supplied in pedigree file will be processed by QuaC and all of these samples must belong to the same project.
 
+<!-- markdown-link-check-enable -->
 
 !!! note "CGDS users only"
 
