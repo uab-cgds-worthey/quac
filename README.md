@@ -7,7 +7,7 @@
 🦆🦆 Don't duck that QC thingy 🦆🦆
 
 
-> **_NOTE:_**  In the past life, QuaC repo used to live at [UAB
+> **_NOTE:_**  In a past life, QuaC used a different remote Git management provider, [UAB
 > Gitlab](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/public/quac). It was migrated to
 > Github in Jan 2023, and the Gitlab version has been archived.
 
