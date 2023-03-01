@@ -6,7 +6,7 @@
 !!! Note
 
     In the past life, QuaC repo used to live at [UAB
-    Gitlab](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/quac). It was
+    Gitlab](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/public/quac). It was
     migrated to Github in Jan 2023, and the Gitlab version has been archived.
 
 
