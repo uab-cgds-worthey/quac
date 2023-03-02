@@ -12,6 +12,11 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-03-01  Manavalan Gajapathy
+
+* Decouples readme.md from readthedocs setup
+
+
 2023-02-28  Manavalan Gajapathy
 
 * Adds license
