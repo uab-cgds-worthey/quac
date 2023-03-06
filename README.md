@@ -1,5 +1,6 @@
 [![Snakemake](https://img.shields.io/badge/snakemake-6.0.5-brightgreen.svg?style=flat)](https://snakemake.readthedocs.io)
 [![ReadTheDocs](https://readthedocs.org/projects/quac/badge/?version=latest)](https://quac.readthedocs.io/en/stable/)
+[![DOI](https://zenodo.org/badge/593702083.svg)](https://zenodo.org/badge/latestdoi/593702083)
 
 
 # QuaC
