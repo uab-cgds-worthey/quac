@@ -4,7 +4,7 @@ set -euo pipefail
 echo "This script retrieves necessary dataset dependencies for Quac."
 
 PARENT_DIR=$(dirname $(realpath -s $0))
-DATA_DIR="${PARENT_DIR}/.test/dependency_datasets"
+DATA_DIR="${PARENT_DIR}/../.test/dependency_datasets"
 mkdir -p $DATA_DIR && cd $DATA_DIR
 echo "Datasets will be saved in '$DATA_DIR'"
 
