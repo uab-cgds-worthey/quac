@@ -12,19 +12,6 @@ created.
     pipeline runs from beginning to end without any execution error for the given test dataset.
 
 
-## Set up dataset dependencies
-
-Certain tools used in QuaC require certain datasets to be present. A script is made available here to retrieve them and then process them as needed.
-
-To run the script:
-
-```sh
-cd .test
-./setup_dependency_datasets.sh
-```
-
-Downloaded datasets here can then be readily supplied to QuaC by supplying `--workflow_config .test/configs/test_workflow.yaml`.
-
 ## How to run
 
 !!! info
@@ -60,7 +47,7 @@ python src/run_quac.py \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
       --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
-      --workflow_config ".test/configs/test_workflow.yaml" \
+      --workflow_config "configs/workflow.yaml" \
       $USE_SLURM
 
 # Exome mode
@@ -70,7 +57,7 @@ python src/run_quac.py \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
       --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
-      --workflow_config ".test/configs/test_workflow.yaml" \
+      --workflow_config "configs/workflow.yaml" \
       --exome \
       $USE_SLURM
 
@@ -88,7 +75,7 @@ python src/run_quac.py \
       --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
       --include_prior_qc \
       --allow_sample_renaming \
-      --workflow_config ".test/configs/test_workflow.yaml" \
+      --workflow_config "configs/workflow.yaml" \
       $USE_SLURM
 
 # Exome mode
@@ -101,7 +88,7 @@ python src/run_quac.py \
       --exome \
       --include_prior_qc \
       --allow_sample_renaming \
-      --workflow_config ".test/configs/test_workflow.yaml" \
+      --workflow_config "configs/workflow.yaml" \
       $USE_SLURM
 ```
 

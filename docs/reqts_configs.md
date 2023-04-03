@@ -36,7 +36,7 @@ In order to run the QuaC pipeline, user needs to
 
 QuaC requires a workflow config file in yaml format, which provides: 
 
-- Filepaths to necessary dataset dependencies required by certain QC tools
+- Filepaths to necessary dataset dependencies required by certain QC tools. [See below](#dependency-datasets) for instructions on how to set them up.
 - Hardware resource configs
 - Slurm partition resources
 
@@ -46,22 +46,14 @@ Refer to the default config file [`configs/workflow.yaml`](../configs/workflow.y
     Custom workflow config file can be provided to QuaC via `--workflow_config`.
 
 
-### Prepare verifybamid datasets for exome mode
+### Dependency datasets
 
-*This step is necessary only if QuaC will be run in exome mode (`--exome`).*
-[verifybamid](https://github.com/Griffan/VerifyBamID) has provided auxiliary resource files, which are necessary for
-analysis. However, chromosome contigs do not include `chr` prefix in their exome resource files, which are expected for
-our analyses at CGDS. Follow these steps to setup resource files with `chr` prefix in their contig names.
+To retrieve and set up all the dependency datasets for QuaC:
 
 ```sh
-# retrieve
-# cd into exome resources dir (available at VerifyBamID github repo)
-cd <path-to>/VerifyBamID-2.0.1/resource/exome/
-sed -e 's/^/chr/' 1000g.phase3.10k.b38.exome.vcf.gz.dat.bed > 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.bed
-sed -e 's/^/chr/' 1000g.phase3.10k.b38.exome.vcf.gz.dat.mu > 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.mu
-cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.UD 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.UD
-cp 1000g.phase3.10k.b38.exome.vcf.gz.dat.V 1000g.phase3.10k.b38_chr.exome.vcf.gz.dat.V
+./setup_dependency_datasets.sh
 ```
+
 
 ## Create singularity+conda environments for tools used in QuaC pipeline
 

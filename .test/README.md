@@ -50,18 +50,3 @@ IO_CONFIG=".test/configs/B/user_io_config.yaml"
 cp -r <small_var_pipeline_outdir>/A/qc/ <quac_repo>/.test/ngs-data/test_project/analysis/A
 cp -r <small_var_pipeline_outdir>/B/qc/ <quac_repo>/.test/ngs-data/test_project/analysis/B
 ```
-
-## Setup dependency datasets
-
-Certain tools used in QuaC require certain datasets to be present. A script is made available here to retrieve them and then process them as needed. 
-
-To run the script:
-
-```sh
-cd .test
-./setup_dependency_datasets.sh
-```
-
-## Workflow config
-
-After retrieving dependency datasets (see above), you may use `configs/test_workflow.yaml` as workflow config for quac (via `--workflow_config`).
