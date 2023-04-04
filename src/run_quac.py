@@ -276,7 +276,7 @@ if __name__ == "__main__":
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
-    QUAC_OUTDIR_DEFAULT = "$USER_SCRATCH/tmp/quac/results/test_project/analysis"
+    QUAC_OUTDIR_DEFAULT = "data/quac/results/test_project/analysis"
     WORKFLOW.add_argument(
         "--outdir",
         help="Out directory path",
@@ -284,7 +284,7 @@ if __name__ == "__main__":
         type=lambda x: create_dirpath(PARSER, x),
         metavar="",
     )
-    TMPDIR_DEFAULT = "$USER_SCRATCH/tmp/quac/tmp"
+    TMPDIR_DEFAULT = "data/quac/tmp"
     WORKFLOW.add_argument(
         "--tmp_dir",
         help="Directory path to store temporary files created by the workflow",
@@ -326,7 +326,7 @@ if __name__ == "__main__":
         metavar="",
     )
 
-    LOGS_DIR_DEFAULT = f"$USER_SCRATCH/tmp/quac/logs"
+    LOGS_DIR_DEFAULT = f"data/quac/logs"
     WRAPPER.add_argument(
         "--log_dir",
         help="Directory path where logs (both workflow's and wrapper's) will be stored",
