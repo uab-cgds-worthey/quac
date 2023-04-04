@@ -45,7 +45,7 @@ python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
+      --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
       --workflow_config "configs/workflow.yaml" \
       $USE_SLURM
@@ -55,7 +55,7 @@ python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
+      --outdir "data/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --workflow_config "configs/workflow.yaml" \
       --exome \
@@ -71,7 +71,7 @@ python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
+      --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
       --include_prior_qc \
       --allow_sample_renaming \
@@ -83,7 +83,7 @@ python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
+      --outdir "data/tmp/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --exome \
       --include_prior_qc \
@@ -101,8 +101,8 @@ python src/run_quac.py \
 Output directory structure for WGS + `include_prior_qc` mode would look like this.
 
 ```sh
-$ tree -d $USER_SCRATCH/tmp/quac/results/test_project_2samples_wgs-no_priorQC/ -L 5
-$USER_SCRATCH/tmp/quac/results/test_project_2samples_wgs-no_priorQC/
+$ tree -d data/quac/results/test_project_2samples_wgs-no_priorQC/ -L 5
+data/quac/results/test_project_2samples_wgs-no_priorQC/
 └── analysis
     ├── C
     │   └── qc

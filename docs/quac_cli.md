@@ -33,9 +33,9 @@ QuaC workflow options:
   --workflow_config     YAML config path specifying filepath to dependencies
                         of tools used in QuaC (default: configs/workflow.yaml)
   --outdir              Out directory path (default:
-                        $USER_SCRATCH/tmp/quac/results/test_project/analysis)
+                        data/quac/results/test_project/analysis)
   --tmp_dir             Directory path to store temporary files created by the
-                        workflow (default: $USER_SCRATCH/tmp/quac/tmp)
+                        workflow (default: data/quac/tmp)
   --exome               Flag to run the workflow in exome mode. WARNING:
                         Please provide appropriate configs via
                         --quac_watch_config. (default: False)
@@ -54,7 +54,7 @@ QuaC wrapper options:
                         jobs in cluster. (default: quac/configs/cluster_config.json)
   --log_dir             Directory path where logs (both workflow's and
                         wrapper's) will be stored (default:
-                        $USER_SCRATCH/tmp/quac/logs)
+                        data/quac/logs)
   -e , --extra_args     Pass additional custom args to snakemake. Equal symbol
                         is needed for assignment as in this example: -e='--
                         forceall' (default: None)

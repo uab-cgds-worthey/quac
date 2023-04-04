@@ -96,7 +96,7 @@ Refer to system testing directory `.test/` in the repo for an example project to
 ## Output
 
 QuaC results are stored at the path specified via option `--outdir` (default:
-`$USER_SCRATCH/tmp/quac/results/test_project/analysis`).  Refer to the [system testing's output](./system_testing.md) to
+`data/quac/results/test_project/analysis`).  Refer to the [system testing's output](./system_testing.md) to
 learn more about the output directory structure. 
 
 !!! tip 
