@@ -224,6 +224,15 @@ def is_valid_dir(p, arg):
         return get_full_path(os.path.expandvars(arg))
 
 
+def create_dirpath(arg):
+    dpath = get_full_path(os.path.expandvars(arg))
+    if not dpath.is_dir():
+        make_dir(dpath)
+        print(f"Created directory: {dpath}")
+
+    return None
+
+
 if __name__ == "__main__":
     PARSER = argparse.ArgumentParser(
         description="Command line interface to QuaC pipeline.",
@@ -272,7 +281,7 @@ if __name__ == "__main__":
         "--outdir",
         help="Out directory path",
         default=QUAC_OUTDIR_DEFAULT,
-        type=lambda x: is_valid_dir(PARSER, x),
+        type=lambda x: create_dirpath(PARSER, x),
         metavar="",
     )
     TMPDIR_DEFAULT = "$USER_SCRATCH/tmp/quac/tmp"
@@ -280,7 +289,7 @@ if __name__ == "__main__":
         "--tmp_dir",
         help="Directory path to store temporary files created by the workflow",
         default=TMPDIR_DEFAULT,
-        type=lambda x: is_valid_dir(PARSER, x),
+        type=lambda x: create_dirpath(PARSER, x),
         metavar="",
     )
     WORKFLOW.add_argument(
@@ -322,7 +331,7 @@ if __name__ == "__main__":
         "--log_dir",
         help="Directory path where logs (both workflow's and wrapper's) will be stored",
         default=LOGS_DIR_DEFAULT,
-        type=lambda x: is_valid_dir(PARSER, x),
+        type=lambda x: create_dirpath(PARSER, x),
         metavar="",
     )
     WRAPPER.add_argument(
