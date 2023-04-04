@@ -232,11 +232,11 @@ def is_valid_dir(p, arg):
 
 def create_dirpath(arg):
     dpath = get_full_path(os.path.expandvars(arg))
-    if not dpath.is_dir():
+    if not Path(dpath).is_dir():
         make_dir(dpath)
         print(f"Created directory: {dpath}")
 
-    return None
+    return dpath
 
 
 if __name__ == "__main__":
@@ -289,7 +289,7 @@ if __name__ == "__main__":
         "--outdir",
         help="Out directory path",
         default=QUAC_OUTDIR_DEFAULT,
-        type=lambda x: create_dirpath(PARSER, x),
+        type=lambda x: create_dirpath(x),
         metavar="",
     )
     TMPDIR_DEFAULT = "data/quac/tmp"
@@ -297,7 +297,7 @@ if __name__ == "__main__":
         "--tmp_dir",
         help="Directory path to store temporary files created by the workflow",
         default=TMPDIR_DEFAULT,
-        type=lambda x: create_dirpath(PARSER, x),
+        type=lambda x: create_dirpath(x),
         metavar="",
     )
     WORKFLOW.add_argument(
@@ -339,7 +339,7 @@ if __name__ == "__main__":
         "--log_dir",
         help="Directory path where logs (both workflow's and wrapper's) will be stored",
         default=LOGS_DIR_DEFAULT,
-        type=lambda x: create_dirpath(PARSER, x),
+        type=lambda x: create_dirpath(x),
         metavar="",
     )
     WRAPPER.add_argument(
