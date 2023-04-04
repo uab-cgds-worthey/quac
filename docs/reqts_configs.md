@@ -34,25 +34,16 @@ In order to run the QuaC pipeline, user needs to
 
 ## Set up workflow config file
 
-QuaC requires a workflow config file in yaml format, which provides: 
+QuaC requires a workflow config file in yaml format (default: `configs/workflow.yaml`). It provides following info to QuaC: 
 
-- Filepaths to necessary dataset dependencies required by certain QC tools. [See below](#dependency-datasets) for instructions on how to set them up.
+- Filepaths to necessary dataset dependencies required by certain QC tools used in QuaC.
+    - Use script `src/setup_dependency_datasets.sh` to download and set up these datasets. 
+    - To run this script, use command: `bash src/setup_dependency_datasets.sh`. Output will be saved at `data/external/dependency_datasets`.
 - Hardware resource configs
 - Slurm partition resources
 
-Refer to the default config file [`configs/workflow.yaml`](../configs/workflow.yaml) to set up your own.
-
 !!! tip
     Custom workflow config file can be provided to QuaC via `--workflow_config`.
-
-
-### Dependency datasets
-
-To retrieve and set up all the dependency datasets for QuaC:
-
-```sh
-./setup_dependency_datasets.sh
-```
 
 
 ## Create singularity+conda environments for tools used in QuaC pipeline
