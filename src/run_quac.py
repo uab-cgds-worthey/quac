@@ -30,7 +30,7 @@ def make_dir(d):
 
 def read_workflow_config(workflow_config_fpath):
     """
-    Read workflow config file to 
+    Read workflow config file to
     (1) identify paths to be mounted for singularity.
     (2) get slurm partitions.
     """
@@ -50,7 +50,7 @@ def read_workflow_config(workflow_config_fpath):
     # verifyBamID resource files
     for resource in datasets["verifyBamID"]:
         mount_paths.add(Path(datasets["verifyBamID"][resource]).parent)
-        
+
     # get slurm partitions
     slurm_partitions_dict = data["slurm_partitions"]
 
@@ -58,7 +58,13 @@ def read_workflow_config(workflow_config_fpath):
 
 
 def gather_mount_paths(
-    projects_path, project_name, pedigree_path, out_dir, log_dir, quac_watch_config, workflow_config
+    projects_path,
+    project_name,
+    pedigree_path,
+    out_dir,
+    log_dir,
+    quac_watch_config,
+    workflow_config,
 ):
     """
     Returns paths that need to be mounted to singularity
@@ -140,7 +146,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
             "--cluster 'sbatch --ntasks {cluster.ntasks} --partition {cluster.partition}"
             " --cpus-per-task {cluster.cpus-per-task} --mem-per-cpu {cluster.mem-per-cpu}"
             " --job-name {cluster.jobname} --output {cluster.output} --parsable'",
-        ]        
+        ]
 
     # add any user provided extra args for snakemake
     if args.extra_args:
@@ -185,7 +191,7 @@ def main(args):
     _, slurm_partition_times = read_workflow_config(args.workflow_config)
 
     slurm_resources = {
-        "partition": args.slurm_partition, 
+        "partition": args.slurm_partition,
         "ntasks": "1",
         "time": slurm_partition_times[args.slurm_partition],
         "cpus-per-task": "1" if args.subtasks_slurm else "4",
@@ -224,6 +230,15 @@ def is_valid_dir(p, arg):
         return get_full_path(os.path.expandvars(arg))
 
 
+def create_dirpath(arg):
+    dpath = get_full_path(os.path.expandvars(arg))
+    if not Path(dpath).is_dir():
+        make_dir(dpath)
+        print(f"Created directory: {dpath}")
+
+    return dpath
+
+
 if __name__ == "__main__":
     PARSER = argparse.ArgumentParser(
         description="Command line interface to QuaC pipeline.",
@@ -238,12 +253,9 @@ if __name__ == "__main__":
         help="Project name",
         metavar="",
     )
-
-    PROJECT_PATH_DEFAULT = "/data/project/worthey_lab/projects/"
     WORKFLOW.add_argument(
         "--projects_path",
         help="Path where all projects are hosted. Do not include project name here.",
-        default=PROJECT_PATH_DEFAULT,
         type=lambda x: is_valid_dir(PARSER, x),
         metavar="",
     )
@@ -255,8 +267,10 @@ if __name__ == "__main__":
     )
     WORKFLOW.add_argument(
         "--quac_watch_config",
-        help=("YAML config path specifying QC thresholds for QuaC-Watch." 
-              " See directory 'configs/quac_watch/' in quac repo for the included config files."),
+        help=(
+            "YAML config path specifying QC thresholds for QuaC-Watch."
+            " See directory 'configs/quac_watch/' in quac repo for the included config files."
+        ),
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
@@ -267,20 +281,20 @@ if __name__ == "__main__":
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
-    QUAC_OUTDIR_DEFAULT = "$USER_SCRATCH/tmp/quac/results/test_project/analysis"
+    QUAC_OUTDIR_DEFAULT = "data/quac/results/test_project/analysis"
     WORKFLOW.add_argument(
         "--outdir",
         help="Out directory path",
         default=QUAC_OUTDIR_DEFAULT,
-        type=lambda x: is_valid_dir(PARSER, x),
+        type=lambda x: create_dirpath(x),
         metavar="",
     )
-    TMPDIR_DEFAULT = "$USER_SCRATCH/tmp/quac/tmp"
+    TMPDIR_DEFAULT = "data/quac/tmp"
     WORKFLOW.add_argument(
         "--tmp_dir",
         help="Directory path to store temporary files created by the workflow",
         default=TMPDIR_DEFAULT,
-        type=lambda x: is_valid_dir(PARSER, x),
+        type=lambda x: create_dirpath(x),
         metavar="",
     )
     WORKFLOW.add_argument(
@@ -302,7 +316,7 @@ if __name__ == "__main__":
         "--subtasks_slurm",
         action="store_true",
         help="Flag indicating that the main Snakemake process of QuaC should submit subtasks of"
-        " the workflow as Slurm jobs instead of running them on the same machine as itself"
+        " the workflow as Slurm jobs instead of running them on the same machine as itself",
     )
 
     ############ Args for QuaC wrapper tool  ############
@@ -317,12 +331,12 @@ if __name__ == "__main__":
         metavar="",
     )
 
-    LOGS_DIR_DEFAULT = f"$USER_SCRATCH/tmp/quac/logs"
+    LOGS_DIR_DEFAULT = f"data/quac/logs"
     WRAPPER.add_argument(
         "--log_dir",
         help="Directory path where logs (both workflow's and wrapper's) will be stored",
         default=LOGS_DIR_DEFAULT,
-        type=lambda x: is_valid_dir(PARSER, x),
+        type=lambda x: create_dirpath(x),
         metavar="",
     )
     WRAPPER.add_argument(
@@ -342,9 +356,9 @@ if __name__ == "__main__":
     WRAPPER.add_argument(
         "--snakemake_slurm",
         action="store_true",
-        help="Flag indicating that the main Snakemake process of QuaC should be" 
-        " submitted to run in a Slurm job instead of executing in the current" 
-        " environment. Useful for headless execution on Slurm-based HPC systems."
+        help="Flag indicating that the main Snakemake process of QuaC should be"
+        " submitted to run in a Slurm job instead of executing in the current"
+        " environment. Useful for headless execution on Slurm-based HPC systems.",
     )
     RERUN_FAILED_DEFAULT = 1
     WRAPPER.add_argument(
@@ -364,9 +378,15 @@ if __name__ == "__main__":
     )
 
     ARGS = PARSER.parse_args()
-    
+
     # Didn't find a argparse friendly solution without having to refactor. Good enough solution
     if not ARGS.quac_watch_config:
-        raise SystemExit("Error. Quac-watch config is missing. Please supply using --quac_watch_config.")
+        raise SystemExit(
+            "Error. Quac-watch config is missing. Please supply using --quac_watch_config."
+        )
+    if not ARGS.projects_path:
+        raise SystemExit(
+            "Error. 'Projects path' not provided. Please supply using --projects_path."
+        )
 
     main(ARGS)

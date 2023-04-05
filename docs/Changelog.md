@@ -12,6 +12,12 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-04-04  Manavalan Gajapathy
+
+* Retires use of cheaha-specific env variable $USER_SCRATCH
+* Auto-creates user-provided dir structures for `--outdir`, `--tmp_dir`, and `--log_dir`
+
+
 2023-03-01  Manavalan Gajapathy
 
 * Decouples readme.md from readthedocs setup
