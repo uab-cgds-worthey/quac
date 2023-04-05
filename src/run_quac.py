@@ -253,12 +253,9 @@ if __name__ == "__main__":
         help="Project name",
         metavar="",
     )
-
-    PROJECT_PATH_DEFAULT = "/data/project/worthey_lab/projects/"
     WORKFLOW.add_argument(
         "--projects_path",
         help="Path where all projects are hosted. Do not include project name here.",
-        default=PROJECT_PATH_DEFAULT,
         type=lambda x: is_valid_dir(PARSER, x),
         metavar="",
     )
@@ -386,6 +383,10 @@ if __name__ == "__main__":
     if not ARGS.quac_watch_config:
         raise SystemExit(
             "Error. Quac-watch config is missing. Please supply using --quac_watch_config."
+        )
+    if not ARGS.projects_path:
+        raise SystemExit(
+            "Error. 'Projects path' not provided. Please supply using --projects_path."
         )
 
     main(ARGS)
