@@ -23,8 +23,7 @@ optional arguments:
 QuaC workflow options:
   --project_name        Project name (default: None)
   --projects_path       Path where all projects are hosted. Do not include
-                        project name here. (default:
-                        /data/project/worthey_lab/projects/)
+                        project name here. (default: None)
   --pedigree            Pedigree filepath. Must correspond to the project
                         supplied via --project_name (default: None)
   --quac_watch_config   YAML config path specifying QC thresholds for QuaC-
