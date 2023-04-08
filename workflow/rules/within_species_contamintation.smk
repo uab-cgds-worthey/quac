@@ -19,7 +19,7 @@ rule verifybamid:
     # conda:
     #     str(WORKFLOW_PATH / "configs/env/verifyBamID.yaml")
     singularity:
-        "docker://quay.io/biocontainers/verifybamid:2.0.1--h6a62bbb_9"
+        "docker://quay.io/biocontainers/verifybamid2:2.0.1--h6a62bbb_9"
     params:
         svd_prefix=lambda wildcards, input: input["svd"][0].replace(Path(input["svd"][0]).suffix, ""),
         out_prefix=lambda wildcards, output: output["ancestry"].replace(".Ancestry", ""),
