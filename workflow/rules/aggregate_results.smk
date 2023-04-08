@@ -50,9 +50,11 @@ rule multiqc_by_sample_initial_pass:
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file, if needed
         extra=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}" if ALLOW_SAMPLE_RENAMING else f"--config {input.multiqc_config}",
-    conda:
-        ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
-        str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
+    # conda:
+    #     ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
+    #     str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
+    singularity:
+        "docker://quay.io/biocontainers/multiqc:1.9--py_1"
     wrapper:
         "0.64.0/bio/multiqc"
 
@@ -138,9 +140,11 @@ rule multiqc_by_sample_final_pass:
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file, if needed
         extra=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}" if ALLOW_SAMPLE_RENAMING else f"--config {input.multiqc_config}",
-    conda:
-        ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
-        str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
+    # conda:
+    #     ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
+    #     str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
+    singularity:
+        "docker://quay.io/biocontainers/multiqc:1.9--py_1"
     wrapper:
         "0.64.0/bio/multiqc"
 
@@ -210,8 +214,10 @@ rule multiqc_aggregation_all_samples:
                                                 f'--config {input.multiqc_config} \
                                                 --cl_config "max_table_rows: 2000"'
         ),
-    conda:
-        ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
-        str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
+    # conda:
+    #     ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
+    #     str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
+    singularity:
+        "docker://quay.io/biocontainers/multiqc:1.9--py_1"
     wrapper:
         "0.64.0/bio/multiqc"

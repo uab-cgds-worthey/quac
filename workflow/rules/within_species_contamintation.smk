@@ -16,8 +16,10 @@ rule verifybamid:
         selfsm=protected(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.selfSM"),
     message:
         "Running VerifyBamID to detect within-species contamination. sample: {wildcards.sample}"
-    conda:
-        str(WORKFLOW_PATH / "configs/env/verifyBamID.yaml")
+    # conda:
+    #     str(WORKFLOW_PATH / "configs/env/verifyBamID.yaml")
+    singularity:
+        "docker://quay.io/biocontainers/verifybamid:2.0.1--h6a62bbb_9"
     params:
         svd_prefix=lambda wildcards, input: input["svd"][0].replace(Path(input["svd"][0]).suffix, ""),
         out_prefix=lambda wildcards, output: output["ancestry"].replace(".Ancestry", ""),

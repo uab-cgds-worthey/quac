@@ -5,8 +5,10 @@ rule bcftools_stats:
         protected(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats"),
     message:
         "stats vcf using bcftools. Sample: {wildcards.sample}"
-    conda:
-        str(WORKFLOW_PATH / "configs/env/bcftools.yaml")
+    # conda:
+    #     str(WORKFLOW_PATH / "configs/env/bcftools.yaml")
+    singularity:
+        "docker://quay.io/biocontainers/bcftools:1.12--h45bccc9_1"
     shell:
         r"""
         bcftools stats --samples - \
@@ -22,8 +24,10 @@ rule bcftools_index:
         protected(OUT_DIR / "{sample}" / "qc" / "bcftools-index" / "{sample}.bcftools.index.tsv"),
     message:
         "Obtains per-contig variant count stats using bcftools index. Sample: {wildcards.sample}"
-    conda:
-        str(WORKFLOW_PATH / "configs/env/bcftools.yaml")
+    # conda:
+    #     str(WORKFLOW_PATH / "configs/env/bcftools.yaml")
+    singularity:
+        "docker://quay.io/biocontainers/bcftools:1.12--h45bccc9_1"
     shell:
         r"""
         bcftools index --stats \
