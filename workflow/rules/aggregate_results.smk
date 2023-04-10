@@ -47,17 +47,28 @@ rule multiqc_by_sample_initial_pass:
     message:
         "Aggregates QC results using multiqc. First pass. Output will be used for the QuaC-Watch. Sample: {wildcards.sample}"
     params:
+        outdir=lambda wildcards, output: str(Path(output[0]).parent),
+        outfilename=lambda wildcards, output: str(Path(output[0]).name),
+        in_dirs=lambda wildcards, input: set(Path(fp).parent for fp in input),
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file, if needed
-        extra=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}" if ALLOW_SAMPLE_RENAMING else f"--config {input.multiqc_config}",
+        extra_config=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}" if ALLOW_SAMPLE_RENAMING else f"--config {input.multiqc_config}",
     # conda:
     #     ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
     #     str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
     singularity:
         "docker://quay.io/biocontainers/multiqc:1.9--py_1"
-    wrapper:
-        "0.64.0/bio/multiqc"
-
+    # wrapper:
+    #     "0.64.0/bio/multiqc"
+    shell:
+        r"""
+        multiqc \
+            {params.extra_config} \
+            --force \
+            --outdir {params.outdir} \
+            --filename {params.outfilename]} \
+            {params.in_dirs}
+        """
 
 rule quac_watch:
     input:
@@ -137,16 +148,28 @@ rule multiqc_by_sample_final_pass:
     message:
         "Aggregates QC results using multiqc. Final pass, where QuaC-Watch results are also aggregated. Sample: {wildcards.sample}"
     params:
+        outdir=lambda wildcards, output: str(Path(output[0]).parent),
+        outfilename=lambda wildcards, output: str(Path(output[0]).name),
+        in_dirs=lambda wildcards, input: set(str(Path(fp).parent) for fp in input),
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file, if needed
-        extra=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}" if ALLOW_SAMPLE_RENAMING else f"--config {input.multiqc_config}",
+        extra_config=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}" if ALLOW_SAMPLE_RENAMING else f"--config {input.multiqc_config}",
     # conda:
     #     ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
     #     str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
     singularity:
         "docker://quay.io/biocontainers/multiqc:1.9--py_1"
-    wrapper:
-        "0.64.0/bio/multiqc"
+    # wrapper:
+    #     "0.64.0/bio/multiqc"
+    shell:
+        r"""
+        multiqc \
+            {params.extra_config} \
+            --force \
+            --outdir {params.outdir} \
+            --filename {params.outfilename]} \
+            {params.in_dirs}
+        """
 
 
 
@@ -204,9 +227,12 @@ rule multiqc_aggregation_all_samples:
     message:
         "Running multiqc for all samples"
     params:
+        outdir=lambda wildcards, output: str(Path(output[0]).parent),
+        outfilename=lambda wildcards, output: str(Path(output[0]).name),
+        in_dirs=lambda wildcards, input: set(Path(fp).parent for fp in input),
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file, if needed
-        extra=(
+        extra_config=(
             lambda wildcards, input: f'--config {input.multiqc_config} \
                                             --sample-names {input.rename_config} \
                                             --cl_config "max_table_rows: 2000"' \
@@ -219,5 +245,14 @@ rule multiqc_aggregation_all_samples:
     #     str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
     singularity:
         "docker://quay.io/biocontainers/multiqc:1.9--py_1"
-    wrapper:
-        "0.64.0/bio/multiqc"
+    # wrapper:
+    #     "0.64.0/bio/multiqc"
+    shell:
+        r"""
+        multiqc \
+            {params.extra_config} \
+            --force \
+            --outdir {params.outdir} \
+            --filename {params.outfilename]} \
+            {params.in_dirs}
+        """
