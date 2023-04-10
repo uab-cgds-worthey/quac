@@ -4,15 +4,10 @@ rule samtools_stats:
         PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt"),
-    # conda:
-    #     ### see issue #49 on why local conda env is used to sidestep snakemake-wrapper's ###
-    #     str(WORKFLOW_PATH / "configs/env/samtools.yaml")
     singularity:
         "docker://quay.io/biocontainers/samtools:1.10--h2e538c0_3"
     message:
         "stats bam using samtools. Sample: {wildcards.sample}"
-    # wrapper:
-    #     "0.64.0/bio/samtools/stats"
     shell:
         r"""
         samtools stats \
@@ -33,8 +28,6 @@ rule qualimap_bamqc:
         summary=protected(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt"),
     message:
         "stats bam using qualimap. Sample: {wildcards.sample}"
-    # conda:
-    #     str(WORKFLOW_PATH / "configs/env/qualimap.yaml")
     singularity:
         "docker://quay.io/biocontainers/qualimap:2.2.2d--hdfd78af_2"
     threads: config["resources"]["qualimap_bamqc"]["no_cpu"]
@@ -69,18 +62,12 @@ rule picard_collect_multiple_metrics:
             ".alignment_summary_metrics",
             ".quality_yield_metrics",
         ),
-    # conda:
-    #     ### see issue #49 on why local conda env is used to sidestep snakemake-wrapper's ###
-    #     str(WORKFLOW_PATH / "configs/env/picard_smk.yaml")
     singularity:
         "docker://quay.io/biocontainers/picard:2.23.0--0"
     message:
         "stats bam using Picard's collectmultiplemetrics. Sample: {wildcards.sample}"
     params:
-        # "PROGRAM=null ",
         out_prefix=lambda wildcards, output: str(Path(output[0]).with_suffix('')),
-    # wrapper:
-    #     "0.73.0/bio/picard/collectmultiplemetrics"
     shell:
         r"""
         picard CollectMultipleMetrics \
@@ -102,8 +89,6 @@ rule picard_collect_wgs_metrics:
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
     message:
         "stats bam using Picard-CollectMultipleMetrics. Sample: {wildcards.sample}"
-    # conda:
-    #     str(WORKFLOW_PATH / "configs/env/picard.yaml")
     singularity:
         "docker://quay.io/biocontainers/picard:2.23.0--0"
     shell:
@@ -126,8 +111,6 @@ rule mosdepth_coverage:
         summary=protected(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.summary.txt"),
     message:
         "Running mosdepth for coverage. Sample: {wildcards.sample}"
-    # conda:
-    #     str(WORKFLOW_PATH / "configs/env/mosdepth.yaml")
     singularity:
         "docker://quay.io/biocontainers/mosdepth:0.3.1--h01d7912_2"
     threads: config["resources"]["mosdepth_coverage"]["no_cpu"]
@@ -185,8 +168,6 @@ rule indexcov:
         "Running indexcov"
     log:
         OUT_DIR / "project_level_qc" / "indexcov" / "stdout.log",
-    # conda:
-    #     str(WORKFLOW_PATH / "configs/env/goleft.yaml")
     singularity:
         "docker://quay.io/biocontainers/goleft:0.2.4--0"
     params:
