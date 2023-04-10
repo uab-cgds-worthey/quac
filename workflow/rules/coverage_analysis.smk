@@ -75,9 +75,20 @@ rule picard_collect_multiple_metrics:
     message:
         "stats bam using Picard's collectmultiplemetrics. Sample: {wildcards.sample}"
     params:
-        "PROGRAM=null ",
-    wrapper:
-        "0.73.0/bio/picard/collectmultiplemetrics"
+        # "PROGRAM=null ",
+        out_prefix=lambda wildcards, output: str(Path(output[0]).with_suffix('')),
+    # wrapper:
+    #     "0.73.0/bio/picard/collectmultiplemetrics"
+    shell:
+        r"""
+        picard CollectWgsMetrics \
+            I={input.bam} \
+            O={params.out_prefix} \
+            R={input.ref} \
+            PROGRAM=null   
+            PROGRAM=CollectAlignmentSummaryMetrics 
+            PROGRAM=CollectQualityYieldMetrics )
+        """
 
 
 rule picard_collect_wgs_metrics:
