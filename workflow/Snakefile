@@ -9,10 +9,6 @@ WORKFLOW_PATH = Path(workflow.basedir).parent
 configfile: config["workflow_config"]
 
 
-# singularity image to use
-singularity: "docker://continuumio/miniconda3:4.7.12"
-
-
 ##############   MODULES   ##############
 include: "rules/common.smk"
 include: "rules/relatedness_ancestry.smk"
