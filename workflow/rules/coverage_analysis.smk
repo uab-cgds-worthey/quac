@@ -65,7 +65,7 @@ rule picard_collect_multiple_metrics:
     singularity:
         "docker://quay.io/biocontainers/picard:2.23.0--0"
     message:
-        "stats bam using Picard's collectmultiplemetrics. Sample: {wildcards.sample}"
+        "Stats bam using Picard's collectmultiplemetrics. Sample: {wildcards.sample}"
     params:
         out_prefix=lambda wildcards, output: str(Path(output[0]).with_suffix('')),
     shell:
@@ -88,7 +88,7 @@ rule picard_collect_wgs_metrics:
     output:
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
     message:
-        "stats bam using Picard-CollectMultipleMetrics. Sample: {wildcards.sample}"
+        "Stats bam using Picard-CollectWgsMetrics. Sample: {wildcards.sample}"
     singularity:
         "docker://quay.io/biocontainers/picard:2.23.0--0"
     shell:
