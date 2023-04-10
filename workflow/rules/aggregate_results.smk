@@ -66,7 +66,7 @@ rule multiqc_by_sample_initial_pass:
             {params.extra_config} \
             --force \
             --outdir {params.outdir} \
-            --filename {params.outfilename]} \
+            --filename {params.outfilename} \
             {params.in_dirs}
         """
 
@@ -167,7 +167,7 @@ rule multiqc_by_sample_final_pass:
             {params.extra_config} \
             --force \
             --outdir {params.outdir} \
-            --filename {params.outfilename]} \
+            --filename {params.outfilename} \
             {params.in_dirs}
         """
 
@@ -253,6 +253,6 @@ rule multiqc_aggregation_all_samples:
             {params.extra_config} \
             --force \
             --outdir {params.outdir} \
-            --filename {params.outfilename]} \
+            --filename {params.outfilename} \
             {params.in_dirs}
         """
