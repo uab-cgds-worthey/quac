@@ -83,13 +83,13 @@ rule picard_collect_multiple_metrics:
     #     "0.73.0/bio/picard/collectmultiplemetrics"
     shell:
         r"""
-        picard CollectWgsMetrics \
+        picard CollectMultipleMetrics \
             I={input.bam} \
             O={params.out_prefix} \
             R={input.ref} \
-            PROGRAM=null   
-            PROGRAM=CollectAlignmentSummaryMetrics 
-            PROGRAM=CollectQualityYieldMetrics )
+            PROGRAM=null \
+            PROGRAM=CollectAlignmentSummaryMetrics \
+            PROGRAM=CollectQualityYieldMetrics
         """
 
 
