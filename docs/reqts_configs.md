@@ -4,7 +4,7 @@ In order to run the QuaC pipeline, user needs to
 
 1. [Install the pipeline and set up the conda environment](./installation.md).
 2. Set up config files specifying paths and hardware resources required by QC tools used in the pipeline.
-3. (Optional) Run QuaC pipeline just to create singularity+conda environments using the system testing datasets.
+3. (Optional) Run QuaC pipeline just to create singularity environments using the system testing datasets.
 
 ## Requirements
 
@@ -46,13 +46,12 @@ QuaC requires a workflow config file in yaml format (default: `configs/workflow.
     Custom workflow config file can be provided to QuaC via `--workflow_config`.
 
 
-## Create singularity+conda environments for tools used in QuaC pipeline
+## Create singularity environments for tools used in QuaC pipeline
 
-All the jobs initiated by QuaC's snakemake workflow would be run in Singularity or Singularity+Conda environment as
-needed. It may be a good idea to create these environments before they are run with actual samples. While this step is
+All the jobs initiated by QuaC's snakemake workflow would be run in Singularity environment. It may be a good idea to create these environments before they are run with actual samples. While this step is
 optional, this will ensure that there will not be any conflicts when running multiple instances of the pipeline.
 
-Running the commands below will create the Singularity/Singularity+conda environments. Note that it will exit right
+Running the commands below will create the Singularity environments. Note that it will exit right
 after creating the environments, and it will not run any QC analyses on the input samples provided.
 
 ```sh
