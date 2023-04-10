@@ -177,8 +177,6 @@ rule aggregate_sample_rename_configs:
         protected(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv"),
     message:
         "Aggregate all sample rename-config files."
-    singularity: 
-        "docker://continuumio/miniconda3:4.7.12"
     run:
         aggregate_rename_configs(input, output[0])
 
