@@ -157,8 +157,8 @@ rule mosdepth_plot:
         protected(OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html"),
     message:
         "Running mosdepth plotting"
-    singularity:
-        "docker://quay.io/biocontainers/mosdepth:0.3.1--h01d7912_2"
+    # singularity:
+    #     "docker://quay.io/biocontainers/mosdepth:0.3.1--h01d7912_2"
     shell:
         r"""
         python {input.script} \
