@@ -12,6 +12,11 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-04-10  Manavalan Gajapathy
+
+* Refactors snakemake pipeline to fully run jobs in direct singularity containers. No more creation of conda environment using singularity containers! (#69)
+
+
 2023-04-04  Manavalan Gajapathy
 
 * Retires use of cheaha-specific env variable $USER_SCRATCH
