@@ -11,8 +11,14 @@ rule samtools_stats:
         "docker://quay.io/biocontainers/samtools:1.10--h2e538c0_3"
     message:
         "stats bam using samtools. Sample: {wildcards.sample}"
-    wrapper:
-        "0.64.0/bio/samtools/stats"
+    # wrapper:
+    #     "0.64.0/bio/samtools/stats"
+    shell:
+        r"""
+        samtools stats \
+            {input} \
+            > {output}
+        """
 
 
 ##########################   Qualimap   ##########################
