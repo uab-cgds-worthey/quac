@@ -69,9 +69,11 @@ rule picard_collect_multiple_metrics:
             ".alignment_summary_metrics",
             ".quality_yield_metrics",
         ),
-    conda:
-        ### see issue #49 on why local conda env is used to sidestep snakemake-wrapper's ###
-        str(WORKFLOW_PATH / "configs/env/picard_smk.yaml")
+    # conda:
+    #     ### see issue #49 on why local conda env is used to sidestep snakemake-wrapper's ###
+    #     str(WORKFLOW_PATH / "configs/env/picard_smk.yaml")
+    singularity:
+        "docker://quay.io/biocontainers/picard:2.23.0--0"
     message:
         "stats bam using Picard's collectmultiplemetrics. Sample: {wildcards.sample}"
     params:
