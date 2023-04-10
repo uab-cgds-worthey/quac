@@ -11,8 +11,8 @@ rule create_multiqc_config:
         temp(MULTIQC_CONFIG_FILE)
     message:
         "Creates multiqc configs from jinja-template based on QuaC-Watch configs"
-    conda:
-        str(WORKFLOW_PATH / "configs/env/quac_watch.yaml")
+    singularity:
+        "docker://quay.io/biocontainers/mulled-v2-78a02249d8cc4e85718933e89cf41d0e6686ac25:70df245247aac9844ee84a9da1e96322a24c1f34-0"
     shell:
         r"""
         python {input.script} \
@@ -106,8 +106,8 @@ rule quac_watch:
         sample="{sample}",
         outdir=lambda wildcards, output: str(Path(output[0]).parent),
         extra=lambda wildcards, input: f'--fastqc "{input.fastqc_trimmed}" --fastq_screen "{input.fastq_screen}" --picard_dups "{input.picard_dups}"' if INCLUDE_PRIOR_QC_DATA else "",
-    conda:
-        str(WORKFLOW_PATH / "configs/env/quac_watch.yaml")
+    singularity:
+        "docker://quay.io/biocontainers/mulled-v2-78a02249d8cc4e85718933e89cf41d0e6686ac25:70df245247aac9844ee84a9da1e96322a24c1f34-0"
     shell:
         r"""
         python src/quac_watch/quac_watch.py \
