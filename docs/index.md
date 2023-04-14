@@ -12,7 +12,7 @@
 
 ## What is QuaC?
 
-QuaC is a snakemake-based pipeline that runs several QC tools for WGS/WES samples and then summarizes their results
+[QuaC](https://github.com/uab-cgds-worthey/quac) is a snakemake-based pipeline that runs several QC tools for WGS/WES samples and then summarizes their results
 using pre-defined, configurable QC thresholds.
 
 In summary, QuaC performs the following:
