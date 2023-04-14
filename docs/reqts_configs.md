@@ -46,3 +46,7 @@ QuaC requires a workflow config file in yaml format (default: `configs/workflow.
     Custom workflow config file can be provided to QuaC via `--workflow_config`.
 
 
+## Pull Singularity images [Optional]
+
+All the jobs initiated by QuaC's snakemake workflow will be run in corresponding Singularity environment, and snakemake automatically retrieves the Singularity images as needed. As part of the initial QuaC setup, it may be a good idea to run _only one of the_ [system testing](./system_testing.md) jobs, and this will retrieve and set up all the necessary Singularity images. This is an optional step, but highly recommended if you plan to run multiple instances of QuaC parallely. 
+
