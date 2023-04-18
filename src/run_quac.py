@@ -134,7 +134,6 @@ def create_snakemake_command(args, repo_path, mount_paths):
         f"--snakefile '{snakefile_path}'",
         f"--config {quac_configs}",
         f"--restart-times {args.rerun_failed}",
-        "--use-conda",
         "--use-singularity",
         f"--singularity-args '--cleanenv --bind {tmp_dir}:/tmp --bind {mount_paths}'",
         f"--profile '{snakemake_profile_dir}'",

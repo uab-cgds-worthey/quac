@@ -11,8 +11,8 @@ rule create_multiqc_config:
         temp(MULTIQC_CONFIG_FILE)
     message:
         "Creates multiqc configs from jinja-template based on QuaC-Watch configs"
-    conda:
-        str(WORKFLOW_PATH / "configs/env/quac_watch.yaml")
+    singularity:
+        "docker://quay.io/biocontainers/mulled-v2-78a02249d8cc4e85718933e89cf41d0e6686ac25:70df245247aac9844ee84a9da1e96322a24c1f34-0"
     shell:
         r"""
         python {input.script} \
@@ -47,15 +47,23 @@ rule multiqc_by_sample_initial_pass:
     message:
         "Aggregates QC results using multiqc. First pass. Output will be used for the QuaC-Watch. Sample: {wildcards.sample}"
     params:
+        outdir=lambda wildcards, output: str(Path(output[0]).parent),
+        outfilename=lambda wildcards, output: str(Path(output[0]).name),
+        in_dirs=lambda wildcards, input: set(Path(fp).parent for fp in input),
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file, if needed
-        extra=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}" if ALLOW_SAMPLE_RENAMING else f"--config {input.multiqc_config}",
-    conda:
-        ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
-        str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
-    wrapper:
-        "0.64.0/bio/multiqc"
-
+        extra_config=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}" if ALLOW_SAMPLE_RENAMING else f"--config {input.multiqc_config}",
+    singularity:
+        "docker://quay.io/biocontainers/multiqc:1.9--py_1"
+    shell:
+        r"""
+        multiqc \
+            {params.extra_config} \
+            --force \
+            --outdir {params.outdir} \
+            --filename {params.outfilename} \
+            {params.in_dirs}
+        """
 
 rule quac_watch:
     input:
@@ -98,8 +106,8 @@ rule quac_watch:
         sample="{sample}",
         outdir=lambda wildcards, output: str(Path(output[0]).parent),
         extra=lambda wildcards, input: f'--fastqc "{input.fastqc_trimmed}" --fastq_screen "{input.fastq_screen}" --picard_dups "{input.picard_dups}"' if INCLUDE_PRIOR_QC_DATA else "",
-    conda:
-        str(WORKFLOW_PATH / "configs/env/quac_watch.yaml")
+    singularity:
+        "docker://quay.io/biocontainers/mulled-v2-78a02249d8cc4e85718933e89cf41d0e6686ac25:70df245247aac9844ee84a9da1e96322a24c1f34-0"
     shell:
         r"""
         python src/quac_watch/quac_watch.py \
@@ -135,21 +143,27 @@ rule multiqc_by_sample_final_pass:
     message:
         "Aggregates QC results using multiqc. Final pass, where QuaC-Watch results are also aggregated. Sample: {wildcards.sample}"
     params:
+        outdir=lambda wildcards, output: str(Path(output[0]).parent),
+        outfilename=lambda wildcards, output: str(Path(output[0]).name),
+        in_dirs=lambda wildcards, input: set(str(Path(fp).parent) for fp in input),
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file, if needed
-        extra=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}" if ALLOW_SAMPLE_RENAMING else f"--config {input.multiqc_config}",
-    conda:
-        ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
-        str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
-    wrapper:
-        "0.64.0/bio/multiqc"
+        extra_config=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}" if ALLOW_SAMPLE_RENAMING else f"--config {input.multiqc_config}",
+    singularity:
+        "docker://quay.io/biocontainers/multiqc:1.9--py_1"
+    shell:
+        r"""
+        multiqc \
+            {params.extra_config} \
+            --force \
+            --outdir {params.outdir} \
+            --filename {params.outfilename} \
+            {params.in_dirs}
+        """
 
 
 
 ##########################   Multi-sample QC aggregation  ##########################
-localrules:
-    aggregate_sample_rename_configs,
-
 rule aggregate_sample_rename_configs:
     input:
         expand(
@@ -157,11 +171,23 @@ rule aggregate_sample_rename_configs:
             sample=SAMPLES,
         ),
     output:
-        protected(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv"),
+        outfile=protected(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv"),
+        tempfile=temp(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "flist.txt"),
     message:
         "Aggregate all sample rename-config files."
-    run:
-        aggregate_rename_configs(input, output[0])
+    singularity:
+        "docker://quay.io/biocontainers/mulled-v2-78a02249d8cc4e85718933e89cf41d0e6686ac25:70df245247aac9844ee84a9da1e96322a24c1f34-0"
+    shell:
+        r"""
+        # save files in a tempfile
+        echo {input} \
+            | tr " " "\n" \
+            > {output.tempfile}
+
+        python src/aggregate_sample_rename_configs.py \
+            --infile {output.tempfile} \
+            --outfile {output.outfile}
+        """
 
 
 rule multiqc_aggregation_all_samples:
@@ -200,9 +226,12 @@ rule multiqc_aggregation_all_samples:
     message:
         "Running multiqc for all samples"
     params:
+        outdir=lambda wildcards, output: str(Path(output[0]).parent),
+        outfilename=lambda wildcards, output: str(Path(output[0]).name),
+        in_dirs=lambda wildcards, input: set(Path(fp).parent for fp in input),
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file, if needed
-        extra=(
+        extra_config=(
             lambda wildcards, input: f'--config {input.multiqc_config} \
                                             --sample-names {input.rename_config} \
                                             --cl_config "max_table_rows: 2000"' \
@@ -210,8 +239,14 @@ rule multiqc_aggregation_all_samples:
                                                 f'--config {input.multiqc_config} \
                                                 --cl_config "max_table_rows: 2000"'
         ),
-    conda:
-        ### see issue #47 on why local conda env is used to sidestep snakemake-wrapper's ###
-        str(WORKFLOW_PATH / "configs/env/multiqc.yaml")
-    wrapper:
-        "0.64.0/bio/multiqc"
+    singularity:
+        "docker://quay.io/biocontainers/multiqc:1.9--py_1"
+    shell:
+        r"""
+        multiqc \
+            {params.extra_config} \
+            --force \
+            --outdir {params.outdir} \
+            --filename {params.outfilename} \
+            {params.in_dirs}
+        """
