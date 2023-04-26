@@ -8,7 +8,7 @@ Installation involves
 ## Requirements
 
 - Linux OS
-  - Tested in Red Hat Enterprise Linux  v7.9
+    - Tested in Red Hat Enterprise Linux  v7.9
 - Git
 - Anaconda/miniconda
     - Tested with Anaconda3/2020.02

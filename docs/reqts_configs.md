@@ -8,6 +8,8 @@ In order to run the QuaC pipeline, user needs to
 
 ## Requirements
 
+- Linux OS. QuaC was developed and tested in Red Hat Enterprise Linux  v7.9
+
 - [Singularity](https://apptainer.org/) is required but not provided. QuaC pipeline was developed and tested using Singularity v3.5.2.
 
 !!! note "Cheaha users only"
