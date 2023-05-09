@@ -65,8 +65,9 @@ def read_workflow_config(workflow_config_fpath):
 
     # verifyBamID resource files
     for resource in datasets["verifyBamID"]:
-        # checks only the parent dir as the filepath provided is just a prefix (ie. without extensions)
-        check_path_exists(Path(datasets["verifyBamID"][resource]).parent)
+        # appends file extension to the prefix path and then checks if they exist
+        for extension in ["bed", "mu", "UD", "V"]:
+            check_path_exists(Path(datasets["verifyBamID"][resource] + f".{extension}"))
         mount_paths.add(Path(datasets["verifyBamID"][resource]).parent)
 
     # get slurm partitions
