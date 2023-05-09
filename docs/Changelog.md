@@ -12,6 +12,11 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-05-09  Manavalan Gajapathy
+
+* Adds a verification step in the CLI wrapper script to check if the file/dirpaths to be mounted to singularity already exist as expected (#71)
+
+
 2023-04-10  Manavalan Gajapathy
 
 * Refactors snakemake pipeline to fully run jobs in direct singularity containers. No more creation of conda environment using singularity containers! (#69)
