@@ -28,6 +28,14 @@ def make_dir(d):
     return None
 
 
+def check_path_exists(path):
+    if not path.exists():
+        raise SystemExit(
+            f"ERROR: Path '{str(path)}' is missing. Please provide a valid path."
+        )
+    return path
+
+
 def read_workflow_config(workflow_config_fpath):
     """
     Read workflow config file to
@@ -41,15 +49,15 @@ def read_workflow_config(workflow_config_fpath):
     mount_paths = set()
     datasets = data["datasets"]
     # ref genome
-    mount_paths.add(Path(datasets["ref"]).parent)
+    mount_paths.add(check_path_exists(Path(datasets["ref"]).parent))
 
     # somalier resource files
     for resource in datasets["somalier"]:
-        mount_paths.add(Path(datasets["somalier"][resource]).parent)
+        mount_paths.add(check_path_exists(Path(datasets["somalier"][resource]).parent))
 
     # verifyBamID resource files
     for resource in datasets["verifyBamID"]:
-        mount_paths.add(Path(datasets["verifyBamID"][resource]).parent)
+        mount_paths.add(check_path_exists(Path(datasets["verifyBamID"][resource]).parent))
 
     # get slurm partitions
     slurm_partitions_dict = data["slurm_partitions"]
@@ -75,20 +83,20 @@ def gather_mount_paths(
     # project path
     project_path = Path(projects_path) / project_name / "analysis"
     make_dir(project_path)
-    mount_paths.add(project_path)
+    mount_paths.add(check_path_exists(project_path))
 
     # pedigree filepath
-    mount_paths.add(Path(pedigree_path).parent)
+    mount_paths.add(check_path_exists(Path(pedigree_path).parent))
 
     # output dirpath
     make_dir(out_dir)
-    mount_paths.add(out_dir)
+    mount_paths.add(check_path_exists(out_dir))
 
     # logs dirpath
-    mount_paths.add(log_dir)
+    mount_paths.add(check_path_exists(log_dir))
 
     # QuaC-Watch configfile
-    mount_paths.add(quac_watch_config)
+    mount_paths.add(check_path_exists(quac_watch_config))
 
     # read paths in workflow config file
     paths_in_wokflow_config, _ = read_workflow_config(workflow_config)
