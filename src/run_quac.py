@@ -28,6 +28,26 @@ def make_dir(d):
     return None
 
 
+def check_mount_paths_exist(paths):
+    """
+    Verify the paths to be mounted to Singularity exist
+    """
+
+    fail_paths = []
+    for path in paths:
+        # print(path)
+        if not Path(path).exists():
+            fail_paths.append(str(path))
+
+    if fail_paths:
+        fail_paths = "\n".join(fail_paths)
+        raise SystemExit(
+            f"ERROR: Following directories that are part of your input were not found: \n{fail_paths}"
+        )
+
+    return None
+
+
 def read_workflow_config(workflow_config_fpath):
     """
     Read workflow config file to
@@ -41,15 +61,15 @@ def read_workflow_config(workflow_config_fpath):
     mount_paths = set()
     datasets = data["datasets"]
     # ref genome
-    mount_paths.add(Path(datasets["ref"]).parent)
+    mount_paths.add(Path(get_full_path(datasets["ref"])).parent)
 
     # somalier resource files
     for resource in datasets["somalier"]:
-        mount_paths.add(Path(datasets["somalier"][resource]).parent)
+        mount_paths.add(Path(get_full_path(datasets["somalier"][resource])).parent)
 
     # verifyBamID resource files
     for resource in datasets["verifyBamID"]:
-        mount_paths.add(Path(datasets["verifyBamID"][resource]).parent)
+        mount_paths.add(Path(get_full_path(datasets["verifyBamID"][resource])).parent)
 
     # get slurm partitions
     slurm_partitions_dict = data["slurm_partitions"]
@@ -93,6 +113,9 @@ def gather_mount_paths(
     # read paths in workflow config file
     paths_in_wokflow_config, _ = read_workflow_config(workflow_config)
     mount_paths.update(paths_in_wokflow_config)
+
+    # checks paths to be mounted to singularity exist
+    check_mount_paths_exist(mount_paths)
 
     return ",".join([str(x) for x in mount_paths])
 
@@ -160,7 +183,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
 
 def main(args):
 
-    repo_path = Path(__file__).absolute().parents[1]
+    repo_path = Path(get_full_path(__file__)).parents[1]
 
     # process user's input-output config file and get singularity bind paths
     mount_paths = gather_mount_paths(
