@@ -15,7 +15,7 @@ YYYY-MM-DD  John Doe
 2023-05-09  Manavalan Gajapathy
 
 * Adds a verification step in the CLI wrapper script to check if the file/dirpaths to be mounted to singularity already exist as expected (#71)
-
+* Resolves dirpaths of datasets in the workflow config file to obtain their full path
 
 2023-04-10  Manavalan Gajapathy
 
