@@ -114,6 +114,7 @@ def gather_mount_paths(
     paths_in_wokflow_config, _ = read_workflow_config(workflow_config)
     mount_paths.update(paths_in_wokflow_config)
 
+    # checks paths to be mounted to singularity exist
     check_mount_paths_exist(mount_paths)
 
     return ",".join([str(x) for x in mount_paths])
