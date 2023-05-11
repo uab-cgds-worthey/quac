@@ -28,17 +28,23 @@ def make_dir(d):
     return None
 
 
-def check_path_exists(path):
+def check_mount_paths_exist(paths):
     """
-    Ensure input file/dir path exists
+    Verify the paths to be mounted to Singularity exist
     """
 
-    path = Path(path)
-    if not path.exists():
+    fail_paths = []
+    for path in paths:
+        # print(path)
+        if not Path(path).exists():
+            fail_paths.append(str(path))
+
+    if fail_paths:
+        fail_paths = "\n".join(fail_paths)
         raise SystemExit(
-            f"ERROR: Path '{str(path)}' is missing. Please provide a valid path."
+            f"ERROR: Following directories that are part of your input were not found: \n{fail_paths}"
         )
-        
+
     return None
 
 
@@ -55,19 +61,14 @@ def read_workflow_config(workflow_config_fpath):
     mount_paths = set()
     datasets = data["datasets"]
     # ref genome
-    check_path_exists(datasets["ref"])
     mount_paths.add(Path(datasets["ref"]).parent)
 
     # somalier resource files
     for resource in datasets["somalier"]:
-        check_path_exists(datasets["somalier"][resource])
         mount_paths.add(Path(datasets["somalier"][resource]).parent)
 
     # verifyBamID resource files
     for resource in datasets["verifyBamID"]:
-        # appends file extension to the prefix path and then checks if they exist
-        for extension in ["bed", "mu", "UD", "V"]:
-            check_path_exists(Path(datasets["verifyBamID"][resource] + f".{extension}"))
         mount_paths.add(Path(datasets["verifyBamID"][resource]).parent)
 
     # get slurm partitions
@@ -97,7 +98,6 @@ def gather_mount_paths(
     mount_paths.add(project_path)
 
     # pedigree filepath
-    check_path_exists(pedigree_path)
     mount_paths.add(Path(pedigree_path).parent)
 
     # output dirpath
@@ -105,16 +105,16 @@ def gather_mount_paths(
     mount_paths.add(out_dir)
 
     # logs dirpath
-    check_path_exists(log_dir)
     mount_paths.add(log_dir)
 
     # QuaC-Watch configfile
-    check_path_exists(quac_watch_config)
     mount_paths.add(quac_watch_config)
 
     # read paths in workflow config file
     paths_in_wokflow_config, _ = read_workflow_config(workflow_config)
     mount_paths.update(paths_in_wokflow_config)
+
+    check_mount_paths_exist(mount_paths)
 
     return ",".join([str(x) for x in mount_paths])
 
