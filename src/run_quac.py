@@ -182,7 +182,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
 
 def main(args):
 
-    repo_path = Path(__file__).absolute().parents[1]
+    repo_path = Path(get_full_path(__file__)).parents[1]
 
     # process user's input-output config file and get singularity bind paths
     mount_paths = gather_mount_paths(
