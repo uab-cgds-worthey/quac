@@ -61,15 +61,15 @@ def read_workflow_config(workflow_config_fpath):
     mount_paths = set()
     datasets = data["datasets"]
     # ref genome
-    mount_paths.add(Path(datasets["ref"]).parent)
+    mount_paths.add(Path(get_full_path(datasets["ref"])).parent)
 
     # somalier resource files
     for resource in datasets["somalier"]:
-        mount_paths.add(Path(datasets["somalier"][resource]).parent)
+        mount_paths.add(Path(get_full_path(datasets["somalier"][resource])).parent)
 
     # verifyBamID resource files
     for resource in datasets["verifyBamID"]:
-        mount_paths.add(Path(datasets["verifyBamID"][resource]).parent)
+        mount_paths.add(Path(get_full_path(datasets["verifyBamID"][resource])).parent)
 
     # get slurm partitions
     slurm_partitions_dict = data["slurm_partitions"]
