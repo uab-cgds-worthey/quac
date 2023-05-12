@@ -42,7 +42,11 @@ def check_mount_paths_exist(paths):
     if fail_paths:
         fail_paths = "\n".join(fail_paths)
         raise SystemExit(
-            f"ERROR: Following directories that are part of your input were not found: \n{fail_paths}"
+            (
+                f"ERROR: Following directories that are part of your input were not found: \n{fail_paths}"
+                "\n\nNOTE: This was likely caused by missing datasets specified in the workflow config file (supplied via --workflow_config)."
+                "\nPlease refer to docs on how to use our script to download the necessary datasets - https://quac.readthedocs.io/en/latest/reqts_configs/#set-up-workflow-config-file"
+            )
         )
 
     return None
@@ -344,7 +348,9 @@ if __name__ == "__main__":
     ############ Args for QuaC wrapper tool  ############
     WRAPPER = PARSER.add_argument_group("QuaC wrapper options")
 
-    CLUSTER_CONFIG_DEFAULT = Path(__file__).absolute().parents[1] / "configs/cluster_config.json"
+    CLUSTER_CONFIG_DEFAULT = (
+        Path(__file__).absolute().parents[1] / "configs/cluster_config.json"
+    )
     WRAPPER.add_argument(
         "--cluster_config",
         help="Cluster config json file. Needed for snakemake to run jobs in cluster.",
