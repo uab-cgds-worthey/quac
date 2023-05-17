@@ -14,6 +14,7 @@ import argparse
 from pathlib import Path
 import uuid
 import os.path
+import json
 import yaml
 from slurm.submit_slurm_job import submit_slurm_job
 
@@ -124,6 +125,25 @@ def gather_mount_paths(
     return ",".join([str(x) for x in mount_paths])
 
 
+def construct_sbatch_command(config_f):
+    """
+    Reads cluster config file and constructs sbatch command to use in slurm
+    """
+    
+    with open(config_f) as fh:
+        data = json.load(fh)
+        
+        default_args = data["__default__"]
+        
+        sbatch_cmd = "sbatch "
+        for k, v in default_args.items():
+            sbatch_cmd += f"--{k} {{cluster.{k}}} "
+
+        sbatch_cmd += "--parsable"
+            
+    return sbatch_cmd
+
+
 def create_snakemake_command(args, repo_path, mount_paths):
     """
     Construct snakemake command to run the pipeline
@@ -138,7 +158,6 @@ def create_snakemake_command(args, repo_path, mount_paths):
     # directory to use as tmp in singularity container
     # If not exist, singularity will complain
     tmp_dir = args.tmp_dir
-    # make_dir(tmp_dir)
 
     quac_configs = {
         "project_name": args.project_name,
@@ -169,9 +188,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
     if args.subtasks_slurm:
         cmd += [
             f"--cluster-config '{args.cluster_config}'",
-            "--cluster 'sbatch --ntasks {cluster.ntasks} --partition {cluster.partition}"
-            " --cpus-per-task {cluster.cpus-per-task} --mem-per-cpu {cluster.mem-per-cpu}"
-            " --job-name {cluster.jobname} --output {cluster.output} --parsable'",
+            f"--cluster '{construct_sbatch_command(args.cluster_config)}'"
         ]
 
     # add any user provided extra args for snakemake
