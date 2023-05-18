@@ -1,0 +1,40 @@
+name: system_testing
+on:
+  push:
+    paths:
+      - 'configs/env/quac.yaml'
+      - '.github/workflows/system_testing.yml'
+
+
+jobs:
+  create-env:
+    name: ubuntu-latest
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+        
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+        
+      - name: create environment with mamba
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          mamba-version: "*"
+          channels: conda-forge,bioconda,defaults
+          auto-activate-base: false
+          activate-environment: quac
+          environment-file: configs/env/quac.yaml
+      
+      - name: check solution
+        run: |
+          mamba env export
+      
+      - name: test samtools
+        run: |
+          which snakemake
+          snakemake --help
