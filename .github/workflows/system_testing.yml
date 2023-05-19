@@ -37,15 +37,21 @@ jobs:
       - name: test snakemake
         run: |
           which snakemake
-          snakemake --help
+          snakemake --version
 
       - uses: eWaterCycle/setup-singularity@v7
         with:
           singularity-version: 3.8.3
       - name: Run a singularity container
-        run: singularity run docker://alpine cat /etc/os-release
+        run: |
+          # singularity run docker://alpine cat /etc/os-release
+          singularity  --version
 
-      - name: run system testing
+      - name: Set up dependecies for QuaC
+        run: |
+          bash src/setup_dependency_datasets.sh
+      
+      - name: Run QuaC system testing
         run: |
           which python
           ls
