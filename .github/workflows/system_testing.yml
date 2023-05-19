@@ -44,3 +44,15 @@ jobs:
           singularity-version: 3.8.3
       - name: Run a singularity container
         run: singularity run docker://alpine cat /etc/os-release
+
+      - name: run system testing
+        run: |
+          which python
+          ls
+          python src/run_quac.py \
+                --project_name test_project \
+                --projects_path ".test/ngs-data/" \
+                --pedigree ".test/configs/no_priorQC/project_2samples.ped" \
+                --outdir "data/quac/results/test_project_2samples_wgs-no_priorQC/analysis" \
+                --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
+                --workflow_config "configs/workflow.yaml" -n
