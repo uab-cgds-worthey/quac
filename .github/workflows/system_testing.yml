@@ -61,4 +61,4 @@ jobs:
                 --pedigree ".test/configs/no_priorQC/project_2samples.ped" \
                 --outdir "data/quac/results/test_project_2samples_wgs-no_priorQC/analysis" \
                 --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
-                --workflow_config "configs/workflow.yaml" -n
+                --workflow_config "configs/workflow.yaml"
