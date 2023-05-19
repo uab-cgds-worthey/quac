@@ -14,8 +14,8 @@ jobs:
       run:
         shell: bash -l {0}
         
-    strategy:
-      fail-fast: false
+    # strategy:
+    #   fail-fast: false
 
     steps:
       - name: checkout repository
@@ -34,7 +34,13 @@ jobs:
         run: |
           mamba env export
       
-      - name: test samtools
+      - name: test snakemake
         run: |
           which snakemake
           snakemake --help
+
+      - uses: eWaterCycle/setup-singularity@v7
+        with:
+          singularity-version: 3.8.3
+      - name: Run a singularity container
+        run: singularity run docker://alpine cat /etc/os-release
