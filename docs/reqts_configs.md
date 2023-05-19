@@ -4,7 +4,7 @@ In order to run the QuaC pipeline, user needs to
 
 1. [Install the pipeline and set up the conda environment](./installation.md).
 2. Set up config files specifying paths and hardware resources required by QC tools used in the pipeline.
-3. Modify cluster config file to suit your Slurm setup.
+3. Set up cluster config file to suit your Slurm setup.
 4. (Optional) Run QuaC pipeline just to create singularity environments using the system testing datasets.
 
 ## Requirements
@@ -49,7 +49,7 @@ QuaC requires a workflow config file in yaml format (default: `configs/workflow.
     Custom workflow config file can be provided to QuaC via `--workflow_config`.
 
 
-## Modify cluster config file
+## Set up cluster config file
 
 QuaC requires a cluster config file (default: `configs/cluster_config.json`), where slurm resources to be utilized by QuaC are configured. You may want to modify `__default__` section in this file to suit your slurm system. For example, if your slurm requires `--account` to be supplied to `sbatch`, you will need to add it to the `__default__` (e.g., "account": "uname").
 
