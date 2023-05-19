@@ -12,6 +12,12 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-05-18  Manavalan Gajapathy
+
+* Constructs snakemake's `sbatch` command using args and values from cluster config file supplied via `--cluster_config`.
+* Updates doc to include cluster config as a requirement
+
+
 2023-05-09  Manavalan Gajapathy
 
 * Adds a verification step in the CLI wrapper script to check if the file/dirpaths to be mounted to singularity already exist as expected (#71)
