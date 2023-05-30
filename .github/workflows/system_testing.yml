@@ -2,8 +2,8 @@ name: system_testing
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  create-env:
-    name: ubuntu-20.04
+  system-testing:
+    name: System testing - QuaC
     runs-on: ubuntu-20.04
     defaults:
       run:
@@ -42,12 +42,64 @@ jobs:
         run: |
           bash src/setup_dependency_datasets.sh
       
-      - name: Run QuaC system testing
+      - name: Run QuaC system testing - WGS mode AND no prior QC data
         run: |
+          PROJECT_CONFIG="project_2samples"
+          PRIOR_QC_STATUS="no_priorQC"
+          USE_SLURM=""
           python src/run_quac.py \
                 --project_name test_project \
                 --projects_path ".test/ngs-data/" \
-                --pedigree ".test/configs/no_priorQC/project_2samples.ped" \
-                --outdir "data/quac/results/test_project_2samples_wgs-no_priorQC/analysis" \
+                --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+                --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
                 --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
-                --workflow_config "configs/workflow.yaml"
+                --workflow_config "configs/workflow.yaml" \
+                $USE_SLURM
+
+      - name: Run QuaC system testing - Exome mode AND no prior QC data
+        run: |
+          PROJECT_CONFIG="project_2samples"
+          PRIOR_QC_STATUS="no_priorQC"
+          USE_SLURM=""
+          python src/run_quac.py \
+                --project_name test_project \
+                --projects_path ".test/ngs-data/" \
+                --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+                --outdir "data/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
+                --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
+                --workflow_config "configs/workflow.yaml" \
+                --exome \
+                $USE_SLURM
+
+      - name: Run QuaC system testing - WGS mode AND uses prior QC data
+        run: |
+          PROJECT_CONFIG="project_2samples"
+          PRIOR_QC_STATUS="include_priorQC"
+          USE_SLURM=""
+          python src/run_quac.py \
+                --project_name test_project \
+                --projects_path ".test/ngs-data/" \
+                --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+                --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
+                --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
+                --include_prior_qc \
+                --allow_sample_renaming \
+                --workflow_config "configs/workflow.yaml" \
+                $USE_SLURM
+
+      - name: Run QuaC system testing - Exome mode AND uses prior QC data
+        run: |
+          PROJECT_CONFIG="project_2samples"
+          PRIOR_QC_STATUS="include_priorQC"
+          USE_SLURM=""
+          python src/run_quac.py \
+                --project_name test_project \
+                --projects_path ".test/ngs-data/" \
+                --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+                --outdir "data/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
+                --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
+                --exome \
+                --include_prior_qc \
+                --allow_sample_renaming \
+                --workflow_config "configs/workflow.yaml" \
+                $USE_SLURM
