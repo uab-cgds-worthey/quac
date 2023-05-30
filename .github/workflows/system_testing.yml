@@ -1,10 +1,5 @@
 name: system_testing
-on:
-  push:
-    paths:
-      - 'configs/env/quac.yaml'
-      - '.github/workflows/system_testing.yml'
-
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   create-env:
