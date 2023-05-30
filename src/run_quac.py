@@ -231,12 +231,7 @@ def main(args):
         "resources": slurm_resources,
     }
 
-    try:
-        submit_slurm_job(pipeline_cmd, job_dict)
-    except Exception as e:
-        print ("Job submission step ran into an error:")
-        print(repr(e))
-        raise SystemExit(1)
+    submit_slurm_job(pipeline_cmd, job_dict)
 
     return None
 
