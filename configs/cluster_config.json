@@ -4,7 +4,7 @@
         "partition": "express",
         "cpus-per-task": "{threads}",
         "mem-per-cpu": "8G",
-        "jobname": "QuaC.{rule}.{jobid}",
+        "job-name": "QuaC.{rule}.{jobid}",
         "output": "{RULE_LOGS_PATH}/{rule}-%j.log"
     },
     "qualimap_bamqc": {
