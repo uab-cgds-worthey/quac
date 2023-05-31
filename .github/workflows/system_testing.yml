@@ -23,7 +23,6 @@ on:
       - converted_to_draft
   workflow_dispatch:
 
-
 jobs:
   system-testing:
     name: System testing - QuaC
