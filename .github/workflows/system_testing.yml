@@ -1,5 +1,22 @@
 name: system_testing
-on: [push, pull_request, workflow_dispatch]
+# on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    paths:
+      - '.github/workflows/system_testing.yml'
+      - '.test/**'
+      - 'configs/**'
+      - 'src/**'
+      - 'workflow/**'
+  pull_request:
+    paths:
+      - '.github/workflows/system_testing.yml'
+      - '.test/**'
+      - 'configs/**'
+      - 'src/**'
+      - 'workflow/**'
+  workflow_dispatch:
+
 
 jobs:
   system-testing:
