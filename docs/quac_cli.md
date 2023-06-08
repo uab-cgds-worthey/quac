@@ -50,7 +50,7 @@ QuaC workflow options:
 
 QuaC wrapper options:
   --cluster_config      Cluster config json file. Needed for snakemake to run
-                        jobs in cluster. (default: quac/configs/cluster_config.json)
+                        jobs in cluster. (default: quac/configs/snakemake_cluster_config.json)
   --log_dir             Directory path where logs (both workflow's and
                         wrapper's) will be stored (default:
                         data/quac/logs)

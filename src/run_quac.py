@@ -76,10 +76,7 @@ def read_workflow_config(workflow_config_fpath):
     for resource in datasets["verifyBamID"]:
         mount_paths.add(Path(get_full_path(datasets["verifyBamID"][resource])).parent)
 
-    # get slurm partitions
-    slurm_partitions_dict = data["slurm_partitions"]
-
-    return mount_paths, slurm_partitions_dict
+    return mount_paths
 
 
 def gather_mount_paths(
@@ -116,7 +113,7 @@ def gather_mount_paths(
     mount_paths.add(quac_watch_config)
 
     # read paths in workflow config file
-    paths_in_wokflow_config, _ = read_workflow_config(workflow_config)
+    paths_in_wokflow_config = read_workflow_config(workflow_config)
     mount_paths.update(paths_in_wokflow_config)
 
     # checks paths to be mounted to singularity exist
@@ -231,15 +228,8 @@ def main(args):
     )
 
     # submit snakemake command as a slurm job
-    _, slurm_partition_times = read_workflow_config(args.workflow_config)
-
-    slurm_resources = {
-        "partition": args.slurm_partition,
-        "ntasks": "1",
-        "time": slurm_partition_times[args.slurm_partition],
-        "cpus-per-task": "1" if args.subtasks_slurm else "4",
-        "mem-per-cpu": "8G",
-    }
+    with open(args.cli_cluster_config) as fh:
+        slurm_resources = json.load(fh)
 
     job_dict = {
         "basename": "quac-",
@@ -248,7 +238,7 @@ def main(args):
         "resources": slurm_resources,
     }
 
-    submit_slurm_job(pipeline_cmd, job_dict)
+    # submit_slurm_job(pipeline_cmd, job_dict)
 
     return None
 
@@ -324,6 +314,17 @@ if __name__ == "__main__":
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
+    SMK_CLUSTER_CONFIG_DEFAULT = (
+        Path(__file__).absolute().parents[1] / "configs/snakemake_cluster_config.json"
+    )
+    WORKFLOW.add_argument(
+        "--snakemake_cluster_config",
+        help="Cluster config json file. Needed for snakemake to run jobs in cluster.",
+        default=SMK_CLUSTER_CONFIG_DEFAULT,
+        type=lambda x: is_valid_file(PARSER, x),
+        metavar="",
+    )
+
     QUAC_OUTDIR_DEFAULT = "data/quac/results/test_project/analysis"
     WORKFLOW.add_argument(
         "--outdir",
@@ -365,13 +366,13 @@ if __name__ == "__main__":
     ############ Args for QuaC wrapper tool  ############
     WRAPPER = PARSER.add_argument_group("QuaC wrapper options")
 
-    CLUSTER_CONFIG_DEFAULT = (
-        Path(__file__).absolute().parents[1] / "configs/cluster_config.json"
+    CLI_CLUSTER_CONFIG_DEFAULT = (
+        Path(__file__).absolute().parents[1] / "configs/cli_cluster_config.json"
     )
     WRAPPER.add_argument(
-        "--cluster_config",
-        help="Cluster config json file. Needed for snakemake to run jobs in cluster.",
-        default=CLUSTER_CONFIG_DEFAULT,
+        "--cli_cluster_config",
+        help="Cluster config json file to run parent workflow job in cluster",
+        default=CLI_CLUSTER_CONFIG_DEFAULT,
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )

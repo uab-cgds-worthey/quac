@@ -51,7 +51,7 @@ QuaC requires a workflow config file in yaml format (default: `configs/workflow.
 
 ## Set up cluster config file
 
-QuaC requires a cluster config file (default: `configs/cluster_config.json`), where slurm resources to be utilized by QuaC are configured. You may want to modify `__default__` section in this file to suit your slurm system. For example, if your slurm requires `--account` to be supplied to `sbatch`, you will need to add it to the `__default__` (e.g., "account": "uname").
+QuaC requires a cluster config file (default: `configs/snakemake_cluster_config.json`), where slurm resources to be utilized by QuaC are configured. You may want to modify `__default__` section in this file to suit your slurm system. For example, if your slurm requires `--account` to be supplied to `sbatch`, you will need to add it to the `__default__` (e.g., "account": "uname").
 
 !!! tip
     Custom cluster config file can be provided to QuaC via `--cluster_config`.

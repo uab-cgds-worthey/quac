@@ -1,0 +1,7 @@
+{
+    "partition": "express",
+    "ntasks": "1",
+    "time": "02:00:00",
+    "cpus-per-task": "1",
+    "mem-per-cpu": "8G"
+}
