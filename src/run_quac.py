@@ -125,17 +125,23 @@ def gather_mount_paths(
     return ",".join([str(x) for x in mount_paths])
 
 
-def get_sbatch_defaults(config_f):
+def construct_sbatch_command(config_f):
     """
-    Reads cluster config file and return defaults supplied by user
+    Reads cluster config file and constructs sbatch command to use in slurm
     """
-
+    
     with open(config_f) as fh:
         data = json.load(fh)
-
+        
         default_args = data["__default__"]
+        
+        sbatch_cmd = "sbatch "
+        for k, v in default_args.items():
+            sbatch_cmd += f"--{k} {{cluster.{k}}} "
 
-    return default_args
+        sbatch_cmd += "--parsable"
+            
+    return sbatch_cmd
 
 
 def create_snakemake_command(args, repo_path, mount_paths):
@@ -179,16 +185,10 @@ def create_snakemake_command(args, repo_path, mount_paths):
         f"--profile '{snakemake_profile_dir}'",
     ]
 
-    # construct sbatch command
-    sbatch_cmd = "sbatch "
-    for sbatch_param in get_sbatch_defaults(args.cluster_config).keys():
-        sbatch_cmd += f"--{sbatch_param} {{cluster.{sbatch_param}}} "
-    sbatch_cmd += "--parsable"
-
     if args.subtasks_slurm:
         cmd += [
             f"--cluster-config '{args.cluster_config}'",
-            f"--cluster '{sbatch_cmd}'",
+            f"--cluster '{construct_sbatch_command(args.cluster_config)}'"
         ]
 
     # add any user provided extra args for snakemake
@@ -233,7 +233,6 @@ def main(args):
     # submit snakemake command as a slurm job
     _, slurm_partition_times = read_workflow_config(args.workflow_config)
 
-    # define slurm resources to supply to sbatch
     slurm_resources = {
         "partition": args.slurm_partition,
         "ntasks": "1",
@@ -241,11 +240,6 @@ def main(args):
         "cpus-per-task": "1" if args.subtasks_slurm else "4",
         "mem-per-cpu": "8G",
     }
-
-    # add user-env specific sbatch params based on cluster config file (eg. account, qos, etc)
-    for sbatch_key, sbatch_val in get_sbatch_defaults(args.cluster_config).items():
-        if sbatch_key not in slurm_resources:
-            slurm_resources[sbatch_key] = sbatch_val
 
     job_dict = {
         "basename": "quac-",
