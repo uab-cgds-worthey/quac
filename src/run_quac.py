@@ -126,18 +126,18 @@ def construct_sbatch_command(config_f):
     """
     Reads cluster config file and constructs sbatch command to use in slurm
     """
-    
+
     with open(config_f) as fh:
         data = json.load(fh)
-        
+
         default_args = data["__default__"]
-        
+
         sbatch_cmd = "sbatch "
         for k, v in default_args.items():
             sbatch_cmd += f"--{k} {{cluster.{k}}} "
 
         sbatch_cmd += "--parsable"
-            
+
     return sbatch_cmd
 
 
@@ -189,7 +189,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
 
         cmd += [
             f"--cluster-config '{args.snakemake_cluster_config}'",
-            f"--cluster '{construct_sbatch_command(args.snakemake_cluster_config)}'"
+            f"--cluster '{construct_sbatch_command(args.snakemake_cluster_config)}'",
         ]
 
     # add any user provided extra args for snakemake
