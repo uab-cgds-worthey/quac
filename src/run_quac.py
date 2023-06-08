@@ -313,13 +313,10 @@ if __name__ == "__main__":
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
-    SMK_CLUSTER_CONFIG_DEFAULT = (
-        Path(__file__).absolute().parents[1] / "configs/snakemake_cluster_config.json"
-    )
     WORKFLOW.add_argument(
         "--snakemake_cluster_config",
-        help="Cluster config json file. Needed for snakemake to run jobs in cluster.",
-        default=SMK_CLUSTER_CONFIG_DEFAULT,
+        help="Cluster config json file. Needed for snakemake to run jobs in cluster."
+        " Edit template file 'configs/snakemake_cluster_config.json' to fit your SLURM environment.",
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
@@ -365,13 +362,10 @@ if __name__ == "__main__":
     ############ Args for QuaC wrapper tool  ############
     WRAPPER = PARSER.add_argument_group("QuaC wrapper options")
 
-    CLI_CLUSTER_CONFIG_DEFAULT = (
-        Path(__file__).absolute().parents[1] / "configs/cli_cluster_config.json"
-    )
     WRAPPER.add_argument(
         "--cli_cluster_config",
-        help="Cluster config json file to run parent workflow job in cluster",
-        default=CLI_CLUSTER_CONFIG_DEFAULT,
+        help="Cluster config json file to run parent workflow job in cluster."
+        " Edit template file 'configs/cli_cluster_config.json' to fit your SLURM environment.",
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
