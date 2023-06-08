@@ -182,6 +182,11 @@ def create_snakemake_command(args, repo_path, mount_paths):
     ]
 
     if args.subtasks_slurm:
+        if args.snakemake_cluster_config is None:
+            raise SystemExit(
+                "Error. Please provide cluster config to use with snakemake via --snakemake_cluster_config."
+            )
+
         cmd += [
             f"--cluster-config '{args.snakemake_cluster_config}'",
             f"--cluster '{construct_sbatch_command(args.snakemake_cluster_config)}'"
