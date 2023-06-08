@@ -415,14 +415,6 @@ if __name__ == "__main__":
         metavar="",
     )
 
-    WRAPPER.add_argument(
-        "--slurm_partition",
-        help="Request a specific partition for the slurm resource allocation to run snakemake."
-        " See 'slurm_partitions' supplied via workflow_config for available partitions",
-        default="short",
-        metavar="",
-    )
-
     ARGS = PARSER.parse_args()
 
     # Didn't find a argparse friendly solution without having to refactor. Good enough solution
