@@ -184,8 +184,8 @@ def create_snakemake_command(args, repo_path, mount_paths):
 
     if args.subtasks_slurm:
         cmd += [
-            f"--cluster-config '{args.cluster_config}'",
-            f"--cluster '{construct_sbatch_command(args.cluster_config)}'"
+            f"--cluster-config '{args.snakemake_cluster_config}'",
+            f"--cluster '{construct_sbatch_command(args.snakemake_cluster_config)}'"
         ]
 
     # add any user provided extra args for snakemake
@@ -238,7 +238,7 @@ def main(args):
         "resources": slurm_resources,
     }
 
-    # submit_slurm_job(pipeline_cmd, job_dict)
+    submit_slurm_job(pipeline_cmd, job_dict)
 
     return None
 
