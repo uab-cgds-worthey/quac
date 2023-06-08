@@ -176,7 +176,6 @@ def create_snakemake_command(args, repo_path, mount_paths):
         "snakemake",
         f"--snakefile '{snakefile_path}'",
         f"--config {quac_configs}",
-        f"--restart-times {args.rerun_failed}",
         "--use-singularity",
         f"--singularity-args '--cleanenv --bind {tmp_dir}:/tmp --bind {mount_paths}'",
         f"--profile '{snakemake_profile_dir}'",
@@ -405,14 +404,6 @@ if __name__ == "__main__":
         help="Flag indicating that the main Snakemake process of QuaC should be"
         " submitted to run in a Slurm job instead of executing in the current"
         " environment. Useful for headless execution on Slurm-based HPC systems.",
-    )
-    RERUN_FAILED_DEFAULT = 1
-    WRAPPER.add_argument(
-        "--rerun_failed",
-        help=f"Number of times snakemake restarts failed jobs. This may be set to >0 "
-        "to avoid pipeline failing due to job fails due to random SLURM issues",
-        default=RERUN_FAILED_DEFAULT,
-        metavar="",
     )
 
     ARGS = PARSER.parse_args()
