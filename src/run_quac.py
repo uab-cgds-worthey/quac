@@ -358,6 +358,20 @@ if __name__ == "__main__":
         help="Flag indicating that the main Snakemake process of QuaC should submit subtasks of"
         " the workflow as Slurm jobs instead of running them on the same machine as itself",
     )
+    WORKFLOW.add_argument(
+        "-e",
+        "--extra_args",
+        help="Pass additional custom args to snakemake. Equal symbol is needed "
+        "for assignment as in this example: -e='--forceall'",
+        metavar="",
+    )
+    WORKFLOW.add_argument(
+        "-n",
+        "--dryrun",
+        action="store_true",
+        help="Flag to dry-run snakemake. Does not execute anything, and "
+        "just display what would be done. Equivalent to '--extra_args \"-n\"'",
+    )
 
     ############ Args for QuaC wrapper tool  ############
     WRAPPER = PARSER.add_argument_group("QuaC wrapper options")
@@ -377,20 +391,6 @@ if __name__ == "__main__":
         default=LOGS_DIR_DEFAULT,
         type=lambda x: create_dirpath(x),
         metavar="",
-    )
-    WRAPPER.add_argument(
-        "-e",
-        "--extra_args",
-        help="Pass additional custom args to snakemake. Equal symbol is needed "
-        "for assignment as in this example: -e='--forceall'",
-        metavar="",
-    )
-    WRAPPER.add_argument(
-        "-n",
-        "--dryrun",
-        action="store_true",
-        help="Flag to dry-run snakemake. Does not execute anything, and "
-        "just display what would be done. Equivalent to '--extra_args \"-n\"'",
     )
     WRAPPER.add_argument(
         "--snakemake_slurm",
