@@ -232,6 +232,12 @@ def main(args):
     )
 
     # submit snakemake command as a slurm job
+    if args.snakemake_slurm:
+        if args.cli_cluster_config is None:
+            raise SystemExit(
+                "Error. Please provide cluster config to use with wrapper via --cli_cluster_config."
+            )
+
     with open(args.cli_cluster_config) as fh:
         slurm_resources = json.load(fh)
 
@@ -321,7 +327,7 @@ if __name__ == "__main__":
     WORKFLOW.add_argument(
         "--snakemake_cluster_config",
         help="Cluster config json file. Needed for snakemake to run jobs in cluster."
-        " Edit template file 'configs/snakemake_cluster_config.json' to fit your SLURM environment.",
+        " Edit template file 'configs/snakemake_cluster_config.json' to suit your SLURM environment.",
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
@@ -384,7 +390,7 @@ if __name__ == "__main__":
     WRAPPER.add_argument(
         "--cli_cluster_config",
         help="Cluster config json file to run parent workflow job in cluster."
-        " Edit template file 'configs/cli_cluster_config.json' to fit your SLURM environment.",
+        " Edit template file 'configs/cli_cluster_config.json' to suit your SLURM environment.",
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
