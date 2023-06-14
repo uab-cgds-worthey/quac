@@ -1,6 +1,10 @@
 # Pull request
 
-Please fill in the checklist below and comment as needed.
+**Please add a clear description of what the PR is about:**
+
+------
+
+**Please fill in the checklist below and comment as needed:**
 
 - [ ] Was code modified? Briefly describe.
 - [ ] Was documentation modified? Briefly describe.
