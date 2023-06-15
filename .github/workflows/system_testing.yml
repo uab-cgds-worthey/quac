@@ -46,10 +46,13 @@ jobs:
       
       - name: Check conda solution
         run: |
+          df -h
           mamba env export
+          df -h
       
       - name: Check snakemake exists in conda env
         run: |
+          df -h
           which snakemake
           snakemake --version
 
@@ -58,14 +61,17 @@ jobs:
           singularity-version: 3.8.3
       - name: Check singularity is working
         run: |
+          df -h
           singularity  --version
 
       - name: Set up dependencies for QuaC
         run: |
+          df -h
           bash src/setup_dependency_datasets.sh
       
       - name: Run QuaC system testing - WGS mode AND no prior QC data
         run: |
+          df -h
           PROJECT_CONFIG="project_2samples"
           PRIOR_QC_STATUS="no_priorQC"
           USE_SLURM=""
@@ -77,9 +83,11 @@ jobs:
                 --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
                 --workflow_config "configs/workflow.yaml" \
                 $USE_SLURM
+          df -h
 
       - name: Run QuaC system testing - Exome mode AND no prior QC data
         run: |
+          df -h
           PROJECT_CONFIG="project_2samples"
           PRIOR_QC_STATUS="no_priorQC"
           USE_SLURM=""
@@ -92,9 +100,11 @@ jobs:
                 --workflow_config "configs/workflow.yaml" \
                 --exome \
                 $USE_SLURM
+          df -h
 
       - name: Run QuaC system testing - WGS mode AND uses prior QC data
         run: |
+          df -h
           PROJECT_CONFIG="project_2samples"
           PRIOR_QC_STATUS="include_priorQC"
           USE_SLURM=""
@@ -108,9 +118,11 @@ jobs:
                 --allow_sample_renaming \
                 --workflow_config "configs/workflow.yaml" \
                 $USE_SLURM
+          df -h
 
       - name: Run QuaC system testing - Exome mode AND uses prior QC data
         run: |
+          df -h
           PROJECT_CONFIG="project_2samples"
           PRIOR_QC_STATUS="include_priorQC"
           USE_SLURM=""
@@ -125,3 +137,4 @@ jobs:
                 --allow_sample_renaming \
                 --workflow_config "configs/workflow.yaml" \
                 $USE_SLURM
+          df -h
