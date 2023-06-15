@@ -32,8 +32,16 @@ jobs:
         shell: bash -l {0}
         
     steps:
+      - name: df before checking out repo
+        run: |
+          df -h
+
       - name: checkout repository
         uses: actions/checkout@v2
+
+      - name: df before conda env creation
+        run: |
+          df -h
         
       - name: Create quac environment
         uses: conda-incubator/setup-miniconda@v2
@@ -43,7 +51,7 @@ jobs:
           auto-activate-base: false
           activate-environment: quac
           environment-file: configs/env/quac.yaml
-      
+
       - name: Check conda solution
         run: |
           df -h
