@@ -76,7 +76,13 @@ jobs:
         run: |
           df -h
           bash src/setup_dependency_datasets.sh
-      
+
+      - name: Frees Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@v1.2.0
+        with:
+          # this might remove tools that are actually needed, when set to "true"
+          tool-cache: true
+
       - name: Run QuaC system testing - WGS mode AND no prior QC data
         run: |
           df -h
