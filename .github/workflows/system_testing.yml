@@ -1,20 +1,19 @@
 name: system_testing
-# on: [push, pull_request, workflow_dispatch]
 on:
   push:
     paths:
-      - '.github/workflows/system_testing.yml'
-      - '.test/**'
-      - 'configs/**'
-      - 'src/**'
-      - 'workflow/**'
+      - ".github/workflows/system_testing.yml"
+      - ".test/**"
+      - "configs/**"
+      - "src/**"
+      - "workflow/**"
   pull_request:
     paths:
-      - '.github/workflows/system_testing.yml'
-      - '.test/**'
-      - 'configs/**'
-      - 'src/**'
-      - 'workflow/**'
+      - ".github/workflows/system_testing.yml"
+      - ".test/**"
+      - "configs/**"
+      - "src/**"
+      - "workflow/**"
     types:
       - opened
       - synchronize
@@ -30,25 +29,18 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
-        
-    steps:
-      - name: df before checking out repo
-        run: |
-          df -h
 
+    steps:
       - name: Frees Disk Space (Ubuntu)
+        # For more info about this task, see https://github.com/uab-cgds-worthey/quac/issues/78
         uses: jlumbroso/free-disk-space@v1.2.0
         with:
           # this might remove tools that are actually needed, when set to "true"
           tool-cache: true
 
-      - name: checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: df before conda env creation
-        run: |
-          df -h
-        
       - name: Create quac environment
         uses: conda-incubator/setup-miniconda@v2
         with:
@@ -60,32 +52,27 @@ jobs:
 
       - name: Check conda solution
         run: |
-          df -h
           mamba env export
-          df -h
-      
+
       - name: Check snakemake exists in conda env
         run: |
-          df -h
           which snakemake
           snakemake --version
 
       - uses: eWaterCycle/setup-singularity@v7
         with:
           singularity-version: 3.8.3
+
       - name: Check singularity is working
         run: |
-          df -h
           singularity  --version
 
       - name: Set up dependencies for QuaC
         run: |
-          df -h
           bash src/setup_dependency_datasets.sh
 
       - name: Run QuaC system testing - WGS mode AND no prior QC data
         run: |
-          df -h
           PROJECT_CONFIG="project_2samples"
           PRIOR_QC_STATUS="no_priorQC"
           USE_SLURM=""
@@ -96,12 +83,11 @@ jobs:
                 --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
                 --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
                 --workflow_config "configs/workflow.yaml" \
-                $USE_SLURM    || df -h
-          
+                $USE_SLURM  \
+          || df -h
 
       - name: Run QuaC system testing - Exome mode AND no prior QC data
         run: |
-          df -h
           PROJECT_CONFIG="project_2samples"
           PRIOR_QC_STATUS="no_priorQC"
           USE_SLURM=""
@@ -113,11 +99,11 @@ jobs:
                 --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
                 --workflow_config "configs/workflow.yaml" \
                 --exome \
-                $USE_SLURM    || df -h
+                $USE_SLURM  \
+          || df -h
 
       - name: Run QuaC system testing - WGS mode AND uses prior QC data
         run: |
-          df -h
           PROJECT_CONFIG="project_2samples"
           PRIOR_QC_STATUS="include_priorQC"
           USE_SLURM=""
@@ -130,11 +116,11 @@ jobs:
                 --include_prior_qc \
                 --allow_sample_renaming \
                 --workflow_config "configs/workflow.yaml" \
-                $USE_SLURM    || df -h
+                $USE_SLURM  \
+          || df -h
 
       - name: Run QuaC system testing - Exome mode AND uses prior QC data
         run: |
-          df -h
           PROJECT_CONFIG="project_2samples"
           PRIOR_QC_STATUS="include_priorQC"
           USE_SLURM=""
@@ -148,4 +134,5 @@ jobs:
                 --include_prior_qc \
                 --allow_sample_renaming \
                 --workflow_config "configs/workflow.yaml" \
-                $USE_SLURM    || df -h
+                $USE_SLURM  \
+          || df -h
