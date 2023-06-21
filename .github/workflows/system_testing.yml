@@ -16,7 +16,7 @@ on:
       - "workflow/**"
     types:
       - opened
-      - synchronize
+      # - synchronize
       - reopened
       - ready_for_review
       - converted_to_draft
