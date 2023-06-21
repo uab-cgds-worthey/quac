@@ -83,8 +83,7 @@ jobs:
                 --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
                 --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
                 --workflow_config "configs/workflow.yaml" \
-                $USE_SLURM  \
-          || df -h
+                $USE_SLURM
 
       - name: Run QuaC system testing - Exome mode AND no prior QC data
         run: |
@@ -99,8 +98,7 @@ jobs:
                 --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
                 --workflow_config "configs/workflow.yaml" \
                 --exome \
-                $USE_SLURM  \
-          || df -h
+                $USE_SLURM
 
       - name: Run QuaC system testing - WGS mode AND uses prior QC data
         run: |
@@ -116,8 +114,7 @@ jobs:
                 --include_prior_qc \
                 --allow_sample_renaming \
                 --workflow_config "configs/workflow.yaml" \
-                $USE_SLURM  \
-          || df -h
+                $USE_SLURM
 
       - name: Run QuaC system testing - Exome mode AND uses prior QC data
         run: |
@@ -134,5 +131,4 @@ jobs:
                 --include_prior_qc \
                 --allow_sample_renaming \
                 --workflow_config "configs/workflow.yaml" \
-                $USE_SLURM  \
-          || df -h
+                $USE_SLURM
