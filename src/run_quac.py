@@ -14,6 +14,7 @@ import argparse
 from pathlib import Path
 import uuid
 import os.path
+from shutil import which
 import json
 import yaml
 from slurm.submit_slurm_job import submit_slurm_job
@@ -27,6 +28,14 @@ def make_dir(d):
     Path(d).mkdir(parents=True, exist_ok=True)
 
     return None
+
+
+def get_tool_path(tool):
+    "return tool path in user's system"
+    
+    tool_path = which(tool)
+    
+    return tool_path
 
 
 def check_mount_paths_exist(paths):
@@ -206,6 +215,12 @@ def main(args):
 
     repo_path = Path(get_full_path(__file__)).parents[1]
 
+    # check if dependencies exist
+    for dep_tool in ["singularity", "snakemake"]:
+        if get_tool_path(dep_tool) is None:
+            print (f"ERROR: Tool '{dep_tool}' is required to run QuaC but not found in your environment.")
+            raise SystemExit(1)
+
     # process user's input-output config file and get singularity bind paths
     mount_paths = gather_mount_paths(
         args.projects_path,
@@ -233,6 +248,10 @@ def main(args):
     # submit snakemake command as a slurm job
     slurm_resources = {}
     if args.snakemake_slurm:
+        if get_tool_path("sbatch") is None:
+            print (f"ERROR: '--snakemake_slurm' was supplied but SLURM's 'sbatch' tool was not found in your environment.")
+            raise SystemExit(1)
+
         if args.cli_cluster_config is None:
             raise SystemExit(
                 "Error. Please provide cluster config to use with wrapper via --cli_cluster_config."
