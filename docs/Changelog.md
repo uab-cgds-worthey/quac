@@ -12,6 +12,11 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-05-31  Manavalan Gajapathy
+
+* Adds system testing as github actions workflow
+
+
 2023-05-18  Manavalan Gajapathy
 
 * Constructs snakemake's `sbatch` command using args and values from cluster config file supplied via `--cluster_config`.
