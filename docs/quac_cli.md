@@ -9,11 +9,11 @@ be run using the wrapper/CLI (command line interface) tool `src/run_quac.py`
 ```sh
 $ python src/run_quac.py -h
 usage: run_quac.py [-h] [--project_name] [--projects_path] [--pedigree]
-                   [--quac_watch_config] [--workflow_config] [--outdir]
-                   [--tmp_dir] [--exome] [--include_prior_qc]
-                   [--allow_sample_renaming] [--subtasks_slurm]
-                   [--cluster_config] [--log_dir] [-e] [-n]
-                   [--snakemake_slurm] [--rerun_failed] [--slurm_partition]
+                   [--quac_watch_config] [--workflow_config]
+                   [--snakemake_cluster_config] [--outdir] [--tmp_dir]
+                   [--exome] [--include_prior_qc] [--allow_sample_renaming]
+                   [--subtasks_slurm] [-e] [-n] [--cli_cluster_config]
+                   [--log_dir] [--snakemake_slurm]
 
 Command line interface to QuaC pipeline.
 
@@ -31,6 +31,11 @@ QuaC workflow options:
                         repo for the included config files. (default: None)
   --workflow_config     YAML config path specifying filepath to dependencies
                         of tools used in QuaC (default: configs/workflow.yaml)
+  --snakemake_cluster_config
+                        Cluster config json file. Needed for snakemake to run
+                        jobs in cluster. Edit template file
+                        'configs/snakemake_cluster_config.json' to suit your
+                        SLURM environment. (default: None)
   --outdir              Out directory path (default:
                         data/quac/results/test_project/analysis)
   --tmp_dir             Directory path to store temporary files created by the
@@ -47,31 +52,26 @@ QuaC workflow options:
                         QuaC should submit subtasks of the workflow as Slurm
                         jobs instead of running them on the same machine as
                         itself (default: False)
-
-QuaC wrapper options:
-  --cluster_config      Cluster config json file. Needed for snakemake to run
-                        jobs in cluster. (default: quac/configs/snakemake_cluster_config.json)
-  --log_dir             Directory path where logs (both workflow's and
-                        wrapper's) will be stored (default:
-                        data/quac/logs)
   -e , --extra_args     Pass additional custom args to snakemake. Equal symbol
                         is needed for assignment as in this example: -e='--
                         forceall' (default: None)
   -n, --dryrun          Flag to dry-run snakemake. Does not execute anything,
                         and just display what would be done. Equivalent to '--
                         extra_args "-n"' (default: False)
+
+QuaC wrapper options:
+  --cli_cluster_config
+                        Cluster config json file to run parent workflow job in
+                        cluster. Edit template file
+                        'configs/cli_cluster_config.json' to suit your SLURM
+                        environment. (default: None)
+  --log_dir             Directory path where logs (both workflow's and
+                        wrapper's) will be stored (default: data/quac/logs)
   --snakemake_slurm     Flag indicating that the main Snakemake process of
                         QuaC should be submitted to run in a Slurm job instead
                         of executing in the current environment. Useful for
                         headless execution on Slurm-based HPC systems.
                         (default: False)
-  --rerun_failed        Number of times snakemake restarts failed jobs. This
-                        may be set to >0 to avoid pipeline failing due to job
-                        fails due to random SLURM issues (default: 1)
-  --slurm_partition     Request a specific partition for the slurm resource
-                        allocation to run snakemake. See 'slurm_partitions'
-                        supplied via workflow_config for available partitions
-                        (default: short)
 ```
 
 ### Useful features
