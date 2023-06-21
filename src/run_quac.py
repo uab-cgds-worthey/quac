@@ -231,14 +231,15 @@ def main(args):
     )
 
     # submit snakemake command as a slurm job
+    slurm_resources = {}
     if args.snakemake_slurm:
         if args.cli_cluster_config is None:
             raise SystemExit(
                 "Error. Please provide cluster config to use with wrapper via --cli_cluster_config."
             )
 
-    with open(args.cli_cluster_config) as fh:
-        slurm_resources = json.load(fh)
+        with open(args.cli_cluster_config) as fh:
+            slurm_resources = json.load(fh)
 
     job_dict = {
         "basename": "quac-",
