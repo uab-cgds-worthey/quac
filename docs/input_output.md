@@ -86,18 +86,23 @@ test_project/
 
 
 !!! note "CGDS users only"
-    Output (bam, vcf and QC output) produced by CGDS's small variant caller pipeline can be readily used as input to QuaC with flags `--include_prior_qc` and `--allow_sample_renaming`.
+
+    Output (bam, vcf and QC output) produced by CGDS's small variant caller pipeline can be readily used as input to
+    QuaC with flags `--include_prior_qc` and `--allow_sample_renaming`.
 
 ### Example project structure
 
-Refer to system testing directory `.test/` in the repo for an example project to see an example project with above mentioned directory structure needed as input. In this setup, projects A and B have prior QC data included, whereas samples C and D do not have them. Refer to pedigree files under `.test/configs/` on how these example samples were used as input to QuaC. 
+Refer to system testing directory `.test/` in the repo for an example project to see an example project with above
+mentioned directory structure needed as input. In this setup, projects A and B have prior QC data included, whereas
+samples C and D do not have them. Refer to pedigree files under `.test/configs/` on how these example samples were used
+as input to QuaC. 
 
 
 ## Output
 
 QuaC results are stored at the path specified via option `--outdir` (default:
-`data/quac/results/test_project/analysis`).  Refer to the [system testing's output](./system_testing.md) to
-learn more about the output directory structure. 
+`data/quac/results/test_project/analysis`).  Refer to the [system testing's output](./system_testing.md) to learn more
+about the output directory structure. 
 
 !!! tip 
 

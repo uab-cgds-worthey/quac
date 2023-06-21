@@ -1,7 +1,8 @@
 # How to run QuaC pipeline
 
-After [fulfilling the necessary requirements and setting up the workflow configs](./reqts_configs.md) and [activating the conda environment](./installation.md), QuaC pipeline can
-be run using the wrapper/CLI (command line interface) tool `src/run_quac.py`
+After [fulfilling the necessary requirements and setting up the workflow configs](./reqts_configs.md) and [activating
+the conda environment](./installation.md), QuaC pipeline can be run using the wrapper/CLI (command line interface) tool
+`src/run_quac.py`
 
 
 ## Command line interface
