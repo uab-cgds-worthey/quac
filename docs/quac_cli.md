@@ -80,11 +80,9 @@ Besides the basic features, wrapper script [`src/run_quac.py`](../src/run_quac.p
 
 - Pass custom snakemake args using option `--extra_args`.
 - Dry-run snakemake using flag `--dryrun`. Note that this is same as `--extra_args='-n'`.
-- Override cluster config file passed to snakemake using `--cluster_config`.
+- Override cluster config file passed to snakemake using `--snakemake_cluster_config`.
 - Submit snakemake process to Slurm, instead of running it locally, using `--snakemake_slurm`. 
-- Override slurm partition used for the snakemake procees via `--slurm_partition`.
 - Submit jobs triggered by snakemake workflow to Slurm using `--subtasks_slurm`.
-- Reruns failed jobs once again by default. This may be modified using `--rerun_failed`.
 
 ## Minimal example
 

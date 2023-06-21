@@ -56,8 +56,7 @@ def check_mount_paths_exist(paths):
 def read_workflow_config(workflow_config_fpath):
     """
     Read workflow config file to
-    (1) identify paths to be mounted for singularity.
-    (2) get slurm partitions.
+    identify paths to be mounted for singularity.
     """
 
     with open(workflow_config_fpath) as fh:

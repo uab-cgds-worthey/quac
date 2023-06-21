@@ -43,7 +43,6 @@ QuaC requires a workflow config file in yaml format (default: `configs/workflow.
     - **Use script `src/setup_dependency_datasets.sh` to download and set up these datasets.**
     - To run this script, use command: `bash src/setup_dependency_datasets.sh`. Output will be saved at `data/external/dependency_datasets`.
 - Hardware resource configs
-- Slurm partition resources
 
 !!! tip
     Custom workflow config file can be provided to QuaC via `--workflow_config`.
