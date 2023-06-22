@@ -261,7 +261,7 @@ def main(args):
         "resources": slurm_resources,
     }
 
-    # submit_slurm_job(pipeline_cmd, job_dict)
+    submit_slurm_job(pipeline_cmd, job_dict)
 
     return None
 
