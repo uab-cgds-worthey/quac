@@ -32,9 +32,9 @@ def make_dir(d):
 
 def get_tool_path(tool):
     "return tool path in user's system"
-    
+
     tool_path = which(tool)
-    
+
     return tool_path
 
 
@@ -189,12 +189,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
         f"--profile '{snakemake_profile_dir}'",
     ]
 
-    if args.subtasks_slurm:
-        if args.snakemake_cluster_config is None:
-            raise SystemExit(
-                "Error. Please provide cluster config to use with snakemake via --snakemake_cluster_config."
-            )
-
+    if args.snakemake_cluster_config:
         cmd += [
             f"--cluster-config '{args.snakemake_cluster_config}'",
             f"--cluster '{construct_sbatch_command(args.snakemake_cluster_config)}'",
@@ -218,7 +213,9 @@ def main(args):
     # check if dependencies exist
     for dep_tool in ["singularity", "snakemake"]:
         if get_tool_path(dep_tool) is None:
-            print (f"ERROR: Tool '{dep_tool}' is required to run QuaC but not found in your environment.")
+            print(
+                f"ERROR: Tool '{dep_tool}' is required to run QuaC but not found in your environment."
+            )
             raise SystemExit(1)
 
     # process user's input-output config file and get singularity bind paths
@@ -249,7 +246,9 @@ def main(args):
     slurm_resources = {}
     if args.cli_cluster_config:
         if get_tool_path("sbatch") is None:
-            print (f"ERROR: '--cli_cluster_config' was supplied to utilize SLURM, but SLURM's 'sbatch' tool was not found in your environment.")
+            print(
+                f"ERROR: '--cli_cluster_config' was supplied to utilize SLURM, but SLURM's 'sbatch' tool was not found in your environment."
+            )
             raise SystemExit(1)
 
         with open(args.cli_cluster_config) as fh:
@@ -262,7 +261,7 @@ def main(args):
         "resources": slurm_resources,
     }
 
-    submit_slurm_job(pipeline_cmd, job_dict)
+    # submit_slurm_job(pipeline_cmd, job_dict)
 
     return None
 
@@ -333,7 +332,7 @@ if __name__ == "__main__":
     )
     WORKFLOW.add_argument(
         "--workflow_config",
-        help="YAML config path specifying filepath to dependencies of tools used in QuaC",
+        help="YAML config path specifying filepath to dependencies of QC tools used in snakemake workflow",
         default="configs/workflow.yaml",
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
@@ -378,12 +377,6 @@ if __name__ == "__main__":
         help="Flag to allow sample renaming in MultiQC report. See documentation for more info.",
     )
     WORKFLOW.add_argument(
-        "--subtasks_slurm",
-        action="store_true",
-        help="Flag indicating that the main Snakemake process of QuaC should submit subtasks of"
-        " the workflow as Slurm jobs instead of running them on the same machine as itself",
-    )
-    WORKFLOW.add_argument(
         "-e",
         "--extra_args",
         help="Pass additional custom args to snakemake. Equal symbol is needed "
@@ -416,13 +409,6 @@ if __name__ == "__main__":
         default=LOGS_DIR_DEFAULT,
         type=lambda x: create_dirpath(x),
         metavar="",
-    )
-    WRAPPER.add_argument(
-        "--snakemake_slurm",
-        action="store_true",
-        help="Flag indicating that the main Snakemake process of QuaC should be"
-        " submitted to run in a Slurm job instead of executing in the current"
-        " environment. Useful for headless execution on Slurm-based HPC systems.",
     )
 
     ARGS = PARSER.parse_args()
