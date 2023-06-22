@@ -247,15 +247,10 @@ def main(args):
 
     # submit snakemake command as a slurm job
     slurm_resources = {}
-    if args.snakemake_slurm:
+    if args.cli_cluster_config:
         if get_tool_path("sbatch") is None:
-            print (f"ERROR: '--snakemake_slurm' was supplied but SLURM's 'sbatch' tool was not found in your environment.")
+            print (f"ERROR: '--cli_cluster_config' was supplied to utilize SLURM, but SLURM's 'sbatch' tool was not found in your environment.")
             raise SystemExit(1)
-
-        if args.cli_cluster_config is None:
-            raise SystemExit(
-                "Error. Please provide cluster config to use with wrapper via --cli_cluster_config."
-            )
 
         with open(args.cli_cluster_config) as fh:
             slurm_resources = json.load(fh)
@@ -263,7 +258,7 @@ def main(args):
     job_dict = {
         "basename": "quac-",
         "log_dir": args.log_dir,
-        "run_locally": False if args.snakemake_slurm else True,
+        "run_locally": False if args.cli_cluster_config else True,
         "resources": slurm_resources,
     }
 
