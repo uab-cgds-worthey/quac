@@ -60,13 +60,13 @@ QuaC:
 
 QuaC's wrapper script `src/run_quac.py` allows you to submit jobs to SLURM scheduler at two levels:
 
-* submits the script that will run the snakemake workflow as a SLURM job (using `--cli_cluster_config`)
-* allows snakemake to submit jobs to SLURM (using `--snakemake_cluster_config`)
+* using `--cli_cluster_config` - submits the script that will run the snakemake workflow as a SLURM job
+* using `--snakemake_cluster_config` - allows snakemake to submit jobs to SLURM
 
 These config files specify the resources to be requested when submitting the job to SLURM.
 
 
-### `--cli_cluster_config` config file
+### a. Set up `--cli_cluster_config` config file
 
 We provide a template file `configs/cli_cluster_config.json` to use with `--cli_cluster_config`. Its contents are shown
 below:
@@ -75,10 +75,10 @@ below:
 {!configs/cli_cluster_config.json!}
 ```
 
-As SLURM configuration at your cluster environment might be different than ours, you may need to modify this template
+As SLURM configuration in your cluster environment might be different than ours, you may need to modify this template
 file to suit your SLURM setup.
 
-For example, some SLURM might need `account` info when submitting jobs. So you may modify the config file as:
+For example, some SLURM might need `account` info when submitting jobs. So you may modify the config file, assuming other args are acceptable, as:
 
 ```json hl_lines="2"
 {
@@ -104,7 +104,7 @@ If your SLURM requires `qos` and doesn't use `partition`, config file can be mod
 }
 ```
 
-### `--snakemake_cluster_config` config file
+### b. Set up `--snakemake_cluster_config` config file
 
 We provide a template file `configs/snakemake_cluster_config.json` to use with `--snakemake_cluster_config`. Its
 contents are shown below:
@@ -113,13 +113,10 @@ contents are shown below:
 {!configs/snakemake_cluster_config.json!}
 ```
 
-Default resources for jobs submitted by snakemake to SLURM are specified in the `__default__` section. If desired, you
-could bypass and provide more resources to certain snakemake jobs by listing the rule name (in files
-`workflow/rules/*.smk`) and specifying the resources needed. For example, refer to `qualimap_bamqc` section in the above
-config file shown.
+In this file, `__default__` specifies the default resources to be requested for jobs submitted by snakemake to SLURM, and the rest (eg. `qualimap_bamqc`) bypass certain defaults and instead specifies snakemake rule specific resources.
 
-Just [as discussed earlier](#--cli_cluster_config-config-file), you may need to modify this template file to suit your
-SLURM setup. For example, if your SLURM requires specifying `account` info when submitting jobs, it can be supplied as:
+Just [as discussed earlier](#a-set-up-cli_cluster_config-config-file), you may need to modify this template file to suit your
+SLURM setup. For example, if your SLURM requires specifying `account` info when submitting jobs, it can be supplied, assuming other args are acceptable, as:
 
 ```json
 {
