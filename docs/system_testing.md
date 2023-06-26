@@ -34,7 +34,7 @@ conda activate quac
 # as well as for the snakemake triggered jobs
 USE_SLURM="--cli_cluster_config configs/cli_cluster_config.json 
            --snakemake_cluster_config configs/snakemake_cluster_config.json"
-# USE_SLURM=""  # uncomment this, comment out the above line, and use this if you don't want to use slurm at all
+# USE_SLURM=""  # uncomment this, comment out the above line, and use this if you don't want to use slurm at all. Useful for development purposes
 
 
 ########## No prior QC data involved ##########

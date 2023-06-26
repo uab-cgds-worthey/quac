@@ -78,7 +78,8 @@ below:
 As SLURM configuration in your cluster environment might be different than ours, you may need to modify this template
 file to suit your SLURM setup.
 
-For example, some SLURM might need `account` info when submitting jobs. So you may modify the config file, assuming other args are acceptable, as:
+For example, some SLURM might need `account` info when submitting jobs. So you may modify the config file, assuming
+other args are acceptable, as:
 
 ```json hl_lines="2"
 {
@@ -113,10 +114,12 @@ contents are shown below:
 {!configs/snakemake_cluster_config.json!}
 ```
 
-In this file, `__default__` specifies the default resources to be requested for jobs submitted by snakemake to SLURM, and the rest (eg. `qualimap_bamqc`) bypass certain defaults and instead specifies snakemake rule specific resources.
+In this file, `__default__` specifies the default resources to be requested for jobs submitted by snakemake to SLURM,
+and the rest (eg. `qualimap_bamqc`) bypass certain defaults and instead specifies snakemake rule specific resources.
 
-Just [as discussed earlier](#a-set-up-cli_cluster_config-config-file), you may need to modify this template file to suit your
-SLURM setup. For example, if your SLURM requires specifying `account` info when submitting jobs, it can be supplied, assuming other args are acceptable, as:
+Just [as discussed earlier](#a-set-up-cli_cluster_config-config-file), you may need to modify this template file to suit
+your SLURM setup. For example, if your SLURM requires specifying `account` info when submitting jobs, it can be
+supplied, assuming other args are acceptable, as:
 
 ```json
 {
