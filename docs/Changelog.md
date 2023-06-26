@@ -12,6 +12,16 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-06-22  Manavalan Gajapathy
+
+* Refactors CLI script to accounting for user's environment specific slurm args requirements when submitting job to
+  slurm (#76)
+* Removes CLI option `--rerun_failed` and instead configures it via snakemake-slurm profile
+  (`src/slurm/slurm_profile/config.yaml`)
+* Removes `--subtasks_slurm option` and `--snakemake_slurm` as they were redundant
+* Checks if tool dependencies are available in user environment.
+
+
 2023-05-31  Manavalan Gajapathy
 
 * Adds system testing as github actions workflow
