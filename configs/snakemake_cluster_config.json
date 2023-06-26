@@ -4,18 +4,22 @@
         "partition": "express",
         "cpus-per-task": "{threads}",
         "mem-per-cpu": "8G",
+        "time": "02:00:00",
         "job-name": "QuaC.{rule}.{jobid}",
         "output": "{RULE_LOGS_PATH}/{rule}-%j.log"
     },
     "qualimap_bamqc": {
         "partition": "short",
-        "mem-per-cpu": "{params.java_mem}"
+        "mem-per-cpu": "{params.java_mem}",
+        "time": "12:00:00"
     },
     "picard_collect_multiple_metrics": {
-        "partition": "short"
+        "partition": "short",
+        "time": "12:00:00"
     },
     "picard_collect_wgs_metrics": {
-        "partition": "short"
+        "partition": "short",
+        "time": "12:00:00"
     },
     "multiqc_aggregation_all_samples": {
         "mem-per-cpu": "24G"
