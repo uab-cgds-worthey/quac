@@ -21,7 +21,8 @@ YYYY-MM-DD  John Doe
 * Removes `--subtasks_slurm option` and `--snakemake_slurm` as they were redundant
 * Checks if tool dependencies are available in user environment.
 * Adds `time` resource to `configs/snakemake_cluster_config.json`
-  
+* Removes PR trigger from system testing github actions.
+
 
 2023-05-31  Manavalan Gajapathy
 
