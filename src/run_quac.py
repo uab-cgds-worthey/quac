@@ -211,7 +211,11 @@ def main(args):
     repo_path = Path(get_full_path(__file__)).parents[1]
 
     # check if dependencies exist
-    for dep_tool in ["singularity", "snakemake"]:
+    dep_tools = ["singularity", "snakemake"]
+    if args.cli_cluster_config or args.snakemake_cluster_config:
+        dep_tools.append("sbatch")
+        
+    for dep_tool in dep_tools:
         if get_tool_path(dep_tool) is None:
             print(
                 f"ERROR: Tool '{dep_tool}' is required to run QuaC but not found in your environment."
