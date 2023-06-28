@@ -19,7 +19,7 @@ In order to run the QuaC pipeline, user needs to
     Singularity is available as module in Cheaha - `Singularity/3.5.2-GCC-5.4.0-2.26`
 
 - [SLURM](https://slurm.schedmd.com/)
-    - Optional. Needed only if you will be supplying `--snakemake_slurm` to `src/run_quac.py`.
+    - Optional. Needed only if you will be supplying `--snakemake_cluster_config` and/or `--cli_cluster_config` to `src/run_quac.py`.
 
 - Following dependencies are installed as part of the `quac` conda environment. See [installation](./installation.md)
   for info on creating this conda environment.
