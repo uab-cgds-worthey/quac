@@ -75,7 +75,7 @@ below:
 {!configs/cli_cluster_config.json!}
 ```
 
-As SLURM configuration in your cluster environment might be different than ours, you may need to modify this template
+As SLURM configuration in your cluster environment likely differs from other HPC clusters, you may need to modify this template
 file to suit your SLURM setup.
 
 For example, some SLURM might need `account` info when submitting jobs. So you may modify the config file, assuming
