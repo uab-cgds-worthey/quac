@@ -17,7 +17,7 @@ def test_singularity():
     )
     if result.returncode != 0:
         print(
-            "Test was performed to check Singularity was working as expected but it ran into error."
+            "ERROR: Test was performed to check Singularity was working as expected but it ran into error."
             " Please make sure singularity works as expected before using QuaC."
         )
         print(f"Command ran: '{cmd}'")
