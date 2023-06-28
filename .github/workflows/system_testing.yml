@@ -1,12 +1,12 @@
 name: system_testing
 on:
-  push:
-    paths:
-      - ".github/workflows/system_testing.yml"
-      - ".test/**"
-      - "configs/**"
-      - "src/**"
-      - "workflow/**"
+  # push:
+  #   paths:
+  #     - ".github/workflows/system_testing.yml"
+  #     - ".test/**"
+  #     - "configs/**"
+  #     - "src/**"
+  #     - "workflow/**"
   workflow_dispatch:
 
 jobs:
