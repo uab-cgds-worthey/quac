@@ -96,7 +96,7 @@ python src/run_quac.py \
       --project_name "PROJECT_DUCK" \
       --projects_path "/path/to/the/projects" \
       --pedigree "path/to/lake/with/ducks_pedigree_file.ped" \
-      --quac_watch_config "path/to/quac_watch_config.yaml" \
+      --quac_watch_config "path/to/quac_watch_config.yaml"
 ```
 
 ## Example usage
