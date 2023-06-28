@@ -211,14 +211,18 @@ def main(args):
     repo_path = Path(get_full_path(__file__)).parents[1]
 
     # check if dependencies exist
-    dep_tools = ["singularity", "snakemake"]
-    if args.cli_cluster_config or args.snakemake_cluster_config:
-        dep_tools.append("sbatch")
-        
-    for dep_tool in dep_tools:
+    for dep_tool in ["singularity", "snakemake"]:
         if get_tool_path(dep_tool) is None:
             print(
                 f"ERROR: Tool '{dep_tool}' is required to run QuaC but not found in your environment."
+            )
+            raise SystemExit(1)
+
+    if args.cli_cluster_config or args.snakemake_cluster_config:
+        if get_tool_path("sbatch") is None:
+            print(
+                "ERROR: '--cli_cluster_config' and/or `snakemake_cluster_config` was supplied to utilize SLURM,"
+                " but SLURM's 'sbatch' tool was not found in your environment."
             )
             raise SystemExit(1)
 
@@ -249,11 +253,6 @@ def main(args):
     # submit snakemake command as a slurm job
     slurm_resources = {}
     if args.cli_cluster_config:
-        if get_tool_path("sbatch") is None:
-            print(
-                f"ERROR: '--cli_cluster_config' was supplied to utilize SLURM, but SLURM's 'sbatch' tool was not found in your environment."
-            )
-            raise SystemExit(1)
 
         with open(args.cli_cluster_config) as fh:
             slurm_resources = json.load(fh)
