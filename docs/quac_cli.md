@@ -78,7 +78,8 @@ Besides the basic features, wrapper script [`src/run_quac.py`](../src/run_quac.p
 
 ## Minimal example
 
-Minimal example to run the wrapper script, which in turn will execute the QuaC pipeline locally:
+Minimal example to run the wrapper script, which in turn will execute the QuaC pipeline on-machine:
+(instead of using a SLURM job scheduler on an HPC system for running on a distributed system)
 
 ```sh
 # First set up dependencies in the environment. 
