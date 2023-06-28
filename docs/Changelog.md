@@ -22,6 +22,7 @@ YYYY-MM-DD  John Doe
 * Checks if tool dependencies are available in user environment.
 * Adds `time` resource to `configs/snakemake_cluster_config.json`
 * Removes PR trigger from system testing github actions.
+* Tests if singularity is working as expected in user machine
 
 
 2023-05-31  Manavalan Gajapathy
