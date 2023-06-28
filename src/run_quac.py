@@ -17,6 +17,7 @@ import os.path
 from shutil import which
 import json
 import yaml
+from singularity_status import test_singularity
 from slurm.submit_slurm_job import submit_slurm_job
 
 
@@ -227,6 +228,9 @@ def main(args):
                 " but SLURM's 'sbatch' tool was not found in your environment."
             )
             raise SystemExit(1)
+
+    # check singularity works properly in user's machine
+    test_singularity()
 
     # process user's input-output config file and get singularity bind paths
     mount_paths = gather_mount_paths(
