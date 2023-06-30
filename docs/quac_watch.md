@@ -8,10 +8,13 @@ and readily highlight samples that need further review.
 
 ## Configs
 
-We provide pre-defined thresholds for QC metrics as part of the QuaC repo and they need to be supplied via `--quac_watch_config`:
+We provide pre-defined thresholds for QC metrics as part of the QuaC repo and they need to be supplied via
+`--quac_watch_config`:
 
-* For Genome sequencing - [configs/quac_watch/wgs_quac_watch_config.yaml](../configs/quac_watch/wgs_quac_watch_config.yaml)
-* For Exome sequencing - [configs/quac_watch/exome_quac_watch_config.yaml](../configs/quac_watch/exome_quac_watch_config.yaml)
+* For Genome sequencing -
+  [configs/quac_watch/wgs_quac_watch_config.yaml](../configs/quac_watch/wgs_quac_watch_config.yaml)
+* For Exome sequencing -
+  [configs/quac_watch/exome_quac_watch_config.yaml](../configs/quac_watch/exome_quac_watch_config.yaml)
 
 These thresholds were curated based on
 
@@ -26,8 +29,11 @@ These thresholds were curated based on
 
 ## QuaC-Watch in MultiQC report
 
-QuaC aggregates QC results from multiple tools using MultiQC into a single stand-alone interactive HTML report. QuaC-Watch results are available at the top of this report, and they serve as the first-stop for QC reviewers to quickly check for sample quality. Here is an example screenshot:
+QuaC aggregates QC results from multiple tools using MultiQC into a single stand-alone interactive HTML report.
+QuaC-Watch results are available at the top of this report, and they serve as the first-stop for QC reviewers to quickly
+check for sample quality. Here is an example screenshot:
 
 ![QuaC-Watch report](./images/quac_watch_multiqc.png "QuaC-Watch report at the top of MultiQC report")
 
-Users may optionally toggle columns to view values for QC metrics of interest and hover over the column title to view thresholds used by Quac-Watch (highlighted by red arrow). 
+Users may optionally toggle columns to view values for QC metrics of interest and hover over the column title to view
+thresholds used by Quac-Watch (highlighted by red arrow). 

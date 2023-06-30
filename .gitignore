@@ -86,3 +86,5 @@ logs/
 # .java/fonts dir get created when creating fastqc conda env
 .java/
 
+# data retrieved for sys testing
+.test/dependency_datasets

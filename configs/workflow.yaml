@@ -1,32 +1,27 @@
+# QuaC workflow config
+# See src/setup_dependency_datasets.sh to download necessary datasets.
+
 datasets:
-    # path to ref genome
-    ref: "/data/project/worthey_lab/datasets_central/human_reference_genome/processed/GRCh38/no_alt_rel20190408/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna"
-    # path to Somalier dataset dependencies. Available at https://github.com/brentp/somalier
-    somalier:
-        sites: "/data/project/worthey_lab/manual_datasets_central/somalier/0.2.13/sites/sites.hg38.vcf.gz"
-        labels_1kg: "/data/project/worthey_lab/manual_datasets_central/somalier/0.2.13/ancestry/ancestry-labels-1kg.tsv"
-        somalier_1kg: "/data/project/worthey_lab/manual_datasets_central/somalier/0.2.13/ancestry/1kg-somalier/"
-    # path to verifyBamID dataset dependencies
-    verifyBamID:
-        # Refer to https://github.com/Griffan/VerifyBamID for downloading this file
-        svd_dat_wgs: "/data/project/worthey_lab/manual_datasets_central/verifyBamID/2.0.1/resource/wgs/1000g.phase3.100k.b38.vcf.gz.dat"
-        # Refer to QuaC docs to create this file. See section "Prepare verifybamid datasets for exome mode" in how to run quac
-        svd_dat_exome: "/data/project/worthey_lab/manual_datasets_central/verifyBamID/2.0.1/resource/exome/chr_added/1000g.phase3.10k.b38.exome.vcf.gz.dat"
+  # path to ref genome
+  ref: "data/external/dependency_datasets/reference_genome/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna"
+  # path to Somalier dataset dependencies. Available at https://github.com/brentp/somalier
+  somalier:
+    sites: "data/external/dependency_datasets/somalier/sites.hg38.vcf.gz"
+    labels_1kg: "data/external/dependency_datasets/somalier/ancestry-labels-1kg.tsv"
+    somalier_1kg: "data/external/dependency_datasets/somalier/1kg-somalier/"
+  # path to verifyBamID dataset dependencies. Available at https://github.com/Griffan/VerifyBamID
+  verifyBamID:
+    svd_dat_wgs: "data/external/dependency_datasets/verifyBamID/1000g.phase3.100k.b38.vcf.gz.dat"
+    # retrieved from https://github.com/Griffan/VerifyBamID and 'chr' prefix added to the contigs
+    svd_dat_exome: "data/external/dependency_datasets/verifyBamID/exome/1000g.phase3.10k.b38_chr.exome.vcf.gz.dat"
 
-#### hardware resources ####
+#### hardware resources for certain tools used in snakemake piepline ####
 resources:
-    qualimap_bamqc:
-        no_cpu: 2
-        mem_per_cpu: "24G"
-    mosdepth_coverage:
-        no_cpu: 4
-    verifybamid:
-        no_cpu: 4
+  qualimap_bamqc:
+    no_cpu: 1 # CGDS uses 2
+    mem_per_cpu: "4G" # CGDS uses 24G
+  mosdepth_coverage:
+    no_cpu: 1 # CGDS uses 4
+  verifybamid:
+    no_cpu: 1 # CGDS uses 4
 
-#### slurm partitions ####
-slurm_partitions:
-    # modify below to provide partitions available in your slurm and their time limits
-    express: "02:00:00"
-    short: "12:00:00"
-    medium: "50:00:00"
-    long: "150:00:00"

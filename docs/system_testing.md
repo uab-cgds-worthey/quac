@@ -32,8 +32,9 @@ conda activate quac
 ## use slurm or not
 # use this to submit jobs to slurm for the parent snakemake process 
 # as well as for the snakemake triggered jobs
-USE_SLURM="--snakemake_slurm --subtasks_slurm"
-# USE_SLURM=""  # uncomment this, comment out the above line, and use this if you don't want to use slurm at all
+USE_SLURM="--cli_cluster_config configs/cli_cluster_config.json 
+           --snakemake_cluster_config configs/snakemake_cluster_config.json"
+# USE_SLURM=""  # uncomment this, comment out the above line, and use this if you don't want to use slurm at all. Useful for development purposes
 
 
 ########## No prior QC data involved ##########
@@ -45,8 +46,9 @@ python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
+      --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
+      --workflow_config "configs/workflow.yaml" \
       $USE_SLURM
 
 # Exome mode
@@ -54,8 +56,9 @@ python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
+      --outdir "data/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
+      --workflow_config "configs/workflow.yaml" \
       --exome \
       $USE_SLURM
 
@@ -69,10 +72,11 @@ python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
+      --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
       --include_prior_qc \
       --allow_sample_renaming \
+      --workflow_config "configs/workflow.yaml" \
       $USE_SLURM
 
 # Exome mode
@@ -80,11 +84,12 @@ python src/run_quac.py \
       --project_name test_project \
       --projects_path ".test/ngs-data/" \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
-      --outdir "$USER_SCRATCH/tmp/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
+      --outdir "data/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --exome \
       --include_prior_qc \
       --allow_sample_renaming \
+      --workflow_config "configs/workflow.yaml" \
       $USE_SLURM
 ```
 
@@ -97,51 +102,54 @@ python src/run_quac.py \
 Output directory structure for WGS + `include_prior_qc` mode would look like this.
 
 ```sh
-$ tree -d $USER_SCRATCH/tmp/quac/results/test_project_2samples_wgs-no_priorQC/ -L 5
-$USER_SCRATCH/tmp/quac/results/test_project_2samples_wgs-no_priorQC/
+$ tree data/quac/results/test_project_2samples_wgs-include_priorQC/ -L 5
+data/quac/results/test_project_2samples_wgs-include_priorQC/
 └── analysis
-    ├── C
+    ├── A
     │   └── qc
     │       ├── bcftools-index
-    │       │   └── ...
+    │       │   └── ...
     │       ├── bcftools-stats
-    │       │   └── ...
+    │       │   └── ...
     │       ├── mosdepth
-    │       │   └── ...
+    │       │   └── ...
     │       ├── multiqc_final_pass
-    │       │   ├── ...
-    │       │   └── C_multiqc.html
+    │       │   ├── ...
+    │       │   └── A_multiqc.html
     │       ├── multiqc_initial_pass
-    │       │   ├── ...
-    │       │   └── C_multiqc.html
+    │       │   ├── ...
+    │       │   └── A_multiqc.html
     │       ├── picard-stats
-    │       │   └── ...
+    │       │   └── ...
     │       ├── quac_watch
-    │       │   └── ...
+    │       │   └── ...
     │       ├── qualimap
-    │       │   └── ...
+    │       │   └── ...
     │       ├── samtools-stats
-    │       │   └── ...
+    │       │   └── ...
     │       └── verifyBamID
-    │           └── ...
-    ├── D
+    │           └── ...
+    ├── B
     │   └── qc
-    │       └── same directory structure as that of sample C
+    │       └── same directory structure as that of sample A
     └── project_level_qc
         ├── covviz
-        │   └── ...
+        │   └── ...
         ├── indexcov
-        │   └── ...
+        │   └── ...
         ├── mosdepth
-        │   └── ...
+        │   └── ...
         ├── multiqc
-        │   ├── ...
+        │   ├── configs
+        │   │   └── aggregated_rename_configs.tsv
+        │   ├── multiqc_report_data
+        │   │   └── ...
         │   └── multiqc_report.html
         └── somalier
             ├── ancestry
-            │   └── ...
+            │   └── ...
             ├── extract
-            │   └── ...
+            │   └── ...
             └── relatedness
                 └── ...
 ```

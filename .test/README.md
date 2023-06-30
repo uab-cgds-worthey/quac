@@ -1,4 +1,4 @@
-# Testing
+# System Testing
 
 Input directory structure to QuaC is based on the output directory structure of the [Small variant caller
 pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).

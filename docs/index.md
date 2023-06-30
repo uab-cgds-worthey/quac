@@ -12,16 +12,16 @@
 
 ## What is QuaC?
 
-QuaC is a snakemake-based pipeline that runs several QC tools for WGS/WES samples and then summarizes their results
-using pre-defined, configurable QC thresholds.
+[QuaC](https://github.com/uab-cgds-worthey/quac) is a snakemake-based pipeline that runs several QC tools for WGS/WES
+samples and then summarizes their results using pre-defined, configurable QC thresholds.
 
 In summary, QuaC performs the following:
 
 - Runs several QC tools using `BAM` and `VCF` files as input. At our center CGDS, these files are produced as part of
   the [small variant caller
   pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
-- Using [QuaC-Watch](./quac_watch.md) tool, it performs QC checkup based on the expected thresholds for certain QC metrics and summarizes
-  the results for easier human consumption
+- Using [QuaC-Watch](./quac_watch.md) tool, it performs QC checkup based on the expected thresholds for certain QC
+  metrics and summarizes the results for easier human consumption
 - Aggregates QC output as well as QuaC-Watch output using MulitQC, both at the sample level and project level.
 - Optionally, above mentioned QuaC-Watch and QC aggregation steps can accept pre-run results from few QC tools (fastqc,
    fastq-screen, picard's markduplicates) when run with flag `--include_prior_qc`. 

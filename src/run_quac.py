@@ -14,7 +14,10 @@ import argparse
 from pathlib import Path
 import uuid
 import os.path
+from shutil import which
+import json
 import yaml
+from singularity_status import test_singularity
 from slurm.submit_slurm_job import submit_slurm_job
 
 
@@ -28,11 +31,44 @@ def make_dir(d):
     return None
 
 
+def get_tool_path(tool):
+    "return tool path in user's system"
+
+    tool_path = which(tool)
+
+    return tool_path
+
+
+def check_mount_paths_exist(paths):
+    """
+    Verify the paths to be mounted to Singularity exist
+    """
+
+    fail_paths = []
+    for path in paths:
+        # print(path)
+        if not Path(path).exists():
+            fail_paths.append(str(path))
+
+    if fail_paths:
+        fail_paths = "\n".join(fail_paths)
+        raise SystemExit(
+            (
+                f"ERROR: Following directories that are part of your input were not found: \n{fail_paths}"
+                "\n\nNOTE: This was likely caused by missing datasets specified in the workflow config file"
+                "(supplied via --workflow_config)."
+                "\nPlease refer to docs on how to use our script to download the necessary datasets -"
+                " https://quac.readthedocs.io/en/stable/installation_configuration/#configuration"
+            )
+        )
+
+    return None
+
+
 def read_workflow_config(workflow_config_fpath):
     """
-    Read workflow config file to 
-    (1) identify paths to be mounted for singularity.
-    (2) get slurm partitions.
+    Read workflow config file to
+    identify paths to be mounted for singularity.
     """
 
     with open(workflow_config_fpath) as fh:
@@ -41,24 +77,27 @@ def read_workflow_config(workflow_config_fpath):
     mount_paths = set()
     datasets = data["datasets"]
     # ref genome
-    mount_paths.add(Path(datasets["ref"]).parent)
+    mount_paths.add(Path(get_full_path(datasets["ref"])).parent)
 
     # somalier resource files
     for resource in datasets["somalier"]:
-        mount_paths.add(Path(datasets["somalier"][resource]).parent)
+        mount_paths.add(Path(get_full_path(datasets["somalier"][resource])).parent)
 
     # verifyBamID resource files
     for resource in datasets["verifyBamID"]:
-        mount_paths.add(Path(datasets["verifyBamID"][resource]).parent)
-        
-    # get slurm partitions
-    slurm_partitions_dict = data["slurm_partitions"]
+        mount_paths.add(Path(get_full_path(datasets["verifyBamID"][resource])).parent)
 
-    return mount_paths, slurm_partitions_dict
+    return mount_paths
 
 
 def gather_mount_paths(
-    projects_path, project_name, pedigree_path, out_dir, log_dir, quac_watch_config, workflow_config
+    projects_path,
+    project_name,
+    pedigree_path,
+    out_dir,
+    log_dir,
+    quac_watch_config,
+    workflow_config,
 ):
     """
     Returns paths that need to be mounted to singularity
@@ -85,10 +124,32 @@ def gather_mount_paths(
     mount_paths.add(quac_watch_config)
 
     # read paths in workflow config file
-    paths_in_wokflow_config, _ = read_workflow_config(workflow_config)
+    paths_in_wokflow_config = read_workflow_config(workflow_config)
     mount_paths.update(paths_in_wokflow_config)
 
+    # checks paths to be mounted to singularity exist
+    check_mount_paths_exist(mount_paths)
+
     return ",".join([str(x) for x in mount_paths])
+
+
+def construct_sbatch_command(config_f):
+    """
+    Reads cluster config file and constructs sbatch command to use in slurm
+    """
+
+    with open(config_f) as fh:
+        data = json.load(fh)
+
+        default_args = data["__default__"]
+
+        sbatch_cmd = "sbatch "
+        for k, v in default_args.items():
+            sbatch_cmd += f"--{k} {{cluster.{k}}} "
+
+        sbatch_cmd += "--parsable"
+
+    return sbatch_cmd
 
 
 def create_snakemake_command(args, repo_path, mount_paths):
@@ -105,7 +166,6 @@ def create_snakemake_command(args, repo_path, mount_paths):
     # directory to use as tmp in singularity container
     # If not exist, singularity will complain
     tmp_dir = args.tmp_dir
-    # make_dir(tmp_dir)
 
     quac_configs = {
         "project_name": args.project_name,
@@ -127,20 +187,16 @@ def create_snakemake_command(args, repo_path, mount_paths):
         "snakemake",
         f"--snakefile '{snakefile_path}'",
         f"--config {quac_configs}",
-        f"--restart-times {args.rerun_failed}",
-        "--use-conda",
         "--use-singularity",
         f"--singularity-args '--cleanenv --bind {tmp_dir}:/tmp --bind {mount_paths}'",
         f"--profile '{snakemake_profile_dir}'",
     ]
 
-    if args.subtasks_slurm:
+    if args.snakemake_cluster_config:
         cmd += [
-            f"--cluster-config '{args.cluster_config}'",
-            "--cluster 'sbatch --ntasks {cluster.ntasks} --partition {cluster.partition}"
-            " --cpus-per-task {cluster.cpus-per-task} --mem-per-cpu {cluster.mem-per-cpu}"
-            " --job-name {cluster.jobname} --output {cluster.output} --parsable'",
-        ]        
+            f"--cluster-config '{args.snakemake_cluster_config}'",
+            f"--cluster '{construct_sbatch_command(args.snakemake_cluster_config)}'",
+        ]
 
     # add any user provided extra args for snakemake
     if args.extra_args:
@@ -155,7 +211,26 @@ def create_snakemake_command(args, repo_path, mount_paths):
 
 def main(args):
 
-    repo_path = Path(__file__).absolute().parents[1]
+    repo_path = Path(get_full_path(__file__)).parents[1]
+
+    # check if dependencies exist
+    for dep_tool in ["singularity", "snakemake"]:
+        if get_tool_path(dep_tool) is None:
+            print(
+                f"ERROR: Tool '{dep_tool}' is required to run QuaC but not found in your environment."
+            )
+            raise SystemExit(1)
+
+    if args.cli_cluster_config or args.snakemake_cluster_config:
+        if get_tool_path("sbatch") is None:
+            print(
+                "ERROR: '--cli_cluster_config' and/or `snakemake_cluster_config` was supplied to utilize SLURM,"
+                " but SLURM's 'sbatch' tool was not found in your environment."
+            )
+            raise SystemExit(1)
+
+    # check singularity works properly in user's machine
+    test_singularity()
 
     # process user's input-output config file and get singularity bind paths
     mount_paths = gather_mount_paths(
@@ -182,20 +257,16 @@ def main(args):
     )
 
     # submit snakemake command as a slurm job
-    _, slurm_partition_times = read_workflow_config(args.workflow_config)
+    slurm_resources = {}
+    if args.cli_cluster_config:
 
-    slurm_resources = {
-        "partition": args.slurm_partition, 
-        "ntasks": "1",
-        "time": slurm_partition_times[args.slurm_partition],
-        "cpus-per-task": "1" if args.subtasks_slurm else "4",
-        "mem-per-cpu": "8G",
-    }
+        with open(args.cli_cluster_config) as fh:
+            slurm_resources = json.load(fh)
 
     job_dict = {
         "basename": "quac-",
         "log_dir": args.log_dir,
-        "run_locally": False if args.snakemake_slurm else True,
+        "run_locally": False if args.cli_cluster_config else True,
         "resources": slurm_resources,
     }
 
@@ -224,6 +295,15 @@ def is_valid_dir(p, arg):
         return get_full_path(os.path.expandvars(arg))
 
 
+def create_dirpath(arg):
+    dpath = get_full_path(os.path.expandvars(arg))
+    if not Path(dpath).is_dir():
+        make_dir(dpath)
+        print(f"Created directory: {dpath}")
+
+    return dpath
+
+
 if __name__ == "__main__":
     PARSER = argparse.ArgumentParser(
         description="Command line interface to QuaC pipeline.",
@@ -238,12 +318,9 @@ if __name__ == "__main__":
         help="Project name",
         metavar="",
     )
-
-    PROJECT_PATH_DEFAULT = "/data/project/worthey_lab/projects/"
     WORKFLOW.add_argument(
         "--projects_path",
         help="Path where all projects are hosted. Do not include project name here.",
-        default=PROJECT_PATH_DEFAULT,
         type=lambda x: is_valid_dir(PARSER, x),
         metavar="",
     )
@@ -255,32 +332,42 @@ if __name__ == "__main__":
     )
     WORKFLOW.add_argument(
         "--quac_watch_config",
-        help=("YAML config path specifying QC thresholds for QuaC-Watch." 
-              " See directory 'configs/quac_watch/' in quac repo for the included config files."),
+        help=(
+            "YAML config path specifying QC thresholds for QuaC-Watch."
+            " See directory 'configs/quac_watch/' in quac repo for the included config files."
+        ),
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
     WORKFLOW.add_argument(
         "--workflow_config",
-        help="YAML config path specifying filepath to dependencies of tools used in QuaC",
+        help="YAML config path specifying filepath to dependencies of QC tools used in snakemake workflow",
         default="configs/workflow.yaml",
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
-    QUAC_OUTDIR_DEFAULT = "$USER_SCRATCH/tmp/quac/results/test_project/analysis"
+    WORKFLOW.add_argument(
+        "--snakemake_cluster_config",
+        help="Cluster config json file. Needed for snakemake to run jobs in cluster."
+        " Edit template file 'configs/snakemake_cluster_config.json' to suit your SLURM environment.",
+        type=lambda x: is_valid_file(PARSER, x),
+        metavar="",
+    )
+
+    QUAC_OUTDIR_DEFAULT = "data/quac/results/test_project/analysis"
     WORKFLOW.add_argument(
         "--outdir",
         help="Out directory path",
         default=QUAC_OUTDIR_DEFAULT,
-        type=lambda x: is_valid_dir(PARSER, x),
+        type=lambda x: create_dirpath(x),
         metavar="",
     )
-    TMPDIR_DEFAULT = "$USER_SCRATCH/tmp/quac/tmp"
+    TMPDIR_DEFAULT = "data/quac/tmp"
     WORKFLOW.add_argument(
         "--tmp_dir",
         help="Directory path to store temporary files created by the workflow",
         default=TMPDIR_DEFAULT,
-        type=lambda x: is_valid_dir(PARSER, x),
+        type=lambda x: create_dirpath(x),
         metavar="",
     )
     WORKFLOW.add_argument(
@@ -299,74 +386,50 @@ if __name__ == "__main__":
         help="Flag to allow sample renaming in MultiQC report. See documentation for more info.",
     )
     WORKFLOW.add_argument(
-        "--subtasks_slurm",
-        action="store_true",
-        help="Flag indicating that the main Snakemake process of QuaC should submit subtasks of"
-        " the workflow as Slurm jobs instead of running them on the same machine as itself"
-    )
-
-    ############ Args for QuaC wrapper tool  ############
-    WRAPPER = PARSER.add_argument_group("QuaC wrapper options")
-
-    CLUSTER_CONFIG_DEFAULT = Path(__file__).absolute().parents[1] / "configs/cluster_config.json"
-    WRAPPER.add_argument(
-        "--cluster_config",
-        help="Cluster config json file. Needed for snakemake to run jobs in cluster.",
-        default=CLUSTER_CONFIG_DEFAULT,
-        type=lambda x: is_valid_file(PARSER, x),
-        metavar="",
-    )
-
-    LOGS_DIR_DEFAULT = f"$USER_SCRATCH/tmp/quac/logs"
-    WRAPPER.add_argument(
-        "--log_dir",
-        help="Directory path where logs (both workflow's and wrapper's) will be stored",
-        default=LOGS_DIR_DEFAULT,
-        type=lambda x: is_valid_dir(PARSER, x),
-        metavar="",
-    )
-    WRAPPER.add_argument(
         "-e",
         "--extra_args",
         help="Pass additional custom args to snakemake. Equal symbol is needed "
         "for assignment as in this example: -e='--forceall'",
         metavar="",
     )
-    WRAPPER.add_argument(
+    WORKFLOW.add_argument(
         "-n",
         "--dryrun",
         action="store_true",
         help="Flag to dry-run snakemake. Does not execute anything, and "
         "just display what would be done. Equivalent to '--extra_args \"-n\"'",
     )
+
+    ############ Args for QuaC wrapper tool  ############
+    WRAPPER = PARSER.add_argument_group("QuaC wrapper options")
+
     WRAPPER.add_argument(
-        "--snakemake_slurm",
-        action="store_true",
-        help="Flag indicating that the main Snakemake process of QuaC should be" 
-        " submitted to run in a Slurm job instead of executing in the current" 
-        " environment. Useful for headless execution on Slurm-based HPC systems."
-    )
-    RERUN_FAILED_DEFAULT = 1
-    WRAPPER.add_argument(
-        "--rerun_failed",
-        help=f"Number of times snakemake restarts failed jobs. This may be set to >0 "
-        "to avoid pipeline failing due to job fails due to random SLURM issues",
-        default=RERUN_FAILED_DEFAULT,
+        "--cli_cluster_config",
+        help="Cluster config json file to run parent workflow job in cluster."
+        " Edit template file 'configs/cli_cluster_config.json' to suit your SLURM environment.",
+        type=lambda x: is_valid_file(PARSER, x),
         metavar="",
     )
 
+    LOGS_DIR_DEFAULT = f"data/quac/logs"
     WRAPPER.add_argument(
-        "--slurm_partition",
-        help="Request a specific partition for the slurm resource allocation to run snakemake."
-        " See 'slurm_partitions' supplied via workflow_config for available partitions",
-        default="short",
+        "--log_dir",
+        help="Directory path where logs (both workflow's and wrapper's) will be stored",
+        default=LOGS_DIR_DEFAULT,
+        type=lambda x: create_dirpath(x),
         metavar="",
     )
 
     ARGS = PARSER.parse_args()
-    
+
     # Didn't find a argparse friendly solution without having to refactor. Good enough solution
     if not ARGS.quac_watch_config:
-        raise SystemExit("Error. Quac-watch config is missing. Please supply using --quac_watch_config.")
+        raise SystemExit(
+            "Error. Quac-watch config is missing. Please supply using --quac_watch_config."
+        )
+    if not ARGS.projects_path:
+        raise SystemExit(
+            "Error. 'Projects path' not provided. Please supply using --projects_path."
+        )
 
     main(ARGS)
