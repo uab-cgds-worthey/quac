@@ -24,7 +24,7 @@ Installation involves
 Go to the directory of your choice and run the command below.
 
 ```sh
-git clone git@github.com:uab-cgds-worthey/quac.git
+git clone https://github.com/uab-cgds-worthey/quac.git
 ```
 
 
