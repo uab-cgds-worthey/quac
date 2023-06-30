@@ -24,44 +24,14 @@ Requirements below are necessary to install and run QuaC.
     * Singularity is available as module in Cheaha - `Singularity/3.5.2-GCC-5.4.0-2.26`
 
 
-## Installation
 
-Installation involves
-
-- fetching the source code
-- creating the conda environment
-
-
-### Retrieve source code
+## Retrieve QuaC source code
 
 Go to the directory of your choice and run the command below.
 
 ```sh
 git clone https://github.com/uab-cgds-worthey/quac.git
 ```
-
-
-### Create conda environment
-
-Conda environment will install all necessary dependencies, including snakemake, to run the QuaC workflow.
-
-```sh
-cd /path/to/quac/repo
-
-# For use only at Cheaha in UAB. Load conda into environment.
-module reset
-module load Anaconda3/2020.02
-
-# create conda environment. Needed only the first time.
-conda env create --file configs/env/quac.yaml
-
-# activate conda environment
-conda activate quac
-
-# if you need to update the existing environment
-conda env update --file configs/env/quac.yaml
-```
-
 
 ## Configuration
 
@@ -194,3 +164,23 @@ Or, if your SLURM requires `qos` and doesn't use `partition`, config file can be
     If you are having difficulty setting up SLURM configs, you may want to consult your institutional support team for assistance.
 
 
+## Create conda environment
+
+Conda environment will install all necessary dependencies, including snakemake, to run the QuaC workflow.
+
+```sh
+cd /path/to/quac/repo
+
+# For use only at Cheaha in UAB. Load conda into environment.
+module reset
+module load Anaconda3/2020.02
+
+# create conda environment. Needed only the first time.
+conda env create --file configs/env/quac.yaml
+
+# activate conda environment
+conda activate quac
+
+# if you need to update the existing environment
+conda env update --file configs/env/quac.yaml
+```
