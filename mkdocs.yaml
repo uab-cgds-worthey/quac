@@ -1,7 +1,7 @@
 site_name: QuaC pipeline
 nav:
   - Home: index.md
-  - Installation: installation.md
+  - Installation and Configuration: installation_configuration.md
   - Requirements and Configs: reqts_configs.md
   - How to run QuaC: quac_cli.md
   - Input/Output: input_output.md
