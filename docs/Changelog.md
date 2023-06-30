@@ -12,6 +12,19 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-06-22  Manavalan Gajapathy
+
+* Refactors CLI script to accounting for user's environment specific slurm args requirements when submitting job to
+  slurm (#76)
+* Removes CLI option `--rerun_failed` and instead configures it via snakemake-slurm profile
+  (`src/slurm/slurm_profile/config.yaml`)
+* Removes `--subtasks_slurm option` and `--snakemake_slurm` as they were redundant
+* Checks if tool dependencies are available in user environment.
+* Adds `time` resource to `configs/snakemake_cluster_config.json`
+* Removes PR trigger from system testing github actions.
+* Tests if singularity is working as expected in user machine
+
+
 2023-05-31  Manavalan Gajapathy
 
 * Adds system testing as github actions workflow
@@ -19,18 +32,21 @@ YYYY-MM-DD  John Doe
 
 2023-05-18  Manavalan Gajapathy
 
-* Constructs snakemake's `sbatch` command using args and values from cluster config file supplied via `--cluster_config`.
+* Constructs snakemake's `sbatch` command using args and values from cluster config file supplied via
+  `--cluster_config`.
 * Updates doc to include cluster config as a requirement
 
 
 2023-05-09  Manavalan Gajapathy
 
-* Adds a verification step in the CLI wrapper script to check if the file/dirpaths to be mounted to singularity already exist as expected (#71)
+* Adds a verification step in the CLI wrapper script to check if the file/dirpaths to be mounted to singularity already
+  exist as expected (#71)
 * Resolves dirpaths of datasets in the workflow config file to obtain their full path
 
 2023-04-10  Manavalan Gajapathy
 
-* Refactors snakemake pipeline to fully run jobs in direct singularity containers. No more creation of conda environment using singularity containers! (#69)
+* Refactors snakemake pipeline to fully run jobs in direct singularity containers. No more creation of conda environment
+  using singularity containers! (#69)
 
 
 2023-04-04  Manavalan Gajapathy
@@ -52,9 +68,11 @@ YYYY-MM-DD  John Doe
 
 2023-01-31  Manavalan Gajapathy
 
-Restructures the docs to make it clearer to non-Cheaha users, updates documentation to reflect recent CLI option changes, and hosts docs publicly using readthedocs.
+Restructures the docs to make it clearer to non-Cheaha users, updates documentation to reflect recent CLI option
+changes, and hosts docs publicly using readthedocs.
 
-* `Readme.md` has grown bigger and became difficult to navigate. Especially for non-Cheaha users. So documentation in readme.md is now restructured to break into multiple files and is now easier to consume.
+* `Readme.md` has grown bigger and became difficult to navigate. Especially for non-Cheaha users. So documentation in
+  readme.md is now restructured to break into multiple files and is now easier to consume.
      * Makes the doc generic to non-Cheaha users
      * Identifies parts of the docs that are specific to Cheaha or CGDS users
 * Updates doc to reflect changes made in #59 

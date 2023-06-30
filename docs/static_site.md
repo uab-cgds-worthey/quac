@@ -1,6 +1,7 @@
 # Read the Docs for hosting
 
-[mkdocs](https://www.mkdocs.org/) is used to serve up the static website, and [Read the Docs](https://docs.readthedocs.io/) is used for hosting it online.
+[mkdocs](https://www.mkdocs.org/) is used to serve up the static website, and [Read the
+Docs](https://docs.readthedocs.io/) is used for hosting it online.
 
 ## Use mkdocs for development
 

@@ -4,3 +4,4 @@ printshellcmds: True
 jobs: 30
 max-jobs-per-second: 7
 max-status-checks-per-second: 7
+restart-times: 1

@@ -15,7 +15,7 @@ datasets:
     # retrieved from https://github.com/Griffan/VerifyBamID and 'chr' prefix added to the contigs
     svd_dat_exome: "data/external/dependency_datasets/verifyBamID/exome/1000g.phase3.10k.b38_chr.exome.vcf.gz.dat"
 
-#### hardware resources ####
+#### hardware resources for certain tools used in snakemake piepline ####
 resources:
   qualimap_bamqc:
     no_cpu: 1 # CGDS uses 2
@@ -25,10 +25,3 @@ resources:
   verifybamid:
     no_cpu: 1 # CGDS uses 4
 
-#### slurm partitions ####
-slurm_partitions:
-  # modify below to provide partitions available in your slurm and their time limits
-  express: "02:00:00"
-  short: "12:00:00"
-  medium: "50:00:00"
-  long: "150:00:00"
