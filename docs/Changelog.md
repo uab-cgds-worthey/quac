@@ -12,6 +12,11 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-06-30  Manavalan Gajapathy
+
+* Merges `joss_manuscript` to the `master` branch to bring it up to date. 
+
+
 2023-06-22  Manavalan Gajapathy
 
 * Refactors CLI script to accounting for user's environment specific slurm args requirements when submitting job to
