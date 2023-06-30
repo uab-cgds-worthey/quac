@@ -1,6 +1,7 @@
 # How to run QuaC pipeline
 
-After [proper installation and configuration](./installation_configuration.md), QuaC pipeline can be run using the wrapper/CLI (command line interface) tool `src/run_quac.py`.
+After [proper installation and configuration](./installation_configuration.md), QuaC pipeline can be run using the
+wrapper/CLI (command line interface) tool `src/run_quac.py`.
 
 ## Command line interface
 
@@ -74,8 +75,8 @@ Besides the basic features, wrapper script [`src/run_quac.py`](../src/run_quac.p
 
 ## Minimal example
 
-Minimal example to run the wrapper script, which in turn will execute the QuaC pipeline on-machine:
-(instead of using a SLURM job scheduler on an HPC system for running on a distributed system)
+Minimal example to run the wrapper script, which in turn will execute the QuaC pipeline on-machine: (instead of using a
+SLURM job scheduler on an HPC system for running on a distributed system)
 
 ```sh
 # First set up dependencies in the environment. 

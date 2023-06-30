@@ -9,7 +9,7 @@ This involves the following steps:
 
 ## Requirements
 
-Requirements below are necessary to install and run QuaC.
+Tools necessary to install and run QuaC:
 
 - Linux OS. Tested in Red Hat Enterprise Linux v7.9
 - Git
@@ -41,8 +41,8 @@ QuaC:
 
 - Filepaths to necessary dataset dependencies required by certain QC tools used in QuaC.
     - ** We provide `src/setup_dependency_datasets.sh` to download and set up these datasets.**
-    - To run this script, change into QuaC directory and use command: `bash src/setup_dependency_datasets.sh`. Output will be saved at
-      `data/external/dependency_datasets`.
+    - To run this script, change into QuaC directory and use command: `bash src/setup_dependency_datasets.sh`. Output
+      will be saved at `data/external/dependency_datasets`.
 - Hardware resource configs for certain QC tools used in snakemake piepline
 
 !!! tip 
@@ -186,7 +186,8 @@ conda env update --file configs/env/quac.yaml
 
 ## Test run QuaC
 
-When you have completed all the installation and configuration steps described so far, it is time to test run QuaC to check it runs as expected using the commands below.  
+When you have completed all the installation and configuration steps described so far, it is time to test run QuaC to
+check it runs as expected using the commands below.  
 
 ```sh
 # Be sure conda and singularity are available in your enviroment
@@ -219,5 +220,7 @@ python src/run_quac.py \
 
     In case you run into an error, please double check that configuration files were properly set up.
 
-Note that the first time you run the snakemake workflow, it will first retrieve the necessary singularity images and then run the QC jobs. This process may take about 30mins to 1hr to complete the job. If it takes way longer than an hour, please check the log files (specified using `--log_dir`) and your SLURM jobs to identify the cause.
+Note that the first time you run the snakemake workflow, it will first retrieve the necessary singularity images and
+then run the QC jobs. This process may take about 30mins to 1hr to complete the job. If it takes way longer than an
+hour, please check the log files (specified using `--log_dir`) and your SLURM jobs to identify the cause.
 
