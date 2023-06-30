@@ -58,7 +58,7 @@ def check_mount_paths_exist(paths):
                 "\n\nNOTE: This was likely caused by missing datasets specified in the workflow config file"
                 "(supplied via --workflow_config)."
                 "\nPlease refer to docs on how to use our script to download the necessary datasets -"
-                " https://quac.readthedocs.io/en/latest/reqts_configs/#set-up-workflow-config-file"
+                " https://quac.readthedocs.io/en/latest/installation_configuration/#configuration"
             )
         )
 

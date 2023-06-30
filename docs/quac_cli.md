@@ -1,9 +1,6 @@
 # How to run QuaC pipeline
 
-After [fulfilling the necessary requirements and setting up the workflow configs](./reqts_configs.md) and [activating
-the conda environment](./installation.md), QuaC pipeline can be run using the wrapper/CLI (command line interface) tool
-`src/run_quac.py`
-
+After [proper installation and configuration](./installation_configuration.md), QuaC pipeline can be run using the wrapper/CLI (command line interface) tool `src/run_quac.py`.
 
 ## Command line interface
 
@@ -72,7 +69,6 @@ Besides the basic features, wrapper script [`src/run_quac.py`](../src/run_quac.p
 
 - Pass custom snakemake args using option `--extra_args`.
 - Dry-run snakemake using flag `--dryrun`. Note that this is same as `--extra_args='-n'`.
-- Override cluster config file passed to snakemake using `--snakemake_cluster_config`.
 - Submit snakemake process to Slurm, instead of running it locally, using `--cli_cluster_config`. 
 - Submit jobs triggered by snakemake workflow to Slurm using `--snakemake_cluster_config`.
 
