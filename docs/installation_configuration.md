@@ -165,7 +165,7 @@ Or, if your SLURM requires `qos` and doesn't use `partition`, config file can be
 
 ## Create conda environment
 
-Conda environment will install all necessary dependencies, including snakemake, to run the QuaC workflow.
+Conda environment will install several necessary dependencies, including snakemake, to run the QuaC workflow.
 
 ```sh
 cd /path/to/quac/repo
@@ -186,8 +186,8 @@ conda env update --file configs/env/quac.yaml
 
 ## Test run QuaC
 
-When you have completed all the installation and configuration steps described so far, it is time to test run QuaC to
-check it runs as expected using the commands below.  
+When you have completed all the installation and configuration steps described so far, it is time to test run QuaC using
+the commands below to check it runs as expected.  
 
 ```sh
 # Be sure conda and singularity are available in your enviroment
@@ -220,7 +220,7 @@ python src/run_quac.py \
 
     In case you run into an error, please double check that configuration files were properly set up.
 
-Note that the first time you run the snakemake workflow, it will first retrieve the necessary singularity images and
-then run the QC jobs. This process may take about 30mins to 1hr to complete the job. If it takes way longer than an
-hour, please check the log files (specified using `--log_dir`) and your SLURM jobs to identify the cause.
+Note that the first time you run the QuaC workflow, snakemake will first retrieve the necessary singularity images and
+then run the QC jobs. This process may take about roughly 30-60mins to complete the job. If it takes way longer than an
+hour, please check the log files (specified using `--log_dir`) and your SLURM job status to identify the cause.
 
