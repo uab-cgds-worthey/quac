@@ -311,33 +311,33 @@ if __name__ == "__main__":
     )
 
     ############ Args for QuaC workflow  ############
-    WORKFLOW = PARSER.add_argument_group("QuaC workflow options")
+    WORKFLOW = PARSER.add_argument_group("QuaC snakemake workflow options")
 
     WORKFLOW.add_argument(
         "--project_name",
-        help="Project name",
-        metavar="",
+        help="Project name. Required.",
+        required=True,
     )
     WORKFLOW.add_argument(
         "--projects_path",
-        help="Path where all projects are hosted. Do not include project name here.",
+        help="Path where all projects are hosted. Do not include project name here. Required.",
         type=lambda x: is_valid_dir(PARSER, x),
-        metavar="",
+        required=True,
     )
     WORKFLOW.add_argument(
         "--pedigree",
-        help="Pedigree filepath. Must correspond to the project supplied via --project_name",
+        help="Pedigree filepath. Must correspond to the project supplied via --project_name. Required.",
         type=lambda x: is_valid_file(PARSER, x),
-        metavar="",
+        required=True,
     )
     WORKFLOW.add_argument(
         "--quac_watch_config",
         help=(
             "YAML config path specifying QC thresholds for QuaC-Watch."
-            " See directory 'configs/quac_watch/' in quac repo for the included config files."
+            " See directory 'configs/quac_watch/' in quac repo for the included config files. Required."
         ),
         type=lambda x: is_valid_file(PARSER, x),
-        metavar="",
+        required=True,
     )
     WORKFLOW.add_argument(
         "--workflow_config",
