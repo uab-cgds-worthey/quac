@@ -114,7 +114,7 @@ data/quac/results/test_project_2samples_wgs-include_priorQC/
     │       │   └── ...
     │       ├── multiqc_final_pass
     │       │   ├── ...
-    │       │   └── A_multiqc.html
+    │       │   └── A_multiqc.html        <--- Sample-level multiqc output file
     │       ├── multiqc_initial_pass
     │       │   ├── ...
     │       │   └── A_multiqc.html
@@ -143,7 +143,7 @@ data/quac/results/test_project_2samples_wgs-include_priorQC/
         │   │   └── aggregated_rename_configs.tsv
         │   ├── multiqc_report_data
         │   │   └── ...
-        │   └── multiqc_report.html
+        │   └── multiqc_report.html        <--- Project-level multiqc output file
         └── somalier
             ├── ancestry
             │   └── ...
