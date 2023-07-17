@@ -1,7 +1,7 @@
 # Visualization of pipeline
 
 [Visualization of the pipeline](https://snakemake.readthedocs.io/en/stable/executing/cli.html#visualization) based on
-the test datasets are available in [directory `./pipeline_visualized/`](../pipeline_visualized/). Commands used to
+the test datasets are available in directory `./pipeline_visualized/`. Commands used to
 create this visualization:
 
 ```sh

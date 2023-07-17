@@ -11,10 +11,8 @@ and readily highlight samples that need further review.
 We provide pre-defined thresholds for QC metrics as part of the QuaC repo and they need to be supplied via
 `--quac_watch_config`:
 
-* For Genome sequencing -
-  [configs/quac_watch/wgs_quac_watch_config.yaml](../configs/quac_watch/wgs_quac_watch_config.yaml)
-* For Exome sequencing -
-  [configs/quac_watch/exome_quac_watch_config.yaml](../configs/quac_watch/exome_quac_watch_config.yaml)
+* For Genome sequencing - `configs/quac_watch/wgs_quac_watch_config.yaml`
+* For Exome sequencing - `configs/quac_watch/exome_quac_watch_config.yaml`
 
 These thresholds were curated based on
 

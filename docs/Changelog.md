@@ -12,6 +12,11 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-07-16  Manavalan Gajapathy
+
+* Updates doc based on users feedback. 
+
+
 2023-06-30  Manavalan Gajapathy
 
 * Merges `joss_manuscript` to the `master` branch to bring it up to date. 

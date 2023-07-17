@@ -2,11 +2,12 @@ site_name: QuaC pipeline
 nav:
   - Home: index.md
   - Installation and Configuration: installation_configuration.md
-  - How to run QuaC: quac_cli.md
+  - Command line interface: quac_cli.md
   - Input/Output: input_output.md
   - QuaC-Watch: quac_watch.md
   - System testing: system_testing.md
   - Pipeline visualization: visualize_pipeline.md
+  - Frequently Asked Questions: faq.md
   - Changelog: Changelog.md
   - QC review:
       - Sample QC review system: sample_qc_review_system.md

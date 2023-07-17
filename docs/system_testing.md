@@ -1,10 +1,9 @@
 # System testing
 
 The system testing implemented for this pipeline tests whether the pipeline runs from start to finish without any error.
-This testing uses test datasets present in [`.test/ngs-data/test_project`](../.test/ngs-data/test_project), which
-reflects a test project containing four samples -- Two samples without priorQC data (`no_priorQC`) and two with priorQC
-data (`include_priorQC`). [See .test/README.md](../.test/README.md) for more info on how these test datasets were
-created.
+This testing uses test datasets present in `.test/ngs-data/test_project`, which reflects a test project containing four
+samples -- Two samples without priorQC data (`no_priorQC`) and two with priorQC data (`include_priorQC`). See
+`.test/README.md` for more info on how these test datasets were created.
 
 !!! warning
 
@@ -115,7 +114,7 @@ data/quac/results/test_project_2samples_wgs-include_priorQC/
     │       │   └── ...
     │       ├── multiqc_final_pass
     │       │   ├── ...
-    │       │   └── A_multiqc.html
+    │       │   └── A_multiqc.html        <--- Sample-level multiqc output file
     │       ├── multiqc_initial_pass
     │       │   ├── ...
     │       │   └── A_multiqc.html
@@ -144,7 +143,7 @@ data/quac/results/test_project_2samples_wgs-include_priorQC/
         │   │   └── aggregated_rename_configs.tsv
         │   ├── multiqc_report_data
         │   │   └── ...
-        │   └── multiqc_report.html
+        │   └── multiqc_report.html        <--- Project-level multiqc output file
         └── somalier
             ├── ancestry
             │   └── ...
