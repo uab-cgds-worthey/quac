@@ -6,9 +6,10 @@ wrapper/CLI (command line interface) tool `src/run_quac.py`.
 ## Command line interface
 
 ```sh
-$ python src/run_quac.py -h
-usage: run_quac.py [-h] [--project_name] [--projects_path] [--pedigree]
-                   [--quac_watch_config] [--workflow_config]
+$ python src/run_quac.py  -h
+usage: run_quac.py [-h] --project_name PROJECT_NAME --projects_path
+                   PROJECTS_PATH --pedigree PEDIGREE --quac_watch_config
+                   QUAC_WATCH_CONFIG [--workflow_config]
                    [--snakemake_cluster_config] [--outdir] [--tmp_dir]
                    [--exome] [--include_prior_qc] [--allow_sample_renaming]
                    [-e] [-n] [--cli_cluster_config] [--log_dir]
@@ -18,15 +19,19 @@ Command line interface to QuaC pipeline.
 optional arguments:
   -h, --help            show this help message and exit
 
-QuaC workflow options:
-  --project_name        Project name (default: None)
-  --projects_path       Path where all projects are hosted. Do not include
-                        project name here. (default: None)
-  --pedigree            Pedigree filepath. Must correspond to the project
-                        supplied via --project_name (default: None)
-  --quac_watch_config   YAML config path specifying QC thresholds for QuaC-
+QuaC snakemake workflow options:
+  --project_name PROJECT_NAME
+                        Project name. Required. (default: None)
+  --projects_path PROJECTS_PATH
+                        Path where all projects are hosted. Do not include
+                        project name here. Required. (default: None)
+  --pedigree PEDIGREE   Pedigree filepath. Must correspond to the project
+                        supplied via --project_name. Required. (default: None)
+  --quac_watch_config QUAC_WATCH_CONFIG
+                        YAML config path specifying QC thresholds for QuaC-
                         Watch. See directory 'configs/quac_watch/' in quac
-                        repo for the included config files. (default: None)
+                        repo for the included config files. Required.
+                        (default: None)
   --workflow_config     YAML config path specifying filepath to dependencies
                         of QC tools used in snakemake workflow (default:
                         configs/workflow.yaml)

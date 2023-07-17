@@ -12,6 +12,11 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-07-17  Manavalan Gajapathy
+
+* Minor updates to documentation.
+
+
 2023-07-16  Manavalan Gajapathy
 
 * Updates doc based on users feedback. 
