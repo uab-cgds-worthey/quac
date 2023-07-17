@@ -101,8 +101,8 @@ as input to QuaC.
 ## Output
 
 QuaC results are stored at the path specified via option `--outdir` (default:
-`data/quac/results/test_project/analysis`).  Refer to the [system testing's output](./system_testing.md) to learn more
-about the output directory structure. 
+`data/quac/results/test_project/analysis`).  Refer to the [system testing's
+output](./system_testing.md#expected-output-files) to learn more about the output directory structure. 
 
 !!! tip 
 

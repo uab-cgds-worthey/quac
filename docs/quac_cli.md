@@ -64,38 +64,6 @@ QuaC wrapper options:
                         wrapper's) will be stored (default: data/quac/logs)
 ```
 
-### Useful features
-
-Besides the basic features, wrapper script [`src/run_quac.py`](../src/run_quac.py) offers the following:
-
-- Pass custom snakemake args using option `--extra_args`.
-- Dry-run snakemake using flag `--dryrun`. Note that this is same as `--extra_args='-n'`.
-- Submit snakemake process to Slurm, instead of running it locally, using `--cli_cluster_config`. 
-- Submit jobs triggered by snakemake workflow to Slurm using `--snakemake_cluster_config`.
-
-## Minimal example
-
-Minimal example to run the wrapper script, which in turn will execute the QuaC pipeline on-machine: (instead of using a
-SLURM job scheduler on an HPC system for running on a distributed system)
-
-```sh
-# First set up dependencies in the environment. 
-### Cheaha users can set them up as follows. 
-module reset
-module load Anaconda3/2020.02
-module load Singularity/3.5.2-GCC-5.4.0-2.26
-
-# activate conda env
-conda activate quac
-
-# run CLI/wrapper script
-python src/run_quac.py \
-      --project_name "PROJECT_DUCK" \
-      --projects_path "/path/to/the/projects" \
-      --pedigree "path/to/lake/with/ducks_pedigree_file.ped" \
-      --quac_watch_config "path/to/quac_watch_config.yaml"
-```
-
 ## Example usage
 
 Refer to commands used in [system testing](./system_testing.md) for example usage.
