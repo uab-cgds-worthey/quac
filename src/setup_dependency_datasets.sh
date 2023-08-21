@@ -16,7 +16,7 @@ mkdir -p $REF_GENOME_DIR && cd $REF_GENOME_DIR
 REF_GENOME_FNAME="GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz"
 REF_GENOME_URL=ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/${REF_GENOME_FNAME}
 curl -L $REF_GENOME_URL -o $REF_GENOME_FNAME
-gzip -d $REF_GENOME_FNAME
+gzip -c $REF_GENOME_FNAME >$(basename $REF_GENOME_FNAME .gz)
 
 ##### retrieve somalier tool dependencies #####
 echo "setting up somalier dependency datasets..."
