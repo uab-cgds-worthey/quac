@@ -6,10 +6,9 @@ wrapper/CLI (command line interface) tool `src/run_quac.py`.
 ## Command line interface
 
 ```sh
-$ python src/run_quac.py  -h
-usage: run_quac.py [-h] --project_name PROJECT_NAME --projects_path
-                   PROJECTS_PATH --pedigree PEDIGREE --quac_watch_config
-                   QUAC_WATCH_CONFIG [--workflow_config]
+$ python src/run_quac.py -h
+usage: run_quac.py [-h] --sample_config SAMPLE_CONFIG --pedigree PEDIGREE
+                   --quac_watch_config QUAC_WATCH_CONFIG [--workflow_config]
                    [--snakemake_cluster_config] [--outdir] [--tmp_dir]
                    [--exome] [--include_prior_qc] [--allow_sample_renaming]
                    [-e] [-n] [--cli_cluster_config] [--log_dir]
@@ -20,13 +19,13 @@ optional arguments:
   -h, --help            show this help message and exit
 
 QuaC snakemake workflow options:
-  --project_name PROJECT_NAME
-                        Project name. Required. (default: None)
-  --projects_path PROJECTS_PATH
-                        Path where all projects are hosted. Do not include
-                        project name here. Required. (default: None)
-  --pedigree PEDIGREE   Pedigree filepath. Must correspond to the project
-                        supplied via --project_name. Required. (default: None)
+  --sample_config SAMPLE_CONFIG
+                        Sample config file in TSV format. Provides sample name
+                        and necessary input filepaths (bam, vcf, etc.).
+                        Required. (default: None)
+  --pedigree PEDIGREE   Pedigree filepath. Must correspond to samples
+                        mentioned in configfile via --sample_config. Required.
+                        (default: None)
   --quac_watch_config QUAC_WATCH_CONFIG
                         YAML config path specifying QC thresholds for QuaC-
                         Watch. See directory 'configs/quac_watch/' in quac

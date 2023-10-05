@@ -317,7 +317,7 @@ if __name__ == "__main__":
 
     WORKFLOW.add_argument(
         "--sample_config",
-        help="Sample config file in TSV format. Provides sample name and necessary input filepaths (bam, vcf, etc.)",
+        help="Sample config file in TSV format. Provides sample name and necessary input filepaths (bam, vcf, etc.). Required.",
         type=lambda x: is_valid_file(PARSER, x),
         required=True,
     )
