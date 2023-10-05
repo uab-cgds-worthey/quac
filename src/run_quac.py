@@ -144,7 +144,11 @@ def gather_mount_paths(
     # input filepaths from sample config
     for sample_val in samples_config_dict.values():
         for val_fpath in sample_val.values():
-            mount_paths.add(Path(val_fpath).parent)
+            if isinstance(val_fpath, str):
+                mount_paths.add(Path(val_fpath).parent)
+            elif isinstance(val_fpath, list):
+                for item in val_fpath:
+                    mount_paths.add(Path(item).parent)
 
     # pedigree filepath
     mount_paths.add(Path(pedigree_path).parent)
