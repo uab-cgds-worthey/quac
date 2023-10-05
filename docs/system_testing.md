@@ -42,9 +42,8 @@ PRIOR_QC_STATUS="no_priorQC"
 
 # WGS mode
 python src/run_quac.py \
-      --project_name test_project \
-      --projects_path ".test/ngs-data/" \
-      --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+      --sample_config ".test/configs/no_priorQC/sample_config/project_2samples.tsv" \
+      --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
       --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
       --workflow_config "configs/workflow.yaml" \
