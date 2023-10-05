@@ -25,7 +25,7 @@ rule create_multiqc_config:
 ##########################   Single-sample-level QC aggregation  ##########################
 rule multiqc_by_sample_initial_pass:
     input:
-        get_small_var_pipeline_targets if INCLUDE_PRIOR_QC_DATA else [],
+        lambda wildcards: get_priorQC_filepaths(wildcards.sample, SAMPLES_CONFIG) if INCLUDE_PRIOR_QC_DATA else [],
         OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
         OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
@@ -126,7 +126,7 @@ rule quac_watch:
 
 rule multiqc_by_sample_final_pass:
     input:
-        get_small_var_pipeline_targets if INCLUDE_PRIOR_QC_DATA else [],
+        lambda wildcards: get_priorQC_filepaths(wildcards.sample, SAMPLES_CONFIG) if INCLUDE_PRIOR_QC_DATA else [],
         OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
         OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
@@ -192,17 +192,7 @@ rule multiqc_by_sample_final_pass:
 
 rule multiqc_aggregation_all_samples:
     input:
-        expand(
-            [
-                PROJECT_PATH / "{sample}" / "qc" / "fastqc-raw" / "{sample}-{unit}-{read}_fastqc.zip",
-                PROJECT_PATH / "{sample}" / "qc" / "fastqc-trimmed" / "{sample}-{unit}-{read}_fastqc.zip",
-                PROJECT_PATH / "{sample}" / "qc" / "fastq_screen-trimmed" / "{sample}-{unit}-{read}_screen.txt",
-                PROJECT_PATH / "{sample}" / "qc" / "dedup" / "{sample}-{unit}.metrics.txt",
-            ],
-            sample=SAMPLES,
-            unit=[1],
-            read=["R1", "R2"],
-        ) if INCLUDE_PRIOR_QC_DATA else [],
+        [get_priorQC_filepaths(sample, SAMPLES_CONFIG) for sample in SAMPLES_CONFIG.keys()] if INCLUDE_PRIOR_QC_DATA else [],
         expand(
             [
                 OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",

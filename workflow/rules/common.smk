@@ -23,9 +23,15 @@ def read_sample_config(config_f):
 
             samples_dict[sample] = {"vcf": vcf, "bam": bam}
 
+            # expect only filepath per field
             for colname in ["capture_bed"]:
                 if colname in row:
                     samples_dict[sample][colname] = row[colname]
+                    
+            # expect >=1 filepath per field
+            for colname in ["fastqc_raw", "fastqc_trimmed", "fastq_screen", "dedup"]:
+                if colname in row:
+                    samples_dict[sample][colname] = row[colname].split(",")
 
     return samples_dict
 
@@ -43,32 +49,20 @@ def is_testing_mode():
     return None
 
 
-def get_small_var_pipeline_targets(wildcards):
+
+def get_priorQC_filepaths(sample, samples_dict):
     """
-    Returns target files that are output by small variant caller pipeline.
-    Uses deduplication's output files as proxy to identify "units"
+    Returns filepaths relevant to priorQC
     """
 
-    flist = (PROJECT_PATH / wildcards.sample / "qc" / "dedup").glob("*.metrics.txt")
-    units = []
-    for fpath in flist:
-        unit = re.match(fr"{wildcards.sample}-(\d+).metrics.txt", fpath.name)
-        units.append(unit.group(1))
+    column_list = ["fastqc_raw", "fastqc_trimmed", "fastq_screen", "dedup"]
+    file_list = []
+    for column in column_list:
+        file_list.append(samples_dict[sample][column])
 
-    targets = (
-        expand(
-            [
-                PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-raw" / "{{sample}}-{unit}-{read}_fastqc.zip",
-                PROJECT_PATH / "{{sample}}" / "qc" / "fastqc-trimmed" / "{{sample}}-{unit}-{read}_fastqc.zip",
-                PROJECT_PATH / "{{sample}}" / "qc" / "fastq_screen-trimmed" / "{{sample}}-{unit}-{read}_screen.txt",
-                PROJECT_PATH / "{{sample}}" / "qc" / "dedup" / "{{sample}}-{unit}.metrics.txt",
-            ],
-            unit=units,
-            read=["R1", "R2"],
-        ),
-    )
+    flat_filelist = [item for sublist in file_list for item in sublist]
 
-    return targets[0]
+    return flat_filelist
 
 
 ##########################   Configs from CLI  ##########################
