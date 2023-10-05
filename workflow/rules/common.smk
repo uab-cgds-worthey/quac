@@ -30,9 +30,11 @@ def is_testing_mode():
     "checks if testing dataset is used as input for the pipeline"
 
     query = ".test"
-    if query in PurePath(PROJECT_PATH).parts:
-        logger.info(f"// WARNING: '{query}' present in the path supplied via --projects_path. So testing mode is used.")
-        return True
+    for sample in SAMPLES_CONFIG.values():
+        for fpath in sample.values():
+            if query in PurePath(fpath).parts:
+                logger.info(f"// WARNING: '{query}' present in at least one of the filepaths supplied via --sample_config. So testing mode is used.")
+                return True
 
     return None
 
