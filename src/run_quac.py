@@ -40,6 +40,38 @@ def get_tool_path(tool):
     return tool_path
 
 
+def check_sample_configs(fpath, exome_mode, include_prior_qc, allow_sample_renaming):
+    """
+    reads from sample configfile and verifies necessary column names exist
+    """
+
+    samples_dict, header = read_sample_config(fpath)
+
+    if exome_mode:
+        if "capture_bed" not in header:
+            print(
+                f"ERROR: Flag --exome supplied but required column 'capture_bed' is missing in sample configfile '{fpath}'"
+            )
+            raise SystemExit(1)
+
+        for sample in samples_dict:
+            if not samples_dict[sample]["capture_bed"].endswith(".bed"):
+                print(
+                    f"ERROR: Capture bed filename is required to end with '.bed' extension: '{samples_dict[sample]['capture_bed']}'"
+                )
+                raise SystemExit(1)
+
+    # TODO
+    if include_prior_qc and "TODO" not in header:
+        pass
+
+    # TODO
+    if allow_sample_renaming and "TODO" not in header:
+        pass
+
+    return samples_dict
+
+
 def check_mount_paths_exist(paths):
     """
     Verify the paths to be mounted to Singularity exist
@@ -92,7 +124,8 @@ def read_workflow_config(workflow_config_fpath):
 
 
 def gather_mount_paths(
-    sample_config,
+    sample_config_f,
+    samples_config_dict,
     pedigree_path,
     out_dir,
     log_dir,
@@ -106,11 +139,10 @@ def gather_mount_paths(
     mount_paths = set()
 
     # sample_config
-    mount_paths.add(Path(sample_config).parent)
+    mount_paths.add(Path(sample_config_f).parent)
 
     # input filepaths from sample config
-    samples_dict = read_sample_config(sample_config)
-    for sample_val in samples_dict.values():
+    for sample_val in samples_config_dict.values():
         for val_fpath in sample_val.values():
             mount_paths.add(Path(val_fpath).parent)
 
@@ -235,9 +267,15 @@ def main(args):
     # check singularity works properly in user's machine
     test_singularity()
 
+    # read sample configfile and verify necessary columns exist
+    samples_config_dict = check_sample_configs(
+        args.sample_config, args.exome, args.include_prior_qc, args.allow_sample_renaming
+    )
+
     # process user's input-output config file and get singularity bind paths
     mount_paths = gather_mount_paths(
         args.sample_config,
+        samples_config_dict,
         args.pedigree,
         args.outdir,
         args.log_dir,
