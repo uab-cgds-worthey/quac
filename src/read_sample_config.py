@@ -14,7 +14,7 @@ def get_full_path(x):
 
 def is_valid_file(fpath):
     if not Path(fpath).is_file():
-        print(f"ERROR: File provided in sample config file was not found: {fpath}")
+        print(f"ERROR: File provided in sample config file was not found: '{fpath}'")
         raise SystemExit(1)
 
     return get_full_path(fpath)
@@ -24,6 +24,7 @@ def read_sample_config(config_f):
 
     with open(config_f) as fh:
         csv_reader = csv.DictReader(fh, delimiter="\t")
+        colnames = csv_reader.fieldnames
 
         samples_dict = {}
         for row in csv_reader:
@@ -41,13 +42,7 @@ def read_sample_config(config_f):
                 if colname in row:
                     samples_dict[sample][colname] = is_valid_file(row[colname])
 
-                    if colname == "capture_bed" and not row["capture_bed"].endswith(".bed"):
-                        print(
-                            f"ERROR: Capture bed filename is required to end with '.bed' extension but it did not: '{row['capture_bed']}'"
-                        )
-                        raise SystemExit(1)
-
-    return samples_dict
+    return samples_dict, colnames
 
 
 if __name__ == "__main__":
