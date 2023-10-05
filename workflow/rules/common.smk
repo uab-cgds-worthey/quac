@@ -13,8 +13,8 @@ def read_sample_config(config_f):
 
         samples_dict = {}
         for row in csv_reader:
-            bam = is_valid_file(row["bam"])
-            vcf = is_valid_file(row["vcf"])
+            bam = row["bam"]
+            vcf = row["vcf"]
 
             sample = row["sample_id"].strip(" ")
             if sample in samples_dict:
@@ -88,8 +88,6 @@ def get_small_var_pipeline_targets(wildcards):
 
 ##########################   Configs from CLI  ##########################
 OUT_DIR = Path(config["out_dir"])
-PROJECT_NAME = config["project_name"]
-PROJECT_PATH = Path(config["projects_path"]) / PROJECT_NAME / "analysis"
 PEDIGREE_FPATH = config["ped"]
 EXOME_MODE = config["exome"]
 ALLOW_SAMPLE_RENAMING = config["allow_sample_renaming"]
@@ -100,10 +98,11 @@ RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"
 RULE_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
 SAMPLES_CONFIG = read_sample_config(config["sample_config"])
+print ([value["bam"] for value in SAMPLES_CONFIG.values()])
 SAMPLES = list(SAMPLES_CONFIG.keys())
 MULTIQC_CONFIG_FILE = OUT_DIR / "project_level_qc" / "multiqc" / "configs" / f"tmp_multiqc_config-{config['unique_id']}.yaml"
 
-logger.info(f"// Processing project: {PROJECT_NAME}")
-logger.info(f'// Project path: "{PROJECT_PATH}"')
+logger.info(f"// Sample configfile: {config['sample_config']}")
+logger.info(f'// Output directory: "{OUT_DIR}"')
 logger.info(f"// Exome mode: {EXOME_MODE}")
 logger.info(f"// Include prior QC data: {INCLUDE_PRIOR_QC_DATA}")

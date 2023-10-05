@@ -1,7 +1,7 @@
 rule somalier_extract:
     input:
-        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
-        bam_index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"],
+        bam_index=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"] + ".bai",
         sites=config["datasets"]["somalier"]["sites"],
         ref_genome=config["datasets"]["ref"],
     output:

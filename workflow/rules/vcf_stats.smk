@@ -1,6 +1,6 @@
 rule bcftools_stats:
     input:
-        PROJECT_PATH / "{sample}" / "vcf" / "{sample}.vcf.gz",
+        lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["vcf"],
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats"),
     message:
@@ -17,7 +17,7 @@ rule bcftools_stats:
 
 rule bcftools_index:
     input:
-        PROJECT_PATH / "{sample}" / "vcf" / "{sample}.vcf.gz",
+        lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["vcf"],
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "bcftools-index" / "{sample}.bcftools.index.tsv"),
     message:
