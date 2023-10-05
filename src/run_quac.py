@@ -172,6 +172,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
     tmp_dir = args.tmp_dir
 
     quac_configs = {
+        "sample_config": args.sample_config,
         "ped": args.pedigree,
         "quac_watch_config": args.quac_watch_config,
         "workflow_config": args.workflow_config,
