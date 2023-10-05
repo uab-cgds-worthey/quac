@@ -21,7 +21,7 @@ rule qualimap_bamqc:
     input:
         bam=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"],
         bam_index=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"] + ".bai",
-        target_regions=get_capture_regions_bed if EXOME_MODE else [],
+        target_regions=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["capture_bed"] if EXOME_MODE else [],
     output:
         html_report=protected(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html"),
         coverage=protected(OUT_DIR / "{sample}" / "qc/qualimap/{sample}/raw_data_qualimapReport/coverage_across_reference.txt"),
@@ -105,7 +105,7 @@ rule mosdepth_coverage:
     input:
         bam=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"],
         bam_index=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"] + ".bai",
-        target_regions=get_capture_regions_bed if EXOME_MODE else [],
+        target_regions=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["capture_bed"] if EXOME_MODE else [],
     output:
         dist=protected(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt"),
         summary=protected(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.summary.txt"),
