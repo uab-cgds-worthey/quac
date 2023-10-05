@@ -1,21 +1,29 @@
+import csv
 import re
 from pathlib import PurePath
 from snakemake.logging import logger
 
 
-def get_samples(ped_fpath):
-    """
-    Parse pedigree file and return sample names
-    """
-    samples = ()
-    with open(ped_fpath, "r") as f_handle:
-        for line in f_handle:
-            if line.startswith("#"):
-                continue
-            sample = line.split("\t")[1]
-            samples += (sample,)
+# TODO: refactor to import from src/read_sample_config.py
+def read_sample_config(config_f):
+    "read sample config file and return map of samples to their input filepaths"
 
-    return samples
+    with open(config_f) as fh:
+        csv_reader = csv.DictReader(fh, delimiter="\t")
+
+        samples_dict = {}
+        for row in csv_reader:
+            bam = is_valid_file(row["bam"])
+            vcf = is_valid_file(row["vcf"])
+
+            sample = row["sample_id"].strip(" ")
+            if sample in samples_dict:
+                print(f"ERROR: Sample '{sample}' found >1x in config file '{config_f}'")
+                raise SystemExit(1)
+
+            samples_dict[sample] = {"vcf": vcf, "bam": bam}
+
+    return samples_dict
 
 
 def is_testing_mode():
@@ -91,7 +99,8 @@ INCLUDE_PRIOR_QC_DATA = config["include_prior_qc_data"]
 RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"
 RULE_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
-SAMPLES = get_samples(PEDIGREE_FPATH)
+SAMPLES_CONFIG = read_sample_config(config["sample_config"])
+SAMPLES = list(SAMPLES_CONFIG.keys())
 MULTIQC_CONFIG_FILE = OUT_DIR / "project_level_qc" / "multiqc" / "configs" / f"tmp_multiqc_config-{config['unique_id']}.yaml"
 
 logger.info(f"// Processing project: {PROJECT_NAME}")
