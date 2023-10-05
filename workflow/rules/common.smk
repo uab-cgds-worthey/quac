@@ -23,6 +23,10 @@ def read_sample_config(config_f):
 
             samples_dict[sample] = {"vcf": vcf, "bam": bam}
 
+            for colname in ["capture_bed"]:
+                if colname in row:
+                    samples_dict[sample][colname] = row[colname]
+
     return samples_dict
 
 
@@ -95,13 +99,13 @@ EXOME_MODE = config["exome"]
 ALLOW_SAMPLE_RENAMING = config["allow_sample_renaming"]
 INCLUDE_PRIOR_QC_DATA = config["include_prior_qc_data"]
 
+SAMPLES_CONFIG = read_sample_config(config["sample_config"])
+SAMPLES = list(SAMPLES_CONFIG.keys())
+
 #### configs from configfile ####
 RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"
 RULE_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
-SAMPLES_CONFIG = read_sample_config(config["sample_config"])
-print ([value["bam"] for value in SAMPLES_CONFIG.values()])
-SAMPLES = list(SAMPLES_CONFIG.keys())
 MULTIQC_CONFIG_FILE = OUT_DIR / "project_level_qc" / "multiqc" / "configs" / f"tmp_multiqc_config-{config['unique_id']}.yaml"
 
 logger.info(f"// Sample configfile: {config['sample_config']}")
