@@ -73,21 +73,19 @@ python src/run_quac.py \
       --include_prior_qc \
       --workflow_config "configs/workflow.yaml" \
       $USE_SLURM
-
     #   --allow_sample_renaming \
 
 # Exome mode
 python src/run_quac.py \
-      --project_name test_project \
-      --projects_path ".test/ngs-data/" \
-      --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+      --sample_config ".test/configs/include_priorQC/sample_config/project_2samples_exome.tsv" \
+      --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
       --outdir "data/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --exome \
       --include_prior_qc \
-      --allow_sample_renaming \
       --workflow_config "configs/workflow.yaml" \
       $USE_SLURM
+    #   --allow_sample_renaming \
 ```
 
 !!! note
