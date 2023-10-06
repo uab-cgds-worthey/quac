@@ -1,7 +1,4 @@
 ##########################     Create Multiqc config file    ##########################
-localrules:
-    create_multiqc_config,
-
 rule create_multiqc_config:
     input:
         script=WORKFLOW_PATH / "src" / "quac_watch" / "create_mutliqc_configs.py",
