@@ -14,6 +14,10 @@ YYYY-MM-DD  John Doe
 
 2023-10-05  Manavalan Gajapathy
 
+* Refactors to accept sample filepaths via user-provided sample config file, when `--allow_sample_renaming` is used (#86)
+
+2023-10-05  Manavalan Gajapathy
+
 * Refactors to accept sample filepaths via user-provided sample config file, when `--include_prior_qc` is used (#86)
 * Adds a test sample config file that includes priorQC filepaths
 
