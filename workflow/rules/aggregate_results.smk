@@ -163,7 +163,7 @@ rule multiqc_by_sample_final_pass:
 ##########################   Multi-sample QC aggregation  ##########################
 rule aggregate_sample_rename_configs:
     input:
-        [SAMPLES_CONFIG[sample]["multiqc_rename_config"] for sample in SAMPLES_CONFIG]
+        [SAMPLES_CONFIG[sample]["multiqc_rename_config"] for sample in SAMPLES_CONFIG] if ALLOW_SAMPLE_RENAMING else [],
     output:
         outfile=protected(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv"),
         tempfile=temp(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "flist.txt"),
