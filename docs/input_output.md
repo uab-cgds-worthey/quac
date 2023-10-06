@@ -4,6 +4,10 @@
 
 ### Sample config file
 
+Sample identifier and their necessary filepaths (`bam`, `vcf`, etc.) are provided to QuaC in a `tsv` formatted config
+file via `--sample_config`. Columns required depend on the flags supplied to `src/run_quac.py`. This table lists the
+allowed columns and when to use them.
+
 | Column                | When to use               | Description                                                                                           |
 | --------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
 | sample_id             | Always                    | Sample identifier                                                                                     |
@@ -15,6 +19,15 @@
 | fastq_screen          | `--include_prior_qc`      | Filepath to FastQ Screen `txt` files. Use comma as delimiter if multiple files.                       |
 | dedup                 | `--include_prior_qc`      | Filepath to Picard's MarkDuplicates `txt` files. Use comma as delimiter if multiple files.            |
 | multiqc_rename_config | `--allow_sample_renaming` | Filepath to label rename configfile to use with multiqc                                               |
+
+Refer to our system testing directory for example sample config files at `.test/configs`. For example:
+
+* `.test/configs/no_priorQC/sample_config/project_2samples_wgs.tsv` - Sample config file for WGS samples and no prior
+  QC.
+* `.test/configs/no_priorQC/sample_config/project_2samples_exome.tsv` - Sample config file for exome samples and no
+  prior QC. Note that WGS and exome samples can't be used in the same config file.
+* `.test/configs/include_priorQC/sample_config/project_2samples_wgs.tsv` - Sample config file for WGS samples with prior
+  QC data available from [certain QC tools](./index.md#optional-qc-output-consumed-by-quac).
 
 ### Pedigree file
 
