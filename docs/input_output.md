@@ -2,6 +2,22 @@
 
 ## Input
 
+### Sample config file
+
+| Column                | When to use               | Description                                                                                           |
+| --------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
+| sample_id             | Always                    | Sample identifier                                                                                     |
+| bam                   | Always                    | BAM filepath                                                                                          |
+| vcf                   | Always                    | VCF filepath                                                                                          |
+| capture_bed           | `--exome`                 | Capture region bed filepath                                                                           |
+| fastqc_raw            | `--include_prior_qc`      | Filepath to FastQC `zip` files created from raw fastqs. Use comma as delimiter if multiple files.     |
+| fastqc_trimmed        | `--include_prior_qc`      | Filepath to FastQC `zip` files created from trimmed fastqs. Use comma as delimiter if multiple files. |
+| fastq_screen          | `--include_prior_qc`      | Filepath to FastQ Screen `txt` files. Use comma as delimiter if multiple files.                       |
+| dedup                 | `--include_prior_qc`      | Filepath to Picard's MarkDuplicates `txt` files. Use comma as delimiter if multiple files.            |
+| multiqc_rename_config | `--allow_sample_renaming` | Filepath to label rename configfile to use with multiqc                                               |
+
+### Pedigree file
+
 <!-- markdown-link-check-disable -->
 
 Samples belonging to a project are provided as input via `--pedigree` to QuaC in [pedigree file
