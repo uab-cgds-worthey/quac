@@ -48,12 +48,16 @@ Samples listed in this file must correspond to those in sample config file (`--s
 ## Output
 
 QuaC results are stored at the path specified via option `--outdir` (default:
-`data/quac/results/test_project/analysis`).  Refer to the [system testing's
+`data/quac/results/test_project/analysis`). Refer to the [system testing's
 output](./system_testing.md#expected-output-files) to learn more about the output directory structure.
+
+QC output are stored at the sample level as well as the project level (ie. all samples considered together) depending on
+the type of QC run. For example, Qualimap tool is run at the sample level whereas Somalier tool is run at the project
+level. MultiQC reports are available both at the sample and project level.
 
 !!! tip
 
-    Users may primarily be interested in the aggregated QC results produced by [multiqc](https://multiqc.info/),
+    Users may primarily be interested in the aggregated QC results produced by [MultiQC](https://multiqc.info/),
     both at sample-level as well as at the project-level. These multiqc reports also include summary of QuaC-Watch
     results at the top.
 
