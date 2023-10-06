@@ -33,7 +33,7 @@ rule multiqc_by_sample_initial_pass:
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         multiqc_config=MULTIQC_CONFIG_FILE,
-        rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv" if ALLOW_SAMPLE_RENAMING else [],
+        rename_config=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["multiqc_rename_config"] if ALLOW_SAMPLE_RENAMING else [],
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc.html"),
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt"),
@@ -135,7 +135,7 @@ rule multiqc_by_sample_final_pass:
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         OUT_DIR / "{sample}" / "qc" / "quac_watch" / "quac_watch_overall_summary.yaml",
         multiqc_config=MULTIQC_CONFIG_FILE,
-        rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv" if ALLOW_SAMPLE_RENAMING else [],
+        rename_config=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["multiqc_rename_config"] if ALLOW_SAMPLE_RENAMING else [],
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html"),
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt"),
