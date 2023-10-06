@@ -33,72 +33,9 @@ supplied in pedigree file will be processed by QuaC and all of these samples mus
     affected status info. See header of the script for usage instructions. 
 
 
-Each sample must have `BAM` and `VCF` files available in the directory structure shown below for sample `X`.
-
-```
-test_project/
-└── analysis
-    ├── X
-    │   ├── bam
-    │   │   ├── X.bam
-    │   │   └── X.bam.bai
-    │   └── vcf
-    │       ├── X.vcf.gz
-    │       └── X.vcf.gz.tbi
-    └── Y
-        └── ....
-```
-
-When run in exome mode using flag `--exome`, QuaC requires a capture-regions bed file at the path
-`path_to_sample/configs/small_variant_caller/<capture_regions>.bed` for each sample.
-
-```
-test_project/
-└── analysis
-    ├── X
-    │   ├── bam
-    │   │   ├── X.bam
-    │   │   └── X.bam.bai
-    │   ├── configs
-    │   │   └── small_variant_caller
-    │   │       └── capture_regions.bed
-    │   └── vcf
-    │       ├── X.vcf.gz
-    │       └── X.vcf.gz.tbi
-    └── Y
-        └── ....
-```
-
 *Optionally*, QuaC can also utilize QC results produced by [certain
 tools](./index.md#optional-qc-output-consumed-by-quac) when run with flag `--include_prior_qc`. In this case, following
 directory structure is expected.
-
-```
-test_project/
-└── analysis
-    ├── X
-    │   ├── bam
-    │   │   ├── X.bam
-    │   │   └── X.bam.bai
-    │   ├── qc
-    │   │   ├── dedup
-    │   │   │   ├── X-1.metrics.txt
-    │   │   │   └── X-2.metrics.txt
-    │   │   ├── fastqc-raw
-    │   │   │   ├── ....
-    │   │   ├── fastqc-trimmed
-    │   │   │   ├── ....
-    │   │   ├── fastq_screen-trimmed
-    │   │   │   └── ....
-    │   │   └── multiqc_initial_pass    <--- needed only when `--allow_sample_renaming` flag is used
-    │   │       └── multiqc_sample_rename_config
-    │   │           └── X_rename_config.tsv
-    │   └── vcf
-    │       ├── X.vcf.gz
-    │       └── X.vcf.gz.tbi
-    └── Y
-        └── ....
-```
 
 
 !!! note "CGDS users only"
@@ -120,7 +57,7 @@ QuaC results are stored at the path specified via option `--outdir` (default:
 `data/quac/results/test_project/analysis`).  Refer to the [system testing's
 output](./system_testing.md#expected-output-files) to learn more about the output directory structure. 
 
-!!! tip 
+!!! tip
 
     Users may primarily be interested in the aggregated QC results produced by [multiqc](https://multiqc.info/),
     both at sample-level as well as at the project-level. These multiqc reports also include summary of QuaC-Watch
