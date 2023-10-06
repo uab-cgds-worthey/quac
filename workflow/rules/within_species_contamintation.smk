@@ -7,8 +7,8 @@ def get_svd(wildcards):
 
 rule verifybamid:
     input:
-        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
-        bam_index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"],
+        bam_index=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"] + ".bai",
         ref_genome=config["datasets"]["ref"],
         svd=get_svd,
     output:

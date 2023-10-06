@@ -12,6 +12,18 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-10-05  Manavalan Gajapathy
+
+* Refactors to accept sample filepaths via user-provided sample config file. Only for WGS mode in minimal manner (w/o
+  --include_prior_qc, --allow_sample_renaming) (#86)
+* Adds sample config file to use with system testing datasets -
+  `.test/configs/no_priorQC/sample_config/project_2samples.tsv`. This provides map of sample name to their VCF and BAM
+  filepaths.
+* Refactors use of `--sample_config` arg to work with this config file as input
+* Deprecates args `--project_name` and `--projects_path`
+* Modifies workflow to use the new input setup
+* Updates README concerning the changes made
+
 2023-07-17  Manavalan Gajapathy
 
 * Minor updates to documentation.

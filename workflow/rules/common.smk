@@ -1,30 +1,40 @@
+import csv
 import re
 from pathlib import PurePath
 from snakemake.logging import logger
 
 
-def get_samples(ped_fpath):
-    """
-    Parse pedigree file and return sample names
-    """
-    samples = ()
-    with open(ped_fpath, "r") as f_handle:
-        for line in f_handle:
-            if line.startswith("#"):
-                continue
-            sample = line.split("\t")[1]
-            samples += (sample,)
+# TODO: refactor to import from src/read_sample_config.py
+def read_sample_config(config_f):
+    "read sample config file and return map of samples to their input filepaths"
 
-    return samples
+    with open(config_f) as fh:
+        csv_reader = csv.DictReader(fh, delimiter="\t")
+
+        samples_dict = {}
+        for row in csv_reader:
+            bam = row["bam"]
+            vcf = row["vcf"]
+
+            sample = row["sample_id"].strip(" ")
+            if sample in samples_dict:
+                print(f"ERROR: Sample '{sample}' found >1x in config file '{config_f}'")
+                raise SystemExit(1)
+
+            samples_dict[sample] = {"vcf": vcf, "bam": bam}
+
+    return samples_dict
 
 
 def is_testing_mode():
     "checks if testing dataset is used as input for the pipeline"
 
     query = ".test"
-    if query in PurePath(PROJECT_PATH).parts:
-        logger.info(f"// WARNING: '{query}' present in the path supplied via --projects_path. So testing mode is used.")
-        return True
+    for sample in SAMPLES_CONFIG.values():
+        for fpath in sample.values():
+            if query in PurePath(fpath).parts:
+                logger.info(f"// WARNING: '{query}' present in at least one of the filepaths supplied via --sample_config. So testing mode is used.")
+                return True
 
     return None
 
@@ -80,8 +90,6 @@ def get_small_var_pipeline_targets(wildcards):
 
 ##########################   Configs from CLI  ##########################
 OUT_DIR = Path(config["out_dir"])
-PROJECT_NAME = config["project_name"]
-PROJECT_PATH = Path(config["projects_path"]) / PROJECT_NAME / "analysis"
 PEDIGREE_FPATH = config["ped"]
 EXOME_MODE = config["exome"]
 ALLOW_SAMPLE_RENAMING = config["allow_sample_renaming"]
@@ -91,10 +99,12 @@ INCLUDE_PRIOR_QC_DATA = config["include_prior_qc_data"]
 RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"
 RULE_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
-SAMPLES = get_samples(PEDIGREE_FPATH)
+SAMPLES_CONFIG = read_sample_config(config["sample_config"])
+print ([value["bam"] for value in SAMPLES_CONFIG.values()])
+SAMPLES = list(SAMPLES_CONFIG.keys())
 MULTIQC_CONFIG_FILE = OUT_DIR / "project_level_qc" / "multiqc" / "configs" / f"tmp_multiqc_config-{config['unique_id']}.yaml"
 
-logger.info(f"// Processing project: {PROJECT_NAME}")
-logger.info(f'// Project path: "{PROJECT_PATH}"')
+logger.info(f"// Sample configfile: {config['sample_config']}")
+logger.info(f'// Output directory: "{OUT_DIR}"')
 logger.info(f"// Exome mode: {EXOME_MODE}")
 logger.info(f"// Include prior QC data: {INCLUDE_PRIOR_QC_DATA}")
