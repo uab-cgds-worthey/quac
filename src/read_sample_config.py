@@ -14,7 +14,7 @@ def get_full_path(x):
 
 def is_valid_file(fpath):
     if not Path(fpath).is_file():
-        print(f"File provided in sample config file was not found: {fpath}")
+        print(f"ERROR: File provided in sample config file was not found: '{fpath}'")
         raise SystemExit(1)
 
     return get_full_path(fpath)
@@ -24,6 +24,7 @@ def read_sample_config(config_f):
 
     with open(config_f) as fh:
         csv_reader = csv.DictReader(fh, delimiter="\t")
+        colnames = csv_reader.fieldnames
 
         samples_dict = {}
         for row in csv_reader:
@@ -37,7 +38,11 @@ def read_sample_config(config_f):
 
             samples_dict[sample] = {"vcf": vcf, "bam": bam}
 
-    return samples_dict
+            for colname in ["capture_bed"]:
+                if colname in row:
+                    samples_dict[sample][colname] = is_valid_file(row[colname])
+
+    return samples_dict, colnames
 
 
 if __name__ == "__main__":

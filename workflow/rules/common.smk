@@ -23,6 +23,10 @@ def read_sample_config(config_f):
 
             samples_dict[sample] = {"vcf": vcf, "bam": bam}
 
+            for colname in ["capture_bed"]:
+                if colname in row:
+                    samples_dict[sample][colname] = row[colname]
+
     return samples_dict
 
 
@@ -37,27 +41,6 @@ def is_testing_mode():
                 return True
 
     return None
-
-
-def get_capture_regions_bed(wildcards):
-    "returns capture bed file (if any) used by small variant caller pipeline"
-
-    config_dir = PROJECT_PATH / wildcards.sample / "configs" / "small_variant_caller"
-    compressed_bed = list(config_dir.glob("*.bed.gz"))
-    if compressed_bed:
-        logger.error(
-            f"ERROR: Compressed capture bed file found for sample {wildcards.sample}, "
-            "but it is not supported by some QC tools used in QuaC (eg. qualimap). "
-            f"Use compressed bed file instead. - {compressed_bed}"
-        )
-        raise SystemExit(1)
-
-    bed = list(config_dir.glob("*.bed"))
-    if len(bed) != 1:
-        logger.error(f"ERROR: No or >1 capture bed file found for sample {wildcards.sample} - {bed}")
-        raise SystemExit(1)
-
-    return bed
 
 
 def get_small_var_pipeline_targets(wildcards):
@@ -95,13 +78,13 @@ EXOME_MODE = config["exome"]
 ALLOW_SAMPLE_RENAMING = config["allow_sample_renaming"]
 INCLUDE_PRIOR_QC_DATA = config["include_prior_qc_data"]
 
+SAMPLES_CONFIG = read_sample_config(config["sample_config"])
+SAMPLES = list(SAMPLES_CONFIG.keys())
+
 #### configs from configfile ####
 RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"
 RULE_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
-SAMPLES_CONFIG = read_sample_config(config["sample_config"])
-print ([value["bam"] for value in SAMPLES_CONFIG.values()])
-SAMPLES = list(SAMPLES_CONFIG.keys())
 MULTIQC_CONFIG_FILE = OUT_DIR / "project_level_qc" / "multiqc" / "configs" / f"tmp_multiqc_config-{config['unique_id']}.yaml"
 
 logger.info(f"// Sample configfile: {config['sample_config']}")

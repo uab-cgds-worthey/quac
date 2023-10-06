@@ -14,6 +14,13 @@ YYYY-MM-DD  John Doe
 
 2023-10-05  Manavalan Gajapathy
 
+* Refactors to accept sample filepaths via user-provided sample config file. Only for exome mode in minimal manner (w/o
+  --include_prior_qc, --allow_sample_renaming) (#86)
+* Adds a test sample config file
+* Refactors to get capture bed file as input from the sample configfile
+
+2023-10-05  Manavalan Gajapathy
+
 * Refactors to accept sample filepaths via user-provided sample config file. Only for WGS mode in minimal manner (w/o
   --include_prior_qc, --allow_sample_renaming) (#86)
 * Adds sample config file to use with system testing datasets -
