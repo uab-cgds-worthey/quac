@@ -164,30 +164,27 @@ rule multiqc_by_sample_final_pass:
 
 
 ##########################   Multi-sample QC aggregation  ##########################
-# rule aggregate_sample_rename_configs:
-#     input:
-#         expand(
-#             PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
-#             sample=SAMPLES,
-#         ),
-#     output:
-#         outfile=protected(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv"),
-#         tempfile=temp(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "flist.txt"),
-#     message:
-#         "Aggregate all sample rename-config files."
-#     singularity:
-#         "docker://quay.io/biocontainers/mulled-v2-78a02249d8cc4e85718933e89cf41d0e6686ac25:70df245247aac9844ee84a9da1e96322a24c1f34-0"
-#     shell:
-#         r"""
-#         # save files in a tempfile
-#         echo {input} \
-#             | tr " " "\n" \
-#             > {output.tempfile}
+rule aggregate_sample_rename_configs:
+    input:
+        [SAMPLES_CONFIG[sample]["multiqc_rename_config"] for sample in SAMPLES_CONFIG]
+    output:
+        outfile=protected(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv"),
+        tempfile=temp(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "flist.txt"),
+    message:
+        "Aggregate all sample rename-config files."
+    singularity:
+        "docker://quay.io/biocontainers/mulled-v2-78a02249d8cc4e85718933e89cf41d0e6686ac25:70df245247aac9844ee84a9da1e96322a24c1f34-0"
+    shell:
+        r"""
+        # save files in a tempfile
+        echo {input} \
+            | tr " " "\n" \
+            > {output.tempfile}
 
-#         python src/aggregate_sample_rename_configs.py \
-#             --infile {output.tempfile} \
-#             --outfile {output.outfile}
-#         """
+        python src/aggregate_sample_rename_configs.py \
+            --infile {output.tempfile} \
+            --outfile {output.outfile}
+        """
 
 
 rule multiqc_aggregation_all_samples:
