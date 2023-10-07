@@ -88,10 +88,6 @@ python src/run_quac.py \
       $USE_SLURM
 ```
 
-!!! note
-
-    Use `PROJECT="project_1sample"` to test out a project with only one sample.
-
 ## Expected output files
 
 Output directory structure for WGS + `include_prior_qc` mode would look like this.
