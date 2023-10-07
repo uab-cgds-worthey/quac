@@ -39,14 +39,16 @@ def read_sample_config(config_f):
             samples_dict[sample] = {"vcf": vcf, "bam": bam}
 
             # expect only filepath per field
-            for colname in ["capture_bed"]:
+            for colname in ["capture_bed", "multiqc_rename_config"]:
                 if colname in row:
                     samples_dict[sample][colname] = is_valid_file(row[colname])
 
             # expect >=1 filepath per field
             for colname in ["fastqc_raw", "fastqc_trimmed", "fastq_screen", "dedup"]:
                 if colname in row:
-                    samples_dict[sample][colname] = [is_valid_file(f) for f in row[colname].split(",")]
+                    samples_dict[sample][colname] = [
+                        is_valid_file(f) for f in row[colname].split(",")
+                    ]
 
     return samples_dict, colnames
 

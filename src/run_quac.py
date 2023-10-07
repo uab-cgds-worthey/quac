@@ -70,9 +70,11 @@ def check_sample_configs(fpath, exome_mode, include_prior_qc, allow_sample_renam
             )
             raise SystemExit(1)
 
-    # TODO
-    if allow_sample_renaming and "TODO" not in header:
-        pass
+    if allow_sample_renaming and "multiqc_rename_config" not in header:
+        print(
+            f"ERROR: Flag --allow_sample_renaming supplied but required column 'multiqc_rename_config' is missing in sample configfile '{fpath}'"
+        )
+        raise SystemExit(1)
 
     return samples_dict
 
