@@ -61,9 +61,14 @@ def check_sample_configs(fpath, exome_mode, include_prior_qc, allow_sample_renam
                 )
                 raise SystemExit(1)
 
-    # TODO
-    if include_prior_qc and "TODO" not in header:
-        pass
+    if include_prior_qc:
+        columns = ["fastqc_raw", "fastqc_trimmed", "fastq_screen", "dedup"]
+        missing_columns = list(set(columns).difference(set(header)))
+        if len(missing_columns):
+            print(
+                f"ERROR: Columns missing in sample config file but needed when flag --include_prior_qc is used: {missing_columns}"
+            )
+            raise SystemExit(1)
 
     # TODO
     if allow_sample_renaming and "TODO" not in header:
@@ -144,7 +149,11 @@ def gather_mount_paths(
     # input filepaths from sample config
     for sample_val in samples_config_dict.values():
         for val_fpath in sample_val.values():
-            mount_paths.add(Path(val_fpath).parent)
+            if isinstance(val_fpath, str):
+                mount_paths.add(Path(val_fpath).parent)
+            elif isinstance(val_fpath, list):
+                for item in val_fpath:
+                    mount_paths.add(Path(item).parent)
 
     # pedigree filepath
     mount_paths.add(Path(pedigree_path).parent)
