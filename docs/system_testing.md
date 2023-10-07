@@ -42,7 +42,7 @@ PRIOR_QC_STATUS="no_priorQC"
 
 # WGS mode
 python src/run_quac.py \
-      --sample_config ".test/configs/no_priorQC/sample_config/project_2samples_wgs.tsv" \
+      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_wgs.tsv" \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
       --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
@@ -51,7 +51,7 @@ python src/run_quac.py \
 
 # Exome mode
 python src/run_quac.py \
-      --sample_config ".test/configs/no_priorQC/sample_config/project_2samples_exome.tsv" \
+      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_exome.tsv" \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
       --outdir "data/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
@@ -66,7 +66,7 @@ PRIOR_QC_STATUS="include_priorQC"
 
 # WGS mode
 python src/run_quac.py \
-      --sample_config ".test/configs/include_priorQC/sample_config/project_2samples_wgs.tsv" \
+      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_wgs.tsv" \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
       --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
@@ -77,7 +77,7 @@ python src/run_quac.py \
 
 # Exome mode
 python src/run_quac.py \
-      --sample_config ".test/configs/include_priorQC/sample_config/project_2samples_exome.tsv" \
+      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_exome.tsv" \
       --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
       --outdir "data/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
@@ -87,10 +87,6 @@ python src/run_quac.py \
       --workflow_config "configs/workflow.yaml" \
       $USE_SLURM
 ```
-
-!!! note
-
-    Use `PROJECT="project_1sample"` to test out a project with only one sample.
 
 ## Expected output files
 

@@ -12,6 +12,12 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-10-06  Manavalan Gajapathy
+
+* Adds documentation on providing sample filepaths via user-provided sample config file due to recent PRs #87, #88, #89
+  and #90 (closes #86).
+* Adds documentation on editing thresholds in the QuaC-Watch config file (closes #85)
+
 2023-10-05  Manavalan Gajapathy
 
 * Refactors to accept sample filepaths via user-provided sample config file, when `--allow_sample_renaming` is used (#86)

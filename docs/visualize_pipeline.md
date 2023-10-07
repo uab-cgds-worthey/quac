@@ -24,9 +24,8 @@ DAG_DIR="pipeline_visualized"
 ###### WGS mode ######
 # DAG
 python src/run_quac.py \
-      --project_name test_project \
-      --projects_path ".test/ngs-data/" \
-      --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_wgs.tsv" \
+      --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
       --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
       --include_prior_qc \
       --extra_args "--dag -F | dot -Tpng > ${DAG_DIR}/wgs_dag.png"
@@ -34,9 +33,8 @@ python src/run_quac.py \
 
 # Rulegraph - less informative than DAG at sample level but less dense than DAG makes this easier to skim
 python src/run_quac.py \
-      --project_name test_project \
-      --projects_path ".test/ngs-data/" \
-      --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_wgs.tsv" \
+      --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
       --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
       --include_prior_qc \
       --extra_args "--rulegraph -F | dot -Tpng > ${DAG_DIR}/wgs_rulegraph.png"
@@ -45,9 +43,8 @@ python src/run_quac.py \
 ###### Exome mode ######
 # DAG
 python src/run_quac.py \
-      --project_name test_project \
-      --projects_path ".test/ngs-data/" \
-      --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_exome.tsv" \
+      --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --include_prior_qc \
       --exome \
@@ -56,12 +53,10 @@ python src/run_quac.py \
 
 # Rulegraph - less informative than DAG at sample level but less dense than DAG makes this easier to skim
 python src/run_quac.py \
-      --project_name test_project \
-      --projects_path ".test/ngs-data/" \
-      --pedigree ".test/configs/${PRIOR_QC_STATUS}/${PROJECT_CONFIG}.ped" \
+      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_exome.tsv" \
+      --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --include_prior_qc \
       --exome \
       --extra_args "--rulegraph -F | dot -Tpng > ${DAG_DIR}/exome_rulegraph.png"
-
 ```
