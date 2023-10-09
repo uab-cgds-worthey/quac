@@ -12,6 +12,10 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2023-10-09  Manavalan Gajapathy
+
+* Merges `joss_manuscript` to the `master` branch to bring it up to date.
+
 2023-10-06  Manavalan Gajapathy
 
 * Adds documentation on providing sample filepaths via user-provided sample config file due to recent PRs #87, #88, #89
