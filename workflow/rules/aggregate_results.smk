@@ -1,7 +1,4 @@
 ##########################     Create Multiqc config file    ##########################
-localrules:
-    create_multiqc_config,
-
 rule create_multiqc_config:
     input:
         script=WORKFLOW_PATH / "src" / "quac_watch" / "create_mutliqc_configs.py",
@@ -25,7 +22,7 @@ rule create_multiqc_config:
 ##########################   Single-sample-level QC aggregation  ##########################
 rule multiqc_by_sample_initial_pass:
     input:
-        get_small_var_pipeline_targets if INCLUDE_PRIOR_QC_DATA else [],
+        lambda wildcards: get_priorQC_filepaths(wildcards.sample, SAMPLES_CONFIG) if INCLUDE_PRIOR_QC_DATA else [],
         OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
         OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
@@ -33,7 +30,7 @@ rule multiqc_by_sample_initial_pass:
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         multiqc_config=MULTIQC_CONFIG_FILE,
-        rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv" if ALLOW_SAMPLE_RENAMING else [],
+        rename_config=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["multiqc_rename_config"] if ALLOW_SAMPLE_RENAMING else [],
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc.html"),
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt"),
@@ -126,7 +123,7 @@ rule quac_watch:
 
 rule multiqc_by_sample_final_pass:
     input:
-        get_small_var_pipeline_targets if INCLUDE_PRIOR_QC_DATA else [],
+        lambda wildcards: get_priorQC_filepaths(wildcards.sample, SAMPLES_CONFIG) if INCLUDE_PRIOR_QC_DATA else [],
         OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
         OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
@@ -135,7 +132,7 @@ rule multiqc_by_sample_final_pass:
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         OUT_DIR / "{sample}" / "qc" / "quac_watch" / "quac_watch_overall_summary.yaml",
         multiqc_config=MULTIQC_CONFIG_FILE,
-        rename_config=PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv" if ALLOW_SAMPLE_RENAMING else [],
+        rename_config=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["multiqc_rename_config"] if ALLOW_SAMPLE_RENAMING else [],
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html"),
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt"),
@@ -166,10 +163,7 @@ rule multiqc_by_sample_final_pass:
 ##########################   Multi-sample QC aggregation  ##########################
 rule aggregate_sample_rename_configs:
     input:
-        expand(
-            PROJECT_PATH / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
-            sample=SAMPLES,
-        ),
+        [SAMPLES_CONFIG[sample]["multiqc_rename_config"] for sample in SAMPLES_CONFIG] if ALLOW_SAMPLE_RENAMING else [],
     output:
         outfile=protected(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv"),
         tempfile=temp(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "flist.txt"),
@@ -192,17 +186,7 @@ rule aggregate_sample_rename_configs:
 
 rule multiqc_aggregation_all_samples:
     input:
-        expand(
-            [
-                PROJECT_PATH / "{sample}" / "qc" / "fastqc-raw" / "{sample}-{unit}-{read}_fastqc.zip",
-                PROJECT_PATH / "{sample}" / "qc" / "fastqc-trimmed" / "{sample}-{unit}-{read}_fastqc.zip",
-                PROJECT_PATH / "{sample}" / "qc" / "fastq_screen-trimmed" / "{sample}-{unit}-{read}_screen.txt",
-                PROJECT_PATH / "{sample}" / "qc" / "dedup" / "{sample}-{unit}.metrics.txt",
-            ],
-            sample=SAMPLES,
-            unit=[1],
-            read=["R1", "R2"],
-        ) if INCLUDE_PRIOR_QC_DATA else [],
+        [get_priorQC_filepaths(sample, SAMPLES_CONFIG) for sample in SAMPLES_CONFIG.keys()] if INCLUDE_PRIOR_QC_DATA else [],
         expand(
             [
                 OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",

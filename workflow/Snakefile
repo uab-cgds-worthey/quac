@@ -1,6 +1,5 @@
 """
 QuaC Pipeline to perform QC on bams and vcfs.
-Works at project level.
 """
 
 WORKFLOW_PATH = Path(workflow.basedir).parent
@@ -24,7 +23,6 @@ include: "rules/aggregate_results.smk"
 ############   CONSTRAINTS   ############
 wildcard_constraints:
     sample="|".join(SAMPLES),
-    project=PROJECT_NAME,
 
 
 #########################################

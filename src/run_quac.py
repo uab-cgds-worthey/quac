@@ -19,6 +19,7 @@ import json
 import yaml
 from singularity_status import test_singularity
 from slurm.submit_slurm_job import submit_slurm_job
+from read_sample_config import read_sample_config
 
 
 def make_dir(d):
@@ -37,6 +38,45 @@ def get_tool_path(tool):
     tool_path = which(tool)
 
     return tool_path
+
+
+def check_sample_configs(fpath, exome_mode, include_prior_qc, allow_sample_renaming):
+    """
+    reads from sample configfile and verifies necessary column names exist
+    """
+
+    samples_dict, header = read_sample_config(fpath)
+
+    if exome_mode:
+        if "capture_bed" not in header:
+            print(
+                f"ERROR: Flag --exome supplied but required column 'capture_bed' is missing in sample configfile '{fpath}'"
+            )
+            raise SystemExit(1)
+
+        for sample in samples_dict:
+            if not samples_dict[sample]["capture_bed"].endswith(".bed"):
+                print(
+                    f"ERROR: Capture bed filename is required to end with '.bed' extension: '{samples_dict[sample]['capture_bed']}'"
+                )
+                raise SystemExit(1)
+
+    if include_prior_qc:
+        columns = ["fastqc_raw", "fastqc_trimmed", "fastq_screen", "dedup"]
+        missing_columns = list(set(columns).difference(set(header)))
+        if len(missing_columns):
+            print(
+                f"ERROR: Columns missing in sample config file but needed when flag --include_prior_qc is used: {missing_columns}"
+            )
+            raise SystemExit(1)
+
+    if allow_sample_renaming and "multiqc_rename_config" not in header:
+        print(
+            f"ERROR: Flag --allow_sample_renaming supplied but required column 'multiqc_rename_config' is missing in sample configfile '{fpath}'"
+        )
+        raise SystemExit(1)
+
+    return samples_dict
 
 
 def check_mount_paths_exist(paths):
@@ -91,8 +131,8 @@ def read_workflow_config(workflow_config_fpath):
 
 
 def gather_mount_paths(
-    projects_path,
-    project_name,
+    sample_config_f,
+    samples_config_dict,
     pedigree_path,
     out_dir,
     log_dir,
@@ -105,10 +145,17 @@ def gather_mount_paths(
 
     mount_paths = set()
 
-    # project path
-    project_path = Path(projects_path) / project_name / "analysis"
-    make_dir(project_path)
-    mount_paths.add(project_path)
+    # sample_config
+    mount_paths.add(Path(sample_config_f).parent)
+
+    # input filepaths from sample config
+    for sample_val in samples_config_dict.values():
+        for val_fpath in sample_val.values():
+            if isinstance(val_fpath, str):
+                mount_paths.add(Path(val_fpath).parent)
+            elif isinstance(val_fpath, list):
+                for item in val_fpath:
+                    mount_paths.add(Path(item).parent)
 
     # pedigree filepath
     mount_paths.add(Path(pedigree_path).parent)
@@ -168,8 +215,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
     tmp_dir = args.tmp_dir
 
     quac_configs = {
-        "project_name": args.project_name,
-        "projects_path": args.projects_path,
+        "sample_config": args.sample_config,
         "ped": args.pedigree,
         "quac_watch_config": args.quac_watch_config,
         "workflow_config": args.workflow_config,
@@ -232,10 +278,15 @@ def main(args):
     # check singularity works properly in user's machine
     test_singularity()
 
+    # read sample configfile and verify necessary columns exist
+    samples_config_dict = check_sample_configs(
+        args.sample_config, args.exome, args.include_prior_qc, args.allow_sample_renaming
+    )
+
     # process user's input-output config file and get singularity bind paths
     mount_paths = gather_mount_paths(
-        args.projects_path,
-        args.project_name,
+        args.sample_config,
+        samples_config_dict,
         args.pedigree,
         args.outdir,
         args.log_dir,
@@ -314,19 +365,14 @@ if __name__ == "__main__":
     WORKFLOW = PARSER.add_argument_group("QuaC snakemake workflow options")
 
     WORKFLOW.add_argument(
-        "--project_name",
-        help="Project name. Required.",
-        required=True,
-    )
-    WORKFLOW.add_argument(
-        "--projects_path",
-        help="Path where all projects are hosted. Do not include project name here. Required.",
-        type=lambda x: is_valid_dir(PARSER, x),
+        "--sample_config",
+        help="Sample config file in TSV format. Provides sample name and necessary input filepaths (bam, vcf, etc.). Required.",
+        type=lambda x: is_valid_file(PARSER, x),
         required=True,
     )
     WORKFLOW.add_argument(
         "--pedigree",
-        help="Pedigree filepath. Must correspond to the project supplied via --project_name. Required.",
+        help="Pedigree filepath. Must correspond to samples mentioned in configfile via --sample_config. Required.",
         type=lambda x: is_valid_file(PARSER, x),
         required=True,
     )
@@ -426,10 +472,6 @@ if __name__ == "__main__":
     if not ARGS.quac_watch_config:
         raise SystemExit(
             "Error. Quac-watch config is missing. Please supply using --quac_watch_config."
-        )
-    if not ARGS.projects_path:
-        raise SystemExit(
-            "Error. 'Projects path' not provided. Please supply using --projects_path."
         )
 
     main(ARGS)

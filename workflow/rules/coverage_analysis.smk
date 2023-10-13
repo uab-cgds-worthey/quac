@@ -1,7 +1,7 @@
 ##########################   Samtools   ##########################
 rule samtools_stats:
     input:
-        PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
+        lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"]
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt"),
     singularity:
@@ -19,9 +19,9 @@ rule samtools_stats:
 ##########################   Qualimap   ##########################
 rule qualimap_bamqc:
     input:
-        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
-        index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
-        target_regions=get_capture_regions_bed if EXOME_MODE else [],
+        bam=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"],
+        bam_index=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"] + ".bai",
+        target_regions=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["capture_bed"] if EXOME_MODE else [],
     output:
         html_report=protected(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html"),
         coverage=protected(OUT_DIR / "{sample}" / "qc/qualimap/{sample}/raw_data_qualimapReport/coverage_across_reference.txt"),
@@ -53,8 +53,8 @@ rule qualimap_bamqc:
 ##########################   Picard   ##########################
 rule picard_collect_multiple_metrics:
     input:
-        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
-        index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"],
+        bam_index=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"] + ".bai",
         ref=config["datasets"]["ref"],
     output:
         multiext(
@@ -82,8 +82,8 @@ rule picard_collect_multiple_metrics:
 
 rule picard_collect_wgs_metrics:
     input:
-        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
-        index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
+        bam=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"],
+        bam_index=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"] + ".bai",
         ref=config["datasets"]["ref"],
     output:
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
@@ -103,9 +103,9 @@ rule picard_collect_wgs_metrics:
 ##########################   Mosdepth   ##########################
 rule mosdepth_coverage:
     input:
-        bam=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
-        bam_index=PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
-        target_regions=get_capture_regions_bed if EXOME_MODE else [],
+        bam=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"],
+        bam_index=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["bam"] + ".bai",
+        target_regions=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["capture_bed"] if EXOME_MODE else [],
     output:
         dist=protected(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt"),
         summary=protected(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.summary.txt"),
@@ -153,14 +153,8 @@ rule mosdepth_plot:
 ##########################   indexcov   ##########################
 rule indexcov:
     input:
-        bam=expand(
-            PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam",
-            sample=SAMPLES,
-        ),
-        bam_index=expand(
-            PROJECT_PATH / "{sample}" / "bam" / "{sample}.bam.bai",
-            sample=SAMPLES,
-        ),
+        bam=[value["bam"] for value in SAMPLES_CONFIG.values()],
+        bam_index=[value["bam"]+".bai" for value in SAMPLES_CONFIG.values()],
     output:
         html=protected(OUT_DIR / "project_level_qc" / "indexcov" / "index.html"),
         bed=protected(OUT_DIR / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz"),
