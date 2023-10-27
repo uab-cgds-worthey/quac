@@ -1,7 +1,7 @@
 [![Snakemake](https://img.shields.io/badge/snakemake-6.0.5-brightgreen.svg?style=flat)](https://snakemake.readthedocs.io)
 [![ReadTheDocs](https://readthedocs.org/projects/quac/badge/?version=latest)](https://quac.readthedocs.io/en/stable/)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10002036.svg)](https://doi.org/10.5281/zenodo.10002036)
-[![DOI](https://joss.theoj.org/papers/10.21105/joss.05313/status.svg)](https://doi.org/10.21105/joss.05313)
+[![DOI JOSS](https://joss.theoj.org/papers/10.21105/joss.05313/status.svg)](https://doi.org/10.21105/joss.05313)
+[![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.10002036.svg)](https://doi.org/10.5281/zenodo.10002036)
 
 # QuaC
 
