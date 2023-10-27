@@ -14,6 +14,9 @@ YYYY-MM-DD  John Doe
 
 2023-10-09  Manavalan Gajapathy
 
+- Makes minor documentation updates - updating citation info, adding JOSS badge and updating zenodo badge to use generic
+  DOI
+
 * Merges `joss_manuscript` to the `master` branch to bring it up to date.
 
 2023-10-06  Manavalan Gajapathy
