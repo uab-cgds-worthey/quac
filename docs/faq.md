@@ -15,3 +15,8 @@ from it's last state.
 * If `--cli_cluster_config` was used, logs from the snakemake process are stored in the directory provided using `--log_dir`. Else, logs will be directed to stderr/stdout and not stored in a file.
 * If `--snakemake_cluster_config` was used, logs for the jobs triggered by snakemake workflow are stored in sub-directory `rule_logs/` under the directory provided using `--log_dir`. Else, logs will be directed to stderr/stdout.
 
+## How to cite QuaC?
+
+Please cite this article:
+
+Gajapathy et al., (2023). QuaC: A Pipeline Implementing Quality Control Best Practices for Genome Sequencing and Exome Sequencing Data. Journal of Open Source Software, 8(90), 5313, https://doi.org/10.21105/joss.05313

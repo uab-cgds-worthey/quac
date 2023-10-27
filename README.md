@@ -34,6 +34,12 @@ In summary, QuaC performs the following:
 
 Full documentation, including installation and how to run QuaC, is available at <https://quac.readthedocs.io>.
 
+## Citing QuaC
+
+If you use QuaC, please cite:
+
+Gajapathy et al., (2023). QuaC: A Pipeline Implementing Quality Control Best Practices for Genome Sequencing and Exome Sequencing Data. Journal of Open Source Software, 8(90), 5313, https://doi.org/10.21105/joss.05313
+
 ## Repo owner
 
 - **Mana**valan Gajapathy
