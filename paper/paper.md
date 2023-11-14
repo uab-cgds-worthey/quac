@@ -24,9 +24,9 @@ authors:
     affiliation: "1, 2"
     corresponding: true
 affiliations:
- - name: Center for Computational Genomics and Data Science, The University of Alabama at Birmingham, Birmingham, AL, USA
+ - name: Center for Computational Genomics and Data Science, The University of Alabama at Birmingham, Birmingham, Alabama, United States of America
    index: 1
- - name: Department of Genetics, Heersink School of Medicine, The University of Alabama at Birmingham, Birmingham, AL, USA
+ - name: Department of Genetics, Heersink School of Medicine, The University of Alabama at Birmingham, Birmingham, Alabama, United States of America
    index: 2
 
 date: 15 January 2023
