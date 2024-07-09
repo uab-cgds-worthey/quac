@@ -12,6 +12,10 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2024-07-08  Brandon Wilk
+
+* Makes minor bug fix for issue #95 found in the test run detection logging function
+
 2023-10-09  Manavalan Gajapathy
 
 - Makes minor documentation updates - updating citation info, adding JOSS badge and updating zenodo badge to use generic
