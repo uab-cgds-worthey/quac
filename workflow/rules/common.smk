@@ -40,14 +40,21 @@ def is_testing_mode():
     "checks if testing dataset is used as input for the pipeline"
 
     query = ".test"
+    isTesting = False
     for sample in SAMPLES_CONFIG.values():
-        for fpath in sample.values():
-            if query in PurePath(fpath).parts:
-                logger.info(f"// WARNING: '{query}' present in at least one of the filepaths supplied via --sample_config. So testing mode is used.")
-                return True
+        for fvalue in sample.values():
+            if isinstance(fvalue, str) and query in PurePath(fvalue).parts:
+                isTesting = True
+            else:
+                for fpath in fvalue:
+                    if query in PurePath(fpath).parts:
+                        isTesting = True
+
+    if isTesting:
+        logger.info(f"// WARNING: '{query}' present in at least one of the filepaths supplied via --sample_config. So testing mode is used.")
+        return True
 
     return None
-
 
 
 def get_priorQC_filepaths(sample, samples_dict):
