@@ -62,7 +62,7 @@ def check_sample_configs(fpath, exome_mode, include_prior_qc, allow_sample_renam
                 raise SystemExit(1)
 
     if include_prior_qc:
-        columns = ["fastqc_raw", "fastqc_trimmed", "fastq_screen", "dedup"]
+        columns = ["fastqc_raw", "fastq_screen", "dedup"]
         missing_columns = list(set(columns).difference(set(header)))
         if len(missing_columns):
             print(
