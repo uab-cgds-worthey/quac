@@ -12,9 +12,11 @@ rule somalier_extract:
         "docker://brentp/somalier:v0.2.13"
     params:
         outdir=lambda wildcards, output: Path(output[0]).parent,
+        sample_name="{sample}",
     shell:
         r"""
         somalier extract \
+            --sample-prefix {params.sample_name} \
             --sites {input.sites} \
             --fasta {input.ref_genome} \
             --out-dir {params.outdir} \
