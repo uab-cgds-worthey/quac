@@ -44,7 +44,7 @@ def read_sample_config(config_f):
                     samples_dict[sample][colname] = is_valid_file(row[colname])
 
             # expect >=1 filepath per field
-            for colname in ["fastqc_raw", "fastqc_trimmed", "fastq_screen", "dedup"]:
+            for colname in ["fastqc_raw", "fastq_screen", "dedup"]:
                 if colname in row:
                     samples_dict[sample][colname] = [
                         is_valid_file(f) for f in row[colname].split(",")
