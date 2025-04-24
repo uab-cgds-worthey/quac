@@ -1,0 +1,235 @@
+# NOTE: Use these thresholds with caution
+qualimap:
+  avg_gc:
+    description: "Mean GC content"
+    min: 40.5
+    max: 42.5
+
+  percentage_aligned:
+    description: "% mapped reads"
+    min: 99
+    max: 100
+
+  mean_coverage:
+    description: "Mean coverage"
+    min: 100
+    max:
+
+  median_coverage:
+    description: "Median coverage"
+    min: 100
+    max:
+
+  mean_cov:median_cov:
+    description: "Ratio of Mean coverage to Median coverage"
+    min: 0.9
+    max: 1.1
+
+  median_insert_size:
+    description: "Median insert size"
+    min: 250
+    max:
+
+  general_error_rate:
+    description: "Alignment error rate"
+    min: 0
+    max: 0.8
+
+picard:
+  AlignmentSummaryMetrics:
+    PCT_PF_READS_ALIGNED:
+      description: "% of Pass filter (PF) reads that aligned to the reference sequence. PF_READS_ALIGNED / PF_READS"
+      min: 98
+      max: 100
+
+    PF_HQ_ALIGNED_Q20_BASES:
+      description: "The subset of PF_HQ_ALIGNED_BASES where the base call quality was Q20 or higher."
+      min: 1.0e+11
+      max:
+
+    PCT_ADAPTER:
+      description: "% of Pass filter(PF) reads that are unaligned and match to a known adapter sequence right from the start of the read."
+      min: 0
+      max: 0.2
+
+    PCT_CHIMERAS:
+      description: "The fraction of reads that map outside of a maximum insert size (usually 100kb) or that have the two ends mapping to different chromosomes."
+      min: 0
+      max: 1
+
+  QualityYieldMetrics:
+    Q30_BASES:
+      description: "The number of bases in all reads that achieve quality score 30 or higher"
+      min: 80.0e+9
+      max:
+    perc_Q30_BASES:
+      description: "% of bases in all reads that achieve quality score 30 or higher"
+      min: 85
+      max:
+
+  WgsMetrics:
+    PCT_EXC_TOTAL:
+      description: "% of aligned bases excluded due to all filters."
+      min: 0
+      max: 15
+    PCT_15X:
+      description: "% of bases that attained at least 15X sequence coverage in post-filtering bases."
+      min: 90
+      max: 100
+
+  MarkDuplicates:
+    PERCENT_DUPLICATION:
+      description: "% of mapped reads that are marked as duplicates"
+      min: 0
+      max: 15
+
+fastqc:
+  - per_base_sequence_quality
+  - per_tile_sequence_quality
+  - per_sequence_quality_scores
+  - per_base_sequence_content
+  - per_sequence_gc_content
+  - per_base_n_content
+  - sequence_length_distribution
+  - sequence_duplication_levels
+  - overrepresented_sequences
+  - adapter_content
+
+fastq_screen:
+  "Human percentage":
+    min: 98.5
+    max: 100
+  "Mouse percentage":
+    min: 8.1
+    max: 11
+  "Rat percentage":
+    min: 9.0
+    max: 11
+  "Drosophila percentage":
+    min: 1.1
+    max: 1.8
+  "Arabidopsis percentage":
+    min: 0.8
+    max: 1.2
+  "No hits percentage":
+    min: 0
+    max: 1
+  "others percentage":
+    min: 0
+    max: 1.0
+
+# verifybamid:
+#   FREEMIX:
+#     description: "% Cross-human-sample contamination"
+#     min: 0
+#     max: 2
+
+bcftools_stats:
+  number_of_records:
+    description: "Total number of variants"
+    min: 82000
+    max: 103000
+
+  number_of_SNPs:
+    description: "Total number of SNPs"
+    min: 71500
+    max: 90000
+
+  number_of_indels:
+    description: "Total number of Indels"
+    min: 9500
+    max: 13000
+
+  perc_snps:
+    description: "%SNPs among all variants"
+    min: 86
+    max: 89
+
+  perc_indels:
+    description: "%Indels among all variants"
+    min: 11
+    max: 14
+
+  tstv:
+    description: "Transition to Transversion ratio"
+    min: 2.3
+    max: 2.5
+
+  heterozygosity_ratio:
+    description: "No. of het sites in an individual divided by the no. of non-reference hom sites. Note: This varies heavily across populations."
+    min: 1.6
+    max: 2.5
+
+perc_variant_per_contig:
+  chr1:
+    min: 0.003
+    max: 0.004
+  chr2:
+    min: 0.002
+    max: 0.003
+  chr3:
+    min: 0.002
+    max: 0.003
+  chr4:
+    min: 0.0016
+    max: 0.0022
+  chr5:
+    min: 0.0018
+    max: 0.0025
+  chr6:
+    min: 0.0020
+    max: 0.0036
+  chr7:
+    min: 0.0028
+    max: 0.0036
+  chr8:
+    min: 0.0019
+    max: 0.0026
+  chr9:
+    min: 0.0021
+    max: 0.0031
+  chr10:
+    min: 0.0025
+    max: 0.0032
+  chr11:
+    min: 0.0035
+    max: 0.0043
+  chr12:
+    min: 0.0031
+    max: 0.0041
+  chr13:
+    min: 0.0013
+    max: 0.0017
+  chr14:
+    min: 0.0026
+    max: 0.0037
+  chr15:
+    min: 0.0022
+    max: 0.0032
+  chr16:
+    min: 0.0037
+    max: 0.0053
+  chr17:
+    min: 0.0052
+    max: 0.0070
+  chr18:
+    min: 0.0015
+    max: 0.0020
+  chr19:
+    min: 0.0097
+    max: 0.0131
+  chr20:
+    min: 0.0029
+    max: 0.0039
+  chr21:
+    min: 0.0021
+    max: 0.0031
+  chr22:
+    min: 0.0034
+    max: 0.0046
+  chrX:
+    min: 0.0007
+    max: 0.0015
+  chrY:
+    min: 0
+    max: 0.000060
