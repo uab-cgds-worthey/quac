@@ -111,18 +111,18 @@ def main(
         bcftools_index_outfile,
     )
 
-    # verifyBamID
-    LOGGER.info("-" * 80)
-    verifybamid_outfile = f"{out_filepath_prefix}_verifybamid.yaml"
-    verifybamid_prefix = "VerifyBAMID_mqc-generalstats-verifybamid"
-    qc_checks_dict["verifybamid"] = multiqc_general_stats.check_thresholds(
-        multiqc_general_stats_df,
-        sample,
-        "verifybamid",
-        config_dict["verifybamid"],
-        verifybamid_prefix,
-        verifybamid_outfile,
-    )
+    # # verifyBamID
+    # LOGGER.info("-" * 80)
+    # verifybamid_outfile = f"{out_filepath_prefix}_verifybamid.yaml"
+    # verifybamid_prefix = "VerifyBAMID_mqc-generalstats-verifybamid"
+    # qc_checks_dict["verifybamid"] = multiqc_general_stats.check_thresholds(
+    #     multiqc_general_stats_df,
+    #     sample,
+    #     "verifybamid",
+    #     config_dict["verifybamid"],
+    #     verifybamid_prefix,
+    #     verifybamid_outfile,
+    # )
 
     # fastq screen
     LOGGER.info("-" * 80)
