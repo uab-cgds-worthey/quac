@@ -26,8 +26,8 @@ table_columns_visible:
 
     "FastQC (raw)": False
 
-table_columns_placement:
-    verifybamid: 900
+# table_columns_placement:
+#     verifybamid: 900
 
 # order of modules to show in report
 module_order:
@@ -37,22 +37,15 @@ module_order:
     - samtools
     - bcftools
     - fastqc:
-          name: "FastQC (trimmed)"
-          anchor: "trimmed"
-          info: "This section of the report shows FastQC results after adapter trimming."
-          target: ""
-          path_filters:
-              - "*/qc/fastqc-trimmed/*_fastqc.zip"
-    - fastqc:
           name: "FastQC (raw)"
           anchor: "raw"
           path_filters:
               - "*/qc/fastqc-raw/*_fastqc.zip"
     - fastq_screen:
-          name: "FastQ Screen (trimmed)"
+          name: "FastQ Screen (raw)"
           path_filters:
-              - "*/qc/fastq_screen-trimmed/*"
-    - verifybamid
+              - "*/qc/fastq_screen-raw/*"
+    # - verifybamid
     - somalier
 
 # qualimap related
@@ -87,8 +80,8 @@ custom_data:
     quac_watch_fastqc:
         parent_id: "quac_watch"
         id: "quac_watch_fastqc"
-        section_name: "FastQC (trimmed)"
-        description: 'Quick summary of FastQC (trimmed) results. See <a href="#trimmed">FastQC</a> section below for detailed results.'
+        section_name: "FastQC (raw)"
+        description: 'Quick summary of FastQC (raw) results. See <a href="#raw">FastQC</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
@@ -463,33 +456,11 @@ custom_data:
                 format: '{:,.6f}'
                 hidden: True
 
-    quac_watch_verifybamid:
-        parent_id: "quac_watch"
-        id: "quac_watch_verifybamid"
-        section_name: "VerifyBAMID"
-        description: 'Quick summary of VerifyBAMID results. See <a href="#verifybamid-1">VerifyBAMID</a> section below for detailed results.'
-        file_format: "yaml"
-        plot_type: "table"
-        pconfig:
-            table_title: "VerifyBAMID - QuaC-Watch"
-            only_defined_headers: False
-            scale: "Blues"
-        headers:
-            FREEMIX_val:
-                min: {{ verifybamid_freemix_min }}
-                max: {{ verifybamid_freemix_max }}
-                description: "{{ verifybamid_freemix_description }} (min: {{ verifybamid_freemix_min }}, max: {{ verifybamid_freemix_max }})"
-                title: "Contamination(%)_val"
-                hidden: True
-            FREEMIX:
-                title: "Contamination(%)"
-                description: "{{ verifybamid_freemix_description }}"
-
     quac_watch_fastq_screen:
         parent_id: "quac_watch"
         id: "quac_watch_fastq_screen"
-        section_name: "FastQ Screen (trimmed)"
-        description: 'Quick summary of FastQ Screen (trimmed) results. See <a href="#fastq_screen-1">FastQ Screen</a> section below for detailed results.'
+        section_name: "FastQ Screen (raw)"
+        description: 'Quick summary of FastQ Screen (raw) results. See <a href="#fastq_screen-1">FastQ Screen</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
@@ -604,7 +575,7 @@ sp:
         fn: "quac_watch_bcftools_stats.yaml"
     quac_watch_variant_per_contig:
         fn: "quac_watch_variant_per_contig.yaml"
-    quac_watch_verifybamid:
-        fn: "quac_watch_verifybamid.yaml"
+    # quac_watch_verifybamid:
+    #     fn: "quac_watch_verifybamid.yaml"
     quac_watch_fastq_screen:
         fn: "quac_watch_fastq_screen.yaml"

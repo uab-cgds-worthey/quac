@@ -27,14 +27,14 @@ rule multiqc_by_sample_initial_pass:
         OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
-        OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
+        # OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         multiqc_config=MULTIQC_CONFIG_FILE,
         rename_config=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["multiqc_rename_config"] if ALLOW_SAMPLE_RENAMING else [],
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc.html"),
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt"),
-        protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc_trimmed.txt") if INCLUDE_PRIOR_QC_DATA else [],
+        protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc_raw.txt") if INCLUDE_PRIOR_QC_DATA else [],
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt") if INCLUDE_PRIOR_QC_DATA else [],
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_AlignmentSummaryMetrics.txt"),
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_QualityYieldMetrics.txt"),
@@ -66,7 +66,7 @@ rule quac_watch:
     input:
         qc_config=config["quac_watch_config"],
         multiqc_stats=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt",
-        fastqc_trimmed=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc_trimmed.txt" if INCLUDE_PRIOR_QC_DATA else [],
+        fastqc_raw=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc_raw.txt" if INCLUDE_PRIOR_QC_DATA else [],
         fastq_screen=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt" if INCLUDE_PRIOR_QC_DATA else [],
         qualimap=OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "genome_results.txt",
         picard_asm=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_picard_AlignmentSummaryMetrics.txt",
@@ -83,7 +83,7 @@ rule quac_watch:
                     "qualimap_overall",
                     "qualimap_chromosome_stats",
                     "picard",
-                    "verifybamid",
+                    # "verifybamid",
                     "bcftools_stats",
                     "variant_per_contig",
                 ],
@@ -102,7 +102,7 @@ rule quac_watch:
     params:
         sample="{sample}",
         outdir=lambda wildcards, output: str(Path(output[0]).parent),
-        extra=lambda wildcards, input: f'--fastqc "{input.fastqc_trimmed}" --fastq_screen "{input.fastq_screen}" --picard_dups "{input.picard_dups}"' if INCLUDE_PRIOR_QC_DATA else "",
+        extra=lambda wildcards, input: f'--fastqc "{input.fastqc_raw}" --fastq_screen "{input.fastq_screen}" --picard_dups "{input.picard_dups}"' if INCLUDE_PRIOR_QC_DATA else "",
     singularity:
         "docker://quay.io/biocontainers/mulled-v2-78a02249d8cc4e85718933e89cf41d0e6686ac25:70df245247aac9844ee84a9da1e96322a24c1f34-0"
     shell:
@@ -128,7 +128,7 @@ rule multiqc_by_sample_final_pass:
         OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
-        OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
+        # OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         OUT_DIR / "{sample}" / "qc" / "quac_watch" / "quac_watch_overall_summary.yaml",
         multiqc_config=MULTIQC_CONFIG_FILE,
@@ -190,12 +190,12 @@ rule multiqc_aggregation_all_samples:
         expand(
             [
                 OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
-                OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
+                # OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
                 OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
                 OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
                 OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
                 OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.collect_wgs_metrics",
-                OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
+                # OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
                 OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
                 OUT_DIR / "{sample}" / "qc" / "quac_watch" / "quac_watch_overall_summary.yaml",
             ],
