@@ -41,8 +41,8 @@ if not EXOME_MODE:
 rule all:
     input:
         ##### ancestry and relatedness #####
-        # # somalier
-        # OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
+        # somalier
+        OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
         # OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
         ##### coverage #####
         # samtools

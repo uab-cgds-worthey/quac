@@ -189,7 +189,7 @@ rule multiqc_aggregation_all_samples:
         [get_priorQC_filepaths(sample, SAMPLES_CONFIG) for sample in SAMPLES_CONFIG.keys()] if INCLUDE_PRIOR_QC_DATA else [],
         expand(
             [
-                # OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
+                OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
                 # OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
                 OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
                 OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
