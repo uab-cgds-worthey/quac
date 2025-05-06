@@ -12,6 +12,12 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2025-05-06  Manavalan Gajapathy
+
+- Refactors QuaC for use with parabricks-based small variant caller pipeline, which does not produce trimmed fastqs.
+- Updates Sample config files: column `fastqc_trimmed` was removed and column `fastqc_raw` was renamed to `fastq`
+
+
 2024-07-08  Brandon Wilk
 
 * Makes minor bug fix for issue #95 found in the test run detection logging function
