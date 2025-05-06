@@ -38,7 +38,6 @@ module_order:
     - bcftools
     - fastqc:
           name: "FastQC"
-          anchor: "raw"
           path_filters:
               - "*/qc/fastqc-raw/*_fastqc.zip"
     - fastq_screen:
@@ -81,7 +80,7 @@ custom_data:
         parent_id: "quac_watch"
         id: "quac_watch_fastqc"
         section_name: "FastQC"
-        description: 'Quick summary of FastQC results. See <a href="#raw">FastQC</a> section below for detailed results.'
+        description: 'Quick summary of FastQC results. See <a href="#fastqc">FastQC</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
