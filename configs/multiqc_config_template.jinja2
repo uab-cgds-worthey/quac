@@ -24,7 +24,7 @@ table_columns_visible:
         reads_mapped_percent: False
         raw_total_sequences: False
 
-    "FastQC (raw)": False
+    "FastQC": False
 
 table_columns_placement:
     verifybamid: 900
@@ -37,12 +37,12 @@ module_order:
     - samtools
     - bcftools
     - fastqc:
-          name: "FastQC (raw)"
+          name: "FastQC"
           anchor: "raw"
           path_filters:
               - "*/qc/fastqc-raw/*_fastqc.zip"
     - fastq_screen:
-          name: "FastQ Screen (raw)"
+          name: "FastQ Screen"
           path_filters:
               - "*/qc/fastq_screen-raw/*"
     - verifybamid
@@ -80,8 +80,8 @@ custom_data:
     quac_watch_fastqc:
         parent_id: "quac_watch"
         id: "quac_watch_fastqc"
-        section_name: "FastQC (raw)"
-        description: 'Quick summary of FastQC (raw) results. See <a href="#raw">FastQC</a> section below for detailed results.'
+        section_name: "FastQC"
+        description: 'Quick summary of FastQC results. See <a href="#raw">FastQC</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
@@ -481,7 +481,7 @@ custom_data:
     quac_watch_fastq_screen:
         parent_id: "quac_watch"
         id: "quac_watch_fastq_screen"
-        section_name: "FastQ Screen (raw)"
+        section_name: "FastQ Screen"
         description: 'Quick summary of FastQ Screen (trimmed) results. See <a href="#fastq_screen-1">FastQ Screen</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
