@@ -24,8 +24,6 @@ table_columns_visible:
         reads_mapped_percent: False
         raw_total_sequences: False
 
-    "FastQC": False
-
 table_columns_placement:
     verifybamid: 900
 
@@ -36,14 +34,8 @@ module_order:
     - picard
     - samtools
     - bcftools
-    - fastqc:
-          name: "FastQC"
-          path_filters:
-              - "*/qc/fastqc-raw/*_fastqc.zip"
-    - fastq_screen:
-          name: "FastQ Screen"
-          path_filters:
-              - "*/qc/fastq_screen-raw/*"
+    - fastqc
+    - fastq_screen
     - verifybamid
     - somalier
 
