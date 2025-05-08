@@ -29,7 +29,7 @@ def read_sample_config(config_f):
                     samples_dict[sample][colname] = row[colname]
                     
             # expect >=1 filepath per field
-            for colname in ["fastqc_raw", "fastqc_trimmed", "fastq_screen", "dedup"]:
+            for colname in ["fastqc", "fastq_screen", "dedup"]:
                 if colname in row:
                     samples_dict[sample][colname] = row[colname].split(",")
 
@@ -62,7 +62,7 @@ def get_priorQC_filepaths(sample, samples_dict):
     Returns filepaths relevant to priorQC
     """
 
-    column_list = ["fastqc_raw", "fastqc_trimmed", "fastq_screen", "dedup"]
+    column_list = ["fastqc", "fastq_screen", "dedup"]
     file_list = []
     for column in column_list:
         file_list.append(samples_dict[sample][column])

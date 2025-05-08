@@ -24,8 +24,6 @@ table_columns_visible:
         reads_mapped_percent: False
         raw_total_sequences: False
 
-    "FastQC (raw)": False
-
 table_columns_placement:
     verifybamid: 900
 
@@ -36,22 +34,8 @@ module_order:
     - picard
     - samtools
     - bcftools
-    - fastqc:
-          name: "FastQC (trimmed)"
-          anchor: "trimmed"
-          info: "This section of the report shows FastQC results after adapter trimming."
-          target: ""
-          path_filters:
-              - "*/qc/fastqc-trimmed/*_fastqc.zip"
-    - fastqc:
-          name: "FastQC (raw)"
-          anchor: "raw"
-          path_filters:
-              - "*/qc/fastqc-raw/*_fastqc.zip"
-    - fastq_screen:
-          name: "FastQ Screen (trimmed)"
-          path_filters:
-              - "*/qc/fastq_screen-trimmed/*"
+    - fastqc
+    - fastq_screen
     - verifybamid
     - somalier
 
@@ -87,8 +71,8 @@ custom_data:
     quac_watch_fastqc:
         parent_id: "quac_watch"
         id: "quac_watch_fastqc"
-        section_name: "FastQC (trimmed)"
-        description: 'Quick summary of FastQC (trimmed) results. See <a href="#trimmed">FastQC</a> section below for detailed results.'
+        section_name: "FastQC"
+        description: 'Quick summary of FastQC results. See <a href="#fastqc-1">FastQC</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
@@ -488,8 +472,8 @@ custom_data:
     quac_watch_fastq_screen:
         parent_id: "quac_watch"
         id: "quac_watch_fastq_screen"
-        section_name: "FastQ Screen (trimmed)"
-        description: 'Quick summary of FastQ Screen (trimmed) results. See <a href="#fastq_screen-1">FastQ Screen</a> section below for detailed results.'
+        section_name: "FastQ Screen"
+        description: 'Quick summary of FastQ Screen results. See <a href="#fastq_screen-1">FastQ Screen</a> section below for detailed results.'
         file_format: "yaml"
         plot_type: "table"
         pconfig:
