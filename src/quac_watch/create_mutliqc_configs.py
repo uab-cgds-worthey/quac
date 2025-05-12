@@ -123,10 +123,10 @@ def main(template_f, qc_config, outfile):
         picard_dups_PERCENT_DUPLICATION_max=config["picard"]["MarkDuplicates"][
             "PERCENT_DUPLICATION"
         ]["max"],
-        # verifybamid
-        verifybamid_freemix_description=config["verifybamid"]["FREEMIX"]["description"],
-        verifybamid_freemix_min=config["verifybamid"]["FREEMIX"]["min"],
-        verifybamid_freemix_max=config["verifybamid"]["FREEMIX"]["max"],
+        # # verifybamid
+        # verifybamid_freemix_description=config["verifybamid"]["FREEMIX"]["description"],
+        # verifybamid_freemix_min=config["verifybamid"]["FREEMIX"]["min"],
+        # verifybamid_freemix_max=config["verifybamid"]["FREEMIX"]["max"],
         # bcftools_stats
         bcftools_stats_number_of_records_description=config["bcftools_stats"]["number_of_records"][
             "description"

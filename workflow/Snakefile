@@ -65,8 +65,8 @@ rule all:
         # indexcov and covviz
         WGS_ONLY_COVERAGE_TARGETS,
         ##### cross-sample contamination #####
-        # verifyBamID
-        expand(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry", sample=SAMPLES),
+        # # verifyBamID
+        # expand(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry", sample=SAMPLES),
         ##### VCF stats #####
         # bcftools
         expand(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats", sample=SAMPLES),
