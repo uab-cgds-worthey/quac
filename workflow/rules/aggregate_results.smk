@@ -190,7 +190,7 @@ rule multiqc_aggregation_all_samples:
         expand(
             [
                 OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
-                OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
+                # OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
                 OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
                 OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
                 OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
