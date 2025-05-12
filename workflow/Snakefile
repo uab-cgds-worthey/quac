@@ -43,7 +43,7 @@ rule all:
         ##### ancestry and relatedness #####
         # somalier
         OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
-        OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
+        # OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
         ##### coverage #####
         # samtools
         expand(OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt", sample=SAMPLES),
@@ -65,8 +65,8 @@ rule all:
         # indexcov and covviz
         WGS_ONLY_COVERAGE_TARGETS,
         ##### cross-sample contamination #####
-        # verifyBamID
-        expand(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry", sample=SAMPLES),
+        # # verifyBamID
+        # expand(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry", sample=SAMPLES),
         ##### VCF stats #####
         # bcftools
         expand(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats", sample=SAMPLES),

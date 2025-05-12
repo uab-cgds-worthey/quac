@@ -24,8 +24,8 @@ table_columns_visible:
         reads_mapped_percent: False
         raw_total_sequences: False
 
-table_columns_placement:
-    verifybamid: 900
+# table_columns_placement:
+#     verifybamid: 900
 
 # order of modules to show in report
 module_order:
@@ -36,7 +36,7 @@ module_order:
     - bcftools
     - fastqc
     - fastq_screen
-    - verifybamid
+    # - verifybamid
     - somalier
 
 # qualimap related
@@ -447,28 +447,6 @@ custom_data:
                 format: '{:,.6f}'
                 hidden: True
 
-    quac_watch_verifybamid:
-        parent_id: "quac_watch"
-        id: "quac_watch_verifybamid"
-        section_name: "VerifyBAMID"
-        description: 'Quick summary of VerifyBAMID results. See <a href="#verifybamid-1">VerifyBAMID</a> section below for detailed results.'
-        file_format: "yaml"
-        plot_type: "table"
-        pconfig:
-            table_title: "VerifyBAMID - QuaC-Watch"
-            only_defined_headers: False
-            scale: "Blues"
-        headers:
-            FREEMIX_val:
-                min: {{ verifybamid_freemix_min }}
-                max: {{ verifybamid_freemix_max }}
-                description: "{{ verifybamid_freemix_description }} (min: {{ verifybamid_freemix_min }}, max: {{ verifybamid_freemix_max }})"
-                title: "Contamination(%)_val"
-                hidden: True
-            FREEMIX:
-                title: "Contamination(%)"
-                description: "{{ verifybamid_freemix_description }}"
-
     quac_watch_fastq_screen:
         parent_id: "quac_watch"
         id: "quac_watch_fastq_screen"
@@ -588,7 +566,7 @@ sp:
         fn: "quac_watch_bcftools_stats.yaml"
     quac_watch_variant_per_contig:
         fn: "quac_watch_variant_per_contig.yaml"
-    quac_watch_verifybamid:
-        fn: "quac_watch_verifybamid.yaml"
+    # quac_watch_verifybamid:
+    #     fn: "quac_watch_verifybamid.yaml"
     quac_watch_fastq_screen:
         fn: "quac_watch_fastq_screen.yaml"
