@@ -119,6 +119,9 @@ def read_workflow_config(workflow_config_fpath):
     # ref genome
     mount_paths.add(Path(get_full_path(datasets["ref"])).parent)
 
+    # fastq_screen config and genomes path
+    mount_paths.add(Path(get_full_path(datasets["fastq_screen_config"])).parent)
+    
     # somalier resource files
     for resource in datasets["somalier"]:
         mount_paths.add(Path(get_full_path(datasets["somalier"][resource])).parent)
