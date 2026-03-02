@@ -34,3 +34,32 @@ rule fastqc:
             mv "$ZIP_PATH" "{output.zip}"
         fi
         """
+
+
+rule fastq_screen:
+    input:
+        fastq = get_fastq_by_read,
+        config_f = config["datasets"]["fastq_screen_config"]
+    output:
+        txt=protected(str(OUT_DIR) + "/{sample}/qc/fastq_screen-raw/{sample}-{unit}-{read}_screen.txt"),
+        # png=protected(str(OUT_DIR) + "/{sample}/qc/fastq_screen-raw/{sample}-{unit}-{read}_screen.png"),
+        html=protected(str(OUT_DIR) + "/{sample}/qc/fastq_screen-raw/{sample}-{unit}-{read}_screen.html"),
+    singularity:
+        "docker://quay.io/biocontainers/fastq-screen:0.16.0--pl5321hdfd78af_0"
+    params:
+        outdir = lambda wildcards, output: str(Path(output[0]).parent),
+        fastq_prefix = lambda wildcards, input: get_basename_stem(input['fastq'])
+    shell:
+        r"""
+        fastq_screen \
+            --aligner bowtie2 \
+            --threads {threads} \
+            --force \
+            --conf {input.config_f} \
+            --outdir {params.outdir} \
+            {input.fastq}
+
+        # rename output files as needed
+        mv "{params.outdir}/{params.fastq_prefix}_screen.txt" "{output.txt}"
+        mv "{params.outdir}/{params.fastq_prefix}_screen.html" "{output.html}"
+        """
