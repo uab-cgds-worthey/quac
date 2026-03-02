@@ -86,6 +86,24 @@ def get_fastq_inputs(fpath):
 
     return reads
 
+
+def get_basename_stem(filepath):
+    "removes fastq extensions from filepath and returns basename"
+
+    basename = os.path.basename(filepath)
+
+    if basename.endswith('.gz'):
+        basename = basename[:-3]
+
+    if basename.endswith('.fastq'):
+        basename = basename[:-6]
+
+    if basename.endswith('.fq'):
+        basename = basename[:-3]
+
+    return basename
+
+
 ##########################   Configs from CLI  ##########################
 OUT_DIR = Path(config["out_dir"])
 PEDIGREE_FPATH = config["ped"]
