@@ -2,8 +2,8 @@ rule fastqc:
     input:
         get_fastq_by_read
     output:
-        html=protected(PROJECT_PATH + "/{sample}/qc/fastqc-raw/{sample}-{unit}-{read}_fastqc.html"),
-        zip=protected(PROJECT_PATH + "/{sample}/qc/fastqc-raw/{sample}-{unit}-{read}_fastqc.zip")
+        html=protected(str(OUT_DIR) + "/{sample}/qc/fastqc-raw/{sample}-{unit}-{read}_fastqc.html"),
+        zip=protected(str(OUT_DIR) + "/{sample}/qc/fastqc-raw/{sample}-{unit}-{read}_fastqc.zip")
     params:
         input_base=lambda wildcards, input: Path(input[0]).name.replace(".gz", "").replace(".fastq", "").replace(".fq", ""),
     singularity:

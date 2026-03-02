@@ -2,6 +2,7 @@ import csv
 import re
 from pathlib import PurePath
 from snakemake.logging import logger
+import pandas as pd
 
 
 # TODO: refactor to import from src/read_sample_config.py
@@ -72,6 +73,19 @@ def get_priorQC_filepaths(sample, samples_dict):
     return flat_filelist
 
 
+# TODO- use functions to clean up
+def get_fastq_inputs(fpath):
+    units = pd.read_table(fpath, dtype=str).set_index(["sample", "unit"], drop=False)
+    units.index = units.index.set_levels([i.astype(str) for i in units.index.levels])  # enforce str in index
+    # validate(units, schema=f"{str(WORKFLOW_PATH)}/workflow/configs/schemas/units.schema.yaml")
+
+    reads = units.rename(columns={'fq1': 'R1', 'fq2': 'R2'}) \
+        .melt(id_vars=['sample', 'unit'], var_name='read', value_name='fastq') \
+        .set_index(["sample", "unit", "read"], drop=False)
+    reads.index = reads.index.set_levels([i.astype(str) for i in reads.index.levels])  # enforce str in index
+
+    return reads
+
 ##########################   Configs from CLI  ##########################
 OUT_DIR = Path(config["out_dir"])
 PEDIGREE_FPATH = config["ped"]
@@ -81,6 +95,12 @@ INCLUDE_PRIOR_QC_DATA = config["include_prior_qc_data"]
 
 SAMPLES_CONFIG = read_sample_config(config["sample_config"])
 SAMPLES = list(SAMPLES_CONFIG.keys())
+
+FASTQ_READS = get_fastq_inputs(config['fastq_config'])
+
+def get_fastq_by_read(wildcards):
+    """Get fastq file of given sample-unit-read."""
+    return FASTQ_READS.loc[(wildcards.sample, wildcards.unit, wildcards.read), "fastq"]
 
 #### configs from configfile ####
 RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"

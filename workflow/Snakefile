@@ -11,6 +11,7 @@ configfile: config["workflow_config"]
 ##############   MODULES   ##############
 include: "rules/common.smk"
 include: "rules/relatedness_ancestry.smk"
+include: "rules/fastq_qc.smk"
 include: "rules/coverage_analysis.smk"
 include: "rules/within_species_contamintation.smk"
 include: "rules/vcf_stats.smk"
@@ -40,37 +41,40 @@ if not EXOME_MODE:
 
 rule all:
     input:
+        ##### fastq #####
+        expand(str(OUT_DIR) + "/{u.sample}/qc/fastqc-raw/{u.sample}-{u.unit}-{u.read}_fastqc.html",
+                u=FASTQ_READS.itertuples()),
         ##### ancestry and relatedness #####
         # somalier
         OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
-        OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
-        ##### coverage #####
-        # samtools
-        expand(OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt", sample=SAMPLES),
-        # qualimap
-        expand(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html", sample=SAMPLES),
-        # picard
-        expand(
-            OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.{ext}",
-            sample=SAMPLES,
-            ext=[
-                "alignment_summary_metrics",
-                "quality_yield_metrics",
-                "collect_wgs_metrics",
-            ],
-        ),
-        # mosdepth
-        expand(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt", sample=SAMPLES),
-        OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html",
-        # indexcov and covviz
-        WGS_ONLY_COVERAGE_TARGETS,
-        ##### cross-sample contamination #####
-        # verifyBamID
-        expand(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry", sample=SAMPLES),
-        ##### VCF stats #####
-        # bcftools
-        expand(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats", sample=SAMPLES),
-        expand(OUT_DIR / "{sample}" / "qc" / "bcftools-index" / "{sample}.bcftools.index.tsv", sample=SAMPLES),
-        ##### results aggregation #####
-        expand(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html", sample=SAMPLES),
-        OUT_DIR / "project_level_qc" / "multiqc" / "multiqc_report.html",
+        # OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
+        # ##### coverage #####
+        # # samtools
+        # expand(OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt", sample=SAMPLES),
+        # # qualimap
+        # expand(OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html", sample=SAMPLES),
+        # # picard
+        # expand(
+        #     OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.{ext}",
+        #     sample=SAMPLES,
+        #     ext=[
+        #         "alignment_summary_metrics",
+        #         "quality_yield_metrics",
+        #         "collect_wgs_metrics",
+        #     ],
+        # ),
+        # # mosdepth
+        # expand(OUT_DIR / "{sample}" / "qc" / "mosdepth" / "{sample}.mosdepth.global.dist.txt", sample=SAMPLES),
+        # OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html",
+        # # indexcov and covviz
+        # WGS_ONLY_COVERAGE_TARGETS,
+        # ##### cross-sample contamination #####
+        # # verifyBamID
+        # expand(OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry", sample=SAMPLES),
+        # ##### VCF stats #####
+        # # bcftools
+        # expand(OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats", sample=SAMPLES),
+        # expand(OUT_DIR / "{sample}" / "qc" / "bcftools-index" / "{sample}.bcftools.index.tsv", sample=SAMPLES),
+        # ##### results aggregation #####
+        # expand(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html", sample=SAMPLES),
+        # OUT_DIR / "project_level_qc" / "multiqc" / "multiqc_report.html",
