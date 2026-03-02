@@ -13,6 +13,8 @@ Following files are necessary for testing:
 **Note**: If `priorQC` is used, be sure to preserve directory structure used in the output of CGDS Small variant caller
 pipeline.
 
+**Note**: Fastq files in `.test/ngs-data/test_project/raw` were obtained from [small_variant_caller_pipeline repo](https://github.com/uab-cgds-worthey/small_variant_caller_pipeline).
+
 ## Setup test datasets
 
 ### Required
