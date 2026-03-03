@@ -16,13 +16,19 @@ def read_sample_config(config_f):
         for row in csv_reader:
             bam = row["bam"]
             vcf = row["vcf"]
+            
+            fastq = {}
+            for unit in row["fastq"].split(";"):
+                # fastq = {"unit": unit[0], "R1": unit[1], "R2": unit[2]}
+                unit = unit.strip().split(",")
+                fastq[unit[0]] = {"R1": unit[1], "R2": unit[2]}
 
             sample = row["sample_id"].strip(" ")
             if sample in samples_dict:
                 print(f"ERROR: Sample '{sample}' found >1x in config file '{config_f}'")
                 raise SystemExit(1)
 
-            samples_dict[sample] = {"vcf": vcf, "bam": bam}
+            samples_dict[sample] = {"vcf": vcf, "bam": bam, "fastq": fastq}
 
             # expect only filepath per field
             for colname in ["capture_bed", "multiqc_rename_config"]:
@@ -34,6 +40,8 @@ def read_sample_config(config_f):
                 if colname in row:
                     samples_dict[sample][colname] = row[colname].split(",")
 
+    # import pprint
+    # pprint.pprint (samples_dict)
     return samples_dict
 
 
