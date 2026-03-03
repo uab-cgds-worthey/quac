@@ -84,7 +84,7 @@ def get_fastq_inputs(fpath):
         .set_index(["sample", "unit", "read"], drop=False)
     reads.index = reads.index.set_levels([i.astype(str) for i in reads.index.levels])  # enforce str in index
 
-    return reads
+    return units, reads
 
 
 def get_basename_stem(filepath):
@@ -104,6 +104,7 @@ def get_basename_stem(filepath):
     return basename
 
 
+
 ##########################   Configs from CLI  ##########################
 OUT_DIR = Path(config["out_dir"])
 PEDIGREE_FPATH = config["ped"]
@@ -114,11 +115,31 @@ INCLUDE_PRIOR_QC_DATA = config["include_prior_qc_data"]
 SAMPLES_CONFIG = read_sample_config(config["sample_config"])
 SAMPLES = list(SAMPLES_CONFIG.keys())
 
-FASTQ_READS = get_fastq_inputs(config['fastq_config'])
+UNITS, FASTQ_READS = get_fastq_inputs(config['fastq_config'])
+
+# if set(SAMPLES) != set(UNITS.index.get_level_values('sample'))):
+
+
 
 def get_fastq_by_read(wildcards):
     """Get fastq file of given sample-unit-read."""
     return FASTQ_READS.loc[(wildcards.sample, wildcards.unit, wildcards.read), "fastq"]
+
+
+def write_sample_rename_config(filepath, units=UNITS):
+    "provides sensible sample names for fastq files, to use in multiqc. Saved into tsv file."
+
+    with open(filepath, "w") as f_handle:
+        f_handle.write('\t'.join(['Original labels', 'Renamed labels']) + '\n')
+
+        for item in units.itertuples():
+            base_rename = f"{item.sample}-{item.unit}"
+
+            f_handle.write('\t'.join([get_basename_stem(item.fq1), f"{base_rename}-R1"]) + '\n')
+            f_handle.write('\t'.join([get_basename_stem(item.fq2), f"{base_rename}-R2"]) + '\n')
+
+    return None
+
 
 #### configs from configfile ####
 RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"

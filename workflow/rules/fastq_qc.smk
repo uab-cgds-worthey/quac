@@ -63,3 +63,14 @@ rule fastq_screen:
         mv "{params.outdir}/{params.fastq_prefix}_screen.txt" "{output.txt}"
         mv "{params.outdir}/{params.fastq_prefix}_screen.html" "{output.html}"
         """
+
+
+localrules: multiqc_sample_renaming
+rule multiqc_sample_renaming:
+    output:
+        protected(str(OUT_DIR) + "/{sample}/qc/multiqc_initial_pass/multiqc_sample_rename_config/{sample}_rename_config.tsv"),
+    # WARNING: don't put this rule in a group, bad things will happen. see issue #23 in gitlab
+    message:
+        "Writes sample rename config file to use with multiqc"
+    run:
+        write_sample_rename_config(output[0])
