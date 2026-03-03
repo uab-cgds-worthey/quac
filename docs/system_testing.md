@@ -71,7 +71,6 @@ python src/run_quac.py \
       --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
       --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
       --include_prior_qc \
-      --allow_sample_renaming \
       --workflow_config "configs/workflow.yaml" \
       $USE_SLURM
 
@@ -83,7 +82,6 @@ python src/run_quac.py \
       --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
       --exome \
       --include_prior_qc \
-      --allow_sample_renaming \
       --workflow_config "configs/workflow.yaml" \
       $USE_SLURM
 ```
@@ -101,6 +99,10 @@ data/quac/results/test_project_2samples_wgs-include_priorQC/
     │       ├── bcftools-index
     │       │   └── ...
     │       ├── bcftools-stats
+    │       │   └── ...
+    │       ├── fastqc-raw
+    │       │   └── ...
+    │       ├── fastq_screen-raw
     │       │   └── ...
     │       ├── mosdepth
     │       │   └── ...
