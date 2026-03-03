@@ -22,10 +22,10 @@ rule create_multiqc_config:
 ##########################   Single-sample-level QC aggregation  ##########################
 rule multiqc_by_sample_initial_pass:
     input:
-        lambda wildcards, output: expand(OUT_DIR / wildcards.sample / "qc" / "fastqc-raw" / "{wildcards.sample}-{{unit}}-{{reads}}_fastqc.html", 
+        lambda wildcards: expand(OUT_DIR / wildcards.sample / "qc" / "fastqc-raw" / f"{wildcards.sample}-{{unit}}-{{reads}}_fastqc.html", 
                 unit=SAMPLES_CONFIG[wildcards.sample]["fastq"].keys(), 
                 reads=["R1", "R2"]),
-        lambda wildcards, output: expand(OUT_DIR / wildcards.sample / "qc" / "fastqc-screen-raw" / "{wildcards.sample}-{{unit}}-{{reads}}_screen.txt", 
+        lambda wildcards: expand(OUT_DIR / wildcards.sample / "qc" / "fastq_screen-raw" / f"{wildcards.sample}-{{unit}}-{{reads}}_screen.txt", 
                 unit=SAMPLES_CONFIG[wildcards.sample]["fastq"].keys(), 
                 reads=["R1", "R2"]),
         lambda wildcards: get_priorQC_filepaths(wildcards.sample, SAMPLES_CONFIG) if INCLUDE_PRIOR_QC_DATA else [],
