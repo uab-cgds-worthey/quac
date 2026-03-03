@@ -1,6 +1,6 @@
 rule fastqc:
     input:
-        get_fastq_by_read
+        lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["fastq"][wildcards.unit][wildcards.read]
     output:
         html=protected(str(OUT_DIR) + "/{sample}/qc/fastqc-raw/{sample}-{unit}-{read}_fastqc.html"),
         zip=protected(str(OUT_DIR) + "/{sample}/qc/fastqc-raw/{sample}-{unit}-{read}_fastqc.zip")
@@ -38,7 +38,7 @@ rule fastqc:
 
 rule fastq_screen:
     input:
-        fastq = get_fastq_by_read,
+        fastq = lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["fastq"][wildcards.unit][wildcards.read],
         config_f = config["datasets"]["fastq_screen_config"]
     output:
         txt=protected(str(OUT_DIR) + "/{sample}/qc/fastq_screen-raw/{sample}-{unit}-{read}_screen.txt"),
@@ -73,4 +73,4 @@ rule multiqc_sample_renaming:
     message:
         "Writes sample rename config file to use with multiqc"
     run:
-        write_sample_rename_config(output[0])
+        write_sample_rename_config(output[0], wildcards.sample, SAMPLES_CONFIG)

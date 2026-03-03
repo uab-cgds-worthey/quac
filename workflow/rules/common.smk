@@ -19,8 +19,11 @@ def read_sample_config(config_f):
             
             fastq = {}
             for unit in row["fastq"].split(";"):
-                # fastq = {"unit": unit[0], "R1": unit[1], "R2": unit[2]}
                 unit = unit.strip().split(",")
+                if unit[0] in fastq:
+                    print(f"ERROR: Fastq unit '{unit[0]}' for '{sample}' found >1x in config file '{config_f}'")
+                    raise SystemExit(1)
+
                 fastq[unit[0]] = {"R1": unit[1], "R2": unit[2]}
 
             sample = row["sample_id"].strip(" ")
@@ -40,8 +43,6 @@ def read_sample_config(config_f):
                 if colname in row:
                     samples_dict[sample][colname] = row[colname].split(",")
 
-    # import pprint
-    # pprint.pprint (samples_dict)
     return samples_dict
 
 
@@ -98,29 +99,7 @@ def get_basename_stem(filepath):
     return basename
 
 
-
-##########################   Configs from CLI  ##########################
-OUT_DIR = Path(config["out_dir"])
-PEDIGREE_FPATH = config["ped"]
-EXOME_MODE = config["exome"]
-# ALLOW_SAMPLE_RENAMING = config["allow_sample_renaming"]
-INCLUDE_PRIOR_QC_DATA = config["include_prior_qc_data"]
-
-SAMPLES_CONFIG = read_sample_config(config["sample_config"])
-SAMPLES = list(SAMPLES_CONFIG.keys())
-
-# UNITS, FASTQ_READS = get_fastq_inputs(config['fastq_config'])
-
-# if set(SAMPLES) != set(UNITS.index.get_level_values('sample'))):
-
-
-
-# def get_fastq_by_read(wildcards):
-#     """Get fastq file of given sample-unit-read."""
-#     return FASTQ_READS.loc[(wildcards.sample, wildcards.unit, wildcards.read), "fastq"]
-
-
-def write_sample_rename_config(filepath, sample, samples_config=SAMPLES_CONFIG):
+def write_sample_rename_config(filepath, sample, samples_config):
     "provides sensible sample names for fastq files, to use in multiqc. Saved into tsv file."
 
     with open(filepath, "w") as f_handle:
@@ -133,6 +112,14 @@ def write_sample_rename_config(filepath, sample, samples_config=SAMPLES_CONFIG):
 
     return None
 
+##########################   Configs from CLI  ##########################
+OUT_DIR = Path(config["out_dir"])
+PEDIGREE_FPATH = config["ped"]
+EXOME_MODE = config["exome"]
+INCLUDE_PRIOR_QC_DATA = config["include_prior_qc_data"]
+
+SAMPLES_CONFIG = read_sample_config(config["sample_config"])
+SAMPLES = list(SAMPLES_CONFIG.keys())
 
 #### configs from configfile ####
 RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"
