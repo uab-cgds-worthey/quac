@@ -31,12 +31,12 @@ def read_sample_config(config_f):
             samples_dict[sample] = {"vcf": vcf, "bam": bam, "fastq": fastq}
 
             # expect only filepath per field
-            for colname in ["capture_bed", "multiqc_rename_config"]:
+            for colname in ["capture_bed"]:
                 if colname in row:
                     samples_dict[sample][colname] = row[colname]
                     
             # expect >=1 filepath per field
-            for colname in ["fastqc", "fastq_screen", "dedup"]:
+            for colname in ["dedup"]:
                 if colname in row:
                     samples_dict[sample][colname] = row[colname].split(",")
 
@@ -71,7 +71,7 @@ def get_priorQC_filepaths(sample, samples_dict):
     Returns filepaths relevant to priorQC
     """
 
-    column_list = ["fastqc", "fastq_screen", "dedup"]
+    column_list = ["dedup"]
     file_list = []
     for column in column_list:
         file_list.append(samples_dict[sample][column])
@@ -79,20 +79,6 @@ def get_priorQC_filepaths(sample, samples_dict):
     flat_filelist = [item for sublist in file_list for item in sublist]
 
     return flat_filelist
-
-
-# TODO- use functions to clean up
-def get_fastq_inputs(fpath):
-    units = pd.read_table(fpath, dtype=str).set_index(["sample", "unit"], drop=False)
-    units.index = units.index.set_levels([i.astype(str) for i in units.index.levels])  # enforce str in index
-    # validate(units, schema=f"{str(WORKFLOW_PATH)}/workflow/configs/schemas/units.schema.yaml")
-
-    reads = units.rename(columns={'fq1': 'R1', 'fq2': 'R2'}) \
-        .melt(id_vars=['sample', 'unit'], var_name='read', value_name='fastq') \
-        .set_index(["sample", "unit", "read"], drop=False)
-    reads.index = reads.index.set_levels([i.astype(str) for i in reads.index.levels])  # enforce str in index
-
-    return units, reads
 
 
 def get_basename_stem(filepath):
@@ -123,28 +109,27 @@ INCLUDE_PRIOR_QC_DATA = config["include_prior_qc_data"]
 SAMPLES_CONFIG = read_sample_config(config["sample_config"])
 SAMPLES = list(SAMPLES_CONFIG.keys())
 
-UNITS, FASTQ_READS = get_fastq_inputs(config['fastq_config'])
+# UNITS, FASTQ_READS = get_fastq_inputs(config['fastq_config'])
 
 # if set(SAMPLES) != set(UNITS.index.get_level_values('sample'))):
 
 
 
-def get_fastq_by_read(wildcards):
-    """Get fastq file of given sample-unit-read."""
-    return FASTQ_READS.loc[(wildcards.sample, wildcards.unit, wildcards.read), "fastq"]
+# def get_fastq_by_read(wildcards):
+#     """Get fastq file of given sample-unit-read."""
+#     return FASTQ_READS.loc[(wildcards.sample, wildcards.unit, wildcards.read), "fastq"]
 
 
-def write_sample_rename_config(filepath, units=UNITS):
+def write_sample_rename_config(filepath, sample, samples_config=SAMPLES_CONFIG):
     "provides sensible sample names for fastq files, to use in multiqc. Saved into tsv file."
 
     with open(filepath, "w") as f_handle:
         f_handle.write('\t'.join(['Original labels', 'Renamed labels']) + '\n')
+        for unit in samples_config[sample]["fastq"]:
+            base_rename = f"{sample}-{unit}"
 
-        for item in units.itertuples():
-            base_rename = f"{item.sample}-{item.unit}"
-
-            f_handle.write('\t'.join([get_basename_stem(item.fq1), f"{base_rename}-R1"]) + '\n')
-            f_handle.write('\t'.join([get_basename_stem(item.fq2), f"{base_rename}-R2"]) + '\n')
+            f_handle.write('\t'.join([get_basename_stem(samples_config[sample]["fastq"][unit]["R1"]), f"{base_rename}-R1"]) + '\n')
+            f_handle.write('\t'.join([get_basename_stem(samples_config[sample]["fastq"][unit]["R2"]), f"{base_rename}-R2"]) + '\n')
 
     return None
 
