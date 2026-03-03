@@ -4,10 +4,12 @@ rule fastqc:
     output:
         html=protected(str(OUT_DIR) + "/{sample}/qc/fastqc-raw/{sample}-{unit}-{read}_fastqc.html"),
         zip=protected(str(OUT_DIR) + "/{sample}/qc/fastqc-raw/{sample}-{unit}-{read}_fastqc.zip")
-    params:
-        input_base=lambda wildcards, input: Path(input[0]).name.replace(".gz", "").replace(".fastq", "").replace(".fq", ""),
+    message:
+        "Stats fastq using FastQC for Sample: {wildcards.sample}, {wildcards.unit}, {wildcards.read}"
     singularity:
         "docker://quay.io/biocontainers/fastqc:0.12.1--hdfd78af_0"
+    params:
+        input_base=lambda wildcards, input: Path(input[0]).name.replace(".gz", "").replace(".fastq", "").replace(".fq", ""),
     shell:
         r"""
         # use a temp dir to avoid race conditions 
@@ -44,6 +46,8 @@ rule fastq_screen:
         txt=protected(str(OUT_DIR) + "/{sample}/qc/fastq_screen-raw/{sample}-{unit}-{read}_screen.txt"),
         # png=protected(str(OUT_DIR) + "/{sample}/qc/fastq_screen-raw/{sample}-{unit}-{read}_screen.png"),
         html=protected(str(OUT_DIR) + "/{sample}/qc/fastq_screen-raw/{sample}-{unit}-{read}_screen.html"),
+    message:
+        "Stats fastq using Fastq Screen for Sample: {wildcards.sample}, {wildcards.unit}, {wildcards.read}"
     singularity:
         "docker://quay.io/biocontainers/fastq-screen:0.16.0--pl5321hdfd78af_0"
     params:
