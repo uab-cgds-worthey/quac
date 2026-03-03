@@ -1,3 +1,0 @@
-sample	unit	fq1	fq2
-C	1	.test/ngs-data/test_project/raw/A/fastq/a.chr21.1.fq	.test/ngs-data/test_project/raw/A/fastq/a.chr21.2.fq
-D	1	.test/ngs-data/test_project/raw/A/fastq/b.chr21.1.fq	.test/ngs-data/test_project/raw/A/fastq/b.chr21.2.fq
