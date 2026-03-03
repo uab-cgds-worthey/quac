@@ -30,7 +30,7 @@ rule multiqc_by_sample_initial_pass:
         OUT_DIR / "{sample}" / "qc" / "verifyBamID" / "{sample}.Ancestry",
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         multiqc_config=MULTIQC_CONFIG_FILE,
-        rename_config=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["multiqc_rename_config"] if ALLOW_SAMPLE_RENAMING else [],
+        rename_config=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",,
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc.html"),
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt"),
@@ -49,7 +49,7 @@ rule multiqc_by_sample_initial_pass:
         in_dirs=lambda wildcards, input: set(Path(fp).parent for fp in input),
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file, if needed
-        extra_config=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}" if ALLOW_SAMPLE_RENAMING else f"--config {input.multiqc_config}",
+        extra_config=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}",
     singularity:
         "docker://quay.io/biocontainers/multiqc:1.9--py_1"
     shell:
@@ -132,7 +132,7 @@ rule multiqc_by_sample_final_pass:
         OUT_DIR / "{sample}" / "qc" / "bcftools-stats" / "{sample}.bcftools.stats",
         OUT_DIR / "{sample}" / "qc" / "quac_watch" / "quac_watch_overall_summary.yaml",
         multiqc_config=MULTIQC_CONFIG_FILE,
-        rename_config=lambda wildcards: SAMPLES_CONFIG[wildcards.sample]["multiqc_rename_config"] if ALLOW_SAMPLE_RENAMING else [],
+        rename_config=OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
     output:
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc.html"),
         protected(OUT_DIR / "{sample}" / "qc" / "multiqc_final_pass" / "{sample}_multiqc_data" / "multiqc_general_stats.txt"),
@@ -145,7 +145,7 @@ rule multiqc_by_sample_final_pass:
         in_dirs=lambda wildcards, input: set(str(Path(fp).parent) for fp in input),
         # multiqc uses fastq's filenames to identify sample names. Rename them to in-house names,
         # using custom rename config file, if needed
-        extra_config=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}" if ALLOW_SAMPLE_RENAMING else f"--config {input.multiqc_config}",
+        extra_config=lambda wildcards, input: f"--config {input.multiqc_config} --sample-names {input.rename_config}",
     singularity:
         "docker://quay.io/biocontainers/multiqc:1.9--py_1"
     shell:
@@ -163,7 +163,8 @@ rule multiqc_by_sample_final_pass:
 ##########################   Multi-sample QC aggregation  ##########################
 rule aggregate_sample_rename_configs:
     input:
-        [SAMPLES_CONFIG[sample]["multiqc_rename_config"] for sample in SAMPLES_CONFIG] if ALLOW_SAMPLE_RENAMING else [],
+        expand(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
+            sample=SAMPLES)
     output:
         outfile=protected(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv"),
         tempfile=temp(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "flist.txt"),
@@ -204,7 +205,7 @@ rule multiqc_aggregation_all_samples:
             read=["R1", "R2"],
         ),
         multiqc_config=MULTIQC_CONFIG_FILE,
-        rename_config=OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv" if ALLOW_SAMPLE_RENAMING else [],
+        rename_config=OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv",
     output:
         protected(OUT_DIR / "project_level_qc" / "multiqc" / "multiqc_report.html"),
     message:
@@ -218,10 +219,7 @@ rule multiqc_aggregation_all_samples:
         extra_config=(
             lambda wildcards, input: f'--config {input.multiqc_config} \
                                             --sample-names {input.rename_config} \
-                                            --cl_config "max_table_rows: 2000"' \
-                                            if ALLOW_SAMPLE_RENAMING else \
-                                                f'--config {input.multiqc_config} \
-                                                --cl_config "max_table_rows: 2000"'
+                                            --cl_config "max_table_rows: 2000"'
         ),
     singularity:
         "docker://quay.io/biocontainers/multiqc:1.9--py_1"

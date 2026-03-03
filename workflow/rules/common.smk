@@ -117,7 +117,7 @@ def get_basename_stem(filepath):
 OUT_DIR = Path(config["out_dir"])
 PEDIGREE_FPATH = config["ped"]
 EXOME_MODE = config["exome"]
-ALLOW_SAMPLE_RENAMING = config["allow_sample_renaming"]
+# ALLOW_SAMPLE_RENAMING = config["allow_sample_renaming"]
 INCLUDE_PRIOR_QC_DATA = config["include_prior_qc_data"]
 
 SAMPLES_CONFIG = read_sample_config(config["sample_config"])
