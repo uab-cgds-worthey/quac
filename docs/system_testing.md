@@ -19,12 +19,9 @@ samples -- Two samples without priorQC data (`no_priorQC`) and two with priorQC 
     not to run jobs.
 
 ```sh
-
-
 # For Cheaha users only. Set up environment. 
 module reset
 module load Anaconda3/2023.07-2
-# module load Singularity/3.5.2-GCC-5.4.0-2.26
 
 # activate conda env
 conda activate quac
@@ -80,57 +77,9 @@ run_quac "$PROJECT_CONFIG" "$SEQ_TYPE" "$PRIOR_QC_STATUS" "$USE_SLURM"
 # Exome mode
 PROJECT_CONFIG="project_2samples"
 SEQ_TYPE="exome"
-PRIOR_QC_STATUS="_include_priorQC"
+PRIOR_QC_STATUS="--include_prior_qc"
 
 run_quac "$PROJECT_CONFIG" "$SEQ_TYPE" "$PRIOR_QC_STATUS" "$USE_SLURM"
-
-
-# WGS mode
-SEQ_TYPE="wgs"
-python src/run_quac.py \
-      --sample_config ".test/configs/sample_config/${PROJECT_CONFIG}_${SEQ_TYPE}.tsv" \
-      --pedigree ".test/configs/pedigree/${PROJECT_CONFIG}.ped" \
-      --outdir "data/quac/results/test_${PROJECT_CONFIG}_${SEQ_TYPE}/analysis" \
-      --quac_watch_config "configs/quac_watch/${SEQ_TYPE}_quac_watch_config.yaml" \
-      --workflow_config "configs/workflow.yaml" \
-      $USE_SLURM
-
-# Exome mode
-SEQ_TYPE="exome"
-python src/run_quac.py \
-      --sample_config ".test/configs/sample_config/${PROJECT_CONFIG}_${SEQ_TYPE}.tsv" \
-      --pedigree ".test/configs/pedigree/${PROJECT_CONFIG}.ped" \
-      --outdir "data/quac/results/test_${PROJECT_CONFIG}_${SEQ_TYPE}/analysis" \
-      --quac_watch_config "configs/quac_watch/${SEQ_TYPE}_quac_watch_config.yaml" \
-      --workflow_config "configs/workflow.yaml" \
-      --exome \
-      $USE_SLURM
-
-
-########## Includes prior QC data and allows sample renaming ##########
-PROJECT_CONFIG="project_2samples"
-PRIOR_QC_STATUS="include_priorQC"
-
-# WGS mode
-python src/run_quac.py \
-      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_wgs.tsv" \
-      --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
-      --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
-      --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
-      --include_prior_qc \
-      --workflow_config "configs/workflow.yaml" \
-      $USE_SLURM
-
-# Exome mode
-python src/run_quac.py \
-      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_exome.tsv" \
-      --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
-      --outdir "data/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
-      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
-      --exome \
-      --include_prior_qc \
-      --workflow_config "configs/workflow.yaml" \
-      $USE_SLURM
 ```
 
 ## Expected output files
