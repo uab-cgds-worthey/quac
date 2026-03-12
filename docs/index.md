@@ -17,9 +17,7 @@ samples and then summarizes their results using pre-defined, configurable QC thr
 
 In summary, QuaC performs the following:
 
-- Runs several QC tools using `FASTQ`, `BAM` and `VCF` files as input. At our center CGDS, these files are produced as part of
-  the [small variant caller
-  pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
+- Runs several QC tools using `FASTQ`, `BAM` and `VCF` files as input. At our center, CGDS, these files are produced as part of secondary analysis.
 - Using [QuaC-Watch](./quac_watch.md) tool, it performs QC checkup based on the expected thresholds for certain QC
   metrics and summarizes the results for easier human consumption
 - Aggregates QC output as well as QuaC-Watch output using MulitQC, both at the sample level and project level.
