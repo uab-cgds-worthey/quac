@@ -27,9 +27,7 @@ In summary, QuaC performs the following:
 
 !!! note "CGDS users only"
 
-     * At CGDS, BAM and VCF files produced by the 
-     [small variant caller pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline) 
-     are used as input to QuaC.
+* At CGDS, BAM, picard markduplicates metrics file, and VCF files are produced using Parabricks' germline pipeline and used as input to QuaC.
      * Tools picard's markduplicates, whose output are accepted by QuaC when used with 
      flag `--include_prior_qc`, are produced by this small_variant_caller_pipeline.
 
