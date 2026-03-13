@@ -17,23 +17,19 @@ samples and then summarizes their results using pre-defined, configurable QC thr
 
 In summary, QuaC performs the following:
 
-- Runs several QC tools using `BAM` and `VCF` files as input. At our center CGDS, these files are produced as part of
-  the [small variant caller
-  pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline).
+- Runs several QC tools using `FASTQ`, `BAM` and `VCF` files as input. At our center, CGDS, these files are produced as part of secondary analysis.
 - Using [QuaC-Watch](./quac_watch.md) tool, it performs QC checkup based on the expected thresholds for certain QC
   metrics and summarizes the results for easier human consumption
 - Aggregates QC output as well as QuaC-Watch output using MulitQC, both at the sample level and project level.
-- Optionally, above mentioned QuaC-Watch and QC aggregation steps can accept pre-run results from few QC tools (fastqc,
-   fastq-screen, picard's markduplicates) when run with flag `--include_prior_qc`. 
+- Optionally, above mentioned QuaC-Watch and QC aggregation steps can accept pre-run results from few QC tools (picard's
+  markduplicates) when run with flag `--include_prior_qc`. 
 
 
 !!! note "CGDS users only"
 
-     * At CGDS, BAM and VCF files produced by the 
-     [small variant caller pipeline](https://gitlab.rc.uab.edu/center-for-computational-genomics-and-data-science/sciops/pipelines/small_variant_caller_pipeline) 
-     are used as input to QuaC.
-     * Tools fastqc, fastq-screen, and picard's markduplicates, whose output are accepted by QuaC when used with 
-     flag `--include_prior_qc`, are produced by this small_variant_caller_pipeline.
+* At CGDS, BAM, picard markduplicates metrics file, and VCF files are produced using Parabricks' germline pipeline and used as input to QuaC.
+     * picard's markduplicates metrics, whose output are accepted by QuaC when used with 
+flag `--include_prior_qc`, are produced by Parabricks' germline pipeline.
 
 !!! info
 
@@ -48,6 +44,8 @@ QuaC quacks using the tools listed below:
 
 | Tool                                                                                                                       | Use                                                                                                     | QC Type                                  |
 | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)                                                       | Performs QC on raw sequence reads data (FASTQ)                                                          | FASTQ quality                            |
+| [FastQ Screen](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/)                                           | Screens FASTQ for other-species contamination                                                           | FASTQ quality                            |
 | [Qualimap](http://qualimap.conesalab.org/)                                                                                 | Summarizes several alignment metrics using BAM file                                                     | BAM quality                              |
 | [Picard-CollectMultipleMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectMultipleMetrics) | Summarizes alignment metrics from BAM file using several modules                                        | BAM quality                              |
 | [Picard-CollectWgsMetrics](https://broadinstitute.github.io/picard/command-line-overview.html#CollectWgsMetrics)           | Collects metrics about coverage and performance using BAM file                                          | BAM quality                              |
@@ -64,11 +62,9 @@ QuaC quacks using the tools listed below:
 Optionally QuaC can also utilize QC results produced by the tools listed below when run with flag `--include_prior_qc`.
 
 
-| Tool                                                                                                         | Use                                               | QC Type       |
-| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | ------------- |
-| [fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)                                         | Performs QC on raw sequence reads data (FASTQ)    | FASTQ quality |
-| [FastQ Screen](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/)                             | Screens FASTQ for other-species contamination     | FASTQ quality |
-| [Picard's MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) | Determines level of read duplication on BAM files | BAM quality   |
+| Tool                                                                                                         | Use                                               | QC Type     |
+| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | ----------- |
+| [Picard's MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) | Determines level of read duplication on BAM files | BAM quality |
 
 
 !!! note "CGDS users only"

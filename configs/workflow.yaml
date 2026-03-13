@@ -4,6 +4,10 @@
 datasets:
   # path to ref genome
   ref: "data/external/dependency_datasets/reference_genome/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna"
+  # path to file specifying config for fastq_screen qc tool. This file's parent directory must contain all genome indices.
+  # If they are located elsewhere, they may not get mounted to be available for singularity container.
+  fastq_screen_config: /data/project/worthey_lab/datasets_central/fastq_screen_genomes/raw/v20200602/FastQ_Screen_Genomes/fastq_screen.conf
+
   # path to Somalier dataset dependencies. Available at https://github.com/brentp/somalier
   somalier:
     sites: "data/external/dependency_datasets/somalier/sites.hg38.vcf.gz"

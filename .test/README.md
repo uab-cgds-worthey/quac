@@ -13,6 +13,11 @@ Following files are necessary for testing:
 **Note**: If `priorQC` is used, be sure to preserve directory structure used in the output of CGDS Small variant caller
 pipeline.
 
+<!-- markdown-link-check-disable -->
+**Note**: Fastq files in `.test/ngs-data/test_project/raw` were obtained from [small_variant_caller_pipeline
+repo](https://github.com/uab-cgds-worthey/small_variant_caller_pipeline).
+<!-- markdown-link-check-enable -->
+
 ## Setup test datasets
 
 ### Required
@@ -50,3 +55,6 @@ IO_CONFIG=".test/configs/B/user_io_config.yaml"
 cp -r <small_var_pipeline_outdir>/A/qc/ <quac_repo>/.test/ngs-data/test_project/analysis/A
 cp -r <small_var_pipeline_outdir>/B/qc/ <quac_repo>/.test/ngs-data/test_project/analysis/B
 ```
+
+**Note: QuaC has now been refactored to run FastQC and Fastq_screen natively. In light of this improvement, FastQC and
+Fastq_screen outputs created by above commands have now been removed. Only the dedup QC output was retained.**

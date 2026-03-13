@@ -21,12 +21,10 @@ samples -- Two samples without priorQC data (`no_priorQC`) and two with priorQC 
 ```sh
 # For Cheaha users only. Set up environment. 
 module reset
-module load Anaconda3/2020.02
-module load Singularity/3.5.2-GCC-5.4.0-2.26
+module load Anaconda3/2023.07-2
 
 # activate conda env
 conda activate quac
-
 
 ## use slurm or not
 # use this to submit jobs to slurm for the parent snakemake process 
@@ -36,56 +34,52 @@ USE_SLURM="--cli_cluster_config configs/cli_cluster_config.json
 # USE_SLURM=""  # uncomment this, comment out the above line, and use this if you don't want to use slurm at all. Useful for development purposes
 
 
-########## No prior QC data involved ##########
-PROJECT_CONFIG="project_2samples"
-PRIOR_QC_STATUS="no_priorQC"
+run_quac() {
+      PROJECT_CONFIG=$1
+      SEQ_TYPE=$2
+      PRIOR_QC_STATUS=$3
+      USE_SLURM=$4
+      
+      python src/run_quac.py \
+            --sample_config ".test/configs/sample_config/${PROJECT_CONFIG}_${SEQ_TYPE}${PRIOR_QC_STATUS}.tsv" \
+            --pedigree ".test/configs/pedigree/${PROJECT_CONFIG}${PRIOR_QC_STATUS}.ped" \
+            --outdir "data/quac/results/test_${PROJECT_CONFIG}_${SEQ_TYPE}${PRIOR_QC_STATUS}/analysis" \
+            --quac_watch_config "configs/quac_watch/${SEQ_TYPE}_quac_watch_config.yaml" \
+            --workflow_config "configs/workflow.yaml" \
+            $PRIOR_QC_STATUS \
+            $USE_SLURM 
+}
 
+########## No prior QC data involved ##########
 # WGS mode
-python src/run_quac.py \
-      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_wgs.tsv" \
-      --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
-      --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
-      --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
-      --workflow_config "configs/workflow.yaml" \
-      $USE_SLURM
+PROJECT_CONFIG="project_2samples"
+SEQ_TYPE="wgs"
+PRIOR_QC_STATUS=""
+
+run_quac "$PROJECT_CONFIG" "$SEQ_TYPE" "$PRIOR_QC_STATUS" "$USE_SLURM"
 
 # Exome mode
-python src/run_quac.py \
-      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_exome.tsv" \
-      --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
-      --outdir "data/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
-      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
-      --workflow_config "configs/workflow.yaml" \
-      --exome \
-      $USE_SLURM
+PROJECT_CONFIG="project_2samples"
+SEQ_TYPE="exome"
+PRIOR_QC_STATUS=""
+
+run_quac "$PROJECT_CONFIG" "$SEQ_TYPE" "$PRIOR_QC_STATUS" "$USE_SLURM"
 
 
 ########## Includes prior QC data and allows sample renaming ##########
-PROJECT_CONFIG="project_2samples"
-PRIOR_QC_STATUS="include_priorQC"
-
 # WGS mode
-python src/run_quac.py \
-      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_wgs.tsv" \
-      --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
-      --outdir "data/quac/results/test_${PROJECT_CONFIG}_wgs-${PRIOR_QC_STATUS}/analysis" \
-      --quac_watch_config "configs/quac_watch/wgs_quac_watch_config.yaml" \
-      --include_prior_qc \
-      --allow_sample_renaming \
-      --workflow_config "configs/workflow.yaml" \
-      $USE_SLURM
+PROJECT_CONFIG="project_2samples"
+SEQ_TYPE="wgs"
+PRIOR_QC_STATUS="--include_prior_qc"
+
+run_quac "$PROJECT_CONFIG" "$SEQ_TYPE" "$PRIOR_QC_STATUS" "$USE_SLURM"
 
 # Exome mode
-python src/run_quac.py \
-      --sample_config ".test/configs/${PRIOR_QC_STATUS}/sample_config/${PROJECT_CONFIG}_exome.tsv" \
-      --pedigree ".test/configs/${PRIOR_QC_STATUS}/pedigree/${PROJECT_CONFIG}.ped" \
-      --outdir "data/quac/results/test_${PROJECT_CONFIG}_exome-${PRIOR_QC_STATUS}/analysis" \
-      --quac_watch_config "configs/quac_watch/exome_quac_watch_config.yaml" \
-      --exome \
-      --include_prior_qc \
-      --allow_sample_renaming \
-      --workflow_config "configs/workflow.yaml" \
-      $USE_SLURM
+PROJECT_CONFIG="project_2samples"
+SEQ_TYPE="exome"
+PRIOR_QC_STATUS="--include_prior_qc"
+
+run_quac "$PROJECT_CONFIG" "$SEQ_TYPE" "$PRIOR_QC_STATUS" "$USE_SLURM"
 ```
 
 ## Expected output files
@@ -101,6 +95,10 @@ data/quac/results/test_project_2samples_wgs-include_priorQC/
     │       ├── bcftools-index
     │       │   └── ...
     │       ├── bcftools-stats
+    │       │   └── ...
+    │       ├── fastqc-raw
+    │       │   └── ...
+    │       ├── fastq_screen-raw
     │       │   └── ...
     │       ├── mosdepth
     │       │   └── ...

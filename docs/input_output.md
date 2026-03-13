@@ -8,24 +8,22 @@ Sample identifier and their necessary filepaths (`bam`, `vcf`, etc.) are provide
 file via `--sample_config`. Columns required depend on the flags supplied to `src/run_quac.py`. This table lists the
 allowed columns and when to use them.
 
-| Column                | When to use               | Description                                                                                |
-| --------------------- | ------------------------- | ------------------------------------------------------------------------------------------ |
-| sample_id             | Always                    | Sample identifier                                                                          |
-| bam                   | Always                    | BAM filepath                                                                               |
-| vcf                   | Always                    | VCF filepath                                                                               |
-| capture_bed           | `--exome`                 | Capture region bed filepath                                                                |
-| fastqc                | `--include_prior_qc`      | Filepath to FastQC `zip` files. Use comma as delimiter if multiple files.                  |
-| fastq_screen          | `--include_prior_qc`      | Filepath to FastQ Screen `txt` files. Use comma as delimiter if multiple files.            |
-| dedup                 | `--include_prior_qc`      | Filepath to Picard's MarkDuplicates `txt` files. Use comma as delimiter if multiple files. |
-| multiqc_rename_config | `--allow_sample_renaming` | Filepath to label rename configfile to use with multiqc                                    |
+| Column      | When to use          | Description                                                                                                                                  |
+| ----------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| sample_id   | Always               | Sample identifier                                                                                                                            |
+| bam         | Always               | BAM filepath                                                                                                                                 |
+| vcf         | Always               | VCF filepath                                                                                                                                 |
+| fastq       | Always               | FASTQs filepath. Pattern: `Lane#,R1,R2`. If multiple lanes, use semi-colon as delimiter. Example: `1,a1-R1.fq,a1-R2.fq; 2,a2-R1.fq,a2-R2.fq` |
+| capture_bed | `--exome`            | Capture region bed filepath                                                                                                                  |
+| dedup       | `--include_prior_qc` | Filepath to Picard's MarkDuplicates `txt` files. Use comma as delimiter if multiple files.                                                   |
 
 Refer to our system testing directory for example sample config files at `.test/configs`. For example:
 
-* `.test/configs/no_priorQC/sample_config/project_2samples_wgs.tsv` - Sample config file for WGS samples and no prior
+* `.test/configs/sample_config/project_2samples_wgs.tsv` - Sample config file for WGS samples and no prior
   QC.
-* `.test/configs/no_priorQC/sample_config/project_2samples_exome.tsv` - Sample config file for exome samples and no
+* `.test/configs/sample_config/project_2samples_exome.tsv` - Sample config file for exome samples and no
   prior QC. Note that WGS and exome samples can't be used in the same config file.
-* `.test/configs/include_priorQC/sample_config/project_2samples_wgs.tsv` - Sample config file for WGS samples with prior
+* `.test/configs/sample_config/project_2samples_wgs--include_prior_qc.tsv` - Sample config file for WGS samples with prior
   QC data available from [certain QC tools](./index.md#optional-qc-output-consumed-by-quac).
 
 ### Pedigree file

@@ -40,7 +40,7 @@ def get_tool_path(tool):
     return tool_path
 
 
-def check_sample_configs(fpath, exome_mode, include_prior_qc, allow_sample_renaming):
+def check_sample_configs(fpath, exome_mode, include_prior_qc):
     """
     reads from sample configfile and verifies necessary column names exist
     """
@@ -62,19 +62,13 @@ def check_sample_configs(fpath, exome_mode, include_prior_qc, allow_sample_renam
                 raise SystemExit(1)
 
     if include_prior_qc:
-        columns = ["fastqc", "fastq_screen", "dedup"]
+        columns = ["dedup"]
         missing_columns = list(set(columns).difference(set(header)))
         if len(missing_columns):
             print(
                 f"ERROR: Columns missing in sample config file but needed when flag --include_prior_qc is used: {missing_columns}"
             )
             raise SystemExit(1)
-
-    if allow_sample_renaming and "multiqc_rename_config" not in header:
-        print(
-            f"ERROR: Flag --allow_sample_renaming supplied but required column 'multiqc_rename_config' is missing in sample configfile '{fpath}'"
-        )
-        raise SystemExit(1)
 
     return samples_dict
 
@@ -119,6 +113,9 @@ def read_workflow_config(workflow_config_fpath):
     # ref genome
     mount_paths.add(Path(get_full_path(datasets["ref"])).parent)
 
+    # fastq_screen config and genomes path
+    mount_paths.add(Path(get_full_path(datasets["fastq_screen_config"])).parent)
+    
     # somalier resource files
     for resource in datasets["somalier"]:
         mount_paths.add(Path(get_full_path(datasets["somalier"][resource])).parent)
@@ -224,7 +221,6 @@ def create_snakemake_command(args, repo_path, mount_paths):
         "log_dir": args.log_dir,
         "exome": args.exome,
         "include_prior_qc_data": args.include_prior_qc,
-        "allow_sample_renaming": args.allow_sample_renaming,
     }
     quac_configs = " ".join([f"{k}='{v}'" for k, v in quac_configs.items()])
 
@@ -280,7 +276,7 @@ def main(args):
 
     # read sample configfile and verify necessary columns exist
     samples_config_dict = check_sample_configs(
-        args.sample_config, args.exome, args.include_prior_qc, args.allow_sample_renaming
+        args.sample_config, args.exome, args.include_prior_qc
     )
 
     # process user's input-output config file and get singularity bind paths
@@ -425,11 +421,6 @@ if __name__ == "__main__":
         "--include_prior_qc",
         action="store_true",
         help="Flag to additionally use prior QC data as input. See documentation for more info.",
-    )
-    WORKFLOW.add_argument(
-        "--allow_sample_renaming",
-        action="store_true",
-        help="Flag to allow sample renaming in MultiQC report. See documentation for more info.",
     )
     WORKFLOW.add_argument(
         "-e",

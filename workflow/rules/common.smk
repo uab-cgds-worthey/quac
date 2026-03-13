@@ -2,6 +2,7 @@ import csv
 import re
 from pathlib import PurePath
 from snakemake.logging import logger
+import pandas as pd
 
 
 # TODO: refactor to import from src/read_sample_config.py
@@ -15,21 +16,30 @@ def read_sample_config(config_f):
         for row in csv_reader:
             bam = row["bam"]
             vcf = row["vcf"]
+            
+            fastq = {}
+            for unit in row["fastq"].split(";"):
+                unit = unit.strip().split(",")
+                if unit[0] in fastq:
+                    print(f"ERROR: Fastq unit '{unit[0]}' for '{sample}' found >1x in config file '{config_f}'")
+                    raise SystemExit(1)
+
+                fastq[unit[0]] = {"R1": unit[1], "R2": unit[2]}
 
             sample = row["sample_id"].strip(" ")
             if sample in samples_dict:
                 print(f"ERROR: Sample '{sample}' found >1x in config file '{config_f}'")
                 raise SystemExit(1)
 
-            samples_dict[sample] = {"vcf": vcf, "bam": bam}
+            samples_dict[sample] = {"vcf": vcf, "bam": bam, "fastq": fastq}
 
             # expect only filepath per field
-            for colname in ["capture_bed", "multiqc_rename_config"]:
+            for colname in ["capture_bed"]:
                 if colname in row:
                     samples_dict[sample][colname] = row[colname]
                     
             # expect >=1 filepath per field
-            for colname in ["fastqc", "fastq_screen", "dedup"]:
+            for colname in ["dedup"]:
                 if colname in row:
                     samples_dict[sample][colname] = row[colname].split(",")
 
@@ -62,7 +72,7 @@ def get_priorQC_filepaths(sample, samples_dict):
     Returns filepaths relevant to priorQC
     """
 
-    column_list = ["fastqc", "fastq_screen", "dedup"]
+    column_list = ["dedup"]
     file_list = []
     for column in column_list:
         file_list.append(samples_dict[sample][column])
@@ -72,11 +82,40 @@ def get_priorQC_filepaths(sample, samples_dict):
     return flat_filelist
 
 
+def get_basename_stem(filepath):
+    "removes fastq extensions from filepath and returns basename"
+
+    basename = os.path.basename(filepath)
+
+    if basename.endswith('.gz'):
+        basename = basename[:-3]
+
+    if basename.endswith('.fastq'):
+        basename = basename[:-6]
+
+    if basename.endswith('.fq'):
+        basename = basename[:-3]
+
+    return basename
+
+
+def write_sample_rename_config(filepath, sample, samples_config):
+    "provides sensible sample names for fastq files, to use in multiqc. Saved into tsv file."
+
+    with open(filepath, "w") as f_handle:
+        f_handle.write('\t'.join(['Original labels', 'Renamed labels']) + '\n')
+        for unit in samples_config[sample]["fastq"]:
+            base_rename = f"{sample}-{unit}"
+
+            f_handle.write('\t'.join([get_basename_stem(samples_config[sample]["fastq"][unit]["R1"]), f"{base_rename}-R1"]) + '\n')
+            f_handle.write('\t'.join([get_basename_stem(samples_config[sample]["fastq"][unit]["R2"]), f"{base_rename}-R2"]) + '\n')
+
+    return None
+
 ##########################   Configs from CLI  ##########################
 OUT_DIR = Path(config["out_dir"])
 PEDIGREE_FPATH = config["ped"]
 EXOME_MODE = config["exome"]
-ALLOW_SAMPLE_RENAMING = config["allow_sample_renaming"]
 INCLUDE_PRIOR_QC_DATA = config["include_prior_qc_data"]
 
 SAMPLES_CONFIG = read_sample_config(config["sample_config"])

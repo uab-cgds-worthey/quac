@@ -10,7 +10,7 @@ $ python src/run_quac.py -h
 usage: run_quac.py [-h] --sample_config SAMPLE_CONFIG --pedigree PEDIGREE
                    --quac_watch_config QUAC_WATCH_CONFIG [--workflow_config]
                    [--snakemake_cluster_config] [--outdir] [--tmp_dir]
-                   [--exome] [--include_prior_qc] [--allow_sample_renaming]
+                   [--exome] [--include_prior_qc]
                    [-e] [-n] [--cli_cluster_config] [--log_dir]
 
 Command line interface to QuaC pipeline.
@@ -47,9 +47,6 @@ QuaC snakemake workflow options:
                         Please provide appropriate configs via
                         --quac_watch_config. (default: False)
   --include_prior_qc    Flag to additionally use prior QC data as input. See
-                        documentation for more info. (default: False)
-  --allow_sample_renaming
-                        Flag to allow sample renaming in MultiQC report. See
                         documentation for more info. (default: False)
   -e , --extra_args     Pass additional custom args to snakemake. Equal symbol
                         is needed for assignment as in this example: -e='--

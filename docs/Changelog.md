@@ -12,6 +12,18 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2026-03-10  Manavalan Gajapathy
+
+- Refactors QuaC to add native support to QC fastq files using FastQC and Fastq Screen.
+  - FastQC and Fastq Screen commands used are based on those in the `small_variant_caller_pipeline`. Tool versions were
+    upgraded and switched from container+conda env to container-only set up.
+- Rule `multiqc_rename_config` was brought in as well from the `small_variant_caller_pipeline`.
+- `--include_prior_qc` is still used but only for Picard markduplicates.
+- Updates conda env to run quac. Switched from `snakemake-minimal` to full `snakemake` for pandas.
+- Updates input data set up and configs for system testing.
+- Updates docs.
+
+
 2025-05-06  Manavalan Gajapathy
 
 - Refactors QuaC for use with parabricks-based small variant caller pipeline, which does not produce trimmed fastqs.
