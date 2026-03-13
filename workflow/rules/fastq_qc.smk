@@ -44,7 +44,6 @@ rule fastq_screen:
         config_f = config["datasets"]["fastq_screen_config"]
     output:
         txt=protected(str(OUT_DIR) + "/{sample}/qc/fastq_screen-raw/{sample}-{unit}-{read}_screen.txt"),
-        # png=protected(str(OUT_DIR) + "/{sample}/qc/fastq_screen-raw/{sample}-{unit}-{read}_screen.png"),
         html=protected(str(OUT_DIR) + "/{sample}/qc/fastq_screen-raw/{sample}-{unit}-{read}_screen.html"),
     message:
         "Stats fastq using Fastq Screen for Sample: {wildcards.sample}, {wildcards.unit}, {wildcards.read}"
