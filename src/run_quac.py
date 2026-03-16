@@ -220,6 +220,7 @@ def create_snakemake_command(args, repo_path, mount_paths):
         "out_dir": args.outdir,
         "log_dir": args.log_dir,
         "exome": args.exome,
+        "project_level_qc_dir": args.project_level_qc_dir,
         "include_prior_qc_data": args.include_prior_qc,
     }
     quac_configs = " ".join([f"{k}='{v}'" for k, v in quac_configs.items()])
@@ -416,6 +417,13 @@ if __name__ == "__main__":
         "--exome",
         action="store_true",
         help="Flag to run the workflow in exome mode. WARNING: Please provide appropriate configs via --quac_watch_config.",
+    )
+    WORKFLOW.add_argument(
+        "--project_level_qc_dir",
+        help="Sub-directory name where project-level QC results get saved. This will be a sub-directory under path " 
+        "provided via --outdir. Nested paths are allowed",
+        default="project_level_qc",
+        metavar="",
     )
     WORKFLOW.add_argument(
         "--include_prior_qc",
