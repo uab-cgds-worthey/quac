@@ -12,6 +12,11 @@ YYYY-MM-DD  John Doe
 ```
 ---
 
+2026-03-16  Manavalan Gajapathy
+
+- Refactors workflow to make project level subdir name a config based one.
+- Adds arg `--project_level_qc_dir` to the runner script
+
 2026-03-10  Manavalan Gajapathy
 
 - Refactors QuaC to add native support to QC fastq files using FastQC and Fastq Screen.
