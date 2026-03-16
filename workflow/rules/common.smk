@@ -121,11 +121,17 @@ INCLUDE_PRIOR_QC_DATA = config["include_prior_qc_data"]
 SAMPLES_CONFIG = read_sample_config(config["sample_config"])
 SAMPLES = list(SAMPLES_CONFIG.keys())
 
+# subdir where project level QC results will be written
+if "project_level_qc_dir" in config and config["project_level_qc_dir"]:
+    PROJECT_LEVEL_QC_SUBDIR = config["project_level_qc_dir"]
+else:
+    PROJECT_LEVEL_QC_SUBDIR = "project_level_qc"
+
 #### configs from configfile ####
 RULE_LOGS_PATH = Path(config["log_dir"]) / "rule_logs"
 RULE_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
-MULTIQC_CONFIG_FILE = OUT_DIR / "project_level_qc" / "multiqc" / "configs" / f"tmp_multiqc_config-{config['unique_id']}.yaml"
+MULTIQC_CONFIG_FILE = OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "multiqc" / "configs" / f"tmp_multiqc_config-{config['unique_id']}.yaml"
 
 logger.info(f"// Sample configfile: {config['sample_config']}")
 logger.info(f'// Output directory: "{OUT_DIR}"')
