@@ -137,7 +137,7 @@ rule mosdepth_plot:
         ),
         script=WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
-        protected(OUT_DIR / "project_level_qc" / "mosdepth" / "mosdepth.html"),
+        protected(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "mosdepth" / "mosdepth.html"),
     message:
         "Running mosdepth plotting"
     singularity: 
@@ -156,12 +156,12 @@ rule indexcov:
         bam=[value["bam"] for value in SAMPLES_CONFIG.values()],
         bam_index=[value["bam"]+".bai" for value in SAMPLES_CONFIG.values()],
     output:
-        html=protected(OUT_DIR / "project_level_qc" / "indexcov" / "index.html"),
-        bed=protected(OUT_DIR / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz"),
+        html=protected(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "indexcov" / "index.html"),
+        bed=protected(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "indexcov" / "indexcov-indexcov.bed.gz"),
     message:
         "Running indexcov"
     log:
-        OUT_DIR / "project_level_qc" / "indexcov" / "stdout.log",
+        OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "indexcov" / "stdout.log",
     singularity:
         "docker://quay.io/biocontainers/goleft:0.2.4--0"
     params:
@@ -178,14 +178,14 @@ rule indexcov:
 ##########################   covviz   ##########################
 rule covviz:
     input:
-        bed=OUT_DIR / "project_level_qc" / "indexcov" / "indexcov-indexcov.bed.gz",
+        bed=OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "indexcov" / "indexcov-indexcov.bed.gz",
         ped=PEDIGREE_FPATH,
     output:
-        html=protected(OUT_DIR / "project_level_qc" / "covviz" / "covviz_report.html"),
+        html=protected(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "covviz" / "covviz_report.html"),
     message:
         "Running covviz"
     log:
-        OUT_DIR / "project_level_qc" / "covviz" / "stdout.log",
+        OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "covviz" / "stdout.log",
     singularity:
         "docker://brwnj/covviz:v1.2.2"
     shell:

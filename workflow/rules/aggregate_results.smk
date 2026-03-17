@@ -178,8 +178,8 @@ rule aggregate_sample_rename_configs:
         expand(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
             sample=SAMPLES)
     output:
-        outfile=protected(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv"),
-        tempfile=temp(OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "flist.txt"),
+        outfile=protected(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "multiqc" / "configs" / "aggregated_rename_configs.tsv"),
+        tempfile=temp(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "multiqc" / "configs" / "flist.txt"),
     message:
         "Aggregate all sample rename-config files."
     singularity:
@@ -202,8 +202,8 @@ rule multiqc_aggregation_all_samples:
         [get_priorQC_filepaths(sample, SAMPLES_CONFIG) for sample in SAMPLES_CONFIG.keys()] if INCLUDE_PRIOR_QC_DATA else [],
         expand(
             [
-                OUT_DIR / "project_level_qc" / "somalier" / "relatedness" / "somalier.html",
-                OUT_DIR / "project_level_qc" / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
+                OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "somalier" / "relatedness" / "somalier.html",
+                OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
                 OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc.txt",
                 OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt",
                 OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
@@ -219,9 +219,9 @@ rule multiqc_aggregation_all_samples:
             read=["R1", "R2"],
         ),
         multiqc_config=MULTIQC_CONFIG_FILE,
-        rename_config=OUT_DIR / "project_level_qc" / "multiqc" / "configs" / "aggregated_rename_configs.tsv",
+        rename_config=OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "multiqc" / "configs" / "aggregated_rename_configs.tsv",
     output:
-        protected(OUT_DIR / "project_level_qc" / "multiqc" / "multiqc_report.html"),
+        protected(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "multiqc" / "multiqc_report.html"),
     message:
         "Running multiqc for all samples"
     params:
