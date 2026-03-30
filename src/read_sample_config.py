@@ -39,16 +39,27 @@ def read_sample_config(config_f):
             samples_dict[sample] = {"vcf": vcf, "bam": bam}
 
             # expect only filepath per field
-            for colname in ["capture_bed", "multiqc_rename_config"]:
+            for colname in ["capture_bed"]:
                 if colname in row:
                     samples_dict[sample][colname] = is_valid_file(row[colname])
 
             # expect >=1 filepath per field
-            for colname in ["fastqc", "fastq_screen", "dedup"]:
+            for colname in ["dedup"]:
                 if colname in row:
                     samples_dict[sample][colname] = [
                         is_valid_file(f) for f in row[colname].split(",")
                     ]
+
+            # specially formatted as "unit #,fq-read-1-path,fq-read-2-path;unit #,fq-read-1-path,fq-read-2-path;..."
+            for colname in ["fastq"]:
+                if colname in row:
+                    samples_dict[sample][colname] = []
+                    # aggregate the fastq file paths into a single list, ignore unit number
+                    # b/c it can be infered by list ordering if needed
+                    for fq_unit in row[colname].split(";"):
+                        fq_unit_info = fq_unit.strip().split(",")
+                        for f in fq_unit_info[1:]:
+                            samples_dict[sample][colname].append(is_valid_file(f))
 
     return samples_dict, colnames
 
