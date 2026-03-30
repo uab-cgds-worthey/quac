@@ -2,7 +2,7 @@
 
 Changelog format to use:
 
-```
+```txt
 YYYY-MM-DD  John Doe
 
 * Big Change 1:
@@ -10,30 +10,33 @@ YYYY-MM-DD  John Doe
 * Another Change 2:
     <reasoning here>
 ```
+
 ---
+
+2024-07-08  Brandon Wilk
+
+* Makes bug fix for issue #102 to add FASTQ file paths as mounts to containers
 
 2026-03-16  Manavalan Gajapathy
 
-- Refactors workflow to make project level subdir name a config based one.
-- Adds arg `--project_level_qc_dir` to the runner script
+* Refactors workflow to make project level subdir name a config based one.
+* Adds arg `--project_level_qc_dir` to the runner script
 
 2026-03-10  Manavalan Gajapathy
 
-- Refactors QuaC to add native support to QC fastq files using FastQC and Fastq Screen.
-  - FastQC and Fastq Screen commands used are based on those in the `small_variant_caller_pipeline`. Tool versions were
+* Refactors QuaC to add native support to QC fastq files using FastQC and Fastq Screen.
+  * FastQC and Fastq Screen commands used are based on those in the `small_variant_caller_pipeline`. Tool versions were
     upgraded and switched from container+conda env to container-only set up.
-- Rule `multiqc_rename_config` was brought in as well from the `small_variant_caller_pipeline`.
-- `--include_prior_qc` is still used but only for Picard markduplicates.
-- Updates conda env to run quac. Switched from `snakemake-minimal` to full `snakemake` for pandas.
-- Updates input data set up and configs for system testing.
-- Updates docs.
-
+* Rule `multiqc_rename_config` was brought in as well from the `small_variant_caller_pipeline`.
+* `--include_prior_qc` is still used but only for Picard markduplicates.
+* Updates conda env to run quac. Switched from `snakemake-minimal` to full `snakemake` for pandas.
+* Updates input data set up and configs for system testing.
+* Updates docs.
 
 2025-05-06  Manavalan Gajapathy
 
-- Refactors QuaC for use with parabricks-based small variant caller pipeline, which does not produce trimmed fastqs.
-- Updates Sample config files: column `fastqc_trimmed` was removed and column `fastqc_raw` was renamed to `fastq`
-
+* Refactors QuaC for use with parabricks-based small variant caller pipeline, which does not produce trimmed fastqs.
+* Updates Sample config files: column `fastqc_trimmed` was removed and column `fastqc_raw` was renamed to `fastq`
 
 2024-07-08  Brandon Wilk
 
@@ -41,7 +44,7 @@ YYYY-MM-DD  John Doe
 
 2023-10-09  Manavalan Gajapathy
 
-- Makes minor documentation updates - updating citation info, adding JOSS badge and updating zenodo badge to use generic
+* Makes minor documentation updates - updating citation info, adding JOSS badge and updating zenodo badge to use generic
   DOI
 
 * Merges `joss_manuscript` to the `master` branch to bring it up to date.
@@ -84,16 +87,13 @@ YYYY-MM-DD  John Doe
 
 * Minor updates to documentation.
 
-
 2023-07-16  Manavalan Gajapathy
 
-* Updates doc based on users feedback. 
-
+* Updates doc based on users feedback.
 
 2023-06-30  Manavalan Gajapathy
 
-* Merges `joss_manuscript` to the `master` branch to bring it up to date. 
-
+* Merges `joss_manuscript` to the `master` branch to bring it up to date.
 
 2023-06-22  Manavalan Gajapathy
 
@@ -107,18 +107,15 @@ YYYY-MM-DD  John Doe
 * Removes PR trigger from system testing github actions.
 * Tests if singularity is working as expected in user machine
 
-
 2023-05-31  Manavalan Gajapathy
 
 * Adds system testing as github actions workflow
-
 
 2023-05-18  Manavalan Gajapathy
 
 * Constructs snakemake's `sbatch` command using args and values from cluster config file supplied via
   `--cluster_config`.
 * Updates doc to include cluster config as a requirement
-
 
 2023-05-09  Manavalan Gajapathy
 
@@ -131,23 +128,19 @@ YYYY-MM-DD  John Doe
 * Refactors snakemake pipeline to fully run jobs in direct singularity containers. No more creation of conda environment
   using singularity containers! (#69)
 
-
 2023-04-04  Manavalan Gajapathy
 
 * Retires use of cheaha-specific env variable $USER_SCRATCH
 * Auto-creates user-provided dir structures for `--outdir`, `--tmp_dir`, and `--log_dir`
 
-
 2023-03-01  Manavalan Gajapathy
 
 * Decouples readme.md from readthedocs setup
-
 
 2023-02-28  Manavalan Gajapathy
 
 * Adds license
 * Bugfix: Changes github PR template filepath
-
 
 2023-01-31  Manavalan Gajapathy
 
@@ -156,15 +149,14 @@ changes, and hosts docs publicly using readthedocs.
 
 * `Readme.md` has grown bigger and became difficult to navigate. Especially for non-Cheaha users. So documentation in
   readme.md is now restructured to break into multiple files and is now easier to consume.
-     * Makes the doc generic to non-Cheaha users
-     * Identifies parts of the docs that are specific to Cheaha or CGDS users
-* Updates doc to reflect changes made in #59 
+  * Makes the doc generic to non-Cheaha users
+  * Identifies parts of the docs that are specific to Cheaha or CGDS users
+* Updates doc to reflect changes made in #59
 * Now hosts doc for "Sample QC review system".
 * Uses [mkdocs](https://www.mkdocs.org/) to create static site for documentation.
-* Hosts QuaC docs using [ReadTheDocs](https://readthedocs.org/) 
+* Hosts QuaC docs using [ReadTheDocs](https://readthedocs.org/)
 * Migrates Gitlab MR template to Github PR template
 * Adds github action to identify broken links in markdown files
-
 
 2023-01-27  Manavalan Gajapathy
 
@@ -188,19 +180,16 @@ user friendly:
 * Loads singularity module loading prior to executing the runner script
 * Uses minimal snakemake instead of full-featured snakemake (closes #56)
 
-
 2022-04-07  Manavalan Gajapathy
 
 * Previously hardcoded hardware resources for snakemake rules can now be supplied via `configs/workflow.yaml` (closes
   #48)
 * Modified multiqc conda env config to use explicit dependencies to get around installation issues (closes #47)
 
-
 2021-06-08  Manavalan Gajapathy
 
 * Bugfix: Fixes error when there is only one sample in input ped file (#34)
 * Adds system-testing for such only-one-sample-in-input setup (#35).
-
 
 2021-05-28  Manavalan Gajapathy
 
@@ -218,7 +207,6 @@ user friendly:
 * QuaC accepts pedigree file as input. A dummy pedigree file creator script is provided, which will be handy until
   phenotips is made available to us.
 * System-level testing is added
-
 
 2021-03-16  Manavalan Gajapathy
 
