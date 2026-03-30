@@ -39,7 +39,7 @@ def read_sample_config(config_f):
             samples_dict[sample] = {"vcf": vcf, "bam": bam}
 
             # expect only filepath per field
-            for colname in ["capture_bed", "multiqc_rename_config"]:
+            for colname in ["capture_bed"]:
                 if colname in row:
                     samples_dict[sample][colname] = is_valid_file(row[colname])
 
