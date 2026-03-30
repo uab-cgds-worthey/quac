@@ -57,7 +57,7 @@ def read_sample_config(config_f):
                     # aggregate the fastq file paths into a single list, ignore unit number
                     # b/c it can be infered by list ordering if needed
                     for fq_unit in row[colname].split(";"):
-                        fq_unit_info = fq_unit.split(",")
+                        fq_unit_info = fq_unit.strip().split(",")
                         for f in fq_unit_info[1:]:
                             samples_dict[sample][colname].append(is_valid_file(f))
 
