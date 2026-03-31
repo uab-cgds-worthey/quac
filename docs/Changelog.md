@@ -13,6 +13,10 @@ YYYY-MM-DD  John Doe
 
 ---
 
+2026-03-31  Manavalan Gajapathy
+
+* Bug fix: Fixes missing fastq and fastq_screen modules in final pass multiqc and project level multiqc reports.
+
 2024-07-08  Brandon Wilk
 
 * Makes bug fix for issue #102 to add FASTQ file paths as mounts to containers
