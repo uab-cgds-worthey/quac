@@ -204,10 +204,18 @@ rule aggregate_sample_rename_configs:
 rule multiqc_aggregation_all_samples:
     input:
         [get_priorQC_filepaths(sample, SAMPLES_CONFIG) for sample in SAMPLES_CONFIG.keys()] if INCLUDE_PRIOR_QC_DATA else [],
+        [OUT_DIR / sample / "qc" / "fastqc-raw" / f"{sample}-{unit}-{read}_fastqc.html" 
+            for sample in SAMPLES_CONFIG 
+            for unit in SAMPLES_CONFIG[sample]["fastq"].keys()
+            for read in ["R1", "R2"]
+            ],
+        [OUT_DIR / sample / "qc" / "fastq_screen-raw" / f"{sample}-{unit}-{read}_screen.txt" 
+            for sample in SAMPLES_CONFIG 
+            for unit in SAMPLES_CONFIG[sample]["fastq"].keys()
+            for read in ["R1", "R2"]
+            ],
         expand(
             [
-                OUT_DIR / "{sample}" / "qc" / "fastqc-raw" / "{sample}-{unit}-{read}_fastqc.html",
-                OUT_DIR / "{sample}" / "qc" / "fastq_screen-raw" / "{sample}-{unit}-{read}_screen.txt",
                 OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "somalier" / "relatedness" / "somalier.html",
                 OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
                 OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
@@ -219,8 +227,6 @@ rule multiqc_aggregation_all_samples:
                 OUT_DIR / "{sample}" / "qc" / "quac_watch" / "quac_watch_overall_summary.yaml",
             ],
             sample=SAMPLES,
-            unit=[1],
-            read=["R1", "R2"],
         ),
         multiqc_config=MULTIQC_CONFIG_FILE,
         rename_config=OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "multiqc" / "configs" / "aggregated_rename_configs.tsv",
