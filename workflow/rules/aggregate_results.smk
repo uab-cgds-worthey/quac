@@ -133,9 +133,13 @@ rule quac_watch:
 
 rule multiqc_by_sample_final_pass:
     input:
+        lambda wildcards: expand(OUT_DIR / wildcards.sample / "qc" / "fastqc-raw" / f"{wildcards.sample}-{{unit}}-{{reads}}_fastqc.html", 
+                unit=SAMPLES_CONFIG[wildcards.sample]["fastq"].keys(), 
+                reads=["R1", "R2"]),
+        lambda wildcards: expand(OUT_DIR / wildcards.sample / "qc" / "fastq_screen-raw" / f"{wildcards.sample}-{{unit}}-{{reads}}_screen.txt", 
+                unit=SAMPLES_CONFIG[wildcards.sample]["fastq"].keys(), 
+                reads=["R1", "R2"]),
         lambda wildcards: get_priorQC_filepaths(wildcards.sample, SAMPLES_CONFIG) if INCLUDE_PRIOR_QC_DATA else [],
-        OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc.txt",
-        OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt",
         OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
         OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
         OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
@@ -202,10 +206,10 @@ rule multiqc_aggregation_all_samples:
         [get_priorQC_filepaths(sample, SAMPLES_CONFIG) for sample in SAMPLES_CONFIG.keys()] if INCLUDE_PRIOR_QC_DATA else [],
         expand(
             [
+                OUT_DIR / "{sample}" / "qc" / "fastqc-raw" / "{sample}-{unit}-{read}_fastqc.html",
+                OUT_DIR / "{sample}" / "qc" / "fastq_screen-raw" / "{sample}-{unit}-{read}_screen.txt",
                 OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "somalier" / "relatedness" / "somalier.html",
                 OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.html",
-                OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastqc.txt",
-                OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "{sample}_multiqc_data" / "multiqc_fastq_screen.txt",
                 OUT_DIR / "{sample}" / "qc" / "samtools-stats" / "{sample}.txt",
                 OUT_DIR / "{sample}" / "qc" / "qualimap" / "{sample}" / "qualimapReport.html",
                 OUT_DIR / "{sample}" / "qc" / "picard-stats" / "{sample}.alignment_summary_metrics",
