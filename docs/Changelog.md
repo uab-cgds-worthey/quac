@@ -13,6 +13,10 @@ YYYY-MM-DD  John Doe
 
 ---
 
+2026-06-04 Manavalan Gajapathy
+
+* Adds `--wait` option to allow waiting until submitted slurm job is terminated
+
 2026-03-31  Manavalan Gajapathy
 
 * Bug fix: Fixes missing fastq and fastq_screen modules in final pass multiqc and project level multiqc reports.
