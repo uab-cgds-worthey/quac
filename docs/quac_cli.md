@@ -67,6 +67,7 @@ QuaC wrapper options:
                         in cluster. Edit template file
                         'configs/cli_cluster_config.json' to suit your SLURM
                         environment. (default: None)
+  --wait                Waits for submitted Slurm jobs to terminate (default: False)
   --log_dir             Directory path where logs (both workflow's and
                         wrapper's) will be stored (default: data/quac/logs)
 ```
