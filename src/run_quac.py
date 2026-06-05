@@ -310,6 +310,9 @@ def main(args):
 
         with open(args.cli_cluster_config) as fh:
             slurm_resources = json.load(fh)
+    # if need to wait for the submitted slurm job to terminate
+    if args.wait:
+        slurm_resources["W"] = ""   # relevant - https://github.com/brentp/slurmpy/issues/13#issuecomment-4623873964
 
     job_dict = {
         "basename": "quac-",
@@ -454,6 +457,12 @@ if __name__ == "__main__":
         " Edit template file 'configs/cli_cluster_config.json' to suit your SLURM environment.",
         type=lambda x: is_valid_file(PARSER, x),
         metavar="",
+    )
+
+    WRAPPER.add_argument(
+        "--wait",
+        action="store_true",
+        help="Waits for submitted Slurm jobs to terminate",
     )
 
     LOGS_DIR_DEFAULT = f"data/quac/logs"
