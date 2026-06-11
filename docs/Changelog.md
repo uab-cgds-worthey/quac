@@ -13,6 +13,10 @@ YYYY-MM-DD  John Doe
 
 ---
 
+2026-06-11 Manavalan Gajapathy
+
+* Removes write protections for project-level output files (#106)
+
 2026-06-04 Manavalan Gajapathy
 
 * Adds `--wait` option to allow waiting until submitted slurm job is terminated
