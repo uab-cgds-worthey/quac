@@ -137,7 +137,7 @@ rule mosdepth_plot:
         ),
         script=WORKFLOW_PATH / "src/mosdepth/v0.3.1/plot-dist.py",
     output:
-        protected(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "mosdepth" / "mosdepth.html"),
+        OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "mosdepth" / "mosdepth.html",
     message:
         "Running mosdepth plotting"
     singularity: 
@@ -156,8 +156,8 @@ rule indexcov:
         bam=[value["bam"] for value in SAMPLES_CONFIG.values()],
         bam_index=[value["bam"]+".bai" for value in SAMPLES_CONFIG.values()],
     output:
-        html=protected(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "indexcov" / "index.html"),
-        bed=protected(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "indexcov" / "indexcov-indexcov.bed.gz"),
+        html=OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "indexcov" / "index.html",
+        bed=OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "indexcov" / "indexcov-indexcov.bed.gz",
     message:
         "Running indexcov"
     log:
@@ -181,7 +181,7 @@ rule covviz:
         bed=OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "indexcov" / "indexcov-indexcov.bed.gz",
         ped=PEDIGREE_FPATH,
     output:
-        html=protected(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "covviz" / "covviz_report.html"),
+        html=OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "covviz" / "covviz_report.html",
     message:
         "Running covviz"
     log:

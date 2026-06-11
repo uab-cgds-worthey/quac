@@ -5,7 +5,7 @@ rule somalier_extract:
         sites=config["datasets"]["somalier"]["sites"],
         ref_genome=config["datasets"]["ref"],
     output:
-        protected(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "somalier" / "extract" / "{sample}.somalier"),
+        OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "somalier" / "extract" / "{sample}.somalier",
     message:
         "Running somalier extract. Sample: {wildcards.sample}"
     singularity:
@@ -27,12 +27,10 @@ rule somalier_relate:
         extracted=expand(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "somalier" / "extract" / "{sample}.somalier", sample=SAMPLES),
         ped=PEDIGREE_FPATH,
     output:
-        out=protected(
-            expand(
+        out=expand(
                 OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "somalier" / "relatedness" / "somalier.{ext}",
                 ext=["html", "pairs.tsv", "samples.tsv"],
-            )
-        ),
+            ),
     message:
         "Running somalier relate"
     singularity:
@@ -58,12 +56,10 @@ rule somalier_ancestry:
         labels_1kg=config["datasets"]["somalier"]["labels_1kg"],
         somalier_1kg_directory=config["datasets"]["somalier"]["somalier_1kg"],
     output:
-        out=protected(
-            expand(
+        out=expand(
                 OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "somalier" / "ancestry" / "somalier.somalier-ancestry.{ext}",
                 ext=["html", "tsv"],
-            )
-        ),
+            ),
     message:
         "Running somalier ancestry."
     singularity:
