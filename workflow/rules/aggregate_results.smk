@@ -182,7 +182,7 @@ rule aggregate_sample_rename_configs:
         expand(OUT_DIR / "{sample}" / "qc" / "multiqc_initial_pass" / "multiqc_sample_rename_config" / "{sample}_rename_config.tsv",
             sample=SAMPLES)
     output:
-        outfile=protected(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "multiqc" / "configs" / "aggregated_rename_configs.tsv"),
+        outfile=OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "multiqc" / "configs" / "aggregated_rename_configs.tsv",
         tempfile=temp(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "multiqc" / "configs" / "flist.txt"),
     message:
         "Aggregate all sample rename-config files."
@@ -231,7 +231,7 @@ rule multiqc_aggregation_all_samples:
         multiqc_config=MULTIQC_CONFIG_FILE,
         rename_config=OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "multiqc" / "configs" / "aggregated_rename_configs.tsv",
     output:
-        protected(OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "multiqc" / "multiqc_report.html"),
+        OUT_DIR / PROJECT_LEVEL_QC_SUBDIR / "multiqc" / "multiqc_report.html",
     message:
         "Running multiqc for all samples"
     params:

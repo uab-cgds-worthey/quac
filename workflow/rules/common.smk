@@ -47,21 +47,19 @@ def read_sample_config(config_f):
 
 
 def is_testing_mode():
-    "checks if testing dataset is used as input for the pipeline"
+    "checks if testing dataset is used as input for the pipeline. Checks in FASTQ filepaths."
 
     query = ".test"
     isTesting = False
     for sample in SAMPLES_CONFIG.values():
-        for fvalue in sample.values():
-            if isinstance(fvalue, str) and query in PurePath(fvalue).parts:
-                isTesting = True
-            else:
-                for fpath in fvalue:
-                    if query in PurePath(fpath).parts:
-                        isTesting = True
+        for lane in sample["fastq"]:
+            for read_pair in sample["fastq"][lane]:
+                if query in PurePath(sample["fastq"][lane][read_pair]).parts:
+                    isTesting = True
+                    break
 
     if isTesting:
-        logger.info(f"// WARNING: '{query}' present in at least one of the filepaths supplied via --sample_config. So testing mode is used.")
+        logger.info(f"// WARNING: '{query}' present in at least one of the FASTQ filepaths supplied via --sample_config. So testing mode is used.")
         return True
 
     return None
