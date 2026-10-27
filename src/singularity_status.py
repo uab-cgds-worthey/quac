@@ -8,7 +8,7 @@ import subprocess
 
 def test_singularity():
 
-    cmd = "singularity run library://sylabsed/examples/lolcow"
+    cmd = "singularity run docker://hello-world"
     result = subprocess.run(
         cmd.split(" "),
         stdout=subprocess.PIPE,
