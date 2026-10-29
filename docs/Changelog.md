@@ -13,6 +13,10 @@ YYYY-MM-DD  John Doe
 
 ---
 
+2026-10-29  Manavalan Gajapathy
+
+* Bug fix: Switches container image for singularity testing
+
 2026-06-11 Manavalan Gajapathy
 
 * Removes write protections for project-level output files (#106)
